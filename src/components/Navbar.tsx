@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { 
   ShoppingCart, 
   User, 
@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +27,9 @@ import {
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,6 +48,19 @@ const Navbar = () => {
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+  };
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchOpen(false);
+      setSearchQuery("");
+    }
   };
 
   const categories = [
@@ -118,10 +135,11 @@ const Navbar = () => {
               variant="ghost" 
               size="icon" 
               className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40"
+              onClick={toggleSearch}
             >
               <Search size={20} />
             </Button>
-            <Link to="/account">
+            <Link to="/signin">
               <Button 
                 variant="ghost" 
                 size="icon" 
@@ -155,6 +173,33 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* Search Overlay */}
+      {isSearchOpen && (
+        <div className="absolute top-full left-0 w-full bg-forest-800 shadow-lg p-4 animate-fade-in border-t border-forest-700">
+          <form onSubmit={handleSearchSubmit} className="container mx-auto flex gap-2">
+            <Input 
+              type="text"
+              placeholder="Search products, categories..."
+              className="flex-1 bg-forest-900 border-forest-700"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
+            />
+            <Button type="submit" className="bg-emerald-600 hover:bg-emerald-500 text-white">
+              Search
+            </Button>
+            <Button 
+              type="button" 
+              variant="ghost" 
+              className="border-forest-700"
+              onClick={toggleSearch}
+            >
+              Cancel
+            </Button>
+          </form>
+        </div>
+      )}
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (

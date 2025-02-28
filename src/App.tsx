@@ -6,6 +6,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import CategoryPage from "./pages/CategoryPage";
+import SearchPage from "./pages/SearchPage";
+import SignIn from "./pages/SignIn";
+import Admin from "./pages/Admin";
+import Cart from "./pages/Cart";
 
 const queryClient = new QueryClient();
 
@@ -17,7 +22,11 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          {/* Add other routes here as we develop them */}
+          <Route path="/category/:categoryId" element={<CategoryPage />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/cart" element={<Cart />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
