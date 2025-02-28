@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { 
   ShoppingCart, 
   User, 
@@ -46,10 +47,10 @@ const Navbar = () => {
   };
 
   const categories = [
-    { name: "Monitors", icon: <Monitor size={16} /> },
-    { name: "Components", icon: <Database size={16} /> },
-    { name: "PC Building", icon: <Settings size={16} /> },
-    { name: "Accessories", icon: <CreditCard size={16} /> }
+    { name: "Monitors", icon: <Monitor size={16} />, path: "/category/monitors" },
+    { name: "Components", icon: <Database size={16} />, path: "/category/components" },
+    { name: "PC Building", icon: <Settings size={16} />, path: "/category/pc-building" },
+    { name: "Accessories", icon: <CreditCard size={16} />, path: "/category/accessories" }
   ];
 
   return (
@@ -63,15 +64,15 @@ const Navbar = () => {
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <a href="/" className="flex items-center">
+          <Link to="/" className="flex items-center">
             <span className="text-xl font-bold text-emerald-400">GreenBits</span>
-          </a>
+          </Link>
 
           {/* Desktop Menu */}
           <nav className="hidden md:flex items-center space-x-6">
-            <a href="/" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
+            <Link to="/" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
               Home
-            </a>
+            </Link>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -86,28 +87,29 @@ const Navbar = () => {
                 <DropdownMenuLabel className="text-emerald-400">Categories</DropdownMenuLabel>
                 <DropdownMenuSeparator className="bg-emerald-800/30" />
                 {categories.map((category) => (
-                  <DropdownMenuItem 
-                    key={category.name}
-                    className="cursor-pointer hover:bg-emerald-900/30"
-                  >
-                    <div className="flex items-center gap-2">
-                      {category.icon}
-                      <span>{category.name}</span>
-                    </div>
-                  </DropdownMenuItem>
+                  <Link to={category.path} key={category.name}>
+                    <DropdownMenuItem 
+                      className="cursor-pointer hover:bg-emerald-900/30"
+                    >
+                      <div className="flex items-center gap-2">
+                        {category.icon}
+                        <span>{category.name}</span>
+                      </div>
+                    </DropdownMenuItem>
+                  </Link>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
             
-            <a href="#" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
+            <Link to="/build" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
               Build Your PC
-            </a>
-            <a href="#" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
+            </Link>
+            <Link to="/about" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
               About
-            </a>
-            <a href="#" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
+            </Link>
+            <Link to="/contact" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
               Contact
-            </a>
+            </Link>
           </nav>
 
           {/* Right Side Icons */}
@@ -119,23 +121,27 @@ const Navbar = () => {
             >
               <Search size={20} />
             </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40"
-            >
-              <User size={20} />
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40 relative"
-            >
-              <ShoppingCart size={20} />
-              <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-emerald-500 text-[10px]">
-                3
-              </Badge>
-            </Button>
+            <Link to="/account">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40"
+              >
+                <User size={20} />
+              </Button>
+            </Link>
+            <Link to="/cart">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40 relative"
+              >
+                <ShoppingCart size={20} />
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-emerald-500 text-[10px]">
+                  3
+                </Badge>
+              </Button>
+            </Link>
 
             {/* Mobile Menu Toggle */}
             <Button
@@ -154,45 +160,50 @@ const Navbar = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden bg-forest-800 shadow-lg animate-fade-in">
           <div className="py-4 px-4 space-y-2">
-            <a
-              href="/"
+            <Link
+              to="/"
               className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Home
-            </a>
+            </Link>
             <div className="py-3 px-4 text-foreground">
               <div className="mb-2 font-medium">Categories</div>
               <div className="ml-3 space-y-2">
                 {categories.map((category) => (
-                  <a
+                  <Link
                     key={category.name}
-                    href="#"
+                    to={category.path}
                     className="flex items-center gap-2 py-2 text-sm text-muted-foreground hover:text-emerald-400"
+                    onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {category.icon}
                     <span>{category.name}</span>
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
-            <a
-              href="#"
+            <Link
+              to="/build"
               className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Build Your PC
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/about"
               className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               About
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              to="/contact"
               className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
             >
               Contact
-            </a>
+            </Link>
           </div>
         </div>
       )}

@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ChevronRight } from "lucide-react";
 
@@ -30,20 +31,24 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button 
-              size="lg" 
-              className="neo-button bg-emerald-600 hover:bg-emerald-500 text-white w-full sm:w-auto"
-            >
-              Shop Components
-              <ChevronRight size={16} className="ml-1" />
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="border-emerald-700 text-emerald-400 hover:bg-emerald-900/30 w-full sm:w-auto"
-            >
-              Build Your PC
-            </Button>
+            <Link to="/products">
+              <Button 
+                size="lg" 
+                className="neo-button bg-emerald-600 hover:bg-emerald-500 text-white w-full sm:w-auto"
+              >
+                Shop Components
+                <ChevronRight size={16} className="ml-1" />
+              </Button>
+            </Link>
+            <Link to="/build">
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="border-emerald-700 text-emerald-400 hover:bg-emerald-900/30 w-full sm:w-auto"
+              >
+                Build Your PC
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

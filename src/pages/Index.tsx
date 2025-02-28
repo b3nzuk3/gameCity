@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import Hero from "@/components/Hero";
 import FeaturedProducts from "@/components/FeaturedProducts";
@@ -37,17 +38,20 @@ const Index = () => {
     {
       title: "Gaming PCs",
       image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80",
-      description: "High-performance custom gaming rigs built to dominate."
+      description: "High-performance custom gaming rigs built to dominate.",
+      path: "/category/gaming-pcs"
     },
     {
       title: "Graphics Cards",
       image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80",
-      description: "Latest GPUs for gaming, rendering, and creative work."
+      description: "Latest GPUs for gaming, rendering, and creative work.",
+      path: "/category/graphics-cards"
     },
     {
       title: "Monitors",
       image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80",
-      description: "Ultra-wide, 4K, and high refresh rate gaming monitors."
+      description: "Ultra-wide, 4K, and high refresh rate gaming monitors.",
+      path: "/category/monitors"
     }
   ];
 
@@ -117,14 +121,16 @@ const Index = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
                   <h3 className="text-xl font-bold mb-2">{category.title}</h3>
                   <p className="text-muted-foreground text-sm mb-4">{category.description}</p>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    className="text-emerald-400 border-emerald-700 hover:bg-emerald-900/30"
-                  >
-                    Browse
-                    <ArrowRight size={16} className="ml-2" />
-                  </Button>
+                  <Link to={category.path}>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="text-emerald-400 border-emerald-700 hover:bg-emerald-900/30"
+                    >
+                      Browse
+                      <ArrowRight size={16} className="ml-2" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             ))}

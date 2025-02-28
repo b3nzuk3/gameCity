@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, ArrowRight, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,9 +15,9 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="mb-4">
-              <a href="/" className="text-2xl font-bold text-emerald-400">
+              <Link to="/" className="text-2xl font-bold text-emerald-400">
                 GreenBits
-              </a>
+              </Link>
             </div>
             <p className="text-muted-foreground mb-6">
               Premium PC hardware and custom systems for gamers, creators, and professionals.
@@ -42,34 +43,34 @@ const Footer = () => {
             <h3 className="text-lg font-medium mb-6">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
+                <Link to="/about" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
                   <ArrowRight size={14} className="mr-2" />
                   About Us
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
+                <Link to="/products" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
                   <ArrowRight size={14} className="mr-2" />
                   Products
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
+                <Link to="/build" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
                   <ArrowRight size={14} className="mr-2" />
                   Build Your PC
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
+                <Link to="/support" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
                   <ArrowRight size={14} className="mr-2" />
                   Support
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
+                <Link to="/contact" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
                   <ArrowRight size={14} className="mr-2" />
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -79,34 +80,34 @@ const Footer = () => {
             <h3 className="text-lg font-medium mb-6">Support</h3>
             <ul className="space-y-3">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
+                <Link to="/faq" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
                   <ArrowRight size={14} className="mr-2" />
                   FAQs
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
+                <Link to="/shipping" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
                   <ArrowRight size={14} className="mr-2" />
                   Shipping Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
+                <Link to="/returns" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
                   <ArrowRight size={14} className="mr-2" />
                   Return Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
+                <Link to="/warranty" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
                   <ArrowRight size={14} className="mr-2" />
                   Warranty Info
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
+                <Link to="/track-order" className="text-muted-foreground hover:text-emerald-400 transition-colors flex items-center">
                   <ArrowRight size={14} className="mr-2" />
                   Track Order
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -130,30 +131,30 @@ const Footer = () => {
             <div className="mt-6">
               <div className="text-sm text-muted-foreground mb-3">Follow Us</div>
               <div className="flex space-x-3">
-                <a 
-                  href="#" 
+                <Link 
+                  to="/social/facebook" 
                   className="w-9 h-9 rounded-full flex items-center justify-center bg-forest-800 hover:bg-emerald-900/50 text-emerald-400 transition-colors"
                 >
                   <Facebook size={18} />
-                </a>
-                <a 
-                  href="#" 
+                </Link>
+                <Link 
+                  to="/social/twitter" 
                   className="w-9 h-9 rounded-full flex items-center justify-center bg-forest-800 hover:bg-emerald-900/50 text-emerald-400 transition-colors"
                 >
                   <Twitter size={18} />
-                </a>
-                <a 
-                  href="#" 
+                </Link>
+                <Link 
+                  to="/social/instagram" 
                   className="w-9 h-9 rounded-full flex items-center justify-center bg-forest-800 hover:bg-emerald-900/50 text-emerald-400 transition-colors"
                 >
                   <Instagram size={18} />
-                </a>
-                <a 
-                  href="#" 
+                </Link>
+                <Link 
+                  to="/social/youtube" 
                   className="w-9 h-9 rounded-full flex items-center justify-center bg-forest-800 hover:bg-emerald-900/50 text-emerald-400 transition-colors"
                 >
                   <Youtube size={18} />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -167,19 +168,19 @@ const Footer = () => {
           <div className="mt-3 md:mt-0">
             <ul className="flex space-x-6">
               <li>
-                <a href="#" className="hover:text-emerald-400 transition-colors">
+                <Link to="/privacy" className="hover:text-emerald-400 transition-colors">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-emerald-400 transition-colors">
+                <Link to="/terms" className="hover:text-emerald-400 transition-colors">
                   Terms of Service
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="hover:text-emerald-400 transition-colors">
+                <Link to="/sitemap" className="hover:text-emerald-400 transition-colors">
                   Sitemap
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
