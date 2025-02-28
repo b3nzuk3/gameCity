@@ -1,5 +1,6 @@
 
 import React from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ProductCard from "./ProductCard";
 
@@ -63,12 +64,14 @@ const FeaturedProducts = () => {
         </div>
 
         <div className="mt-12 text-center">
-          <Button
-            variant="outline"
-            className="border-emerald-700 text-emerald-400 hover:bg-emerald-900/30"
-          >
-            View All Products
-          </Button>
+          <Link to="/category/components">
+            <Button
+              variant="outline"
+              className="border-emerald-700 text-emerald-400 hover:bg-emerald-900/30"
+            >
+              View All Products
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

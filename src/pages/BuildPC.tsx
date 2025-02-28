@@ -169,7 +169,7 @@ const BuildPC = () => {
             </div>
             
             <Tabs defaultValue={partCategories[0].id} className="w-full">
-              <TabsList className="w-full flex overflow-x-auto bg-forest-800 border border-forest-700 rounded-lg p-1 mb-8">
+              <TabsList className="w-full flex overflow-x-auto bg-forest-800 border border-forest-700 rounded-lg p-1 mb-8 justify-start">
                 {partCategories.map((category) => (
                   <TabsTrigger 
                     key={category.id} 

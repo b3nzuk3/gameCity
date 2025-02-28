@@ -46,13 +46,15 @@ const ProductCard = ({ product }: ProductProps) => {
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-between gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          className="flex-1 border-forest-700 text-muted-foreground hover:text-foreground"
-        >
-          Details
-        </Button>
+        <Link to={`/category/${product.category?.toLowerCase() || 'components'}?product=${product.id}`} className="flex-1">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full border-forest-700 text-muted-foreground hover:text-foreground"
+          >
+            Details
+          </Button>
+        </Link>
         <Button
           size="sm"
           className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white"

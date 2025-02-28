@@ -34,6 +34,7 @@ const SignIn = () => {
     
     // Simulate API call delay
     setTimeout(() => {
+      // Check for admin login
       if (email === adminEmail && password === adminPassword) {
         // Set user in localStorage (in a real app, use a more secure method and tokens)
         localStorage.setItem("user", JSON.stringify({ 
@@ -50,11 +51,32 @@ const SignIn = () => {
         // Redirect to admin dashboard
         navigate("/admin");
       } else {
-        toast({
-          title: "Invalid credentials",
-          description: "The email or password you entered is incorrect",
-          variant: "destructive",
-        });
+        // Check if there's a registered user from signup
+        const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+        const user = registeredUsers.find((user: any) => user.email === email);
+        
+        if (user && user.password === password) {
+          // Set regular user in localStorage
+          localStorage.setItem("user", JSON.stringify({ 
+            email, 
+            isAdmin: false, 
+            name: user.name 
+          }));
+          
+          toast({
+            title: `Welcome back, ${user.name}`,
+            description: "You've successfully signed in",
+          });
+          
+          // Redirect to home page
+          navigate("/");
+        } else {
+          toast({
+            title: "Invalid credentials",
+            description: "The email or password you entered is incorrect",
+            variant: "destructive",
+          });
+        }
       }
       setIsLoading(false);
     }, 1500);

@@ -31,7 +31,7 @@ const Hero = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/products">
+            <Link to="/category/components">
               <Button 
                 size="lg" 
                 className="neo-button bg-emerald-600 hover:bg-emerald-500 text-white w-full sm:w-auto"

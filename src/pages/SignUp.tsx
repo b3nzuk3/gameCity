@@ -72,15 +72,47 @@ const SignUp = () => {
     
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    // Store user data in localStorage (in a real app, this would be sent to a backend)
+    try {
+      // Get any existing users
+      const existingUsers = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
+      
+      // Check if email already exists
+      if (existingUsers.some((user: any) => user.email === formData.email)) {
+        toast({
+          title: "Error",
+          description: "An account with this email already exists",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+      
+      // Add new user
+      const newUser = {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password, // In a real app, never store plain text passwords
+      };
+      
+      localStorage.setItem("registeredUsers", JSON.stringify([...existingUsers, newUser]));
+      
       toast({
         title: "Account created",
         description: "You have successfully registered for GreenBits!",
       });
-      setIsLoading(false);
+      
+      // Navigate to sign in page
       navigate("/signin");
-    }, 1500);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "There was an error creating your account",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
