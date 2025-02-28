@@ -1,93 +1,68 @@
 
 import React from "react";
-import { ShoppingCart, Star } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "@/hooks/use-toast";
+import { ShoppingCart, Star } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
-interface Product {
-  id: number;
-  name: string;
-  image: string;
-  price: number;
-  rating: number;
-  category: string;
-}
-
-interface ProductCardProps {
-  product: Product;
-}
-
-const ProductCard = ({ product }: ProductCardProps) => {
-  const { name, image, price, rating, category } = product;
-
-  const handleAddToCart = () => {
-    toast({
-      title: "Added to cart",
-      description: `${name} has been added to your cart`,
-    });
+interface ProductProps {
+  product: {
+    id: number;
+    name: string;
+    image: string;
+    price: number;
+    rating: number;
+    category?: string;
   };
+}
 
+const ProductCard = ({ product }: ProductProps) => {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product, 1);
+  };
+  
   return (
-    <div className="group relative bg-forest-800 rounded-xl overflow-hidden hover-scale transition-all duration-300 shadow-md hover:shadow-emerald-900/20">
-      {/* Category Badge */}
-      <Badge className="absolute top-3 left-3 z-10 bg-emerald-600/90 hover:bg-emerald-600 text-white">
-        {category}
-      </Badge>
-      
-      {/* Image Container */}
-      <div className="aspect-square overflow-hidden bg-forest-900/50">
+    <Card className="bg-forest-800 border-forest-700 overflow-hidden hover:border-emerald-600/50 transition-colors group">
+      <div className="relative aspect-square overflow-hidden">
         <img
-          src={image}
-          alt={name}
+          src={product.image}
+          alt={product.name}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          loading="lazy"
         />
       </div>
-      
-      {/* Product Details */}
-      <div className="p-5">
-        <h3 className="font-medium text-lg mb-2 line-clamp-1">{name}</h3>
-        
-        {/* Rating */}
-        <div className="flex items-center mb-3">
-          <div className="flex items-center text-amber-400 mr-2">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                size={14}
-                fill={i < Math.floor(rating) ? "currentColor" : "none"}
-                className={i < Math.floor(rating) ? "text-amber-400" : "text-gray-500"}
-              />
-            ))}
+      <CardContent className="p-4">
+        <h3 className="font-medium mb-1 line-clamp-1">{product.name}</h3>
+        <div className="flex justify-between items-center">
+          <span className="text-lg font-bold text-emerald-400">${product.price.toFixed(2)}</span>
+          <div className="flex items-center">
+            <Star size={14} className="fill-yellow-500 text-yellow-500" />
+            <span className="text-sm ml-1">{product.rating}</span>
           </div>
-          <span className="text-sm text-muted-foreground">{rating}</span>
         </div>
-        
-        {/* Price and Button */}
-        <div className="flex items-center justify-between mt-4">
-          <span className="text-lg font-bold">${price.toFixed(2)}</span>
-          <Button
-            size="sm"
-            onClick={handleAddToCart}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white"
-          >
-            <ShoppingCart size={16} className="mr-1" />
-            Add
-          </Button>
-        </div>
-      </div>
-      
-      {/* Quick View Overlay - visible on hover */}
-      <div className="absolute inset-0 bg-forest-900/70 opacity-0 flex items-center justify-center transition-opacity group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto">
+      </CardContent>
+      <CardFooter className="p-4 pt-0 flex justify-between gap-2">
         <Button
           variant="outline"
-          className="border-white/20 bg-white/10 text-white hover:bg-white/20"
+          size="sm"
+          className="flex-1 border-forest-700 text-muted-foreground hover:text-foreground"
         >
-          Quick View
+          Details
         </Button>
-      </div>
-    </div>
+        <Button
+          size="sm"
+          className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white"
+          onClick={handleAddToCart}
+        >
+          <ShoppingCart size={14} className="mr-1" />
+          Add
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 

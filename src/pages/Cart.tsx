@@ -5,48 +5,17 @@ import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2, MinusCircle, PlusCircle, ArrowRight, ShoppingBag } from "lucide-react";
-
-// Sample cart items
-const initialCartItems = [
-  {
-    id: 1,
-    name: "RTX 4080 Super Gaming GPU",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80",
-    price: 1299.99,
-    quantity: 1,
-  },
-  {
-    id: 3,
-    name: "32GB DDR5 RGB RAM Kit",
-    image: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&q=80",
-    price: 249.99,
-    quantity: 2,
-  }
-];
+import { useCart } from "@/contexts/CartContext";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState(initialCartItems);
+  const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal } = useCart();
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
   
-  const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const subtotal = getCartTotal();
   const shipping = subtotal > 1000 ? 0 : 29.99;
   const discount = promoApplied ? subtotal * 0.1 : 0;
   const total = subtotal + shipping - discount;
-
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    
-    setCartItems(items => 
-      items.map(item => 
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    );
-  };
-
-  const removeItem = (id: number) => {
-    setCartItems(items => items.filter(item => item.id !== id));
-  };
 
   const applyPromoCode = () => {
     if (promoCode.toLowerCase() === "greenbits10") {
@@ -70,7 +39,7 @@ const Cart = () => {
             <p className="text-muted-foreground mb-6">
               Looks like you haven't added any products to your cart yet.
             </p>
-            <Link to="/products">
+            <Link to="/category/monitors">
               <Button className="bg-emerald-600 hover:bg-emerald-500 text-white">
                 Browse Products
               </Button>
@@ -136,7 +105,7 @@ const Cart = () => {
                             variant="ghost" 
                             size="sm" 
                             className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20"
-                            onClick={() => removeItem(item.id)}
+                            onClick={() => removeFromCart(item.id)}
                           >
                             <Trash2 size={16} />
                           </Button>
@@ -148,7 +117,7 @@ const Cart = () => {
               </div>
               
               <div className="mt-6 flex flex-wrap gap-4">
-                <Link to="/products">
+                <Link to="/category/monitors">
                   <Button variant="outline" className="border-forest-700 text-muted-foreground hover:text-foreground">
                     Continue Shopping
                   </Button>
@@ -156,7 +125,7 @@ const Cart = () => {
                 <Button 
                   variant="outline" 
                   className="border-forest-700 text-muted-foreground hover:text-foreground"
-                  onClick={() => setCartItems([])}
+                  onClick={clearCart}
                 >
                   Clear Cart
                 </Button>

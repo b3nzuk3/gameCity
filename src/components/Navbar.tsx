@@ -23,8 +23,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useCart } from "@/contexts/CartContext";
 
 const Navbar = () => {
+  const { getCartCount } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -155,9 +157,11 @@ const Navbar = () => {
                 className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40 relative"
               >
                 <ShoppingCart size={20} />
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-emerald-500 text-[10px]">
-                  3
-                </Badge>
+                {getCartCount() > 0 && (
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-emerald-500 text-[10px]">
+                    {getCartCount()}
+                  </Badge>
+                )}
               </Button>
             </Link>
 
