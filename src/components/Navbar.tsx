@@ -175,10 +175,12 @@ const Navbar = () => {
                 <DropdownMenuContent className="w-56 bg-forest-800 border-emerald-700/50">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-emerald-800/30" />
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                    <User size={16} />
-                    <span>Profile</span>
-                  </DropdownMenuItem>
+                  <Link to="/profile">
+                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+                      <User size={16} />
+                      <span>Profile</span>
+                    </DropdownMenuItem>
+                  </Link>
                   {user.isAdmin && (
                     <Link to="/admin">
                       <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
@@ -313,6 +315,13 @@ const Navbar = () => {
             {user && (
               <>
                 <div className="border-t border-forest-700 mt-4 pt-4"></div>
+                <Link
+                  to="/profile"
+                  className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Profile
+                </Link>
                 {user.isAdmin && (
                   <Link
                     to="/admin"
