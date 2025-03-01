@@ -10,7 +10,8 @@ import {
   Monitor,
   Database,
   Settings,
-  CreditCard
+  CreditCard,
+  LogOut 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/contexts/CartContext";
+import { toast } from "@/hooks/use-toast";
 
 const Navbar = () => {
   const { getCartCount } = useCart();
@@ -31,9 +33,16 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Check if user is logged in
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+
     const handleScroll = () => {
       if (window.scrollY > 20) {
         setIsScrolled(true);
@@ -63,6 +72,16 @@ const Navbar = () => {
       setIsSearchOpen(false);
       setSearchQuery("");
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out",
+    });
+    navigate("/");
   };
 
   const categories = [
@@ -141,15 +160,52 @@ const Navbar = () => {
             >
               <Search size={20} />
             </Button>
-            <Link to="/signin">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40"
-              >
-                <User size={20} />
-              </Button>
-            </Link>
+            
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40"
+                  >
+                    <User size={20} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56 bg-forest-800 border-emerald-700/50">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-emerald-800/30" />
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+                    <User size={16} />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
+                  {user.isAdmin && (
+                    <Link to="/admin">
+                      <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
+                        <Settings size={16} />
+                        <span>Admin Dashboard</span>
+                      </DropdownMenuItem>
+                    </Link>
+                  )}
+                  <DropdownMenuSeparator className="bg-emerald-800/30" />
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onClick={handleLogout}>
+                    <LogOut size={16} />
+                    <span>Logout</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Link to="/signin">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40"
+                >
+                  <User size={20} />
+                </Button>
+              </Link>
+            )}
+            
             <Link to="/cart">
               <Button 
                 variant="ghost" 
@@ -253,6 +309,30 @@ const Navbar = () => {
             >
               Contact
             </Link>
+            
+            {user && (
+              <>
+                <div className="border-t border-forest-700 mt-4 pt-4"></div>
+                {user.isAdmin && (
+                  <Link
+                    to="/admin"
+                    className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    Admin Dashboard
+                  </Link>
+                )}
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="block w-full text-left py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

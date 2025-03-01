@@ -12,7 +12,7 @@ const featuredProducts = [
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80",
     price: 1299.99,
     rating: 4.8,
-    category: "GPU",
+    category: "graphics-cards",
   },
   {
     id: 2,
@@ -20,7 +20,7 @@ const featuredProducts = [
     image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80",
     price: 2499.99,
     rating: 4.9,
-    category: "Desktop PC",
+    category: "gaming-pcs",
   },
   {
     id: 3,
@@ -28,7 +28,7 @@ const featuredProducts = [
     image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?auto=format&fit=crop&q=80",
     price: 699.99,
     rating: 4.7,
-    category: "Monitor",
+    category: "monitors",
   },
   {
     id: 4,
@@ -36,7 +36,7 @@ const featuredProducts = [
     image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80",
     price: 199.99,
     rating: 4.6,
-    category: "Peripherals",
+    category: "peripherals",
   }
 ];
 

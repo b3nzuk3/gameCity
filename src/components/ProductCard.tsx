@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
@@ -26,6 +25,14 @@ const ProductCard = ({ product }: ProductProps) => {
     addToCart(product, 1);
   };
   
+  const getCategoryUrl = (category: string | undefined) => {
+    if (!category) return 'components';
+    
+    if (category.includes('-')) return category.toLowerCase();
+    
+    return category.toLowerCase().replace(/\s+/g, '-');
+  };
+  
   return (
     <Card className="bg-forest-800 border-forest-700 overflow-hidden hover:border-emerald-600/50 transition-colors group">
       <div className="relative aspect-square overflow-hidden">
@@ -46,7 +53,7 @@ const ProductCard = ({ product }: ProductProps) => {
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-between gap-2">
-        <Link to={`/category/${product.category?.toLowerCase() || 'components'}?product=${product.id}`} className="flex-1">
+        <Link to={`/category/${getCategoryUrl(product.category)}?product=${product.id}`} className="flex-1">
           <Button
             variant="outline"
             size="sm"

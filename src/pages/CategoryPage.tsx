@@ -1,272 +1,567 @@
 
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import { Filter, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { X, SlidersHorizontal } from "lucide-react";
 
-// Sample product data - in a real app, this would come from an API
-const productsByCategory: Record<string, any[]> = {
-  monitors: [
-    {
-      id: 1,
-      name: "Ultra Gaming Monitor 27\"",
-      image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?auto=format&fit=crop&q=80",
-      price: 699.99,
-      rating: 4.7,
-      category: "Monitor",
-    },
-    {
-      id: 2,
-      name: "ProDesign Monitor 32\" 4K",
-      image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&q=80",
-      price: 899.99,
-      rating: 4.8,
-      category: "Monitor",
-    },
-    {
-      id: 3,
-      name: "Curved Gaming Monitor 34\"",
-      image: "https://images.unsplash.com/photo-1547119957-637f8679db1e?auto=format&fit=crop&q=80",
-      price: 799.99,
-      rating: 4.6,
-      category: "Monitor",
-    },
-    {
-      id: 4,
-      name: "Budget Gaming Monitor 24\"",
-      image: "https://images.unsplash.com/photo-1551645120-d70bcd9c547e?auto=format&fit=crop&q=80",
-      price: 299.99,
-      rating: 4.4,
-      category: "Monitor",
-    },
-    {
-      id: 5,
-      name: "Ultra Wide Monitor 38\"",
-      image: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&q=80",
-      price: 1199.99,
-      rating: 4.9,
-      category: "Monitor",
-    },
-    {
-      id: 6,
-      name: "Portable Monitor 15.6\"",
-      image: "https://images.unsplash.com/photo-1544652478-6653e09f18a2?auto=format&fit=crop&q=80",
-      price: 249.99,
-      rating: 4.3,
-      category: "Monitor",
-    }
-  ],
-  components: [
-    {
-      id: 7,
-      name: "RTX 4080 Super Gaming GPU",
-      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80",
-      price: 1299.99,
-      rating: 4.8,
-      category: "GPU",
-    },
-    {
-      id: 8,
-      name: "AMD Ryzen 9 7950X CPU",
-      image: "https://images.unsplash.com/photo-1600348712270-5da9de1f413b?auto=format&fit=crop&q=80",
-      price: 599.99,
-      rating: 4.9,
-      category: "CPU",
-    },
-    {
-      id: 9,
-      name: "32GB DDR5 RGB RAM Kit",
-      image: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&q=80",
-      price: 249.99,
-      rating: 4.7,
-      category: "RAM",
-    },
-    {
-      id: 10,
-      name: "2TB NVMe SSD Gen4",
-      image: "https://images.unsplash.com/photo-1597074866923-dc0589150358?auto=format&fit=crop&q=80",
-      price: 329.99,
-      rating: 4.8,
-      category: "Storage",
-    }
-  ],
-  "pc-building": [
-    {
-      id: 11,
-      name: "Aurora Gaming Desktop",
-      image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80",
-      price: 2499.99,
-      rating: 4.9,
-      category: "Desktop PC",
-    },
-    {
-      id: 12,
-      name: "Custom Liquid Cooling Kit",
-      image: "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&q=80",
-      price: 349.99,
-      rating: 4.7,
-      category: "Cooling",
-    },
-    {
-      id: 13,
-      name: "PC Building Tool Kit",
-      image: "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&q=80",
-      price: 59.99,
-      rating: 4.6,
-      category: "Tools",
-    }
-  ],
-  accessories: [
-    {
-      id: 14,
-      name: "Mechanical RGB Keyboard",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80",
-      price: 199.99,
-      rating: 4.6,
-      category: "Peripherals",
-    },
-    {
-      id: 15,
-      name: "Wireless Gaming Mouse",
-      image: "https://images.unsplash.com/photo-1615663245857-ac93bb7c39e7?auto=format&fit=crop&q=80",
-      price: 129.99,
-      rating: 4.7,
-      category: "Peripherals",
-    },
-    {
-      id: 16,
-      name: "RGB Mousepad XL",
-      image: "https://images.unsplash.com/photo-1625462689963-98e50afee8e6?auto=format&fit=crop&q=80",
-      price: 49.99,
-      rating: 4.5,
-      category: "Peripherals",
-    }
-  ]
-};
+// Sample product data
+const allProducts = [
+  // GPUs
+  {
+    id: 1,
+    name: "RTX 4080 Super Gaming GPU",
+    price: 1299.99,
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80",
+    rating: 4.8,
+    category: "graphics-cards",
+    brand: "NVIDIA",
+    stock: 10,
+  },
+  {
+    id: 2,
+    name: "RTX 4070 Ti GPU",
+    price: 899.99,
+    image: "https://images.unsplash.com/photo-1562408590-e32931084e23?auto=format&fit=crop&q=80",
+    rating: 4.7,
+    category: "graphics-cards",
+    brand: "NVIDIA",
+    stock: 15,
+  },
+  {
+    id: 3,
+    name: "AMD Radeon RX 7900 XTX",
+    price: 1199.99,
+    image: "https://images.unsplash.com/photo-1542736705-53f0131d1e98?auto=format&fit=crop&q=80",
+    rating: 4.6,
+    category: "graphics-cards",
+    brand: "AMD",
+    stock: 8,
+  },
+  // Monitors
+  {
+    id: 4,
+    name: "Ultra Gaming Monitor 27\"",
+    price: 699.99,
+    image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?auto=format&fit=crop&q=80",
+    rating: 4.7,
+    category: "monitors",
+    brand: "LG",
+    stock: 20,
+  },
+  {
+    id: 5,
+    name: "Curved Ultrawide Monitor 34\"",
+    price: 899.99,
+    image: "https://images.unsplash.com/photo-1547119957-637f8679db1e?auto=format&fit=crop&q=80",
+    rating: 4.8,
+    category: "monitors",
+    brand: "Samsung",
+    stock: 12,
+  },
+  {
+    id: 6,
+    name: "4K ProDisplay 32\"",
+    price: 1299.99,
+    image: "https://images.unsplash.com/photo-1600733885209-e8f7aee20187?auto=format&fit=crop&q=80",
+    rating: 4.9,
+    category: "monitors",
+    brand: "Dell",
+    stock: 5,
+  },
+  // PC Components
+  {
+    id: 7,
+    name: "AMD Ryzen 9 7950X CPU",
+    price: 599.99,
+    image: "https://images.unsplash.com/photo-1620283085348-9894fe64aad4?auto=format&fit=crop&q=80",
+    rating: 4.9,
+    category: "components",
+    brand: "AMD",
+    stock: 15,
+  },
+  {
+    id: 8,
+    name: "Intel Core i9-13900K CPU",
+    price: 649.99,
+    image: "https://images.unsplash.com/photo-1561113500-8f4ad4f80a93?auto=format&fit=crop&q=80",
+    rating: 4.8,
+    category: "components",
+    brand: "Intel",
+    stock: 10,
+  },
+  {
+    id: 9,
+    name: "DDR5 RGB RAM 32GB",
+    price: 249.99,
+    image: "https://images.unsplash.com/photo-1473968512647-3e447244af8f?auto=format&fit=crop&q=80",
+    rating: 4.7,
+    category: "components",
+    brand: "Corsair",
+    stock: 25,
+  },
+  // Gaming PCs
+  {
+    id: 10,
+    name: "Aurora Gaming Desktop",
+    price: 2499.99,
+    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80",
+    rating: 4.9,
+    category: "gaming-pcs",
+    brand: "Alienware",
+    stock: 7,
+  },
+  {
+    id: 11,
+    name: "Pro Gaming PC RTX 4090",
+    price: 3499.99,
+    image: "https://images.unsplash.com/photo-1578598336057-0a34b74b82bc?auto=format&fit=crop&q=80",
+    rating: 5.0,
+    category: "gaming-pcs",
+    brand: "GreenBits",
+    stock: 3,
+  },
+  {
+    id: 12,
+    name: "Compact Gaming PC",
+    price: 1899.99,
+    image: "https://images.unsplash.com/photo-1587202372634-32705e3bf49c?auto=format&fit=crop&q=80",
+    rating: 4.6,
+    category: "gaming-pcs",
+    brand: "NZXT",
+    stock: 9,
+  },
+  // Peripherals
+  {
+    id: 13,
+    name: "Mechanical RGB Keyboard",
+    price: 199.99,
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80",
+    rating: 4.6,
+    category: "peripherals",
+    brand: "Razer",
+    stock: 30,
+  },
+  {
+    id: 14,
+    name: "Wireless Gaming Mouse",
+    price: 129.99,
+    image: "https://images.unsplash.com/photo-1588200618450-3a18f1eb7cd0?auto=format&fit=crop&q=80",
+    rating: 4.7,
+    category: "peripherals",
+    brand: "Logitech",
+    stock: 35,
+  },
+  {
+    id: 15,
+    name: "Premium Gaming Headset",
+    price: 249.99,
+    image: "https://images.unsplash.com/photo-1615558830379-a6d21a5ab273?auto=format&fit=crop&q=80",
+    rating: 4.8,
+    category: "peripherals",
+    brand: "SteelSeries",
+    stock: 20,
+  },
+];
 
 const CategoryPage = () => {
-  const { categoryId } = useParams<{ categoryId: string }>();
-  const products = categoryId ? productsByCategory[categoryId] || [] : [];
+  const { categoryId } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const productId = searchParams.get("product");
   
-  // Format category name for display
-  const formatCategoryName = (name: string) => {
-    if (!name) return '';
-    return name
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
+  const [products, setProducts] = useState([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [priceRange, setPriceRange] = useState([0, 4000]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [sortOrder, setSortOrder] = useState("featured");
+
+  const brands = [...new Set(allProducts.map(product => product.brand))];
+
+  // Initialize products based on category
+  useEffect(() => {
+    let filtered = [...allProducts];
+    
+    if (categoryId && categoryId !== "all") {
+      filtered = filtered.filter(
+        product => product.category.toLowerCase() === categoryId.toLowerCase()
+      );
+    }
+    
+    applyFilters(filtered);
+  }, [categoryId]);
+
+  const applyFilters = (baseProducts = null) => {
+    let filtered = baseProducts || [...allProducts];
+    
+    if (categoryId && categoryId !== "all" && !baseProducts) {
+      filtered = filtered.filter(
+        product => product.category.toLowerCase() === categoryId.toLowerCase()
+      );
+    }
+    
+    // Apply price filter
+    filtered = filtered.filter(
+      product => product.price >= priceRange[0] && product.price <= priceRange[1]
+    );
+    
+    // Apply brand filter
+    if (selectedBrands.length > 0) {
+      filtered = filtered.filter(product => selectedBrands.includes(product.brand));
+    }
+    
+    // Apply sorting
+    if (sortOrder === "price-asc") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortOrder === "price-desc") {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sortOrder === "rating") {
+      filtered.sort((a, b) => b.rating - a.rating);
+    }
+    
+    setProducts(filtered);
   };
 
-  return (
-    <Layout>
-      <div className="container mx-auto px-4 py-12 mt-16">
-        {/* Page header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold">{formatCategoryName(categoryId || '')}</h1>
-          <p className="text-muted-foreground mt-2">
-            Browse our selection of high-quality {formatCategoryName(categoryId || '')} for your setup.
-          </p>
-        </div>
+  const handlePriceChange = (value) => {
+    setPriceRange(value);
+  };
 
-        {/* Filters and products grid */}
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters sidebar */}
-          <div className="w-full lg:w-64 shrink-0">
-            <div className="sticky top-24 bg-forest-800 rounded-lg p-5 shadow-md">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center">
-                  <Filter size={18} className="mr-2 text-emerald-400" />
-                  <h3 className="font-medium">Filters</h3>
-                </div>
-                <Button variant="ghost" size="sm" className="text-xs text-emerald-400 hover:text-emerald-300">
-                  Reset
-                </Button>
-              </div>
+  const handleBrandToggle = (brand) => {
+    setSelectedBrands(prev => 
+      prev.includes(brand)
+        ? prev.filter(b => b !== brand)
+        : [...prev, brand]
+    );
+  };
 
-              {/* Price Range */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-sm font-medium">Price Range</h4>
-                  <ChevronDown size={16} />
-                </div>
-                <div className="flex gap-2 items-center">
-                  <input 
-                    type="text" 
-                    placeholder="Min" 
-                    className="flex-1 h-9 rounded border border-forest-700 bg-forest-900 px-3 text-sm" 
-                  />
-                  <span>-</span>
-                  <input 
-                    type="text" 
-                    placeholder="Max" 
-                    className="flex-1 h-9 rounded border border-forest-700 bg-forest-900 px-3 text-sm" 
-                  />
-                </div>
-              </div>
+  const handleReset = () => {
+    setPriceRange([0, 4000]);
+    setSelectedBrands([]);
+    setSortOrder("featured");
+    
+    let filtered = [...allProducts];
+    if (categoryId && categoryId !== "all") {
+      filtered = filtered.filter(
+        product => product.category.toLowerCase() === categoryId.toLowerCase()
+      );
+    }
+    setProducts(filtered);
+  };
 
-              {/* Brand */}
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className="text-sm font-medium">Brand</h4>
-                  <ChevronDown size={16} />
-                </div>
-                <div className="space-y-2">
-                  {['ASUS', 'MSI', 'Gigabyte', 'Dell', 'LG', 'Samsung'].map(brand => (
-                    <div key={brand} className="flex items-center">
-                      <input type="checkbox" id={brand} className="mr-2 h-4 w-4 rounded border-forest-700 bg-forest-900 text-emerald-500" />
-                      <label htmlFor={brand} className="text-sm">{brand}</label>
-                    </div>
+  const handleSortChange = (value) => {
+    setSortOrder(value);
+    applyFilters();
+  };
+
+  useEffect(() => {
+    applyFilters();
+  }, [priceRange, selectedBrands, sortOrder]);
+
+  // If viewing a specific product
+  if (productId) {
+    const product = allProducts.find(p => p.id === parseInt(productId));
+    
+    if (!product) {
+      return (
+        <Layout>
+          <div className="container mx-auto py-12 px-4 mt-16">
+            <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
+            <p>The product you're looking for does not exist.</p>
+          </div>
+        </Layout>
+      );
+    }
+    
+    return (
+      <Layout>
+        <div className="container mx-auto py-12 px-4 mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="rounded-lg overflow-hidden border border-forest-700">
+              <img 
+                src={product.image} 
+                alt={product.name} 
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="space-y-6">
+              <h1 className="text-3xl font-bold">{product.name}</h1>
+              <div className="flex items-center">
+                <div className="flex items-center space-x-1">
+                  {[...Array(5)].map((_, i) => (
+                    <svg 
+                      key={i}
+                      className={`w-5 h-5 ${i < Math.floor(product.rating) ? "text-yellow-500 fill-yellow-500" : "text-gray-300 fill-gray-300"}`}
+                      xmlns="http://www.w3.org/2000/svg" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                    </svg>
                   ))}
                 </div>
+                <span className="ml-2 text-sm text-gray-400">({product.rating})</span>
               </div>
-
-              {/* Display Size (for monitors) */}
-              {categoryId === 'monitors' && (
-                <div className="mb-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <h4 className="text-sm font-medium">Display Size</h4>
-                    <ChevronDown size={16} />
-                  </div>
-                  <div className="space-y-2">
-                    {['24"', '27"', '32"', '34" Ultrawide', '38" Ultrawide', '49" Super Ultrawide'].map(size => (
-                      <div key={size} className="flex items-center">
-                        <input type="checkbox" id={size} className="mr-2 h-4 w-4 rounded border-forest-700 bg-forest-900 text-emerald-500" />
-                        <label htmlFor={size} className="text-sm">{size}</label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Apply button */}
-              <Button className="w-full bg-emerald-600 hover:bg-emerald-500 text-white">
-                Apply Filters
-              </Button>
+              <div className="text-3xl font-bold text-emerald-400">${product.price.toFixed(2)}</div>
+              <div className="space-y-2">
+                <p className="text-sm">Brand: <span className="text-emerald-400">{product.brand}</span></p>
+                <p className="text-sm">Category: <span className="text-emerald-400">{product.category}</span></p>
+                <p className="text-sm">Availability: 
+                  <span className={product.stock > 0 ? "text-emerald-400" : "text-red-400"}>
+                    {product.stock > 0 ? ` In Stock (${product.stock})` : " Out of Stock"}
+                  </span>
+                </p>
+              </div>
+              <div className="pt-4">
+                <Button className="w-full bg-emerald-600 hover:bg-emerald-500 text-white">
+                  Add to Cart
+                </Button>
+              </div>
+              <div className="pt-4 space-y-4">
+                <h3 className="font-medium">Description</h3>
+                <p className="text-muted-foreground">
+                  Experience unparalleled performance with the {product.name}. 
+                  Designed for enthusiasts and professionals who demand the best 
+                  in technology, this product delivers exceptional quality and reliability.
+                </p>
+              </div>
             </div>
           </div>
+        </div>
+      </Layout>
+    );
+  }
 
-          {/* Products grid */}
-          <div className="flex-1">
-            {/* Sort and layout controls */}
-            <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6 bg-forest-800 p-4 rounded-lg">
-              <div className="flex items-center gap-2">
-                <SlidersHorizontal size={18} />
-                <span className="text-sm">Sort by:</span>
-                <select className="bg-forest-900 border border-forest-700 rounded px-2 py-1 text-sm">
-                  <option>Popularity</option>
-                  <option>Price: Low to High</option>
-                  <option>Price: High to Low</option>
-                  <option>Newest First</option>
-                  <option>Rating</option>
-                </select>
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Showing {products.length} products
+  // Category display with products grid
+  return (
+    <Layout>
+      <div className="container mx-auto py-12 px-4 mt-16">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-2xl font-bold capitalize">
+            {categoryId === "all" ? "All Products" : categoryId?.split('-').join(' ')}
+          </h1>
+          
+          {/* Mobile filter toggle */}
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="md:hidden border-forest-700"
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+          >
+            <SlidersHorizontal size={16} className="mr-2" />
+            Filters
+          </Button>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* Filter sidebar - desktop */}
+          <div className="hidden md:block space-y-6 bg-forest-800 p-4 rounded-lg border border-forest-700 h-fit">
+            <div className="flex justify-between items-center">
+              <h3 className="font-medium">Filters</h3>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handleReset}
+                className="text-xs h-8 px-2 text-emerald-400 hover:text-emerald-300 hover:bg-forest-700"
+              >
+                Reset All
+              </Button>
+            </div>
+            
+            <div className="border-t border-forest-700 pt-4">
+              <h4 className="font-medium mb-4">Price Range</h4>
+              <div className="px-2">
+                <Slider
+                  min={0}
+                  max={4000}
+                  step={50}
+                  value={priceRange}
+                  onValueChange={handlePriceChange}
+                  className="my-6"
+                />
+                <div className="flex items-center justify-between mt-2">
+                  <div className="w-24">
+                    <Input
+                      type="number"
+                      value={priceRange[0]}
+                      onChange={(e) => handlePriceChange([parseInt(e.target.value), priceRange[1]])}
+                      className="bg-forest-900 border-forest-700 h-8 px-2"
+                    />
+                  </div>
+                  <span className="text-muted-foreground">-</span>
+                  <div className="w-24">
+                    <Input
+                      type="number"
+                      value={priceRange[1]}
+                      onChange={(e) => handlePriceChange([priceRange[0], parseInt(e.target.value)])}
+                      className="bg-forest-900 border-forest-700 h-8 px-2"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-
+            
+            <div className="border-t border-forest-700 pt-4">
+              <h4 className="font-medium mb-4">Brands</h4>
+              <div className="space-y-2">
+                {brands.map(brand => (
+                  <div key={brand} className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id={`brand-${brand}`}
+                      checked={selectedBrands.includes(brand)}
+                      onChange={() => handleBrandToggle(brand)}
+                      className="mr-2 rounded border-forest-700 bg-forest-900 text-emerald-600 focus:ring-0 focus:ring-offset-0"
+                    />
+                    <label htmlFor={`brand-${brand}`} className="text-sm">
+                      {brand}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          {/* Mobile filter sidebar */}
+          {isFilterOpen && (
+            <div className="md:hidden fixed inset-0 z-50 bg-black/80 flex justify-end">
+              <div className="w-3/4 h-full bg-forest-800 overflow-auto p-4 animate-in slide-in-from-right">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="font-medium">Filters</h3>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => setIsFilterOpen(false)}
+                    className="text-muted-foreground"
+                  >
+                    <X size={18} />
+                  </Button>
+                </div>
+                
+                <div className="space-y-6">
+                  <div className="flex justify-between items-center">
+                    <h4 className="text-sm">Applied Filters</h4>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={handleReset}
+                      className="text-xs h-8 px-2 text-emerald-400 hover:text-emerald-300"
+                    >
+                      Reset All
+                    </Button>
+                  </div>
+                  
+                  <Accordion type="single" collapsible className="space-y-4">
+                    <AccordionItem value="price" className="border-b border-forest-700">
+                      <AccordionTrigger className="text-sm py-2">Price Range</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="px-2">
+                          <Slider
+                            min={0}
+                            max={4000}
+                            step={50}
+                            value={priceRange}
+                            onValueChange={handlePriceChange}
+                            className="my-6"
+                          />
+                          <div className="flex items-center justify-between mt-2">
+                            <div className="w-20">
+                              <Input
+                                type="number"
+                                value={priceRange[0]}
+                                onChange={(e) => handlePriceChange([parseInt(e.target.value), priceRange[1]])}
+                                className="bg-forest-900 border-forest-700 h-8 px-2"
+                              />
+                            </div>
+                            <span className="text-muted-foreground">-</span>
+                            <div className="w-20">
+                              <Input
+                                type="number"
+                                value={priceRange[1]}
+                                onChange={(e) => handlePriceChange([priceRange[0], parseInt(e.target.value)])}
+                                className="bg-forest-900 border-forest-700 h-8 px-2"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    
+                    <AccordionItem value="brands" className="border-b border-forest-700">
+                      <AccordionTrigger className="text-sm py-2">Brands</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-2">
+                          {brands.map(brand => (
+                            <div key={brand} className="flex items-center">
+                              <input
+                                type="checkbox"
+                                id={`mobile-brand-${brand}`}
+                                checked={selectedBrands.includes(brand)}
+                                onChange={() => handleBrandToggle(brand)}
+                                className="mr-2 rounded border-forest-700 bg-forest-900 text-emerald-600 focus:ring-0 focus:ring-offset-0"
+                              />
+                              <label htmlFor={`mobile-brand-${brand}`} className="text-sm">
+                                {brand}
+                              </label>
+                            </div>
+                          ))}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                  
+                  <div className="mt-auto pt-6">
+                    <Button 
+                      className="w-full bg-emerald-600 hover:bg-emerald-500 text-white"
+                      onClick={() => {
+                        applyFilters();
+                        setIsFilterOpen(false);
+                      }}
+                    >
+                      Apply Filters
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Products grid */}
+          <div className="md:col-span-3 space-y-6">
+            {/* Sort & filter controls */}
+            <div className="flex flex-col sm:flex-row justify-between gap-4 pb-4 border-b border-forest-700">
+              <p className="text-sm text-muted-foreground">
+                Showing <span className="font-medium text-foreground">{products.length}</span> products
+              </p>
+              
+              <div className="flex gap-2">
+                <Select value={sortOrder} onValueChange={handleSortChange}>
+                  <SelectTrigger className="w-[180px] bg-forest-800 border-forest-700">
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-forest-800 border-forest-700">
+                    <SelectItem value="featured">Featured</SelectItem>
+                    <SelectItem value="price-asc">Price: Low to High</SelectItem>
+                    <SelectItem value="price-desc">Price: High to Low</SelectItem>
+                    <SelectItem value="rating">Highest Rated</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            
             {/* Products */}
             {products.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -277,32 +572,7 @@ const CategoryPage = () => {
             ) : (
               <div className="text-center py-12">
                 <h3 className="text-lg font-medium mb-2">No products found</h3>
-                <p className="text-muted-foreground">
-                  Try adjusting your filters or search terms.
-                </p>
-              </div>
-            )}
-
-            {/* Pagination */}
-            {products.length > 0 && (
-              <div className="mt-12 flex justify-center">
-                <div className="flex">
-                  <Button variant="outline" size="sm" className="rounded-r-none">
-                    Previous
-                  </Button>
-                  <Button variant="outline" size="sm" className="rounded-none bg-forest-700">
-                    1
-                  </Button>
-                  <Button variant="outline" size="sm" className="rounded-none">
-                    2
-                  </Button>
-                  <Button variant="outline" size="sm" className="rounded-none">
-                    3
-                  </Button>
-                  <Button variant="outline" size="sm" className="rounded-l-none">
-                    Next
-                  </Button>
-                </div>
+                <p className="text-muted-foreground">Try adjusting your filters or search terms.</p>
               </div>
             )}
           </div>

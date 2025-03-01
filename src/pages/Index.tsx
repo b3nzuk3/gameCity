@@ -52,6 +52,18 @@ const Index = () => {
       image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80",
       description: "Ultra-wide, 4K, and high refresh rate gaming monitors.",
       path: "/category/monitors"
+    },
+    {
+      title: "Components",
+      image: "https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&q=80",
+      description: "Premium PC components for your custom build.",
+      path: "/category/components"
+    },
+    {
+      title: "Peripherals",
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80",
+      description: "High-quality keyboards, mice, and other accessories.",
+      path: "/category/peripherals"
     }
   ];
 
