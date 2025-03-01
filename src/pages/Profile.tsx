@@ -1,21 +1,79 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/hooks/use-toast";
 
 const Profile = () => {
-  // This would usually come from authentication context
-  const userProfile = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    joinDate: "January 2023",
+  const [userProfile, setUserProfile] = useState({
+    name: "",
+    email: "",
+    joinDate: "",
     avatarUrl: "",
-    recentOrders: [
-      { id: "ORD-12345", date: "2023-05-15", status: "Delivered", total: "$599.99" },
-      { id: "ORD-67890", date: "2023-04-02", status: "Processing", total: "$1299.99" },
-    ],
+    recentOrders: [],
+    isAdmin: false
+  });
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Get user data from localStorage
+    const userData = localStorage.getItem("user");
+    
+    if (userData) {
+      const user = JSON.parse(userData);
+      // Set profile data from user object
+      setUserProfile({
+        name: user.name || "User",
+        email: user.email || "user@example.com",
+        joinDate: user.joinDate || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
+        avatarUrl: user.avatarUrl || "",
+        recentOrders: user.orders || [
+          { id: "ORD-12345", date: "2023-05-15", status: "Delivered", total: "$599.99" },
+          { id: "ORD-67890", date: "2023-04-02", status: "Processing", total: "$1299.99" },
+        ],
+        isAdmin: user.isAdmin || false
+      });
+    } else {
+      // Redirect to sign in if no user is logged in
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to view your profile",
+        variant: "destructive"
+      });
+      navigate("/signin");
+    }
+  }, [navigate]);
+
+  const handleEditProfile = () => {
+    toast({
+      title: "Edit Profile",
+      description: "Profile editing functionality will be available soon"
+    });
+  };
+
+  const handleChangePassword = () => {
+    toast({
+      title: "Change Password",
+      description: "Password changing functionality will be available soon"
+    });
+  };
+
+  const handleViewAllOrders = () => {
+    toast({
+      title: "Orders",
+      description: "Full order history will be available soon"
+    });
+  };
+
+  const handleAddAddress = () => {
+    toast({
+      title: "Add Address",
+      description: "Address management will be available soon"
+    });
   };
 
   return (
@@ -29,11 +87,16 @@ const Profile = () => {
             <CardHeader className="flex flex-row items-center gap-4">
               <Avatar className="h-16 w-16">
                 <AvatarImage src={userProfile.avatarUrl} alt={userProfile.name} />
-                <AvatarFallback className="text-xl">{userProfile.name.charAt(0)}</AvatarFallback>
+                <AvatarFallback className="text-xl bg-emerald-600">{userProfile.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>
                 <CardTitle>{userProfile.name}</CardTitle>
                 <CardDescription>{userProfile.email}</CardDescription>
+                {userProfile.isAdmin && (
+                  <span className="inline-block mt-1 text-xs font-medium bg-emerald-100 text-emerald-800 rounded-full px-2 py-0.5">
+                    Admin
+                  </span>
+                )}
               </div>
             </CardHeader>
             <CardContent>
@@ -44,8 +107,20 @@ const Profile = () => {
                 </div>
                 <Separator />
                 <div className="flex justify-between">
-                  <a href="#" className="text-blue-600 hover:underline">Edit Profile</a>
-                  <a href="#" className="text-blue-600 hover:underline">Change Password</a>
+                  <Button 
+                    variant="link" 
+                    className="p-0 h-auto text-emerald-600 hover:text-emerald-800"
+                    onClick={handleEditProfile}
+                  >
+                    Edit Profile
+                  </Button>
+                  <Button 
+                    variant="link" 
+                    className="p-0 h-auto text-emerald-600 hover:text-emerald-800"
+                    onClick={handleChangePassword}
+                  >
+                    Change Password
+                  </Button>
                 </div>
               </div>
             </CardContent>
@@ -58,17 +133,17 @@ const Profile = () => {
               <CardDescription>Your recent purchases and their status</CardDescription>
             </CardHeader>
             <CardContent>
-              {userProfile.recentOrders.length > 0 ? (
+              {userProfile.recentOrders?.length > 0 ? (
                 <div className="space-y-4">
                   {userProfile.recentOrders.map((order) => (
-                    <div key={order.id} className="flex justify-between items-center p-4 rounded-lg border">
+                    <div key={order.id} className="flex justify-between items-center p-4 rounded-lg border border-emerald-100">
                       <div>
                         <p className="font-medium">{order.id}</p>
                         <p className="text-sm text-muted-foreground">{order.date}</p>
                       </div>
                       <div className="text-right">
                         <p className={`font-medium ${
-                          order.status === "Delivered" ? "text-green-600" : "text-amber-600"
+                          order.status === "Delivered" ? "text-emerald-600" : "text-amber-600"
                         }`}>
                           {order.status}
                         </p>
@@ -77,7 +152,13 @@ const Profile = () => {
                     </div>
                   ))}
                   <div className="text-center mt-6">
-                    <a href="#" className="text-blue-600 hover:underline">View All Orders</a>
+                    <Button 
+                      variant="link" 
+                      className="text-emerald-600 hover:text-emerald-800"
+                      onClick={handleViewAllOrders}
+                    >
+                      View All Orders
+                    </Button>
                   </div>
                 </div>
               ) : (
@@ -95,7 +176,13 @@ const Profile = () => {
             <CardContent>
               <div className="text-center py-8">
                 <p className="text-muted-foreground mb-4">You don't have any saved addresses yet</p>
-                <a href="#" className="text-blue-600 hover:underline">Add New Address</a>
+                <Button 
+                  variant="link" 
+                  className="text-emerald-600 hover:text-emerald-800"
+                  onClick={handleAddAddress}
+                >
+                  Add New Address
+                </Button>
               </div>
             </CardContent>
           </Card>
