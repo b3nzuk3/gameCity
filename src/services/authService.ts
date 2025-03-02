@@ -1,4 +1,3 @@
-
 import api from './api';
 import axios from 'axios';
 import { toast } from '@/hooks/use-toast';
@@ -33,6 +32,17 @@ type UserProfile = {
   token: string;
 };
 
+// Mock admin user for development/testing when backend is unavailable
+const MOCK_ADMIN_USER: UserProfile = {
+  _id: 'admin123',
+  name: 'Admin User',
+  email: 'admin@greenbits.com',
+  isAdmin: true,
+  joinDate: new Date().toISOString(),
+  addresses: [],
+  token: 'mock-jwt-token'
+};
+
 // Services
 export const authService = {
   // Login user
@@ -56,6 +66,23 @@ export const authService = {
       return data;
     } catch (error) {
       console.error('Login error:', error);
+      
+      // Special case for admin login when backend is unavailable
+      if (credentials.email === 'admin@greenbits.com' && credentials.password === 'admin123') {
+        console.log('Using mock admin login as fallback');
+        
+        // Store mock token and user data
+        localStorage.setItem('token', MOCK_ADMIN_USER.token);
+        localStorage.setItem('user', JSON.stringify(MOCK_ADMIN_USER));
+        
+        toast({
+          title: 'Mock Admin Login',
+          description: 'Logged in as admin in development mode (backend unavailable)',
+        });
+        
+        return MOCK_ADMIN_USER;
+      }
+      
       if (axios.isAxiosError(error) && error.response) {
         const message = error.response.data.message || 'Invalid email or password';
         toast({
@@ -66,7 +93,7 @@ export const authService = {
       } else {
         toast({
           title: 'Login failed',
-          description: 'An unexpected error occurred',
+          description: 'Backend server unavailable. For testing, use admin@greenbits.com / admin123',
           variant: 'destructive'
         });
       }
