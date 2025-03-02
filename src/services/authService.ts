@@ -1,3 +1,4 @@
+
 import api from './api';
 import axios from 'axios';
 import { toast } from '@/hooks/use-toast';
@@ -48,6 +49,23 @@ export const authService = {
   // Login user
   async login(credentials: LoginCredentials): Promise<UserProfile | null> {
     try {
+      // Check if this is an admin login with test credentials before trying the API
+      if (credentials.email === 'admin@greenbits.com' && credentials.password === 'admin123') {
+        console.log('Using mock admin login');
+        
+        // Store mock token and user data
+        localStorage.setItem('token', MOCK_ADMIN_USER.token);
+        localStorage.setItem('user', JSON.stringify(MOCK_ADMIN_USER));
+        
+        toast({
+          title: 'Mock Admin Login',
+          description: 'Logged in as admin in development mode',
+        });
+        
+        return MOCK_ADMIN_USER;
+      }
+      
+      // Regular API login attempt
       const { data } = await api.post('/users/login', credentials);
       
       // Store token in localStorage
@@ -67,9 +85,9 @@ export const authService = {
     } catch (error) {
       console.error('Login error:', error);
       
-      // Special case for admin login when backend is unavailable
+      // If the API login attempt failed, but is for admin credentials, fall back to mock
       if (credentials.email === 'admin@greenbits.com' && credentials.password === 'admin123') {
-        console.log('Using mock admin login as fallback');
+        console.log('API login failed, using mock admin login as fallback');
         
         // Store mock token and user data
         localStorage.setItem('token', MOCK_ADMIN_USER.token);
