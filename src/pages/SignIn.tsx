@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import Layout from "@/components/Layout";
+import { authService } from "@/services/authService";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -26,60 +27,30 @@ const SignIn = () => {
       return;
     }
     
-    // Demo credentials for admin access
-    const adminEmail = "admin@greenbits.com";
-    const adminPassword = "admin123";
-    
     setIsLoading(true);
     
-    // Simulate API call delay
-    setTimeout(() => {
-      // Check for admin login
-      if (email === adminEmail && password === adminPassword) {
-        // Set user in localStorage (in a real app, use a more secure method and tokens)
-        localStorage.setItem("user", JSON.stringify({ 
-          email, 
-          isAdmin: true, 
-          name: "Admin User" 
-        }));
-        
+    try {
+      const user = await authService.login({ email, password });
+      
+      if (user) {
         toast({
-          title: "Welcome back, Admin",
+          title: `Welcome back, ${user.name}`,
           description: "You've successfully signed in",
         });
         
-        // Redirect to admin dashboard
-        navigate("/admin");
-      } else {
-        // Check if there's a registered user from signup
-        const registeredUsers = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
-        const user = registeredUsers.find((user: any) => user.email === email);
-        
-        if (user && user.password === password) {
-          // Set regular user in localStorage
-          localStorage.setItem("user", JSON.stringify({ 
-            email, 
-            isAdmin: false, 
-            name: user.name 
-          }));
-          
-          toast({
-            title: `Welcome back, ${user.name}`,
-            description: "You've successfully signed in",
-          });
-          
-          // Redirect to home page
-          navigate("/");
+        // Redirect based on user role
+        if (user.isAdmin) {
+          navigate("/admin");
         } else {
-          toast({
-            title: "Invalid credentials",
-            description: "The email or password you entered is incorrect",
-            variant: "destructive",
-          });
+          navigate("/");
         }
       }
+    } catch (error) {
+      console.error("Login error:", error);
+      // Error toast is handled in the authService
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (

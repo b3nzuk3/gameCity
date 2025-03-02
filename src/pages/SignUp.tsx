@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,6 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import Layout from "@/components/Layout";
+import { authService } from "@/services/authService";
 
 const SignUp = () => {
   const { toast } = useToast();
@@ -72,44 +72,25 @@ const SignUp = () => {
     
     setIsLoading(true);
     
-    // Store user data in localStorage (in a real app, this would be sent to a backend)
     try {
-      // Get any existing users
-      const existingUsers = JSON.parse(localStorage.getItem("registeredUsers") || "[]");
-      
-      // Check if email already exists
-      if (existingUsers.some((user: any) => user.email === formData.email)) {
-        toast({
-          title: "Error",
-          description: "An account with this email already exists",
-          variant: "destructive",
-        });
-        setIsLoading(false);
-        return;
-      }
-      
-      // Add new user
-      const newUser = {
+      const user = await authService.register({
         name: formData.name,
         email: formData.email,
-        password: formData.password, // In a real app, never store plain text passwords
-      };
-      
-      localStorage.setItem("registeredUsers", JSON.stringify([...existingUsers, newUser]));
-      
-      toast({
-        title: "Account created",
-        description: "You have successfully registered for GreenBits!",
+        password: formData.password
       });
       
-      // Navigate to sign in page
-      navigate("/signin");
+      if (user) {
+        toast({
+          title: "Account created",
+          description: "You have successfully registered for GreenBits!",
+        });
+        
+        // Navigate to home page
+        navigate("/");
+      }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "There was an error creating your account",
-        variant: "destructive",
-      });
+      console.error("Registration error:", error);
+      // Error toast is handled in the authService
     } finally {
       setIsLoading(false);
     }

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
@@ -17,16 +16,13 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/components/ui/dialog";
+import { authService } from "@/services/authService";
+import { orderService, Order } from "@/services/orderService";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 const Profile = () => {
-  const [userProfile, setUserProfile] = useState({
-    name: "",
-    email: "",
-    joinDate: "",
-    avatarUrl: "",
-    recentOrders: [],
-    isAdmin: false
-  });
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   
   const [editMode, setEditMode] = useState(false);
   const [editProfileData, setEditProfileData] = useState({
@@ -51,88 +47,107 @@ const Profile = () => {
     country: ""
   });
   
-  const [addresses, setAddresses] = useState([]);
-  const navigate = useNavigate();
-
+  // Get user profile
+  const user = authService.getCurrentUser();
+  
+  // Fetch user orders
+  const { 
+    data: orders = [], 
+    isLoading: ordersLoading
+  } = useQuery({
+    queryKey: ['orders'],
+    queryFn: orderService.getMyOrders,
+    enabled: !!user
+  });
+  
+  // Update profile mutation
+  const updateProfileMutation = useMutation({
+    mutationFn: authService.updateProfile,
+    onSuccess: () => {
+      setEditMode(false);
+      toast({
+        title: "Profile Updated",
+        description: "Your profile information has been updated successfully."
+      });
+    }
+  });
+  
+  // Change password mutation
+  const changePasswordMutation = useMutation({
+    mutationFn: (passwordData: { currentPassword: string, newPassword: string }) => 
+      authService.changePassword(passwordData),
+    onSuccess: () => {
+      setShowPasswordDialog(false);
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: ""
+      });
+      toast({
+        title: "Password Updated",
+        description: "Your password has been changed successfully."
+      });
+    }
+  });
+  
+  // Add address mutation
+  const addAddressMutation = useMutation({
+    mutationFn: authService.addAddress,
+    onSuccess: () => {
+      setShowAddressDialog(false);
+      setAddressData({
+        street: "",
+        city: "",
+        state: "",
+        postalCode: "",
+        country: ""
+      });
+      toast({
+        title: "Address Added",
+        description: "Your new address has been added successfully."
+      });
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+    }
+  });
+  
   useEffect(() => {
-    // Get user data from localStorage
-    const userData = localStorage.getItem("user");
-    
-    if (userData) {
-      const user = JSON.parse(userData);
-      // Set profile data from user object
-      setUserProfile({
-        name: user.name || "User",
-        email: user.email || "user@example.com",
-        joinDate: user.joinDate || new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
-        avatarUrl: user.avatarUrl || "",
-        recentOrders: user.orders || [
-          { id: "ORD-12345", date: "2023-05-15", status: "Delivered", total: "$599.99" },
-          { id: "ORD-67890", date: "2023-04-02", status: "Processing", total: "$1299.99" },
-        ],
-        isAdmin: user.isAdmin || false
-      });
-      
-      setEditProfileData({
-        name: user.name || "User",
-        email: user.email || "user@example.com"
-      });
-      
-      setAddresses(user.addresses || []);
-    } else {
-      // Redirect to sign in if no user is logged in
+    // Check if user is logged in
+    if (!user) {
       toast({
         title: "Authentication required",
         description: "Please sign in to view your profile",
         variant: "destructive"
       });
       navigate("/signin");
+      return;
     }
-  }, [navigate]);
+    
+    // Set profile data
+    setEditProfileData({
+      name: user.name || "",
+      email: user.email || ""
+    });
+  }, [user, navigate]);
 
   const handleEditProfile = () => {
     setEditMode(true);
   };
 
   const handleSaveProfile = () => {
-    // Get existing user data
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      const user = JSON.parse(userData);
-      
-      // Update user data
-      const updatedUser = {
-        ...user,
-        name: editProfileData.name,
-        email: editProfileData.email
-      };
-      
-      // Save updated user data
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      
-      // Update profile state
-      setUserProfile({
-        ...userProfile,
-        name: editProfileData.name,
-        email: editProfileData.email
-      });
-      
-      // Exit edit mode
-      setEditMode(false);
-      
-      toast({
-        title: "Profile Updated",
-        description: "Your profile information has been updated successfully."
-      });
-    }
+    updateProfileMutation.mutate({
+      name: editProfileData.name,
+      email: editProfileData.email
+    });
   };
 
   const handleCancelEdit = () => {
     // Reset form data
-    setEditProfileData({
-      name: userProfile.name,
-      email: userProfile.email
-    });
+    if (user) {
+      setEditProfileData({
+        name: user.name,
+        email: user.email
+      });
+    }
     
     // Exit edit mode
     setEditMode(false);
@@ -166,21 +181,9 @@ const Profile = () => {
       return;
     }
     
-    // In a real app, you would send this to an API
-    // For now, we'll just show a success message
-    
-    // Reset form and close dialog
-    setPasswordData({
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: ""
-    });
-    
-    setShowPasswordDialog(false);
-    
-    toast({
-      title: "Password Updated",
-      description: "Your password has been changed successfully."
+    changePasswordMutation.mutate({
+      currentPassword: passwordData.currentPassword,
+      newPassword: passwordData.newPassword
     });
   };
 
@@ -203,48 +206,7 @@ const Profile = () => {
       return;
     }
     
-    // Get existing user data
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      const user = JSON.parse(userData);
-      
-      // Add new address
-      const newAddress = {
-        id: Date.now().toString(),
-        ...addressData
-      };
-      
-      const userAddresses = user.addresses || [];
-      const updatedAddresses = [...userAddresses, newAddress];
-      
-      // Update user data
-      const updatedUser = {
-        ...user,
-        addresses: updatedAddresses
-      };
-      
-      // Save updated user data
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      
-      // Update addresses state
-      setAddresses(updatedAddresses);
-      
-      // Reset form and close dialog
-      setAddressData({
-        street: "",
-        city: "",
-        state: "",
-        postalCode: "",
-        country: ""
-      });
-      
-      setShowAddressDialog(false);
-      
-      toast({
-        title: "Address Added",
-        description: "Your new address has been added successfully."
-      });
-    }
+    addAddressMutation.mutate(addressData);
   };
 
   const handleAddressInputChange = (e) => {
@@ -254,6 +216,18 @@ const Profile = () => {
       [name]: value
     });
   };
+
+  if (!user) {
+    return null; // Will redirect in useEffect
+  }
+
+  // Format orders for display
+  const formattedOrders = orders.map((order: Order) => ({
+    id: order._id,
+    date: new Date(order.createdAt).toLocaleDateString(),
+    status: order.status,
+    total: `$${order.totalPrice.toFixed(2)}`
+  }));
 
   return (
     <Layout>
@@ -265,8 +239,8 @@ const Profile = () => {
           <Card className="col-span-1">
             <CardHeader className="flex flex-row items-center gap-4">
               <Avatar className="h-16 w-16">
-                <AvatarImage src={userProfile.avatarUrl} alt={userProfile.name} />
-                <AvatarFallback className="text-xl bg-emerald-600">{userProfile.name.charAt(0)}</AvatarFallback>
+                <AvatarImage src={user.avatarUrl} alt={user.name} />
+                <AvatarFallback className="text-xl bg-emerald-600">{user.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>
                 {editMode ? (
@@ -286,9 +260,9 @@ const Profile = () => {
                   </div>
                 ) : (
                   <>
-                    <CardTitle>{userProfile.name}</CardTitle>
-                    <CardDescription>{userProfile.email}</CardDescription>
-                    {userProfile.isAdmin && (
+                    <CardTitle>{user.name}</CardTitle>
+                    <CardDescription>{user.email}</CardDescription>
+                    {user.isAdmin && (
                       <span className="inline-block mt-1 text-xs font-medium bg-emerald-100 text-emerald-800 rounded-full px-2 py-0.5">
                         Admin
                       </span>
@@ -301,7 +275,7 @@ const Profile = () => {
               <div className="space-y-4">
                 <div>
                   <p className="text-sm text-muted-foreground">Member since</p>
-                  <p>{userProfile.joinDate}</p>
+                  <p>{user.joinDate}</p>
                 </div>
                 <Separator />
                 {editMode ? (
@@ -315,8 +289,9 @@ const Profile = () => {
                     <Button 
                       variant="default" 
                       onClick={handleSaveProfile}
+                      disabled={updateProfileMutation.isLoading}
                     >
-                      Save Changes
+                      {updateProfileMutation.isLoading ? "Saving..." : "Save Changes"}
                     </Button>
                   </div>
                 ) : (
@@ -348,11 +323,13 @@ const Profile = () => {
               <CardDescription>Your recent purchases and their status</CardDescription>
             </CardHeader>
             <CardContent>
-              {!showAllOrders ? (
+              {ordersLoading ? (
+                <p className="text-center text-muted-foreground py-8">Loading orders...</p>
+              ) : !showAllOrders ? (
                 <>
-                  {userProfile.recentOrders?.length > 0 ? (
+                  {formattedOrders?.length > 0 ? (
                     <div className="space-y-4">
-                      {userProfile.recentOrders.slice(0, 2).map((order) => (
+                      {formattedOrders.slice(0, 2).map((order) => (
                         <div key={order.id} className="flex justify-between items-center p-4 rounded-lg border border-emerald-100">
                           <div>
                             <p className="font-medium">{order.id}</p>
@@ -384,9 +361,9 @@ const Profile = () => {
                 </>
               ) : (
                 <>
-                  {userProfile.recentOrders?.length > 0 ? (
+                  {formattedOrders?.length > 0 ? (
                     <div className="space-y-4">
-                      {userProfile.recentOrders.map((order) => (
+                      {formattedOrders.map((order) => (
                         <div key={order.id} className="flex justify-between items-center p-4 rounded-lg border border-emerald-100">
                           <div>
                             <p className="font-medium">{order.id}</p>
@@ -427,10 +404,10 @@ const Profile = () => {
               <CardDescription>Manage your shipping and billing addresses</CardDescription>
             </CardHeader>
             <CardContent>
-              {addresses.length > 0 ? (
+              {user.addresses && user.addresses.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {addresses.map((address) => (
-                    <div key={address.id} className="p-4 rounded-lg border border-emerald-100">
+                  {user.addresses.map((address) => (
+                    <div key={address._id} className="p-4 rounded-lg border border-emerald-100">
                       <div className="space-y-2">
                         <p className="font-medium">{address.street}</p>
                         <p className="text-sm">{address.city}, {address.state} {address.postalCode}</p>
@@ -508,7 +485,13 @@ const Profile = () => {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowPasswordDialog(false)}>Cancel</Button>
-            <Button variant="default" onClick={handlePasswordChange}>Change Password</Button>
+            <Button 
+              variant="default" 
+              onClick={handlePasswordChange}
+              disabled={changePasswordMutation.isLoading}
+            >
+              {changePasswordMutation.isLoading ? "Changing..." : "Change Password"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -580,7 +563,13 @@ const Profile = () => {
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAddressDialog(false)}>Cancel</Button>
-            <Button variant="default" onClick={handleAddAddress}>Add Address</Button>
+            <Button 
+              variant="default" 
+              onClick={handleAddAddress}
+              disabled={addAddressMutation.isLoading}
+            >
+              {addAddressMutation.isLoading ? "Adding..." : "Add Address"}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
