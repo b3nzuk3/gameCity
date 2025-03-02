@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
@@ -239,7 +240,7 @@ const Profile = () => {
           <Card className="col-span-1">
             <CardHeader className="flex flex-row items-center gap-4">
               <Avatar className="h-16 w-16">
-                <AvatarImage src={user.avatarUrl} alt={user.name} />
+                <AvatarImage src={user.avatarUrl || undefined} alt={user.name} />
                 <AvatarFallback className="text-xl bg-emerald-600">{user.name.charAt(0)}</AvatarFallback>
               </Avatar>
               <div>
@@ -289,9 +290,9 @@ const Profile = () => {
                     <Button 
                       variant="default" 
                       onClick={handleSaveProfile}
-                      disabled={updateProfileMutation.isLoading}
+                      disabled={updateProfileMutation.isPending}
                     >
-                      {updateProfileMutation.isLoading ? "Saving..." : "Save Changes"}
+                      {updateProfileMutation.isPending ? "Saving..." : "Save Changes"}
                     </Button>
                   </div>
                 ) : (
@@ -488,9 +489,9 @@ const Profile = () => {
             <Button 
               variant="default" 
               onClick={handlePasswordChange}
-              disabled={changePasswordMutation.isLoading}
+              disabled={changePasswordMutation.isPending}
             >
-              {changePasswordMutation.isLoading ? "Changing..." : "Change Password"}
+              {changePasswordMutation.isPending ? "Changing..." : "Change Password"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -566,9 +567,9 @@ const Profile = () => {
             <Button 
               variant="default" 
               onClick={handleAddAddress}
-              disabled={addAddressMutation.isLoading}
+              disabled={addAddressMutation.isPending}
             >
-              {addAddressMutation.isLoading ? "Adding..." : "Add Address"}
+              {addAddressMutation.isPending ? "Adding..." : "Add Address"}
             </Button>
           </DialogFooter>
         </DialogContent>

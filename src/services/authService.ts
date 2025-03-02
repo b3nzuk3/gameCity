@@ -1,5 +1,6 @@
 
 import api from './api';
+import axios from 'axios';
 import { toast } from '@/hooks/use-toast';
 
 // Types
@@ -20,6 +21,7 @@ type UserProfile = {
   email: string;
   isAdmin: boolean;
   joinDate: string;
+  avatarUrl?: string; // Added optional avatarUrl property
   addresses: Array<{
     _id: string;
     street: string;
