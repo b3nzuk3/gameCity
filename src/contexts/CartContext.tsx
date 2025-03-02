@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { toast } from "@/hooks/use-toast";
 import { cartService, CartItem as ApiCartItem } from "@/services/cartService";
@@ -22,6 +21,8 @@ export type CartItem = {
   price: number;
   image: string;
   quantity: number;
+  id?: string;
+  _id?: string;
 };
 
 // Context type definition

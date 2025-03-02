@@ -10,8 +10,8 @@ export type CartItem = {
   image: string;
   price: number;
   quantity: number;
-  id: string; // Added id field to match what's used in the Cart.tsx component
-  _id?: string; // Added optional _id field for MongoDB compatibility
+  id?: string; // ID field from frontend
+  _id?: string; // ID field from MongoDB
 };
 
 export type Cart = {

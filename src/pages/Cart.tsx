@@ -23,6 +23,11 @@ const Cart = () => {
     }
   };
 
+  // Helper function to get item ID consistently
+  const getItemId = (item: any) => {
+    return item.product || item._id || item.id;
+  };
+
   const isCartEmpty = cartItems.length === 0;
 
   return (
@@ -62,7 +67,7 @@ const Cart = () => {
                   </thead>
                   <tbody className="divide-y divide-forest-700">
                     {cartItems.map((item) => (
-                      <tr key={item.product || item._id || item.id} className="hover:bg-forest-700/30">
+                      <tr key={getItemId(item)} className="hover:bg-forest-700/30">
                         <td className="px-4 py-4">
                           <div className="flex items-center">
                             <div className="h-16 w-16 flex-shrink-0 rounded bg-forest-700 overflow-hidden">
@@ -82,7 +87,7 @@ const Cart = () => {
                               variant="ghost" 
                               size="sm" 
                               className="h-8 w-8 p-0 text-muted-foreground"
-                              onClick={() => updateQuantity(item.product || item._id || item.id, item.quantity - 1)}
+                              onClick={() => updateQuantity(getItemId(item), item.quantity - 1)}
                             >
                               <MinusCircle size={16} />
                             </Button>
@@ -91,7 +96,7 @@ const Cart = () => {
                               variant="ghost" 
                               size="sm" 
                               className="h-8 w-8 p-0 text-muted-foreground"
-                              onClick={() => updateQuantity(item.product || item._id || item.id, item.quantity + 1)}
+                              onClick={() => updateQuantity(getItemId(item), item.quantity + 1)}
                             >
                               <PlusCircle size={16} />
                             </Button>
@@ -105,7 +110,7 @@ const Cart = () => {
                             variant="ghost" 
                             size="sm" 
                             className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20"
-                            onClick={() => removeFromCart(item.product || item._id || item.id)}
+                            onClick={() => removeFromCart(getItemId(item))}
                           >
                             <Trash2 size={16} />
                           </Button>
