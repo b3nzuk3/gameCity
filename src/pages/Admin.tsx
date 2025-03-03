@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
@@ -15,9 +14,13 @@ import {
   Trash2,
   Search,
   LayoutDashboard,
-  LogOut
+  LogOut,
+  X
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Sample product data
 const demoProducts = [
@@ -135,6 +138,25 @@ const demoUsers = [
   }
 ];
 
+// Product form type
+type ProductFormData = {
+  id?: number;
+  name: string;
+  price: number;
+  category: string;
+  stock: number;
+  status: string;
+};
+
+// User form type
+type UserFormData = {
+  id?: number;
+  name: string;
+  email: string;
+  role: string;
+  joined: string;
+};
+
 const Admin = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -144,7 +166,31 @@ const Admin = () => {
   const [productSearch, setProductSearch] = useState("");
   const [orderSearch, setOrderSearch] = useState("");
   const [userSearch, setUserSearch] = useState("");
-
+  
+  // Dialog states
+  const [productDialogOpen, setProductDialogOpen] = useState(false);
+  const [userDialogOpen, setUserDialogOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState<ProductFormData>({
+    name: "",
+    price: 0,
+    category: "",
+    stock: 0,
+    status: "In Stock"
+  });
+  const [currentUser, setCurrentUser] = useState<UserFormData>({
+    name: "",
+    email: "",
+    role: "Customer",
+    joined: new Date().toISOString().split('T')[0]
+  });
+  const [isEditing, setIsEditing] = useState(false);
+  const [storeSettings, setStoreSettings] = useState({
+    name: "GreenBits",
+    email: "support@greenbits.com",
+    phone: "+1 (555) 123-4567",
+    currency: "USD ($)"
+  });
+  
   // Check authentication on mount
   useEffect(() => {
     const user = localStorage.getItem("user");
@@ -191,6 +237,103 @@ const Admin = () => {
     user.email.toLowerCase().includes(userSearch.toLowerCase()) ||
     user.role.toLowerCase().includes(userSearch.toLowerCase())
   );
+
+  // Product CRUD operations
+  const handleAddProduct = () => {
+    setIsEditing(false);
+    setCurrentProduct({
+      name: "",
+      price: 0,
+      category: "",
+      stock: 0,
+      status: "In Stock"
+    });
+    setProductDialogOpen(true);
+  };
+
+  const handleEditProduct = (product: any) => {
+    setIsEditing(true);
+    setCurrentProduct({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      category: product.category,
+      stock: product.stock,
+      status: product.status
+    });
+    setProductDialogOpen(true);
+  };
+
+  const handleDeleteProduct = (productId: number) => {
+    setProducts(products.filter(product => product.id !== productId));
+    toast({
+      title: "Product Deleted",
+      description: "Product has been successfully removed",
+    });
+  };
+
+  const saveProduct = () => {
+    if (isEditing) {
+      setProducts(products.map(product => 
+        product.id === currentProduct.id ? { ...currentProduct as any } : product
+      ));
+      toast({
+        title: "Product Updated",
+        description: "Product has been successfully updated",
+      });
+    } else {
+      const newProduct = {
+        ...currentProduct,
+        id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
+      };
+      setProducts([...products, newProduct as any]);
+      toast({
+        title: "Product Added",
+        description: "New product has been successfully added",
+      });
+    }
+    setProductDialogOpen(false);
+  };
+
+  // User CRUD operations
+  const handleEditUser = (user: any) => {
+    setIsEditing(true);
+    setCurrentUser({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      joined: user.joined
+    });
+    setUserDialogOpen(true);
+  };
+
+  const handleDeleteUser = (userId: number) => {
+    setUsers(users.filter(user => user.id !== userId));
+    toast({
+      title: "User Deleted",
+      description: "User has been successfully removed",
+    });
+  };
+
+  const saveUser = () => {
+    setUsers(users.map(user => 
+      user.id === currentUser.id ? { ...currentUser, orders: user.orders } as any : user
+    ));
+    toast({
+      title: "User Updated",
+      description: "User has been successfully updated",
+    });
+    setUserDialogOpen(false);
+  };
+
+  // Settings operations
+  const saveSettings = () => {
+    toast({
+      title: "Settings Saved",
+      description: "Store settings have been successfully updated",
+    });
+  };
 
   if (!isAuthenticated) {
     return null; // Don't render anything while checking auth
@@ -298,7 +441,10 @@ const Admin = () => {
                   onChange={(e) => setProductSearch(e.target.value)}
                 />
               </div>
-              <Button className="bg-emerald-600 hover:bg-emerald-500 text-white">
+              <Button 
+                className="bg-emerald-600 hover:bg-emerald-500 text-white"
+                onClick={handleAddProduct}
+              >
                 <PlusCircle size={16} className="mr-2" />
                 Add New Product
               </Button>
@@ -337,10 +483,20 @@ const Admin = () => {
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap text-sm text-right">
                           <div className="flex justify-end gap-2">
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 w-8 p-0"
+                              onClick={() => handleEditProduct(product)}
+                            >
                               <Edit size={14} />
                             </Button>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                              onClick={() => handleDeleteProduct(product.id)}
+                            >
                               <Trash2 size={14} />
                             </Button>
                           </div>
@@ -465,10 +621,20 @@ const Admin = () => {
                         <td className="px-4 py-4 whitespace-nowrap text-sm">{user.joined}</td>
                         <td className="px-4 py-4 whitespace-nowrap text-sm text-right">
                           <div className="flex justify-end gap-2">
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 w-8 p-0"
+                              onClick={() => handleEditUser(user)}
+                            >
                               <Edit size={14} />
                             </Button>
-                            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20">
+                            <Button 
+                              variant="ghost" 
+                              size="sm" 
+                              className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                              onClick={() => handleDeleteUser(user.id)}
+                            >
                               <Trash2 size={14} />
                             </Button>
                           </div>
@@ -493,28 +659,55 @@ const Admin = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="store-name" className="text-sm font-medium">Store Name</label>
-                  <Input id="store-name" defaultValue="GreenBits" className="bg-forest-900 border-forest-700" />
+                  <Input 
+                    id="store-name" 
+                    value={storeSettings.name} 
+                    onChange={(e) => setStoreSettings({...storeSettings, name: e.target.value})}
+                    className="bg-forest-900 border-forest-700" 
+                  />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="store-email" className="text-sm font-medium">Store Email</label>
-                  <Input id="store-email" defaultValue="support@greenbits.com" className="bg-forest-900 border-forest-700" />
+                  <Input 
+                    id="store-email" 
+                    value={storeSettings.email}
+                    onChange={(e) => setStoreSettings({...storeSettings, email: e.target.value})}
+                    className="bg-forest-900 border-forest-700" 
+                  />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="store-phone" className="text-sm font-medium">Store Phone</label>
-                  <Input id="store-phone" defaultValue="+1 (555) 123-4567" className="bg-forest-900 border-forest-700" />
+                  <Input 
+                    id="store-phone" 
+                    value={storeSettings.phone}
+                    onChange={(e) => setStoreSettings({...storeSettings, phone: e.target.value})}
+                    className="bg-forest-900 border-forest-700" 
+                  />
                 </div>
                 <div className="space-y-2">
                   <label htmlFor="store-currency" className="text-sm font-medium">Currency</label>
-                  <select id="store-currency" className="w-full h-10 px-3 rounded-md border border-forest-700 bg-forest-900">
-                    <option>USD ($)</option>
-                    <option>EUR (€)</option>
-                    <option>GBP (£)</option>
-                    <option>CAD (C$)</option>
-                  </select>
+                  <Select 
+                    value={storeSettings.currency}
+                    onValueChange={(value) => setStoreSettings({...storeSettings, currency: value})}
+                  >
+                    <SelectTrigger id="store-currency" className="w-full border-forest-700 bg-forest-900">
+                      <SelectValue placeholder="Select currency" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="USD ($)">USD ($)</SelectItem>
+                      <SelectItem value="EUR (€)">EUR (€)</SelectItem>
+                      <SelectItem value="GBP (£)">GBP (£)</SelectItem>
+                      <SelectItem value="CAD (C$)">CAD (C$)</SelectItem>
+                      <SelectItem value="KES (KSh)">KES (KSh)</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
               <div className="mt-6">
-                <Button className="bg-emerald-600 hover:bg-emerald-500 text-white">
+                <Button 
+                  className="bg-emerald-600 hover:bg-emerald-500 text-white"
+                  onClick={saveSettings}
+                >
                   Save Settings
                 </Button>
               </div>
@@ -522,6 +715,131 @@ const Admin = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Product Dialog */}
+      <Dialog open={productDialogOpen} onOpenChange={setProductDialogOpen}>
+        <DialogContent className="bg-forest-800 border-forest-700">
+          <DialogHeader>
+            <DialogTitle>{isEditing ? 'Edit Product' : 'Add New Product'}</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="product-name">Name</Label>
+              <Input 
+                id="product-name" 
+                value={currentProduct.name} 
+                onChange={(e) => setCurrentProduct({...currentProduct, name: e.target.value})}
+                className="bg-forest-900 border-forest-700" 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="product-price">Price</Label>
+              <Input 
+                id="product-price" 
+                type="number" 
+                value={currentProduct.price} 
+                onChange={(e) => setCurrentProduct({...currentProduct, price: parseFloat(e.target.value) || 0})}
+                className="bg-forest-900 border-forest-700" 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="product-category">Category</Label>
+              <Input 
+                id="product-category" 
+                value={currentProduct.category} 
+                onChange={(e) => setCurrentProduct({...currentProduct, category: e.target.value})}
+                className="bg-forest-900 border-forest-700" 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="product-stock">Stock</Label>
+              <Input 
+                id="product-stock" 
+                type="number" 
+                value={currentProduct.stock} 
+                onChange={(e) => setCurrentProduct({...currentProduct, stock: parseInt(e.target.value) || 0})}
+                className="bg-forest-900 border-forest-700" 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="product-status">Status</Label>
+              <Select 
+                value={currentProduct.status}
+                onValueChange={(value) => setCurrentProduct({...currentProduct, status: value})}
+              >
+                <SelectTrigger id="product-status" className="bg-forest-900 border-forest-700">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="In Stock">In Stock</SelectItem>
+                  <SelectItem value="Out of Stock">Out of Stock</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline" className="border-forest-700">Cancel</Button>
+            </DialogClose>
+            <Button onClick={saveProduct} className="bg-emerald-600 hover:bg-emerald-500 text-white">
+              {isEditing ? 'Update' : 'Add'} Product
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* User Edit Dialog */}
+      <Dialog open={userDialogOpen} onOpenChange={setUserDialogOpen}>
+        <DialogContent className="bg-forest-800 border-forest-700">
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="user-name">Name</Label>
+              <Input 
+                id="user-name" 
+                value={currentUser.name} 
+                onChange={(e) => setCurrentUser({...currentUser, name: e.target.value})}
+                className="bg-forest-900 border-forest-700" 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="user-email">Email</Label>
+              <Input 
+                id="user-email" 
+                type="email" 
+                value={currentUser.email} 
+                onChange={(e) => setCurrentUser({...currentUser, email: e.target.value})}
+                className="bg-forest-900 border-forest-700" 
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="user-role">Role</Label>
+              <Select 
+                value={currentUser.role}
+                onValueChange={(value) => setCurrentUser({...currentUser, role: value})}
+              >
+                <SelectTrigger id="user-role" className="bg-forest-900 border-forest-700">
+                  <SelectValue placeholder="Select role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Customer">Customer</SelectItem>
+                  <SelectItem value="Administrator">Administrator</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline" className="border-forest-700">Cancel</Button>
+            </DialogClose>
+            <Button onClick={saveUser} className="bg-emerald-600 hover:bg-emerald-500 text-white">
+              Update User
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 };
