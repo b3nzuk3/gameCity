@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, Plus, ChevronRight, Package, PcCase, Cpu, Smartphone, Monitor, HardDrive } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { useCart } from "@/contexts/CartContext";
 
 // PC parts data
 const partCategories = [
@@ -119,7 +119,6 @@ type SelectedPartsType = Record<string, PartType | null>;
 
 const BuildPC = () => {
   const { toast } = useToast();
-  const { addToCart } = useCart();
   const [selectedParts, setSelectedParts] = useState<SelectedPartsType>({
     cpu: null,
     motherboard: null,
@@ -150,17 +149,6 @@ const BuildPC = () => {
   const selectedPartsCount = Object.values(selectedParts).filter(Boolean).length;
   
   const addAllToCart = () => {
-    Object.values(selectedParts)
-      .filter((part): part is PartType => part !== null)
-      .forEach(part => {
-        addToCart({
-          id: part.id,
-          name: part.name,
-          price: part.price,
-          image: "/placeholder.svg",
-        }, 1);
-      });
-      
     toast({
       title: "Added to cart",
       description: "All selected components have been added to your cart",
