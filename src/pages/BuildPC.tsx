@@ -13,6 +13,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Check, Plus, ChevronRight, Package, PcCase, Cpu, Smartphone, Monitor, HardDrive } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useCart } from "@/contexts/CartContext";
 
 // PC parts data
 const partCategories = [
@@ -119,6 +120,7 @@ type SelectedPartsType = Record<string, PartType | null>;
 
 const BuildPC = () => {
   const { toast } = useToast();
+  const { addToCart } = useCart();
   const [selectedParts, setSelectedParts] = useState<SelectedPartsType>({
     cpu: null,
     motherboard: null,
@@ -149,6 +151,23 @@ const BuildPC = () => {
   const selectedPartsCount = Object.values(selectedParts).filter(Boolean).length;
   
   const addAllToCart = () => {
+    const selectedPartsArray = Object.values(selectedParts).filter((part): part is PartType => part !== null);
+    
+    if (selectedPartsArray.length === 0) {
+      return;
+    }
+    
+    // Add each selected part to the cart
+    selectedPartsArray.forEach(part => {
+      addToCart({
+        id: part.id,
+        name: part.name,
+        price: part.price,
+        image: "/placeholder.svg", // Default image for PC parts
+        category: part.categoryName
+      });
+    });
+    
     toast({
       title: "Added to cart",
       description: "All selected components have been added to your cart",

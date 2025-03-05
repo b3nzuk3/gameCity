@@ -15,7 +15,8 @@ import {
   Search,
   LayoutDashboard,
   LogOut,
-  X
+  X,
+  Upload
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
@@ -31,6 +32,7 @@ const demoProducts = [
     category: "Monitor",
     stock: 15,
     status: "In Stock",
+    image: "/placeholder.svg"
   },
   {
     id: 2,
@@ -39,6 +41,7 @@ const demoProducts = [
     category: "GPU",
     stock: 8,
     status: "In Stock",
+    image: "/placeholder.svg"
   },
   {
     id: 3,
@@ -47,6 +50,7 @@ const demoProducts = [
     category: "Desktop PC",
     stock: 5,
     status: "In Stock",
+    image: "/placeholder.svg"
   },
   {
     id: 4,
@@ -55,6 +59,7 @@ const demoProducts = [
     category: "Peripherals",
     stock: 20,
     status: "In Stock",
+    image: "/placeholder.svg"
   },
   {
     id: 5,
@@ -63,6 +68,7 @@ const demoProducts = [
     category: "CPU",
     stock: 0,
     status: "Out of Stock",
+    image: "/placeholder.svg"
   }
 ];
 
@@ -146,6 +152,7 @@ type ProductFormData = {
   category: string;
   stock: number;
   status: string;
+  image: string;
 };
 
 // User form type
@@ -166,8 +173,8 @@ const Admin = () => {
   const [productSearch, setProductSearch] = useState("");
   const [orderSearch, setOrderSearch] = useState("");
   const [userSearch, setUserSearch] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   
-  // Dialog states
   const [productDialogOpen, setProductDialogOpen] = useState(false);
   const [userDialogOpen, setUserDialogOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState<ProductFormData>({
@@ -175,7 +182,8 @@ const Admin = () => {
     price: 0,
     category: "",
     stock: 0,
-    status: "In Stock"
+    status: "In Stock",
+    image: "/placeholder.svg"
   });
   const [currentUser, setCurrentUser] = useState<UserFormData>({
     name: "",
@@ -191,7 +199,13 @@ const Admin = () => {
     currency: "USD ($)"
   });
   
-  // Check authentication on mount
+  const [revenueData, setRevenueData] = useState({
+    total: 5649.94,
+    lastMonth: 2890.45,
+    thisMonth: 2759.49,
+    growth: 16.8
+  });
+
   useEffect(() => {
     const user = localStorage.getItem("user");
     if (user) {
@@ -220,7 +234,6 @@ const Admin = () => {
     });
   };
 
-  // Filter functions
   const filteredProducts = products.filter(product => 
     product.name.toLowerCase().includes(productSearch.toLowerCase()) ||
     product.category.toLowerCase().includes(productSearch.toLowerCase())
@@ -238,7 +251,6 @@ const Admin = () => {
     user.role.toLowerCase().includes(userSearch.toLowerCase())
   );
 
-  // Product CRUD operations
   const handleAddProduct = () => {
     setIsEditing(false);
     setCurrentProduct({
@@ -246,8 +258,10 @@ const Admin = () => {
       price: 0,
       category: "",
       stock: 0,
-      status: "In Stock"
+      status: "In Stock",
+      image: "/placeholder.svg"
     });
+    setImageUrl("");
     setProductDialogOpen(true);
   };
 
@@ -259,8 +273,10 @@ const Admin = () => {
       price: product.price,
       category: product.category,
       stock: product.stock,
-      status: product.status
+      status: product.status,
+      image: product.image
     });
+    setImageUrl(product.image);
     setProductDialogOpen(true);
   };
 
@@ -273,9 +289,14 @@ const Admin = () => {
   };
 
   const saveProduct = () => {
+    const productToSave = {
+      ...currentProduct,
+      image: imageUrl || "/placeholder.svg"
+    };
+    
     if (isEditing) {
       setProducts(products.map(product => 
-        product.id === currentProduct.id ? { ...currentProduct as any } : product
+        product.id === currentProduct.id ? { ...productToSave as any } : product
       ));
       toast({
         title: "Product Updated",
@@ -283,7 +304,7 @@ const Admin = () => {
       });
     } else {
       const newProduct = {
-        ...currentProduct,
+        ...productToSave,
         id: products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1,
       };
       setProducts([...products, newProduct as any]);
@@ -295,7 +316,6 @@ const Admin = () => {
     setProductDialogOpen(false);
   };
 
-  // User CRUD operations
   const handleEditUser = (user: any) => {
     setIsEditing(true);
     setCurrentUser({
@@ -327,7 +347,6 @@ const Admin = () => {
     setUserDialogOpen(false);
   };
 
-  // Settings operations
   const saveSettings = () => {
     toast({
       title: "Settings Saved",
@@ -336,7 +355,7 @@ const Admin = () => {
   };
 
   if (!isAuthenticated) {
-    return null; // Don't render anything while checking auth
+    return null;
   }
 
   return (
@@ -357,7 +376,6 @@ const Admin = () => {
           </Button>
         </div>
 
-        {/* Dashboard Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <div className="bg-forest-800 rounded-lg p-6 border border-forest-700 shadow-sm">
             <div className="flex items-center">
@@ -396,19 +414,26 @@ const Admin = () => {
           </div>
           
           <div className="bg-forest-800 rounded-lg p-6 border border-forest-700 shadow-sm">
-            <div className="flex items-center">
-              <div className="p-3 rounded-full bg-emerald-900/50 mr-4">
-                <LayoutDashboard className="h-6 w-6 text-emerald-400" />
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center">
+                <div className="p-3 rounded-full bg-emerald-900/50 mr-4">
+                  <LayoutDashboard className="h-6 w-6 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-sm">Revenue</p>
+                  <h3 className="text-2xl font-bold">${revenueData.total.toFixed(2)}</h3>
+                </div>
               </div>
-              <div>
-                <p className="text-muted-foreground text-sm">Revenue</p>
-                <h3 className="text-2xl font-bold">$5,649.94</h3>
+              <div className="text-right">
+                <p className={`text-xs font-medium ${revenueData.growth > 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                  {revenueData.growth > 0 ? '+' : ''}{revenueData.growth}%
+                </p>
+                <p className="text-xs text-muted-foreground">vs last month</p>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Main Content Tabs */}
         <Tabs defaultValue="products" className="w-full">
           <TabsList className="w-full bg-forest-800 border border-forest-700 rounded-lg p-1 mb-8">
             <TabsTrigger value="products" className="flex-1 data-[state=active]:bg-forest-700 data-[state=active]:text-foreground">
@@ -429,7 +454,6 @@ const Admin = () => {
             </TabsTrigger>
           </TabsList>
 
-          {/* Products Tab */}
           <TabsContent value="products" className="space-y-6">
             <div className="flex flex-col md:flex-row justify-between gap-4">
               <div className="relative max-w-sm w-full">
@@ -514,7 +538,6 @@ const Admin = () => {
             </div>
           </TabsContent>
 
-          {/* Orders Tab */}
           <TabsContent value="orders" className="space-y-6">
             <div className="relative max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -576,7 +599,6 @@ const Admin = () => {
             </div>
           </TabsContent>
 
-          {/* Users Tab */}
           <TabsContent value="users" className="space-y-6">
             <div className="relative max-w-sm">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -652,7 +674,6 @@ const Admin = () => {
             </div>
           </TabsContent>
 
-          {/* Settings Tab */}
           <TabsContent value="settings" className="space-y-6">
             <div className="bg-forest-800 rounded-lg border border-forest-700 p-6">
               <h3 className="text-lg font-medium mb-4">Store Settings</h3>
@@ -716,7 +737,6 @@ const Admin = () => {
         </Tabs>
       </div>
 
-      {/* Product Dialog */}
       <Dialog open={productDialogOpen} onOpenChange={setProductDialogOpen}>
         <DialogContent className="bg-forest-800 border-forest-700">
           <DialogHeader>
@@ -776,6 +796,31 @@ const Admin = () => {
                 </SelectContent>
               </Select>
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="product-image">Product Image URL</Label>
+              <div className="flex gap-2">
+                <Input 
+                  id="product-image" 
+                  value={imageUrl} 
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  placeholder="Enter image URL"
+                  className="bg-forest-900 border-forest-700 flex-1" 
+                />
+                <Button 
+                  variant="outline" 
+                  className="border-forest-700"
+                  onClick={() => setImageUrl("/placeholder.svg")}
+                >
+                  <Upload size={16} className="mr-2" />
+                  Default
+                </Button>
+              </div>
+              {imageUrl && (
+                <div className="mt-2 p-2 border border-forest-700 rounded-md bg-forest-900 flex justify-center">
+                  <img src={imageUrl} alt="Product preview" className="h-20 w-20 object-contain" />
+                </div>
+              )}
+            </div>
           </div>
           <DialogFooter>
             <DialogClose asChild>
@@ -788,7 +833,6 @@ const Admin = () => {
         </DialogContent>
       </Dialog>
 
-      {/* User Edit Dialog */}
       <Dialog open={userDialogOpen} onOpenChange={setUserDialogOpen}>
         <DialogContent className="bg-forest-800 border-forest-700">
           <DialogHeader>
