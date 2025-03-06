@@ -1,4 +1,5 @@
 
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from '@/hooks/use-toast';
 
 // Types
@@ -34,66 +35,71 @@ type UserProfile = {
   _password?: string;
 };
 
-// Mock admin user for testing
-const MOCK_ADMIN_USER: UserProfile = {
-  _id: 'admin123',
-  name: 'Admin User',
-  email: 'admin@gamecity.com',
-  isAdmin: true,
-  joinDate: new Date().toISOString(),
-  addresses: [],
-  token: 'mock-jwt-token',
-  _password: 'admin123' // Internal use only
-};
-
-// LocalStorage helper functions
-const getUsers = (): UserProfile[] => {
-  const usersStr = localStorage.getItem('users');
-  return usersStr ? JSON.parse(usersStr) : [];
-};
-
-const saveUsers = (users: UserProfile[]): void => {
-  localStorage.setItem('users', JSON.stringify(users));
-};
-
 // Services
 export const authService = {
   // Login user
   async login(credentials: LoginCredentials): Promise<UserProfile | null> {
     try {
-      // Check if this is an admin login
-      if (credentials.email === 'admin@gamecity.com' && credentials.password === 'admin123') {
-        localStorage.setItem('token', MOCK_ADMIN_USER.token);
-        localStorage.setItem('user', JSON.stringify(MOCK_ADMIN_USER));
-        
-        return MOCK_ADMIN_USER;
-      }
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: credentials.email,
+        password: credentials.password
+      });
       
-      // Check local storage for the user
-      const users = getUsers();
-      const user = users.find(u => 
-        u.email === credentials.email && 
-        // In a real app, we'd use bcrypt to compare passwords
-        // This is obviously not secure, but it's just for demo purposes
-        u._password === credentials.password
-      );
-      
-      if (!user) {
+      if (error) {
         toast({
           title: 'Login failed',
-          description: 'Invalid email or password',
+          description: error.message,
           variant: 'destructive'
         });
         return null;
       }
       
-      // Store token in localStorage
-      localStorage.setItem('token', user.token);
+      if (!data.user) {
+        toast({
+          title: 'Login failed',
+          description: 'User not found',
+          variant: 'destructive'
+        });
+        return null;
+      }
       
-      // Store user info in localStorage
-      localStorage.setItem('user', JSON.stringify(user));
+      // Get user profile data from profiles table
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*, addresses(id, street, city, state, postal_code, country)')
+        .eq('id', data.user.id)
+        .single();
+        
+      if (profileError) {
+        console.error('Profile fetch error:', profileError);
+        toast({
+          title: 'Profile fetch failed',
+          description: 'Could not retrieve user profile',
+          variant: 'destructive'
+        });
+        return null;
+      }
       
-      return user;
+      // Map the Supabase profile to our app's UserProfile format
+      const userProfile: UserProfile = {
+        _id: profileData.id,
+        name: profileData.name,
+        email: profileData.email,
+        isAdmin: profileData.is_admin,
+        joinDate: profileData.join_date,
+        avatarUrl: profileData.avatar_url,
+        addresses: profileData.addresses ? profileData.addresses.map(addr => ({
+          _id: addr.id,
+          street: addr.street,
+          city: addr.city,
+          state: addr.state,
+          postalCode: addr.postal_code,
+          country: addr.country
+        })) : [],
+        token: data.session?.access_token || ''
+      };
+      
+      return userProfile;
     } catch (error) {
       console.error('Login error:', error);
       toast({
@@ -108,10 +114,15 @@ export const authService = {
   // Register new user
   async register(userData: RegisterData): Promise<UserProfile | null> {
     try {
-      const users = getUsers();
-      
       // Check if user already exists
-      if (users.some(user => user.email === userData.email)) {
+      const { data: existingUsers, error: checkError } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', userData.email);
+        
+      if (checkError) {
+        console.error('User check error:', checkError);
+      } else if (existingUsers && existingUsers.length > 0) {
         toast({
           title: 'Registration failed',
           description: 'User with this email already exists',
@@ -120,33 +131,81 @@ export const authService = {
         return null;
       }
       
-      // Create a new user
-      const newUser: UserProfile = {
-        _id: 'user_' + Date.now(),
-        name: userData.name,
+      // Register with Supabase Auth
+      const { data, error } = await supabase.auth.signUp({
         email: userData.email,
-        // In a real app, we'd use bcrypt to hash the password
-        _password: userData.password, // Store password internally
-        isAdmin: false,
-        joinDate: new Date().toISOString(),
-        addresses: [],
-        token: 'token_' + Date.now()
-      };
+        password: userData.password,
+        options: {
+          data: {
+            name: userData.name
+          }
+        }
+      });
       
-      // Add user to the array
-      users.push(newUser);
-      saveUsers(users);
+      if (error) {
+        toast({
+          title: 'Registration failed',
+          description: error.message,
+          variant: 'destructive'
+        });
+        return null;
+      }
       
-      // Store token and user in localStorage
-      localStorage.setItem('token', newUser.token);
-      localStorage.setItem('user', JSON.stringify(newUser));
+      if (!data.user) {
+        toast({
+          title: 'Registration failed',
+          description: 'User creation failed',
+          variant: 'destructive'
+        });
+        return null;
+      }
+      
+      // Wait briefly for the trigger to create the profile
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Get the newly created profile
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', data.user.id)
+        .single();
+        
+      if (profileError) {
+        console.error('Profile fetch error:', profileError);
+        toast({
+          title: 'Profile fetch failed',
+          description: 'User created but could not retrieve profile',
+          variant: 'destructive'
+        });
+        
+        // Return basic profile even if detailed fetch failed
+        return {
+          _id: data.user.id,
+          name: userData.name,
+          email: userData.email,
+          isAdmin: false,
+          joinDate: new Date().toISOString(),
+          addresses: [],
+          token: data.session?.access_token || ''
+        };
+      }
       
       toast({
         title: 'Registration successful',
         description: 'Your account has been created',
       });
       
-      return newUser;
+      // Map to our app's UserProfile format
+      return {
+        _id: profileData.id,
+        name: profileData.name,
+        email: profileData.email,
+        isAdmin: profileData.is_admin || false,
+        joinDate: profileData.join_date,
+        avatarUrl: profileData.avatar_url,
+        addresses: [],
+        token: data.session?.access_token || ''
+      };
     } catch (error) {
       console.error('Registration error:', error);
       toast({
@@ -159,60 +218,122 @@ export const authService = {
   },
   
   // Logout user
-  logout(): void {
+  async logout(): Promise<void> {
+    await supabase.auth.signOut();
     localStorage.removeItem('token');
     localStorage.removeItem('user');
   },
   
-  // Get current user from localStorage
-  getCurrentUser(): UserProfile | null {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+  // Get current user from Supabase session
+  async getCurrentUser(): Promise<UserProfile | null> {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session || !session.user) {
+        return null;
+      }
+      
+      // Get user profile from Supabase
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*, addresses(id, street, city, state, postal_code, country)')
+        .eq('id', session.user.id)
+        .single();
+        
+      if (profileError) {
+        console.error('Profile fetch error:', profileError);
+        return null;
+      }
+      
+      // Map to our app's UserProfile format
+      return {
+        _id: profileData.id,
+        name: profileData.name,
+        email: profileData.email,
+        isAdmin: profileData.is_admin,
+        joinDate: profileData.join_date,
+        avatarUrl: profileData.avatar_url,
+        addresses: profileData.addresses ? profileData.addresses.map(addr => ({
+          _id: addr.id,
+          street: addr.street,
+          city: addr.city,
+          state: addr.state,
+          postalCode: addr.postal_code,
+          country: addr.country
+        })) : [],
+        token: session.access_token
+      };
+    } catch (error) {
+      console.error('Get current user error:', error);
+      return null;
+    }
   },
   
   // Check if user is authenticated
-  isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+  async isAuthenticated(): Promise<boolean> {
+    const { data: { session } } = await supabase.auth.getSession();
+    return !!session;
   },
   
   // Check if user is admin
-  isAdmin(): boolean {
-    const user = this.getCurrentUser();
-    return user ? user.isAdmin : false;
+  async isAdmin(): Promise<boolean> {
+    try {
+      const user = await this.getCurrentUser();
+      return user ? user.isAdmin : false;
+    } catch (error) {
+      console.error('Admin check error:', error);
+      return false;
+    }
   },
   
   // Update user profile
   async updateProfile(userData: Partial<UserProfile>): Promise<UserProfile | null> {
     try {
-      const currentUser = this.getCurrentUser();
-      if (!currentUser) {
-        throw new Error('User not found');
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        throw new Error('Not authenticated');
       }
       
-      const users = getUsers();
-      const userIndex = users.findIndex(u => u._id === currentUser._id);
-      
-      if (userIndex === -1) {
-        throw new Error('User not found in database');
+      // Update profile in Supabase
+      const { data, error } = await supabase
+        .from('profiles')
+        .update({
+          name: userData.name,
+          email: userData.email,
+          avatar_url: userData.avatarUrl
+        })
+        .eq('id', session.user.id)
+        .select('*, addresses(id, street, city, state, postal_code, country)')
+        .single();
+        
+      if (error) {
+        throw error;
       }
-      
-      // Update user data
-      const updatedUser = { 
-        ...currentUser, 
-        ...userData 
-      };
-      
-      users[userIndex] = updatedUser;
-      saveUsers(users);
-      
-      localStorage.setItem('user', JSON.stringify(updatedUser));
       
       toast({
         title: 'Profile updated',
         description: 'Your profile has been updated successfully',
       });
       
-      return updatedUser;
+      // Map to our app's UserProfile format
+      return {
+        _id: data.id,
+        name: data.name,
+        email: data.email,
+        isAdmin: data.is_admin,
+        joinDate: data.join_date,
+        avatarUrl: data.avatar_url,
+        addresses: data.addresses ? data.addresses.map(addr => ({
+          _id: addr.id,
+          street: addr.street,
+          city: addr.city,
+          state: addr.state,
+          postalCode: addr.postal_code,
+          country: addr.country
+        })) : [],
+        token: session.access_token
+      };
     } catch (error) {
       console.error('Profile update error:', error);
       toast({
@@ -233,40 +354,64 @@ export const authService = {
     country: string;
   }): Promise<UserProfile | null> {
     try {
-      const currentUser = this.getCurrentUser();
-      if (!currentUser) {
-        throw new Error('User not found');
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        throw new Error('Not authenticated');
       }
       
-      const users = getUsers();
-      const userIndex = users.findIndex(u => u._id === currentUser._id);
-      
-      if (userIndex === -1) {
-        throw new Error('User not found in database');
+      // Insert address to addresses table
+      const { data: newAddress, error: addressError } = await supabase
+        .from('addresses')
+        .insert({
+          user_id: session.user.id,
+          street: addressData.street,
+          city: addressData.city,
+          state: addressData.state,
+          postal_code: addressData.postalCode,
+          country: addressData.country
+        })
+        .select()
+        .single();
+        
+      if (addressError) {
+        throw addressError;
       }
       
-      // Add the new address
-      const newAddress = {
-        _id: 'addr_' + Date.now(),
-        ...addressData
-      };
-      
-      const updatedUser = { 
-        ...currentUser,
-        addresses: [...currentUser.addresses, newAddress] 
-      };
-      
-      users[userIndex] = updatedUser;
-      saveUsers(users);
-      
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      // Get updated profile with addresses
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*, addresses(id, street, city, state, postal_code, country)')
+        .eq('id', session.user.id)
+        .single();
+        
+      if (profileError) {
+        throw profileError;
+      }
       
       toast({
         title: 'Address added',
         description: 'Your address has been added successfully',
       });
       
-      return updatedUser;
+      // Map to our app's UserProfile format
+      return {
+        _id: profileData.id,
+        name: profileData.name,
+        email: profileData.email,
+        isAdmin: profileData.is_admin,
+        joinDate: profileData.join_date,
+        avatarUrl: profileData.avatar_url,
+        addresses: profileData.addresses ? profileData.addresses.map(addr => ({
+          _id: addr.id,
+          street: addr.street,
+          city: addr.city,
+          state: addr.state,
+          postalCode: addr.postal_code,
+          country: addr.country
+        })) : [],
+        token: session.access_token
+      };
     } catch (error) {
       console.error('Add address error:', error);
       toast({
@@ -284,21 +429,13 @@ export const authService = {
     newPassword: string;
   }): Promise<boolean> {
     try {
-      const currentUser = this.getCurrentUser();
-      if (!currentUser) {
-        throw new Error('User not found');
-      }
+      // First verify the current password by attempting to sign in
+      const { data: { user }, error: signInError } = await supabase.auth.signInWithPassword({
+        email: (await this.getCurrentUser())?.email || '',
+        password: passwordData.currentPassword
+      });
       
-      const users = getUsers();
-      const userIndex = users.findIndex(u => u._id === currentUser._id);
-      
-      if (userIndex === -1) {
-        throw new Error('User not found in database');
-      }
-      
-      // In a real app, we'd verify the current password with bcrypt
-      // and hash the new password
-      if (users[userIndex]._password !== passwordData.currentPassword) {
+      if (signInError || !user) {
         toast({
           title: 'Password change failed',
           description: 'Current password is incorrect',
@@ -307,9 +444,19 @@ export const authService = {
         return false;
       }
       
-      // Update the password
-      users[userIndex]._password = passwordData.newPassword;
-      saveUsers(users);
+      // Now update the password
+      const { error: updateError } = await supabase.auth.updateUser({
+        password: passwordData.newPassword
+      });
+      
+      if (updateError) {
+        toast({
+          title: 'Password change failed',
+          description: updateError.message,
+          variant: 'destructive'
+        });
+        return false;
+      }
       
       toast({
         title: 'Password changed',

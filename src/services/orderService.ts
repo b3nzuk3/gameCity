@@ -1,4 +1,5 @@
 
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from '@/hooks/use-toast';
 import { authService } from './authService';
 
@@ -52,26 +53,82 @@ export type OrderCreate = {
   totalPrice: number;
 };
 
-// LocalStorage helper functions
-const getOrders = (): Order[] => {
-  const ordersStr = localStorage.getItem('orders');
-  return ordersStr ? JSON.parse(ordersStr) : [];
-};
-
-const saveOrders = (orders: Order[]): void => {
-  localStorage.setItem('orders', JSON.stringify(orders));
-};
-
 // Services
 export const orderService = {
   // Create new order
   async createOrder(orderData: OrderCreate): Promise<Order> {
     try {
-      const currentUser = authService.getCurrentUser();
-      const userId = currentUser ? currentUser._id : 'guest_user';
+      // Check if user is authenticated
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error('User not authenticated');
+      }
       
-      const newOrder: Order = {
-        _id: 'order_' + Date.now(),
+      const userId = session.user.id;
+      
+      // Start a transaction using RPC (future enhancement: use proper transactions)
+      // 1. Create the order
+      const { data: orderResult, error: orderError } = await supabase
+        .from('orders')
+        .insert({
+          user_id: userId,
+          payment_method: orderData.paymentMethod,
+          tax_price: orderData.taxPrice,
+          shipping_price: orderData.shippingPrice,
+          total_price: orderData.totalPrice,
+          status: 'Processing'
+        })
+        .select()
+        .single();
+        
+      if (orderError) throw orderError;
+      
+      // 2. Add shipping address
+      const { error: shippingError } = await supabase
+        .from('shipping_addresses')
+        .insert({
+          order_id: orderResult.id,
+          street: orderData.shippingAddress.street,
+          city: orderData.shippingAddress.city,
+          state: orderData.shippingAddress.state,
+          postal_code: orderData.shippingAddress.postalCode,
+          country: orderData.shippingAddress.country
+        });
+        
+      if (shippingError) throw shippingError;
+      
+      // 3. Add order items
+      const orderItems = orderData.orderItems.map(item => ({
+        order_id: orderResult.id,
+        product_id: item.product,
+        name: item.name,
+        image: item.image,
+        price: item.price,
+        quantity: item.quantity
+      }));
+      
+      const { error: itemsError } = await supabase
+        .from('order_items')
+        .insert(orderItems);
+        
+      if (itemsError) throw itemsError;
+      
+      // 4. Clear the user's cart
+      const { error: cartError } = await supabase
+        .from('cart_items')
+        .delete()
+        .eq('user_id', userId);
+        
+      if (cartError) console.error('Error clearing cart:', cartError);
+      
+      toast({
+        title: 'Order placed',
+        description: 'Your order has been placed successfully',
+      });
+      
+      // Return the created order in the format our app expects
+      return {
+        _id: orderResult.id,
         user: userId,
         orderItems: orderData.orderItems,
         shippingAddress: orderData.shippingAddress,
@@ -82,23 +139,9 @@ export const orderService = {
         isPaid: false,
         isDelivered: false,
         status: 'Processing',
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: new Date(orderResult.created_at),
+        updatedAt: new Date(orderResult.updated_at)
       };
-      
-      const orders = getOrders();
-      orders.push(newOrder);
-      saveOrders(orders);
-      
-      // Clear cart after order is created
-      localStorage.setItem('cart', JSON.stringify([]));
-      
-      toast({
-        title: 'Order placed',
-        description: 'Your order has been placed successfully',
-      });
-      
-      return newOrder;
     } catch (error) {
       console.error('Create order error:', error);
       toast({
@@ -113,14 +156,82 @@ export const orderService = {
   // Get order by ID
   async getOrderById(id: string): Promise<Order> {
     try {
-      const orders = getOrders();
-      const order = orders.find(o => o._id === id);
+      // Get order details
+      const { data: order, error: orderError } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('id', id)
+        .single();
+        
+      if (orderError) throw orderError;
       
-      if (!order) {
-        throw new Error('Order not found');
+      // Get order items
+      const { data: orderItems, error: itemsError } = await supabase
+        .from('order_items')
+        .select('*')
+        .eq('order_id', id);
+        
+      if (itemsError) throw itemsError;
+      
+      // Get shipping address
+      const { data: shippingAddress, error: addressError } = await supabase
+        .from('shipping_addresses')
+        .select('*')
+        .eq('order_id', id)
+        .single();
+        
+      if (addressError) throw addressError;
+      
+      // Get payment result if paid
+      let paymentResult = undefined;
+      if (order.is_paid) {
+        const { data: payment, error: paymentError } = await supabase
+          .from('payment_results')
+          .select('*')
+          .eq('order_id', id)
+          .single();
+          
+        if (!paymentError && payment) {
+          paymentResult = {
+            id: payment.payment_id,
+            status: payment.status,
+            update_time: payment.update_time,
+            email_address: payment.email_address
+          };
+        }
       }
       
-      return order;
+      // Map to our app's Order format
+      return {
+        _id: order.id,
+        user: order.user_id,
+        orderItems: orderItems.map(item => ({
+          product: item.product_id,
+          name: item.name,
+          image: item.image,
+          price: item.price,
+          quantity: item.quantity
+        })),
+        shippingAddress: {
+          street: shippingAddress.street,
+          city: shippingAddress.city,
+          state: shippingAddress.state,
+          postalCode: shippingAddress.postal_code,
+          country: shippingAddress.country
+        },
+        paymentMethod: order.payment_method,
+        paymentResult,
+        taxPrice: order.tax_price,
+        shippingPrice: order.shipping_price,
+        totalPrice: order.total_price,
+        isPaid: order.is_paid,
+        paidAt: order.paid_at ? new Date(order.paid_at) : undefined,
+        isDelivered: order.is_delivered,
+        deliveredAt: order.delivered_at ? new Date(order.delivered_at) : undefined,
+        status: order.status,
+        createdAt: new Date(order.created_at),
+        updatedAt: new Date(order.updated_at)
+      };
     } catch (error) {
       console.error(`Get order error (ID: ${id}):`, error);
       throw error;
@@ -138,31 +249,38 @@ export const orderService = {
     }
   ): Promise<Order> {
     try {
-      const orders = getOrders();
-      const orderIndex = orders.findIndex(o => o._id === id);
+      // Update order paid status
+      const { error: orderError } = await supabase
+        .from('orders')
+        .update({
+          is_paid: true,
+          paid_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id);
+        
+      if (orderError) throw orderError;
       
-      if (orderIndex === -1) {
-        throw new Error('Order not found');
-      }
-      
-      orders[orderIndex].isPaid = true;
-      orders[orderIndex].paidAt = new Date();
-      orders[orderIndex].paymentResult = {
-        id: paymentResult.id,
-        status: paymentResult.status,
-        update_time: paymentResult.update_time,
-        email_address: paymentResult.payer.email_address
-      };
-      orders[orderIndex].updatedAt = new Date();
-      
-      saveOrders(orders);
+      // Add payment result
+      const { error: paymentError } = await supabase
+        .from('payment_results')
+        .insert({
+          order_id: id,
+          payment_id: paymentResult.id,
+          status: paymentResult.status,
+          update_time: paymentResult.update_time,
+          email_address: paymentResult.payer.email_address
+        });
+        
+      if (paymentError) throw paymentError;
       
       toast({
         title: 'Payment successful',
         description: 'Your payment has been processed successfully',
       });
       
-      return orders[orderIndex];
+      // Get the updated order
+      return this.getOrderById(id);
     } catch (error) {
       console.error(`Payment update error (Order ID: ${id}):`, error);
       toast({
@@ -177,26 +295,25 @@ export const orderService = {
   // Update order to delivered (admin)
   async updateOrderToDelivered(id: string): Promise<Order> {
     try {
-      const orders = getOrders();
-      const orderIndex = orders.findIndex(o => o._id === id);
-      
-      if (orderIndex === -1) {
-        throw new Error('Order not found');
-      }
-      
-      orders[orderIndex].isDelivered = true;
-      orders[orderIndex].deliveredAt = new Date();
-      orders[orderIndex].status = 'Delivered';
-      orders[orderIndex].updatedAt = new Date();
-      
-      saveOrders(orders);
+      const { error } = await supabase
+        .from('orders')
+        .update({
+          is_delivered: true,
+          delivered_at: new Date().toISOString(),
+          status: 'Delivered',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id);
+        
+      if (error) throw error;
       
       toast({
         title: 'Order updated',
         description: 'Order marked as delivered',
       });
       
-      return orders[orderIndex];
+      // Get the updated order
+      return this.getOrderById(id);
     } catch (error) {
       console.error(`Delivery update error (Order ID: ${id}):`, error);
       toast({
@@ -214,30 +331,31 @@ export const orderService = {
     status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled'
   ): Promise<Order> {
     try {
-      const orders = getOrders();
-      const orderIndex = orders.findIndex(o => o._id === id);
-      
-      if (orderIndex === -1) {
-        throw new Error('Order not found');
-      }
-      
-      orders[orderIndex].status = status;
-      orders[orderIndex].updatedAt = new Date();
+      const updates: any = {
+        status,
+        updated_at: new Date().toISOString()
+      };
       
       // If status is Delivered, update isDelivered as well
       if (status === 'Delivered') {
-        orders[orderIndex].isDelivered = true;
-        orders[orderIndex].deliveredAt = new Date();
+        updates.is_delivered = true;
+        updates.delivered_at = new Date().toISOString();
       }
       
-      saveOrders(orders);
+      const { error } = await supabase
+        .from('orders')
+        .update(updates)
+        .eq('id', id);
+        
+      if (error) throw error;
       
       toast({
         title: 'Order updated',
         description: `Order status changed to ${status}`,
       });
       
-      return orders[orderIndex];
+      // Get the updated order
+      return this.getOrderById(id);
     } catch (error) {
       console.error(`Status update error (Order ID: ${id}):`, error);
       toast({
@@ -252,14 +370,45 @@ export const orderService = {
   // Get logged in user orders
   async getMyOrders(): Promise<Order[]> {
     try {
-      const currentUser = authService.getCurrentUser();
+      const { data: { session } } = await supabase.auth.getSession();
       
-      if (!currentUser) {
+      if (!session) {
         return [];
       }
       
-      const orders = getOrders();
-      return orders.filter(o => o.user === currentUser._id);
+      const { data: orders, error } = await supabase
+        .from('orders')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .order('created_at', { ascending: false });
+        
+      if (error) throw error;
+      
+      // For simplicity, we're returning basic order details
+      // In a real app, you might want to fetch items and addresses too
+      return orders.map(order => ({
+        _id: order.id,
+        user: order.user_id,
+        orderItems: [],  // Would require additional queries to populate
+        shippingAddress: {
+          street: '',
+          city: '',
+          state: '',
+          postalCode: '',
+          country: ''
+        },
+        paymentMethod: order.payment_method,
+        taxPrice: order.tax_price,
+        shippingPrice: order.shipping_price,
+        totalPrice: order.total_price,
+        isPaid: order.is_paid,
+        paidAt: order.paid_at ? new Date(order.paid_at) : undefined,
+        isDelivered: order.is_delivered,
+        deliveredAt: order.delivered_at ? new Date(order.delivered_at) : undefined,
+        status: order.status,
+        createdAt: new Date(order.created_at),
+        updatedAt: new Date(order.updated_at)
+      }));
     } catch (error) {
       console.error('Get my orders error:', error);
       return [];
@@ -269,7 +418,49 @@ export const orderService = {
   // Get all orders (admin)
   async getOrders(): Promise<Order[]> {
     try {
-      return getOrders();
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        return [];
+      }
+      
+      // Check if user is admin (for security)
+      const isAdmin = await authService.isAdmin();
+      if (!isAdmin) {
+        throw new Error('Unauthorized');
+      }
+      
+      const { data: orders, error } = await supabase
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+        
+      if (error) throw error;
+      
+      // For simplicity, we're returning basic order details
+      return orders.map(order => ({
+        _id: order.id,
+        user: order.user_id,
+        orderItems: [],  // Would require additional queries to populate
+        shippingAddress: {
+          street: '',
+          city: '',
+          state: '',
+          postalCode: '',
+          country: ''
+        },
+        paymentMethod: order.payment_method,
+        taxPrice: order.tax_price,
+        shippingPrice: order.shipping_price,
+        totalPrice: order.total_price,
+        isPaid: order.is_paid,
+        paidAt: order.paid_at ? new Date(order.paid_at) : undefined,
+        isDelivered: order.is_delivered,
+        deliveredAt: order.delivered_at ? new Date(order.delivered_at) : undefined,
+        status: order.status,
+        createdAt: new Date(order.created_at),
+        updatedAt: new Date(order.updated_at)
+      }));
     } catch (error) {
       console.error('Get all orders error:', error);
       return [];
