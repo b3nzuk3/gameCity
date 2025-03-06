@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, ArrowRight, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
@@ -16,7 +15,7 @@ const Footer = () => {
           <div>
             <div className="mb-4">
               <Link to="/" className="text-2xl font-bold text-emerald-400">
-                GreenBits
+                Gamecity
               </Link>
             </div>
             <p className="text-muted-foreground mb-6">
@@ -33,7 +32,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center">
                 <Mail size={18} className="text-emerald-500 mr-3" />
-                <span className="text-sm">support@greenbits.com</span>
+                <span className="text-sm">support@gamecity.com</span>
               </div>
             </div>
           </div>
@@ -163,7 +162,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-forest-800 mt-12 py-6 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
           <div>
-            © {currentYear} GreenBits. All rights reserved.
+            © {currentYear} Gamecity. All rights reserved.
           </div>
           <div className="mt-3 md:mt-0">
             <ul className="flex space-x-6">

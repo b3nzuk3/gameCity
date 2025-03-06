@@ -23,7 +23,6 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogC
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-// Sample product data
 const demoProducts = [
   {
     id: 1,
@@ -72,7 +71,6 @@ const demoProducts = [
   }
 ];
 
-// Sample order data
 const demoOrders = [
   {
     id: "ORD-001",
@@ -108,7 +106,6 @@ const demoOrders = [
   }
 ];
 
-// Sample user data
 const demoUsers = [
   {
     id: 1,
@@ -144,7 +141,6 @@ const demoUsers = [
   }
 ];
 
-// Product form type
 type ProductFormData = {
   id?: number;
   name: string;
@@ -155,7 +151,6 @@ type ProductFormData = {
   image: string;
 };
 
-// User form type
 type UserFormData = {
   id?: number;
   name: string;
@@ -193,8 +188,8 @@ const Admin = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [storeSettings, setStoreSettings] = useState({
-    name: "GreenBits",
-    email: "support@greenbits.com",
+    name: "Gamecity",
+    email: "support@gamecity.com",
     phone: "+1 (555) 123-4567",
     currency: "USD ($)"
   });
