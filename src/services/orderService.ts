@@ -327,41 +327,29 @@ export const orderService = {
   // Update order status (admin)
   async updateOrderStatus(
     id: string,
-    status: 'Processing' | 'Shipped' | 'Delivered' | 'Cancelled'
+    status: "Processing" | "Shipped" | "Delivered" | "Cancelled"
   ): Promise<Order> {
     try {
-      const updates: any = {
-        status,
-        updated_at: new Date().toISOString()
-      };
-      
-      // If status is Delivered, update isDelivered as well
-      if (status === 'Delivered') {
-        updates.is_delivered = true;
-        updates.delivered_at = new Date().toISOString();
+      const session = await supabase.auth.getSession();
+      if (!session.data.session) {
+        throw new Error("Not authorized");
       }
       
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('orders')
-        .update(updates)
-        .eq('id', id);
+        .update({ 
+          status: status,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select()
+        .single();
         
       if (error) throw error;
       
-      toast({
-        title: 'Order updated',
-        description: `Order status changed to ${status}`,
-      });
-      
-      // Get the updated order
-      return this.getOrderById(id);
+      return data as Order;
     } catch (error) {
-      console.error(`Status update error (Order ID: ${id}):`, error);
-      toast({
-        title: 'Update failed',
-        description: 'An unexpected error occurred',
-        variant: 'destructive'
-      });
+      console.error("Error updating order status:", error);
       throw error;
     }
   },
@@ -431,7 +419,22 @@ export const orderService = {
       
       const { data: orders, error } = await supabase
         .from('orders')
-        .select('*')
+        .select(`
+          id,
+          user_id,
+          payment_method,
+          tax_price,
+          shipping_price,
+          total_price,
+          is_paid,
+          paid_at,
+          is_delivered,
+          delivered_at,
+          status,
+          created_at,
+          updated_at
+        `)
+        .eq('user_id', session.data.session.user.id)
         .order('created_at', { ascending: false });
         
       if (error) throw error;
@@ -467,6 +470,10 @@ export const orderService = {
       return [];
     }
   }
+};
+
+export const getUserOrders = async (): Promise<Order[]> => {
+  return getOrders();
 };
 
 export default orderService;
