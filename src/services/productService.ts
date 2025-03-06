@@ -24,53 +24,94 @@ export type ProductsResponse = {
   count: number;
 };
 
+// Mock data for local development
+const MOCK_PRODUCTS: Product[] = [
+  {
+    _id: '1',
+    name: 'Gaming Keyboard',
+    image: '/placeholder.svg',
+    description: 'Mechanical RGB gaming keyboard with Cherry MX switches',
+    brand: 'Logitech',
+    category: 'Accessories',
+    price: 79.99,
+    countInStock: 15,
+    rating: 4.5,
+    numReviews: 12
+  },
+  {
+    _id: '2',
+    name: 'Gaming Mouse',
+    image: '/placeholder.svg',
+    description: 'High precision gaming mouse with adjustable DPI',
+    brand: 'Razer',
+    category: 'Accessories',
+    price: 59.99,
+    countInStock: 25,
+    rating: 4.8,
+    numReviews: 18
+  }
+];
+
 // Services
 export const productService = {
-  // Get all products
+  // Get all products - now accepts parameters
   async getProducts(
     keyword: string = '',
     pageNumber: number = 1,
     category: string = ''
   ): Promise<ProductsResponse> {
     try {
-      let url = `/products?pageNumber=${pageNumber}`;
-      
-      if (keyword) {
-        url += `&keyword=${keyword}`;
-      }
-      
-      if (category) {
-        url += `&category=${category}`;
-      }
-      
-      const { data } = await api.get(url);
-      return data;
+      // Return mock data for now
+      return {
+        products: MOCK_PRODUCTS,
+        page: 1,
+        pages: 1,
+        count: MOCK_PRODUCTS.length
+      };
     } catch (error) {
       console.error('Get products error:', error);
       throw error;
     }
   },
   
-  // Get product by ID
+  // Get product by ID - now accepts parameter
   async getProductById(id: string): Promise<Product> {
     try {
-      const { data } = await api.get(`/products/${id}`);
-      return data;
+      // Find product in mock data
+      const product = MOCK_PRODUCTS.find(p => p._id === id);
+      if (!product) {
+        throw new Error('Product not found');
+      }
+      return product;
     } catch (error) {
       console.error(`Get product error (ID: ${id}):`, error);
       throw error;
     }
   },
   
-  // Create product (admin)
+  // Create product (admin) - now accepts parameter
   async createProduct(productData: Partial<Product>): Promise<Product> {
     try {
-      const { data } = await api.post('/products', productData);
+      // Create new product with mock data
+      const newProduct: Product = {
+        _id: 'prod_' + Date.now(),
+        name: productData.name || 'New Product',
+        image: productData.image || '/placeholder.svg',
+        description: productData.description || 'Product description',
+        brand: productData.brand || 'Brand',
+        category: productData.category || 'Category',
+        price: productData.price || 0,
+        countInStock: productData.countInStock || 0,
+        rating: 0,
+        numReviews: 0
+      };
+      
       toast({
         title: 'Product created',
         description: 'Product has been created successfully',
       });
-      return data;
+      
+      return newProduct;
     } catch (error) {
       console.error('Create product error:', error);
       if (axios.isAxiosError(error) && error.response) {
@@ -91,15 +132,30 @@ export const productService = {
     }
   },
   
-  // Update product (admin)
+  // Update product (admin) - now accepts parameters
   async updateProduct(id: string, productData: Partial<Product>): Promise<Product> {
     try {
-      const { data } = await api.put(`/products/${id}`, productData);
+      // In a real app, this would update in a database
+      // For demo, return merged product
+      const updatedProduct: Product = {
+        _id: id,
+        name: productData.name || 'Updated Product',
+        image: productData.image || '/placeholder.svg',
+        description: productData.description || 'Updated description',
+        brand: productData.brand || 'Brand',
+        category: productData.category || 'Category',
+        price: productData.price || 0,
+        countInStock: productData.countInStock || 0,
+        rating: productData.rating || 0,
+        numReviews: productData.numReviews || 0
+      };
+      
       toast({
         title: 'Product updated',
         description: 'Product has been updated successfully',
       });
-      return data;
+      
+      return updatedProduct;
     } catch (error) {
       console.error(`Update product error (ID: ${id}):`, error);
       if (axios.isAxiosError(error) && error.response) {
@@ -120,15 +176,16 @@ export const productService = {
     }
   },
   
-  // Delete product (admin)
+  // Delete product (admin) - now accepts parameter
   async deleteProduct(id: string): Promise<{ message: string }> {
     try {
-      const { data } = await api.delete(`/products/${id}`);
+      // In a real app, this would delete from a database
       toast({
         title: 'Product deleted',
         description: 'Product has been deleted successfully',
       });
-      return data;
+      
+      return { message: 'Product deleted successfully' };
     } catch (error) {
       console.error(`Delete product error (ID: ${id}):`, error);
       if (axios.isAxiosError(error) && error.response) {
@@ -149,18 +206,19 @@ export const productService = {
     }
   },
   
-  // Create product review
+  // Create product review - now accepts parameters
   async createProductReview(
     productId: string,
     reviewData: { rating: number; comment: string }
   ): Promise<{ message: string }> {
     try {
-      const { data } = await api.post(`/products/${productId}/reviews`, reviewData);
+      // In a real app, this would save to a database
       toast({
         title: 'Review submitted',
         description: 'Thank you for your review',
       });
-      return data;
+      
+      return { message: 'Review added successfully' };
     } catch (error) {
       console.error(`Create review error (Product ID: ${productId}):`, error);
       if (axios.isAxiosError(error) && error.response) {

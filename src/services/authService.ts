@@ -29,6 +29,9 @@ type UserProfile = {
     country: string;
   }>;
   token: string;
+  // Internal property not included in public API type
+  // but needed for local storage implementation
+  _password?: string;
 };
 
 // Mock admin user for testing
@@ -39,7 +42,8 @@ const MOCK_ADMIN_USER: UserProfile = {
   isAdmin: true,
   joinDate: new Date().toISOString(),
   addresses: [],
-  token: 'mock-jwt-token'
+  token: 'mock-jwt-token',
+  _password: 'admin123' // Internal use only
 };
 
 // LocalStorage helper functions
@@ -71,7 +75,7 @@ export const authService = {
         u.email === credentials.email && 
         // In a real app, we'd use bcrypt to compare passwords
         // This is obviously not secure, but it's just for demo purposes
-        credentials.password === credentials.password
+        u._password === credentials.password
       );
       
       if (!user) {
@@ -122,7 +126,7 @@ export const authService = {
         name: userData.name,
         email: userData.email,
         // In a real app, we'd use bcrypt to hash the password
-        password: userData.password,
+        _password: userData.password, // Store password internally
         isAdmin: false,
         joinDate: new Date().toISOString(),
         addresses: [],
@@ -294,7 +298,7 @@ export const authService = {
       
       // In a real app, we'd verify the current password with bcrypt
       // and hash the new password
-      if (users[userIndex].password !== passwordData.currentPassword) {
+      if (users[userIndex]._password !== passwordData.currentPassword) {
         toast({
           title: 'Password change failed',
           description: 'Current password is incorrect',
@@ -304,7 +308,7 @@ export const authService = {
       }
       
       // Update the password
-      users[userIndex].password = passwordData.newPassword;
+      users[userIndex]._password = passwordData.newPassword;
       saveUsers(users);
       
       toast({
