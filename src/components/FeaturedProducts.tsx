@@ -3,12 +3,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import ProductCard from "./ProductCard";
-import { Product } from "@/types";
 
-// Sample product data with string IDs
-const featuredProducts: Product[] = [
+// Sample product data
+const featuredProducts = [
   {
-    id: "1",
+    id: 1,
     name: "RTX 4080 Super Gaming GPU",
     image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80",
     price: 1299.99,
@@ -16,7 +15,7 @@ const featuredProducts: Product[] = [
     category: "graphics-cards",
   },
   {
-    id: "2",
+    id: 2,
     name: "Aurora Gaming Desktop",
     image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80",
     price: 2499.99,
@@ -24,7 +23,7 @@ const featuredProducts: Product[] = [
     category: "gaming-pcs",
   },
   {
-    id: "3",
+    id: 3,
     name: "Ultra Gaming Monitor 27\"",
     image: "https://images.unsplash.com/photo-1483058712412-4245e9b90334?auto=format&fit=crop&q=80",
     price: 699.99,
@@ -32,7 +31,7 @@ const featuredProducts: Product[] = [
     category: "monitors",
   },
   {
-    id: "4",
+    id: 4,
     name: "Mechanical RGB Keyboard",
     image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80",
     price: 199.99,

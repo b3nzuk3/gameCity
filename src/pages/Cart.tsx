@@ -1,69 +1,21 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Trash2, MinusCircle, PlusCircle, ArrowRight, ShoppingBag } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import { Product } from "@/types";
-import { supabase } from "@/integrations/supabase/client";
 
 const Cart = () => {
-  const { cart, removeFromCart, updateCartItemQuantity, clearCart, cartTotal, itemCount } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal } = useCart();
   const [promoCode, setPromoCode] = useState("");
   const [promoApplied, setPromoApplied] = useState(false);
-  const [cartWithProducts, setCartWithProducts] = useState<Array<{
-    product_id: string;
-    quantity: number;
-    product: Product;
-  }>>([]);
-  const [isLoading, setIsLoading] = useState(true);
   
-  useEffect(() => {
-    const loadProductDetails = async () => {
-      setIsLoading(true);
-      try {
-        const productIds = cart.map(item => item.product_id);
-        if (productIds.length === 0) {
-          setCartWithProducts([]);
-          setIsLoading(false);
-          return;
-        }
-        
-        const { data, error } = await supabase
-          .from('products')
-          .select('*')
-          .in('id', productIds);
-          
-        if (error) {
-          console.error('Error fetching product details:', error);
-          return;
-        }
-        
-        // Map products to cart items
-        const cartWithProductDetails = cart.map(item => {
-          const productDetail = data?.find(p => p.id === item.product_id);
-          return {
-            ...item,
-            product: productDetail as Product
-          };
-        }).filter(item => item.product); // Filter out items with no product detail
-        
-        setCartWithProducts(cartWithProductDetails);
-      } catch (error) {
-        console.error('Error loading product details:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    
-    loadProductDetails();
-  }, [cart]);
-  
-  const shipping = cartTotal > 1000 ? 0 : 29.99;
-  const discount = promoApplied ? cartTotal * 0.1 : 0;
-  const total = cartTotal + shipping - discount;
+  const subtotal = getCartTotal();
+  const shipping = subtotal > 1000 ? 0 : 29.99;
+  const discount = promoApplied ? subtotal * 0.1 : 0;
+  const total = subtotal + shipping - discount;
 
   const applyPromoCode = () => {
     if (promoCode.toLowerCase() === "greenbits10") {
@@ -71,16 +23,19 @@ const Cart = () => {
     }
   };
 
-  const isCartEmpty = itemCount === 0;
+  // Helper function to get item ID consistently
+  const getItemId = (item: any) => {
+    return item.product || item._id || item.id;
+  };
+
+  const isCartEmpty = cartItems.length === 0;
 
   return (
     <Layout>
       <div className="container mx-auto px-4 py-12 mt-16">
         <h1 className="text-3xl font-bold mb-8">Your Cart</h1>
         
-        {isLoading ? (
-          <div className="text-center py-8">Loading your cart...</div>
-        ) : isCartEmpty ? (
+        {isCartEmpty ? (
           <div className="bg-forest-800 rounded-lg p-12 text-center">
             <div className="flex justify-center mb-4">
               <ShoppingBag size={64} className="text-muted-foreground" />
@@ -111,20 +66,20 @@ const Cart = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-forest-700">
-                    {cartWithProducts.map((item) => (
-                      <tr key={item.product_id} className="hover:bg-forest-700/30">
+                    {cartItems.map((item) => (
+                      <tr key={getItemId(item)} className="hover:bg-forest-700/30">
                         <td className="px-4 py-4">
                           <div className="flex items-center">
                             <div className="h-16 w-16 flex-shrink-0 rounded bg-forest-700 overflow-hidden">
-                              <img src={item.product.image} alt={item.product.name} className="h-full w-full object-cover" />
+                              <img src={item.image} alt={item.name} className="h-full w-full object-cover" />
                             </div>
                             <div className="ml-4">
-                              <div className="text-sm font-medium">{item.product.name}</div>
+                              <div className="text-sm font-medium">{item.name}</div>
                             </div>
                           </div>
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap text-sm">
-                          ${item.product.price.toFixed(2)}
+                          ${item.price.toFixed(2)}
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap">
                           <div className="flex items-center">
@@ -132,8 +87,7 @@ const Cart = () => {
                               variant="ghost" 
                               size="sm" 
                               className="h-8 w-8 p-0 text-muted-foreground"
-                              onClick={() => updateCartItemQuantity(item.product_id, item.quantity - 1)}
-                              disabled={item.quantity <= 1}
+                              onClick={() => updateQuantity(getItemId(item), item.quantity - 1)}
                             >
                               <MinusCircle size={16} />
                             </Button>
@@ -142,21 +96,21 @@ const Cart = () => {
                               variant="ghost" 
                               size="sm" 
                               className="h-8 w-8 p-0 text-muted-foreground"
-                              onClick={() => updateCartItemQuantity(item.product_id, item.quantity + 1)}
+                              onClick={() => updateQuantity(getItemId(item), item.quantity + 1)}
                             >
                               <PlusCircle size={16} />
                             </Button>
                           </div>
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
-                          ${(item.product.price * item.quantity).toFixed(2)}
+                          ${(item.price * item.quantity).toFixed(2)}
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap text-right text-sm">
                           <Button 
                             variant="ghost" 
                             size="sm" 
                             className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20"
-                            onClick={() => removeFromCart(item.product_id)}
+                            onClick={() => removeFromCart(getItemId(item))}
                           >
                             <Trash2 size={16} />
                           </Button>
@@ -191,7 +145,7 @@ const Cart = () => {
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Subtotal</span>
-                    <span>${cartTotal.toFixed(2)}</span>
+                    <span>${subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Shipping</span>
