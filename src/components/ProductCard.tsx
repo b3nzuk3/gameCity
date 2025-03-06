@@ -1,19 +1,14 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Star } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { Product } from "@/types";
 
 interface ProductProps {
-  product: {
-    id: number;
-    name: string;
-    image: string;
-    price: number;
-    rating: number;
-    category?: string;
-  };
+  product: Product;
 }
 
 const ProductCard = ({ product }: ProductProps) => {
@@ -22,7 +17,7 @@ const ProductCard = ({ product }: ProductProps) => {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart(product, 1);
+    addToCart(product.id);
   };
   
   const getCategoryUrl = (category: string | undefined) => {
@@ -48,7 +43,7 @@ const ProductCard = ({ product }: ProductProps) => {
           <span className="text-lg font-bold text-emerald-400">${product.price.toFixed(2)}</span>
           <div className="flex items-center">
             <Star size={14} className="fill-yellow-500 text-yellow-500" />
-            <span className="text-sm ml-1">{product.rating}</span>
+            <span className="text-sm ml-1">{product.rating || 0}</span>
           </div>
         </div>
       </CardContent>

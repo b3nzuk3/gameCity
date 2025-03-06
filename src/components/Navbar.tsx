@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { 
@@ -25,24 +24,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/contexts/CartContext";
+import { useUser } from "@/hooks/useUser";
 import { toast } from "@/hooks/use-toast";
 
 const Navbar = () => {
-  const { getCartCount } = useCart();
+  const { itemCount } = useCart();
+  const { user, signOut } = useUser();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user is logged in
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-
     const handleScroll = () => {
       if (window.scrollY > 20) {
         setIsScrolled(true);
@@ -74,14 +68,22 @@ const Navbar = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    toast({
-      title: "Logged out",
-      description: "You have been successfully logged out",
-    });
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out",
+      });
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to log out",
+        variant: "destructive"
+      });
+    }
   };
 
   const categories = [
@@ -101,12 +103,10 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
           <Link to="/" className="flex items-center">
             <span className="text-xl font-bold text-emerald-400">Gamecity</span>
           </Link>
 
-          {/* Desktop Menu */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link to="/" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
               Home
@@ -150,7 +150,6 @@ const Navbar = () => {
             </Link>
           </nav>
 
-          {/* Right Side Icons */}
           <div className="flex items-center space-x-4">
             <Button 
               variant="ghost" 
@@ -215,15 +214,14 @@ const Navbar = () => {
                 className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40 relative"
               >
                 <ShoppingCart size={20} />
-                {getCartCount() > 0 && (
+                {itemCount > 0 && (
                   <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-emerald-500 text-[10px]">
-                    {getCartCount()}
+                    {itemCount}
                   </Badge>
                 )}
               </Button>
             </Link>
 
-            {/* Mobile Menu Toggle */}
             <Button
               variant="ghost"
               size="icon"
@@ -236,7 +234,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Search Overlay */}
       {isSearchOpen && (
         <div className="absolute top-full left-0 w-full bg-forest-800 shadow-lg p-4 animate-fade-in border-t border-forest-700">
           <form onSubmit={handleSearchSubmit} className="container mx-auto flex gap-2">
@@ -263,7 +260,6 @@ const Navbar = () => {
         </div>
       )}
 
-      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-forest-800 shadow-lg animate-fade-in">
           <div className="py-4 px-4 space-y-2">
