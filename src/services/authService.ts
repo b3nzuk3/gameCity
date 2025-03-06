@@ -1,6 +1,4 @@
 
-import api from './api';
-import axios from 'axios';
 import { toast } from '@/hooks/use-toast';
 
 // Types
@@ -21,7 +19,7 @@ type UserProfile = {
   email: string;
   isAdmin: boolean;
   joinDate: string;
-  avatarUrl?: string; // Added optional avatarUrl property
+  avatarUrl?: string;
   addresses: Array<{
     _id: string;
     street: string;
@@ -33,15 +31,25 @@ type UserProfile = {
   token: string;
 };
 
-// Mock admin user for development/testing when backend is unavailable
+// Mock admin user for testing
 const MOCK_ADMIN_USER: UserProfile = {
   _id: 'admin123',
   name: 'Admin User',
-  email: 'admin@greenbits.com',
+  email: 'admin@gamecity.com',
   isAdmin: true,
   joinDate: new Date().toISOString(),
   addresses: [],
   token: 'mock-jwt-token'
+};
+
+// LocalStorage helper functions
+const getUsers = (): UserProfile[] => {
+  const usersStr = localStorage.getItem('users');
+  return usersStr ? JSON.parse(usersStr) : [];
+};
+
+const saveUsers = (users: UserProfile[]): void => {
+  localStorage.setItem('users', JSON.stringify(users));
 };
 
 // Services
@@ -49,72 +57,46 @@ export const authService = {
   // Login user
   async login(credentials: LoginCredentials): Promise<UserProfile | null> {
     try {
-      // Check if this is an admin login with test credentials before trying the API
-      if (credentials.email === 'admin@greenbits.com' && credentials.password === 'admin123') {
-        console.log('Using mock admin login');
-        
-        // Store mock token and user data
+      // Check if this is an admin login
+      if (credentials.email === 'admin@gamecity.com' && credentials.password === 'admin123') {
         localStorage.setItem('token', MOCK_ADMIN_USER.token);
         localStorage.setItem('user', JSON.stringify(MOCK_ADMIN_USER));
-        
-        toast({
-          title: 'Mock Admin Login',
-          description: 'Logged in as admin in development mode',
-        });
         
         return MOCK_ADMIN_USER;
       }
       
-      // Regular API login attempt
-      const { data } = await api.post('/users/login', credentials);
+      // Check local storage for the user
+      const users = getUsers();
+      const user = users.find(u => 
+        u.email === credentials.email && 
+        // In a real app, we'd use bcrypt to compare passwords
+        // This is obviously not secure, but it's just for demo purposes
+        credentials.password === credentials.password
+      );
+      
+      if (!user) {
+        toast({
+          title: 'Login failed',
+          description: 'Invalid email or password',
+          variant: 'destructive'
+        });
+        return null;
+      }
       
       // Store token in localStorage
-      localStorage.setItem('token', data.token);
+      localStorage.setItem('token', user.token);
       
-      // Store user info in localStorage (without sensitive data)
-      localStorage.setItem('user', JSON.stringify({
-        _id: data._id,
-        name: data.name,
-        email: data.email,
-        isAdmin: data.isAdmin,
-        joinDate: data.joinDate,
-        addresses: data.addresses
-      }));
+      // Store user info in localStorage
+      localStorage.setItem('user', JSON.stringify(user));
       
-      return data;
+      return user;
     } catch (error) {
       console.error('Login error:', error);
-      
-      // If the API login attempt failed, but is for admin credentials, fall back to mock
-      if (credentials.email === 'admin@greenbits.com' && credentials.password === 'admin123') {
-        console.log('API login failed, using mock admin login as fallback');
-        
-        // Store mock token and user data
-        localStorage.setItem('token', MOCK_ADMIN_USER.token);
-        localStorage.setItem('user', JSON.stringify(MOCK_ADMIN_USER));
-        
-        toast({
-          title: 'Mock Admin Login',
-          description: 'Logged in as admin in development mode (backend unavailable)',
-        });
-        
-        return MOCK_ADMIN_USER;
-      }
-      
-      if (axios.isAxiosError(error) && error.response) {
-        const message = error.response.data.message || 'Invalid email or password';
-        toast({
-          title: 'Login failed',
-          description: message,
-          variant: 'destructive'
-        });
-      } else {
-        toast({
-          title: 'Login failed',
-          description: 'Backend server unavailable. For testing, use admin@greenbits.com / admin123',
-          variant: 'destructive'
-        });
-      }
+      toast({
+        title: 'Login failed',
+        description: 'An unexpected error occurred. Try admin@gamecity.com / admin123',
+        variant: 'destructive'
+      });
       return null;
     }
   },
@@ -122,38 +104,52 @@ export const authService = {
   // Register new user
   async register(userData: RegisterData): Promise<UserProfile | null> {
     try {
-      const { data } = await api.post('/users', userData);
+      const users = getUsers();
       
-      // Store token in localStorage
-      localStorage.setItem('token', data.token);
+      // Check if user already exists
+      if (users.some(user => user.email === userData.email)) {
+        toast({
+          title: 'Registration failed',
+          description: 'User with this email already exists',
+          variant: 'destructive'
+        });
+        return null;
+      }
       
-      // Store user info in localStorage (without sensitive data)
-      localStorage.setItem('user', JSON.stringify({
-        _id: data._id,
-        name: data.name,
-        email: data.email,
-        isAdmin: data.isAdmin,
-        joinDate: data.joinDate,
-        addresses: data.addresses
-      }));
+      // Create a new user
+      const newUser: UserProfile = {
+        _id: 'user_' + Date.now(),
+        name: userData.name,
+        email: userData.email,
+        // In a real app, we'd use bcrypt to hash the password
+        password: userData.password,
+        isAdmin: false,
+        joinDate: new Date().toISOString(),
+        addresses: [],
+        token: 'token_' + Date.now()
+      };
       
-      return data;
+      // Add user to the array
+      users.push(newUser);
+      saveUsers(users);
+      
+      // Store token and user in localStorage
+      localStorage.setItem('token', newUser.token);
+      localStorage.setItem('user', JSON.stringify(newUser));
+      
+      toast({
+        title: 'Registration successful',
+        description: 'Your account has been created',
+      });
+      
+      return newUser;
     } catch (error) {
       console.error('Registration error:', error);
-      if (axios.isAxiosError(error) && error.response) {
-        const message = error.response.data.message || 'Registration failed';
-        toast({
-          title: 'Registration failed',
-          description: message,
-          variant: 'destructive'
-        });
-      } else {
-        toast({
-          title: 'Registration failed',
-          description: 'An unexpected error occurred',
-          variant: 'destructive'
-        });
-      }
+      toast({
+        title: 'Registration failed',
+        description: 'An unexpected error occurred',
+        variant: 'destructive'
+      });
       return null;
     }
   },
@@ -184,35 +180,42 @@ export const authService = {
   // Update user profile
   async updateProfile(userData: Partial<UserProfile>): Promise<UserProfile | null> {
     try {
-      const { data } = await api.put('/users/profile', userData);
-      
-      // Update token if provided
-      if (data.token) {
-        localStorage.setItem('token', data.token);
+      const currentUser = this.getCurrentUser();
+      if (!currentUser) {
+        throw new Error('User not found');
       }
       
-      // Update user info in localStorage
-      const currentUser = this.getCurrentUser();
-      const updatedUser = { ...currentUser, ...data };
+      const users = getUsers();
+      const userIndex = users.findIndex(u => u._id === currentUser._id);
+      
+      if (userIndex === -1) {
+        throw new Error('User not found in database');
+      }
+      
+      // Update user data
+      const updatedUser = { 
+        ...currentUser, 
+        ...userData 
+      };
+      
+      users[userIndex] = updatedUser;
+      saveUsers(users);
+      
       localStorage.setItem('user', JSON.stringify(updatedUser));
+      
+      toast({
+        title: 'Profile updated',
+        description: 'Your profile has been updated successfully',
+      });
       
       return updatedUser;
     } catch (error) {
       console.error('Profile update error:', error);
-      if (axios.isAxiosError(error) && error.response) {
-        const message = error.response.data.message || 'Profile update failed';
-        toast({
-          title: 'Profile update failed',
-          description: message,
-          variant: 'destructive'
-        });
-      } else {
-        toast({
-          title: 'Profile update failed',
-          description: 'An unexpected error occurred',
-          variant: 'destructive'
-        });
-      }
+      toast({
+        title: 'Profile update failed',
+        description: 'An unexpected error occurred',
+        variant: 'destructive'
+      });
       return null;
     }
   },
@@ -226,32 +229,47 @@ export const authService = {
     country: string;
   }): Promise<UserProfile | null> {
     try {
-      const { data } = await api.post('/users/address', addressData);
-      
-      // Update user info in localStorage
       const currentUser = this.getCurrentUser();
-      if (currentUser) {
-        currentUser.addresses = data.addresses;
-        localStorage.setItem('user', JSON.stringify(currentUser));
+      if (!currentUser) {
+        throw new Error('User not found');
       }
       
-      return currentUser;
+      const users = getUsers();
+      const userIndex = users.findIndex(u => u._id === currentUser._id);
+      
+      if (userIndex === -1) {
+        throw new Error('User not found in database');
+      }
+      
+      // Add the new address
+      const newAddress = {
+        _id: 'addr_' + Date.now(),
+        ...addressData
+      };
+      
+      const updatedUser = { 
+        ...currentUser,
+        addresses: [...currentUser.addresses, newAddress] 
+      };
+      
+      users[userIndex] = updatedUser;
+      saveUsers(users);
+      
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      
+      toast({
+        title: 'Address added',
+        description: 'Your address has been added successfully',
+      });
+      
+      return updatedUser;
     } catch (error) {
       console.error('Add address error:', error);
-      if (axios.isAxiosError(error) && error.response) {
-        const message = error.response.data.message || 'Failed to add address';
-        toast({
-          title: 'Address update failed',
-          description: message,
-          variant: 'destructive'
-        });
-      } else {
-        toast({
-          title: 'Address update failed',
-          description: 'An unexpected error occurred',
-          variant: 'destructive'
-        });
-      }
+      toast({
+        title: 'Address update failed',
+        description: 'An unexpected error occurred',
+        variant: 'destructive'
+      });
       return null;
     }
   },
@@ -262,33 +280,46 @@ export const authService = {
     newPassword: string;
   }): Promise<boolean> {
     try {
-      const { data } = await api.put('/users/profile', {
-        password: passwordData.newPassword,
-        currentPassword: passwordData.currentPassword
-      });
-      
-      // Update token if provided
-      if (data.token) {
-        localStorage.setItem('token', data.token);
+      const currentUser = this.getCurrentUser();
+      if (!currentUser) {
+        throw new Error('User not found');
       }
+      
+      const users = getUsers();
+      const userIndex = users.findIndex(u => u._id === currentUser._id);
+      
+      if (userIndex === -1) {
+        throw new Error('User not found in database');
+      }
+      
+      // In a real app, we'd verify the current password with bcrypt
+      // and hash the new password
+      if (users[userIndex].password !== passwordData.currentPassword) {
+        toast({
+          title: 'Password change failed',
+          description: 'Current password is incorrect',
+          variant: 'destructive'
+        });
+        return false;
+      }
+      
+      // Update the password
+      users[userIndex].password = passwordData.newPassword;
+      saveUsers(users);
+      
+      toast({
+        title: 'Password changed',
+        description: 'Your password has been changed successfully',
+      });
       
       return true;
     } catch (error) {
       console.error('Password change error:', error);
-      if (axios.isAxiosError(error) && error.response) {
-        const message = error.response.data.message || 'Failed to change password';
-        toast({
-          title: 'Password change failed',
-          description: message,
-          variant: 'destructive'
-        });
-      } else {
-        toast({
-          title: 'Password change failed',
-          description: 'An unexpected error occurred',
-          variant: 'destructive'
-        });
-      }
+      toast({
+        title: 'Password change failed',
+        description: 'An unexpected error occurred',
+        variant: 'destructive'
+      });
       return false;
     }
   }
