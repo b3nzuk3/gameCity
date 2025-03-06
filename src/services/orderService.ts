@@ -59,12 +59,18 @@ export const createOrder = async (orderData: OrderCreate): Promise<Order> => {
     throw new Error('Failed to create order');
   }
   
-  // Convert to Order type
+  // Convert database fields to Order type
   const order: Order = {
     id: data.id,
     user_id: data.user_id,
-    items: data.items,
-    shippingAddress: data.shipping_address,
+    items: data.items || [],
+    shippingAddress: data.shipping_address || {
+      street: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: ''
+    },
     paymentMethod: data.payment_method,
     taxPrice: data.tax_price,
     shippingPrice: data.shipping_price,
@@ -94,12 +100,18 @@ export const getOrderById = async (id: string): Promise<Order> => {
     throw new Error('Failed to fetch order');
   }
   
-  // Convert to Order type
+  // Convert database fields to Order type
   const order: Order = {
     id: data.id,
     user_id: data.user_id,
-    items: data.items,
-    shippingAddress: data.shipping_address,
+    items: data.items || [],
+    shippingAddress: data.shipping_address || {
+      street: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: ''
+    },
     paymentMethod: data.payment_method,
     taxPrice: data.tax_price,
     shippingPrice: data.shipping_price,
@@ -134,12 +146,18 @@ export const updateOrderToPaid = async (id: string, paymentResult: PaymentResult
     throw new Error('Failed to update order payment status');
   }
   
-  // Convert to Order type
+  // Convert database fields to Order type
   const order: Order = {
     id: data.id,
     user_id: data.user_id,
-    items: data.items,
-    shippingAddress: data.shipping_address,
+    items: data.items || [],
+    shippingAddress: data.shipping_address || {
+      street: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: ''
+    },
     paymentMethod: data.payment_method,
     taxPrice: data.tax_price,
     shippingPrice: data.shipping_price,
@@ -174,12 +192,18 @@ export const updateOrderToDelivered = async (id: string): Promise<Order> => {
     throw new Error('Failed to update order delivery status');
   }
   
-  // Convert to Order type
+  // Convert database fields to Order type
   const order: Order = {
     id: data.id,
     user_id: data.user_id,
-    items: data.items,
-    shippingAddress: data.shipping_address,
+    items: data.items || [],
+    shippingAddress: data.shipping_address || {
+      street: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: ''
+    },
     paymentMethod: data.payment_method,
     taxPrice: data.tax_price,
     shippingPrice: data.shipping_price,
@@ -210,12 +234,18 @@ export const updateOrderStatus = async (id: string, status: OrderStatus): Promis
     throw new Error('Failed to update order status');
   }
   
-  // Convert to Order type
+  // Convert database fields to Order type
   const order: Order = {
     id: data.id,
     user_id: data.user_id,
-    items: data.items,
-    shippingAddress: data.shipping_address,
+    items: data.items || [],
+    shippingAddress: data.shipping_address || {
+      street: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: ''
+    },
     paymentMethod: data.payment_method,
     taxPrice: data.tax_price,
     shippingPrice: data.shipping_price,
@@ -251,12 +281,18 @@ export const getOrders = async (): Promise<Order[]> => {
     throw new Error('Failed to fetch orders');
   }
   
-  // Convert to Order[] type
+  // Convert database fields to Order[] type
   const orders: Order[] = data.map(order => ({
     id: order.id,
     user_id: order.user_id,
-    items: order.items,
-    shippingAddress: order.shipping_address,
+    items: order.items || [],
+    shippingAddress: order.shipping_address || {
+      street: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: ''
+    },
     paymentMethod: order.payment_method,
     taxPrice: order.tax_price,
     shippingPrice: order.shipping_price,
@@ -285,12 +321,18 @@ export const getAllOrders = async (): Promise<Order[]> => {
     throw new Error('Failed to fetch orders');
   }
   
-  // Convert to Order[] type
+  // Convert database fields to Order[] type
   const orders: Order[] = data.map(order => ({
     id: order.id,
     user_id: order.user_id,
-    items: order.items,
-    shippingAddress: order.shipping_address,
+    items: order.items || [],
+    shippingAddress: order.shipping_address || {
+      street: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: ''
+    },
     paymentMethod: order.payment_method,
     taxPrice: order.tax_price,
     shippingPrice: order.shipping_price,

@@ -42,8 +42,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser({
             id: session.user.id,
             email: session.user.email || '',
-            firstName: data.first_name,
-            lastName: data.last_name,
+            firstName: data.name.split(' ')[0] || '',
+            lastName: data.name.split(' ').slice(1).join(' ') || '',
             isAdmin: data.is_admin
           });
         } else {
@@ -77,8 +77,8 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
               setUser({
                 id: session.user.id,
                 email: session.user.email || '',
-                firstName: data.first_name,
-                lastName: data.last_name,
+                firstName: data.name.split(' ')[0] || '',
+                lastName: data.name.split(' ').slice(1).join(' ') || '',
                 isAdmin: data.is_admin
               });
             } else {
@@ -120,13 +120,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) throw error;
 
       if (data.user) {
-        // Create user profile
+        // Create user profile with combined name for first and last name
+        const fullName = `${firstName} ${lastName}`;
         const { error: profileError } = await supabase
           .from('profiles')
           .insert({
             id: data.user.id,
-            first_name: firstName,
-            last_name: lastName,
+            name: fullName,
             email
           });
 
@@ -158,12 +158,21 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       if (!user) throw new Error('User not authenticated');
 
-      // Update profile in database
+      // Update profile in database (combine first and last name to name field)
+      const fullName = updates.firstName && updates.lastName 
+        ? `${updates.firstName} ${updates.lastName}`
+        : updates.firstName 
+          ? updates.firstName 
+          : updates.lastName 
+            ? updates.lastName 
+            : user.firstName && user.lastName 
+              ? `${user.firstName} ${user.lastName}`
+              : '';
+
       const { error } = await supabase
         .from('profiles')
         .update({
-          first_name: updates.firstName,
-          last_name: updates.lastName
+          name: fullName || undefined
         })
         .eq('id', user.id);
 
