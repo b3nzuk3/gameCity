@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from '@/hooks/use-toast';
 import { authService } from './authService';
@@ -76,7 +75,7 @@ export const orderService = {
           tax_price: orderData.taxPrice,
           shipping_price: orderData.shippingPrice,
           total_price: orderData.totalPrice,
-          status: 'Processing'
+          status: "Processing" as "Processing" | "Shipped" | "Delivered" | "Cancelled"
         })
         .select()
         .single();
@@ -138,7 +137,7 @@ export const orderService = {
         totalPrice: orderData.totalPrice,
         isPaid: false,
         isDelivered: false,
-        status: 'Processing',
+        status: "Processing" as "Processing" | "Shipped" | "Delivered" | "Cancelled",
         createdAt: new Date(orderResult.created_at),
         updatedAt: new Date(orderResult.updated_at)
       };
@@ -438,7 +437,7 @@ export const orderService = {
       if (error) throw error;
       
       // For simplicity, we're returning basic order details
-      return orders.map(order => ({
+      const mappedOrders = orders.map((order: any) => ({
         _id: order.id,
         user: order.user_id,
         orderItems: [],  // Would require additional queries to populate
@@ -461,6 +460,8 @@ export const orderService = {
         createdAt: new Date(order.created_at),
         updatedAt: new Date(order.updated_at)
       }));
+      
+      return mappedOrders as Order[];
     } catch (error) {
       console.error('Get all orders error:', error);
       return [];

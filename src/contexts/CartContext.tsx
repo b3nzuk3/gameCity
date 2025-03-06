@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
@@ -374,6 +373,90 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   // Get cart count (total number of items)
   const getCartCount = () => {
     return cartItems.reduce((count, item) => count + item.quantity, 0);
+  };
+
+  const addToCartSupabase = async (productId: string, quantity: number) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) return false;
+      
+      // Check if the product already exists in the cart
+      const { data: existingItem } = await supabase
+        .from('cart_items')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .eq('product_id', productId)
+        .single();
+        
+      if (existingItem) {
+        // Update quantity
+        const { error } = await supabase
+          .from('cart_items')
+          .update({ quantity: existingItem.quantity + quantity })
+          .eq('id', existingItem.id);
+          
+        if (error) throw error;
+      } else {
+        // Insert new item
+        const { error } = await supabase
+          .from('cart_items')
+          .insert({
+            user_id: session.user.id,
+            product_id: productId,
+            quantity
+          });
+          
+        if (error) throw error;
+      }
+      
+      return true;
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      return false;
+    }
+  };
+
+  const removeFromCartSupabase = async (id: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) return false;
+      
+      const { error } = await supabase
+        .from('cart_items')
+        .delete()
+        .eq('user_id', session.user.id)
+        .eq('product_id', id);
+        
+      if (error) throw error;
+      
+      return true;
+    } catch (error) {
+      console.error('Error removing from cart:', error);
+      return false;
+    }
+  };
+
+  const updateCartItemSupabase = async (id: string, quantity: number) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) return false;
+      
+      const { error } = await supabase
+        .from('cart_items')
+        .update({ quantity })
+        .eq('user_id', session.user.id)
+        .eq('product_id', id);
+        
+      if (error) throw error;
+      
+      return true;
+    } catch (error) {
+      console.error('Error updating cart item:', error);
+      return false;
+    }
   };
 
   return (

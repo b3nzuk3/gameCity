@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, ShieldCheck } from "lucide-react";
 import Layout from "@/components/Layout";
 import { authService } from "@/services/authService";
 
@@ -137,9 +137,20 @@ const SignIn = () => {
           <div className="mt-8 p-3 bg-forest-700/50 rounded border border-emerald-900/50 text-xs">
             <p className="font-medium text-emerald-400 mb-1">Demo Credentials</p>
             <p className="text-muted-foreground">
-              Email: admin@greenbits.com<br />
+              Email: admin@gamecity.com<br />
               Password: admin123
             </p>
+          </div>
+          
+          {/* Add link to create admin */}
+          <div className="mt-4 text-center">
+            <Link 
+              to="/create-admin" 
+              className="inline-flex items-center text-xs text-emerald-400 hover:text-emerald-300"
+            >
+              <ShieldCheck size={12} className="mr-1" />
+              Create Admin User
+            </Link>
           </div>
         </div>
       </div>
