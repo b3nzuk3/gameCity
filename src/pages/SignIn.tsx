@@ -62,9 +62,6 @@ const SignIn = () => {
       const user = await authService.login({ email, password });
       
       if (user) {
-        // Store user in localStorage for persistence
-        localStorage.setItem("user", JSON.stringify(user));
-        
         toast({
           title: `Welcome back, ${user.name}`,
           description: "You've successfully signed in",

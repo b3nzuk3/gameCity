@@ -1,5 +1,6 @@
+
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,6 +15,7 @@ import {
   DialogFooter, 
   DialogHeader, 
   DialogTitle,
+  DialogTrigger
 } from "@/components/ui/dialog";
 import { authService } from "@/services/authService";
 import { orderService, Order } from "@/services/orderService";
@@ -23,7 +25,6 @@ const Profile = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   
-  const [user, setUser] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [editProfileData, setEditProfileData] = useState({
     name: "",
@@ -47,49 +48,10 @@ const Profile = () => {
     country: ""
   });
   
-  useEffect(() => {
-    const fetchUserData = async () => {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-        setEditProfileData({
-          name: parsedUser.name || "",
-          email: parsedUser.email || ""
-        });
-      } else {
-        try {
-          const userProfile = await authService.getCurrentUser();
-          if (userProfile) {
-            setUser(userProfile);
-            localStorage.setItem("user", JSON.stringify(userProfile));
-            setEditProfileData({
-              name: userProfile.name || "",
-              email: userProfile.email || ""
-            });
-          } else {
-            toast({
-              title: "Authentication required",
-              description: "Please sign in to view your profile",
-              variant: "destructive"
-            });
-            navigate("/signin");
-          }
-        } catch (error) {
-          console.error("Error fetching user data:", error);
-          toast({
-            title: "Error",
-            description: "Failed to load user profile",
-            variant: "destructive"
-          });
-          navigate("/signin");
-        }
-      }
-    };
-
-    fetchUserData();
-  }, [navigate]);
+  // Get user profile
+  const user = authService.getCurrentUser();
   
+  // Fetch user orders
   const { 
     data: orders = [], 
     isLoading: ordersLoading
@@ -99,13 +61,10 @@ const Profile = () => {
     enabled: !!user
   });
   
+  // Update profile mutation
   const updateProfileMutation = useMutation({
     mutationFn: authService.updateProfile,
-    onSuccess: (updatedProfile) => {
-      if (updatedProfile) {
-        setUser(updatedProfile);
-        localStorage.setItem("user", JSON.stringify(updatedProfile));
-      }
+    onSuccess: () => {
       setEditMode(false);
       toast({
         title: "Profile Updated",
@@ -114,6 +73,7 @@ const Profile = () => {
     }
   });
   
+  // Change password mutation
   const changePasswordMutation = useMutation({
     mutationFn: (passwordData: { currentPassword: string, newPassword: string }) => 
       authService.changePassword(passwordData),
@@ -131,13 +91,10 @@ const Profile = () => {
     }
   });
   
+  // Add address mutation
   const addAddressMutation = useMutation({
     mutationFn: authService.addAddress,
-    onSuccess: (updatedProfile) => {
-      if (updatedProfile) {
-        setUser(updatedProfile);
-        localStorage.setItem("user", JSON.stringify(updatedProfile));
-      }
+    onSuccess: () => {
       setShowAddressDialog(false);
       setAddressData({
         street: "",
@@ -153,6 +110,25 @@ const Profile = () => {
       queryClient.invalidateQueries({ queryKey: ['user'] });
     }
   });
+  
+  useEffect(() => {
+    // Check if user is logged in
+    if (!user) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to view your profile",
+        variant: "destructive"
+      });
+      navigate("/signin");
+      return;
+    }
+    
+    // Set profile data
+    setEditProfileData({
+      name: user.name || "",
+      email: user.email || ""
+    });
+  }, [user, navigate]);
 
   const handleEditProfile = () => {
     setEditMode(true);
@@ -166,6 +142,7 @@ const Profile = () => {
   };
 
   const handleCancelEdit = () => {
+    // Reset form data
     if (user) {
       setEditProfileData({
         name: user.name,
@@ -173,6 +150,7 @@ const Profile = () => {
       });
     }
     
+    // Exit edit mode
     setEditMode(false);
   };
 
@@ -185,6 +163,7 @@ const Profile = () => {
   };
 
   const handlePasswordChange = () => {
+    // Validate passwords
     if (!passwordData.currentPassword) {
       toast({
         title: "Error",
@@ -218,6 +197,7 @@ const Profile = () => {
   };
 
   const handleAddAddress = () => {
+    // Validate address
     if (!addressData.street || !addressData.city || !addressData.postalCode) {
       toast({
         title: "Error",
@@ -239,9 +219,10 @@ const Profile = () => {
   };
 
   if (!user) {
-    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+    return null; // Will redirect in useEffect
   }
 
+  // Format orders for display
   const formattedOrders = orders.map((order: Order) => ({
     id: order._id,
     date: new Date(order.createdAt).toLocaleDateString(),
@@ -255,6 +236,7 @@ const Profile = () => {
         <h1 className="text-3xl font-bold mb-6">My Profile</h1>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Profile Info Card */}
           <Card className="col-span-1">
             <CardHeader className="flex flex-row items-center gap-4">
               <Avatar className="h-16 w-16">
@@ -335,6 +317,7 @@ const Profile = () => {
             </CardContent>
           </Card>
 
+          {/* Recent Orders */}
           <Card className="col-span-1 md:col-span-2">
             <CardHeader>
               <CardTitle>Recent Orders</CardTitle>
@@ -415,6 +398,7 @@ const Profile = () => {
             </CardContent>
           </Card>
           
+          {/* Saved Addresses Card */}
           <Card className="col-span-1 md:col-span-3">
             <CardHeader>
               <CardTitle>Saved Addresses</CardTitle>
@@ -459,6 +443,7 @@ const Profile = () => {
         </div>
       </div>
       
+      {/* Change Password Dialog */}
       <Dialog open={showPasswordDialog} onOpenChange={setShowPasswordDialog}>
         <DialogContent>
           <DialogHeader>
@@ -512,6 +497,7 @@ const Profile = () => {
         </DialogContent>
       </Dialog>
       
+      {/* Add Address Dialog */}
       <Dialog open={showAddressDialog} onOpenChange={setShowAddressDialog}>
         <DialogContent>
           <DialogHeader>
