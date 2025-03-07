@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { 
@@ -26,6 +25,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { authService } from "@/services/authService";
 
 const Navbar = () => {
   const { getCartCount } = useCart();
@@ -37,11 +38,44 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if user is logged in
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
+    const checkUserAuth = async () => {
+      const userData = localStorage.getItem("user");
+      if (userData) {
+        setUser(JSON.parse(userData));
+      } else {
+        const { data } = await supabase.auth.getSession();
+        if (data.session) {
+          try {
+            const userProfile = await authService.getCurrentUser();
+            if (userProfile) {
+              setUser(userProfile);
+              localStorage.setItem("user", JSON.stringify(userProfile));
+            }
+          } catch (error) {
+            console.error("Error fetching user profile:", error);
+          }
+        }
+      }
+    };
+
+    checkUserAuth();
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        try {
+          const userProfile = await authService.getCurrentUser();
+          if (userProfile) {
+            setUser(userProfile);
+            localStorage.setItem("user", JSON.stringify(userProfile));
+          }
+        } catch (error) {
+          console.error("Error fetching user profile on auth change:", error);
+        }
+      } else if (event === 'SIGNED_OUT') {
+        setUser(null);
+        localStorage.removeItem("user");
+      }
+    });
 
     const handleScroll = () => {
       if (window.scrollY > 20) {
@@ -52,8 +86,10 @@ const Navbar = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
+    
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      subscription.unsubscribe();
     };
   }, []);
 
@@ -74,14 +110,24 @@ const Navbar = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    toast({
-      title: "Logged out",
-      description: "You have been successfully logged out",
-    });
-    navigate("/");
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+      setUser(null);
+      localStorage.removeItem("user");
+      toast({
+        title: "Logged out",
+        description: "You have been successfully logged out",
+      });
+      navigate("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast({
+        title: "Logout failed",
+        description: "An error occurred during logout",
+        variant: "destructive"
+      });
+    }
   };
 
   const categories = [
@@ -101,12 +147,10 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-16 md:h-20">
-          {/* Logo */}
           <Link to="/" className="flex items-center">
             <span className="text-xl font-bold text-emerald-400">Gamecity</span>
           </Link>
 
-          {/* Desktop Menu */}
           <nav className="hidden md:flex items-center space-x-6">
             <Link to="/" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
               Home
@@ -150,7 +194,6 @@ const Navbar = () => {
             </Link>
           </nav>
 
-          {/* Right Side Icons */}
           <div className="flex items-center space-x-4">
             <Button 
               variant="ghost" 
@@ -175,19 +218,21 @@ const Navbar = () => {
                 <DropdownMenuContent className="w-56 bg-forest-800 border-emerald-700/50">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-emerald-800/30" />
-                  <Link to="/profile">
-                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                      <User size={16} />
-                      <span>Profile</span>
-                    </DropdownMenuItem>
-                  </Link>
+                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onClick={() => {
+                    navigate("/profile");
+                    setIsMobileMenuOpen(false);
+                  }}>
+                    <User size={16} />
+                    <span>Profile</span>
+                  </DropdownMenuItem>
                   {user.isAdmin && (
-                    <Link to="/admin">
-                      <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                        <Settings size={16} />
-                        <span>Admin Dashboard</span>
-                      </DropdownMenuItem>
-                    </Link>
+                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onClick={() => {
+                      navigate("/admin");
+                      setIsMobileMenuOpen(false);
+                    }}>
+                      <Settings size={16} />
+                      <span>Admin Dashboard</span>
+                    </DropdownMenuItem>
                   )}
                   <DropdownMenuSeparator className="bg-emerald-800/30" />
                   <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onClick={handleLogout}>
@@ -223,7 +268,6 @@ const Navbar = () => {
               </Button>
             </Link>
 
-            {/* Mobile Menu Toggle */}
             <Button
               variant="ghost"
               size="icon"
@@ -236,7 +280,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Search Overlay */}
       {isSearchOpen && (
         <div className="absolute top-full left-0 w-full bg-forest-800 shadow-lg p-4 animate-fade-in border-t border-forest-700">
           <form onSubmit={handleSearchSubmit} className="container mx-auto flex gap-2">
@@ -263,7 +306,6 @@ const Navbar = () => {
         </div>
       )}
 
-      {/* Mobile Menu */}
       {isMobileMenuOpen && (
         <div className="md:hidden bg-forest-800 shadow-lg animate-fade-in">
           <div className="py-4 px-4 space-y-2">
@@ -315,21 +357,25 @@ const Navbar = () => {
             {user && (
               <>
                 <div className="border-t border-forest-700 mt-4 pt-4"></div>
-                <Link
-                  to="/profile"
-                  className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
+                <button
+                  onClick={() => {
+                    navigate("/profile");
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className="block w-full text-left py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
                 >
                   Profile
-                </Link>
+                </button>
                 {user.isAdmin && (
-                  <Link
-                    to="/admin"
-                    className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
+                  <button
+                    onClick={() => {
+                      navigate("/admin");
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="block w-full text-left py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
                   >
                     Admin Dashboard
-                  </Link>
+                  </button>
                 )}
                 <button
                   onClick={() => {
