@@ -11,9 +11,7 @@ export default defineConfig(({ mode }) => ({
       '/api': 'http://localhost:5000',
     },
   },
-  plugins: [react(), mode === 'development' && componentTagger()].filter(
-    Boolean
-  ),
+  plugins: [react()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
