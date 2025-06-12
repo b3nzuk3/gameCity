@@ -1,179 +1,138 @@
-
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { toast } from "@/hooks/use-toast";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
-import Layout from "@/components/Layout";
-import { authService } from "@/services/authService";
-import { supabase } from "@/integrations/supabase/client";
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import Layout from '@/components/Layout'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useAuth } from '@/contexts/AuthContext'
+import { Eye, EyeOff, Mail, Lock, LogIn } from 'lucide-react'
 
 const SignIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const { login } = useAuth()
 
-  // Check if user is already logged in on component mount
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        // User is already logged in, redirect
-        navigate('/');
-      }
-    };
-    
-    checkSession();
-    
-    // Subscribe to auth changes
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === 'SIGNED_IN' && session) {
-          // Redirect on sign in
-          navigate('/');
-        }
-      }
-    );
-    
-    // Cleanup subscription
-    return () => {
-      authListener?.subscription.unsubscribe();
-    };
-  }, [navigate]);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  })
+  const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!email || !password) {
-      toast({
-        title: "Error",
-        description: "Please fill in all fields",
-        variant: "destructive",
-      });
-      return;
-    }
-    
-    setIsLoading(true);
-    
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+
     try {
-      const user = await authService.login({ email, password });
-      
-      if (user) {
-        toast({
-          title: `Welcome back, ${user.name}`,
-          description: "You've successfully signed in",
-        });
-        
-        // Redirect based on user role
-        if (user.isAdmin) {
-          navigate("/admin");
-        } else {
-          navigate("/");
-        }
-      }
+      await login(formData.email, formData.password)
+      navigate('/')
     } catch (error) {
-      console.error("Login error:", error);
-      // Error toast is handled in the authService
+      console.error('Sign in error:', error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
+  const fillDemoCredentials = (email: string) => {
+    setFormData({
+      email,
+      password: 'password',
+    })
+  }
 
   return (
     <Layout>
-      <div className="container max-w-md mx-auto px-4 py-16 mt-16">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">Sign In</h1>
-          <p className="text-muted-foreground mt-2">
-            Enter your credentials to access your account
-          </p>
-        </div>
-        
-        <div className="bg-forest-800 rounded-lg shadow-lg p-8 border border-forest-700">
-          <form onSubmit={handleSignIn} className="space-y-6">
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  className="pl-10 bg-forest-900 border-forest-700"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+      <div className="container mx-auto px-4 py-8 mt-16">
+        <div className="max-w-md mx-auto">
+          <Card className="bg-forest-800 border-forest-700">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl font-bold flex items-center justify-center">
+                <LogIn className="mr-2 h-6 w-6" />
+                Sign In
+              </CardTitle>
+              <p className="text-muted-foreground">Welcome back to Gamecity</p>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <Label htmlFor="email">Email</Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="Enter your email"
+                      className="pl-10 bg-forest-900 border-forest-600"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="password">Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      id="password"
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={formData.password}
+                      onChange={handleInputChange}
+                      placeholder="Enter your password"
+                      className="pl-10 pr-10 bg-forest-900 border-forest-600"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <Button
+                  type="submit"
                   disabled={isLoading}
-                />
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <label htmlFor="password" className="text-sm font-medium">
-                  Password
-                </label>
-                <Link to="/forgot-password" className="text-xs text-emerald-400 hover:text-emerald-300">
-                  Forgot password?
-                </Link>
-              </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  className="pl-10 pr-10 bg-forest-900 border-forest-700"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={isLoading}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="w-full bg-emerald-600 hover:bg-emerald-500"
                 >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
+                  {isLoading ? 'Signing in...' : 'Sign In'}
+                </Button>
+              </form>
+
+              <div className="mt-6 text-center">
+                <p className="text-sm text-muted-foreground">
+                  Don't have an account?{' '}
+                  <Link
+                    to="/signup"
+                    className="text-emerald-400 hover:text-emerald-300 underline"
+                  >
+                    Sign up
+                  </Link>
+                </p>
               </div>
-            </div>
-            
-            <div>
-              <Button
-                type="submit"
-                className="w-full bg-emerald-600 hover:bg-emerald-500 text-white"
-                disabled={isLoading}
-              >
-                {isLoading ? "Signing in..." : "Sign In"}
-              </Button>
-            </div>
-          </form>
-          
-          <div className="mt-6 text-center text-sm">
-            <p className="text-muted-foreground">
-              Don't have an account?{" "}
-              <Link to="/signup" className="text-emerald-400 hover:text-emerald-300">
-                Sign up
-              </Link>
-            </p>
-          </div>
-          
-          {/* Demo credentials info */}
-          <div className="mt-8 p-3 bg-forest-700/50 rounded border border-emerald-900/50 text-xs">
-            <p className="font-medium text-emerald-400 mb-1">Demo Credentials</p>
-            <p className="text-muted-foreground">
-              Email: admin@greenbits.com<br />
-              Password: admin123
-            </p>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default SignIn;
+export default SignIn

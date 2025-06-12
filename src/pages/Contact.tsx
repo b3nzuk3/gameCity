@@ -1,10 +1,9 @@
-
-import React, { useState } from "react";
-import Layout from "@/components/Layout";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/hooks/use-toast";
+import React, { useState } from 'react'
+import Layout from '@/components/Layout'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { useToast } from '@/hooks/use-toast'
 import {
   Mail,
   Phone,
@@ -14,78 +13,84 @@ import {
   MessageSquare,
   HelpCircle,
   ShoppingCart,
-  AlertCircle
-} from "lucide-react";
+  AlertCircle,
+} from 'lucide-react'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select'
 
 const Contact = () => {
-  const { toast } = useToast();
+  const { toast } = useToast()
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-    inquiryType: ""
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+    inquiryType: '',
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
 
   const handleSelectChange = (value: string) => {
-    setFormData(prev => ({ ...prev, inquiryType: value }));
-  };
+    setFormData((prev) => ({ ...prev, inquiryType: value }))
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
+    e.preventDefault()
+    setIsSubmitting(true)
+
     // Simulate form submission
     setTimeout(() => {
       toast({
-        title: "Message sent",
+        title: 'Message sent',
         description: "We'll get back to you as soon as possible!",
-      });
-      
+      })
+
       setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-        inquiryType: ""
-      });
-      
-      setIsSubmitting(false);
-    }, 1500);
-  };
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+        inquiryType: '',
+      })
+
+      setIsSubmitting(false)
+    }, 1500)
+  }
 
   // Common question data
   const faqs = [
     {
-      question: "What are your shipping times?",
-      answer: "Standard shipping typically takes 3-5 business days within the continental US. Expedited shipping options are available at checkout."
+      question: 'What are your shipping times?',
+      answer:
+        'Standard shipping typically takes 3-5 business days within the continental US. Expedited shipping options are available at checkout.',
     },
     {
-      question: "Do you offer international shipping?",
-      answer: "Yes, we ship to most countries worldwide. International shipping times vary by location, typically 7-14 business days."
+      question: 'Do you offer international shipping?',
+      answer:
+        'Yes, we ship to most countries worldwide. International shipping times vary by location, typically 7-14 business days.',
     },
     {
-      question: "What is your return policy?",
-      answer: "We offer a 30-day return policy on most items. Products must be in original packaging and undamaged. Custom builds have special return conditions."
+      question: 'What is your return policy?',
+      answer:
+        'We offer a 30-day return policy on most items. Products must be in original packaging and undamaged. Custom builds have special return conditions.',
     },
     {
-      question: "Do you offer price matching?",
-      answer: "Yes, we match prices from authorized retailers for identical products. Contact customer service with details of the competitor's offer."
-    }
-  ];
+      question: 'Do you offer price matching?',
+      answer:
+        "Yes, we match prices from authorized retailers for identical products. Contact customer service with details of the competitor's offer.",
+    },
+  ]
 
   return (
     <Layout>
@@ -94,8 +99,8 @@ const Contact = () => {
           <div className="text-center mb-12">
             <h1 className="text-3xl md:text-4xl font-bold mb-4">Contact Us</h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Have questions or need assistance? Our team is here to help.
-              Reach out to us through any of the channels below.
+              Have questions or need assistance? Our team is here to help. Reach
+              out to us through any of the channels below.
             </p>
           </div>
 
@@ -108,8 +113,11 @@ const Contact = () => {
               <p className="text-muted-foreground mb-4">
                 For general inquiries and support
               </p>
-              <a href="mailto:support@greenbits.com" className="text-emerald-400 hover:text-emerald-300">
-                support@greenbits.com
+              <a
+                href="mailto:gamecityelectronics@gmail.com"
+                className="text-emerald-400 hover:text-emerald-300"
+              >
+                gamecityelectronics@gmail.com
               </a>
             </div>
 
@@ -121,8 +129,11 @@ const Contact = () => {
               <p className="text-muted-foreground mb-4">
                 Speak directly with our support team
               </p>
-              <a href="tel:+15551234567" className="text-emerald-400 hover:text-emerald-300">
-                +1 (555) 123-4567
+              <a
+                href="tel:0712248706"
+                className="text-emerald-400 hover:text-emerald-300"
+              >
+                0712248706
               </a>
             </div>
 
@@ -134,10 +145,14 @@ const Contact = () => {
               <p className="text-muted-foreground mb-4">
                 Our retail store and service center
               </p>
-              <address className="not-italic text-emerald-400">
-                1234 Tech Avenue<br />
-                Silicon Valley, CA 94043
-              </address>
+              <a
+                href="https://www.google.com/maps/place/GAMECITY+ELECTRONICS/@-1.2835,36.8247986,17z/data=!4m6!3m5!1s0x182f11ff319a2a71:0x23dfb4aee72fab6f!8m2!3d-1.2834756!4d36.8245877!16s%2Fg%2F11rcy9p60j?entry=ttu&g_ep=EgoyMDI1MDYwNC4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-400 hover:text-emerald-300 not-italic"
+              >
+                GAMECITY ELECTRONICS
+              </a>
             </div>
           </div>
 
@@ -147,14 +162,18 @@ const Contact = () => {
               <div className="mb-6">
                 <h2 className="text-2xl font-bold mb-2">Send Us a Message</h2>
                 <p className="text-muted-foreground">
-                  Fill out the form below and we'll get back to you as soon as possible.
+                  Fill out the form below and we'll get back to you as soon as
+                  possible.
                 </p>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-4">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-1">
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium mb-1"
+                    >
                       Your Name
                     </label>
                     <Input
@@ -167,9 +186,12 @@ const Contact = () => {
                       className="bg-forest-900 border-forest-700"
                     />
                   </div>
-                  
+
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-1">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium mb-1"
+                    >
                       Email Address
                     </label>
                     <Input
@@ -183,27 +205,42 @@ const Contact = () => {
                       className="bg-forest-900 border-forest-700"
                     />
                   </div>
-                  
+
                   <div>
-                    <label htmlFor="inquiryType" className="block text-sm font-medium mb-1">
+                    <label
+                      htmlFor="inquiryType"
+                      className="block text-sm font-medium mb-1"
+                    >
                       Inquiry Type
                     </label>
-                    <Select onValueChange={handleSelectChange} value={formData.inquiryType}>
+                    <Select
+                      onValueChange={handleSelectChange}
+                      value={formData.inquiryType}
+                    >
                       <SelectTrigger className="bg-forest-900 border-forest-700">
                         <SelectValue placeholder="Select inquiry type" />
                       </SelectTrigger>
                       <SelectContent className="bg-forest-800 border-forest-700">
                         <SelectItem value="general">General Inquiry</SelectItem>
-                        <SelectItem value="support">Technical Support</SelectItem>
+                        <SelectItem value="support">
+                          Technical Support
+                        </SelectItem>
                         <SelectItem value="orders">Order Status</SelectItem>
-                        <SelectItem value="returns">Returns & Refunds</SelectItem>
-                        <SelectItem value="wholesale">Wholesale & Business</SelectItem>
+                        <SelectItem value="returns">
+                          Returns & Refunds
+                        </SelectItem>
+                        <SelectItem value="wholesale">
+                          Wholesale & Business
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-medium mb-1">
+                    <label
+                      htmlFor="subject"
+                      className="block text-sm font-medium mb-1"
+                    >
                       Subject
                     </label>
                     <Input
@@ -216,9 +253,12 @@ const Contact = () => {
                       className="bg-forest-900 border-forest-700"
                     />
                   </div>
-                  
+
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium mb-1">
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-medium mb-1"
+                    >
                       Message
                     </label>
                     <Textarea
@@ -234,12 +274,14 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="w-full bg-emerald-600 hover:bg-emerald-500 text-white"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Sending..." : (
+                  {isSubmitting ? (
+                    'Sending...'
+                  ) : (
                     <>
                       <Send size={16} className="mr-2" />
                       Send Message
@@ -249,93 +291,32 @@ const Contact = () => {
               </form>
             </div>
 
-            {/* Right Side Content */}
-            <div className="space-y-8">
-              {/* Hours */}
-              <div className="bg-forest-800 rounded-lg p-6 border border-forest-700">
-                <div className="flex items-start mb-4">
-                  <Clock className="h-5 w-5 text-emerald-400 mt-0.5 mr-2" />
-                  <h3 className="text-lg font-medium">Business Hours</h3>
-                </div>
-                <ul className="space-y-2">
-                  <li className="flex justify-between">
-                    <span className="text-muted-foreground">Monday - Friday</span>
-                    <span>9:00 AM - 6:00 PM PST</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span className="text-muted-foreground">Saturday</span>
-                    <span>10:00 AM - 4:00 PM PST</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span className="text-muted-foreground">Sunday</span>
-                    <span>Closed</span>
-                  </li>
-                </ul>
-                <div className="mt-4 pt-4 border-t border-forest-700">
-                  <div className="flex items-start">
-                    <AlertCircle className="h-5 w-5 text-emerald-400 mt-0.5 mr-2 shrink-0" />
-                    <p className="text-sm text-muted-foreground">
-                      Technical support is available 24/7 via email or through our support portal.
-                    </p>
-                  </div>
-                </div>
+            {/* Business Hours Section */}
+            <div className="bg-forest-800 rounded-lg p-6 border border-forest-700 mt-8">
+              <div className="flex items-start mb-4">
+                <Clock className="h-5 w-5 text-emerald-400 mt-0.5 mr-2" />
+                <h3 className="text-lg font-medium">Business Hours</h3>
               </div>
-
-              {/* Departments */}
-              <div className="bg-forest-800 rounded-lg p-6 border border-forest-700">
-                <h3 className="text-lg font-medium mb-4">Specialized Departments</h3>
-                <ul className="space-y-4">
-                  <li className="flex items-start">
-                    <HelpCircle className="h-5 w-5 text-emerald-400 mt-0.5 mr-3 shrink-0" />
-                    <div>
-                      <h4 className="font-medium">Technical Support</h4>
-                      <p className="text-sm text-muted-foreground mb-1">For help with products and troubleshooting</p>
-                      <a href="mailto:techsupport@greenbits.com" className="text-sm text-emerald-400 hover:text-emerald-300">
-                        techsupport@greenbits.com
-                      </a>
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <ShoppingCart className="h-5 w-5 text-emerald-400 mt-0.5 mr-3 shrink-0" />
-                    <div>
-                      <h4 className="font-medium">Orders & Shipping</h4>
-                      <p className="text-sm text-muted-foreground mb-1">For inquiries about orders, shipping, and returns</p>
-                      <a href="mailto:orders@greenbits.com" className="text-sm text-emerald-400 hover:text-emerald-300">
-                        orders@greenbits.com
-                      </a>
-                    </div>
-                  </li>
-                  <li className="flex items-start">
-                    <MessageSquare className="h-5 w-5 text-emerald-400 mt-0.5 mr-3 shrink-0" />
-                    <div>
-                      <h4 className="font-medium">Business Inquiries</h4>
-                      <p className="text-sm text-muted-foreground mb-1">For partnerships and wholesale opportunities</p>
-                      <a href="mailto:business@greenbits.com" className="text-sm text-emerald-400 hover:text-emerald-300">
-                        business@greenbits.com
-                      </a>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-
-              {/* FAQs */}
-              <div>
-                <h3 className="text-lg font-medium mb-4">Frequently Asked Questions</h3>
-                <div className="space-y-4">
-                  {faqs.map((faq, index) => (
-                    <div key={index} className="bg-forest-800 rounded-lg p-4 border border-forest-700">
-                      <h4 className="font-medium mb-2">{faq.question}</h4>
-                      <p className="text-sm text-muted-foreground">{faq.answer}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              <ul className="space-y-2">
+                <li className="flex justify-between">
+                  <span className="text-muted-foreground">Monday - Friday</span>
+                  <span>9:00 AM - 6:00 PM</span>
+                </li>
+                <li className="flex justify-between">
+                  <span className="text-muted-foreground">Saturday</span>
+                  <span>10:00 AM - 4:00 PM</span>
+                </li>
+                <li className="flex justify-between">
+                  <span className="text-muted-foreground">Sunday</span>
+                  <span>Closed</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default Contact;
+export default Contact

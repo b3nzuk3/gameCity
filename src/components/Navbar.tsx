@@ -1,352 +1,323 @@
-
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { 
-  ShoppingCart, 
-  User, 
-  Menu, 
-  X, 
-  Search,
-  Monitor,
-  Database,
-  Settings,
-  CreditCard,
-  LogOut 
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { useAuth } from '@/contexts/AuthContext'
+import { useCart } from '@/contexts/CartContext'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useCart } from "@/contexts/CartContext";
-import { toast } from "@/hooks/use-toast";
+} from '@/components/ui/dropdown-menu'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
+import {
+  Search,
+  ShoppingCart,
+  User,
+  Menu,
+  LogOut,
+  Settings,
+  Heart,
+  Package,
+  Shield,
+} from 'lucide-react'
 
 const Navbar = () => {
-  const { getCartCount } = useCart();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const { user, logout } = useAuth()
+  const { getCartCount } = useCart()
+  const [searchQuery, setSearchQuery] = useState('')
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
-  useEffect(() => {
-    // Check if user is logged in
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const toggleSearch = () => {
-    setIsSearchOpen(!isSearchOpen);
-  };
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
     if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setIsSearchOpen(false);
-      setSearchQuery("");
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
+      setSearchQuery('')
     }
-  };
+  }
 
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    setUser(null);
-    toast({
-      title: "Logged out",
-      description: "You have been successfully logged out",
-    });
-    navigate("/");
-  };
+  const handleSignOut = async () => {
+    try {
+      await logout()
+      navigate('/')
+    } catch (error) {
+      console.error('Sign out error:', error)
+    }
+  }
 
-  const categories = [
-    { name: "Monitors", icon: <Monitor size={16} />, path: "/category/monitors" },
-    { name: "Components", icon: <Database size={16} />, path: "/category/components" },
-    { name: "PC Building", icon: <Settings size={16} />, path: "/category/pc-building" },
-    { name: "Accessories", icon: <CreditCard size={16} />, path: "/category/accessories" }
-  ];
+  const totalItems = getCartCount()
 
   return (
-    <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? "bg-forest-800/90 backdrop-blur-lg shadow-md"
-          : "bg-transparent"
-      }`}
-    >
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between h-16 md:h-20">
+    <nav className="bg-forest-900 border-b border-forest-700 shadow-lg fixed top-0 left-0 right-0 z-50">
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <span className="text-xl font-bold text-emerald-400">Gamecity</span>
+          <Link
+            to="/"
+            className="flex items-center space-x-2 text-xl font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+          >
+            <Package className="h-6 w-6" />
+            <span>Gamecity</span>
           </Link>
 
-          {/* Desktop Menu */}
-          <nav className="hidden md:flex items-center space-x-6">
-            <Link to="/" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
-              Home
-            </Link>
-            
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button 
-                  variant="ghost" 
-                  className="text-sm text-foreground hover:text-emerald-400 transition-colors p-0"
-                >
-                  Products
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-60 bg-forest-800 border-emerald-700/50">
-                <DropdownMenuLabel className="text-emerald-400">Categories</DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-emerald-800/30" />
-                {categories.map((category) => (
-                  <Link to={category.path} key={category.name}>
-                    <DropdownMenuItem 
-                      className="cursor-pointer hover:bg-emerald-900/30"
-                    >
-                      <div className="flex items-center gap-2">
-                        {category.icon}
-                        <span>{category.name}</span>
-                      </div>
-                    </DropdownMenuItem>
-                  </Link>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            
-            <Link to="/build" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
-              Build Your PC
-            </Link>
-            <Link to="/about" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
-              About
-            </Link>
-            <Link to="/contact" className="text-sm text-foreground hover:text-emerald-400 transition-colors">
-              Contact
-            </Link>
-          </nav>
+          {/* Search Bar - Desktop */}
+          <div className="hidden md:flex flex-1 max-w-lg mx-8">
+            <form onSubmit={handleSearch} className="w-full">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  type="text"
+                  placeholder="Search for games, accessories..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 bg-forest-800 border-forest-600 text-white placeholder:text-gray-400 focus:border-emerald-500 focus:ring-emerald-500"
+                />
+              </div>
+            </form>
+          </div>
 
-          {/* Right Side Icons */}
-          <div className="flex items-center space-x-4">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40"
-              onClick={toggleSearch}
+          {/* Desktop Menu */}
+          <div className="hidden md:flex items-center space-x-4">
+            {/* Navigation Links */}
+            <Link
+              to="/category/all"
+              className="text-gray-300 hover:text-emerald-400 transition-colors px-3 py-2 rounded-md text-sm font-medium"
             >
-              <Search size={20} />
-            </Button>
-            
+              Categories
+            </Link>
+
+            {/* Favorites */}
+            <Link
+              to="/favorites"
+              className="text-gray-300 hover:text-emerald-400 transition-colors p-2 rounded-md"
+            >
+              <Heart className="h-5 w-5" />
+            </Link>
+
+            {/* Cart */}
+            <Link
+              to="/cart"
+              className="relative text-gray-300 hover:text-emerald-400 transition-colors p-2 rounded-md"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </Link>
+
+            {/* User Menu */}
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40"
+                  <Button
+                    variant="ghost"
+                    className="relative h-8 w-8 rounded-full bg-forest-800 hover:bg-forest-700"
                   >
-                    <User size={20} />
+                    <User className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 bg-forest-800 border-emerald-700/50">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-emerald-800/30" />
-                  <Link to="/profile">
-                    <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                      <User size={16} />
-                      <span>Profile</span>
-                    </DropdownMenuItem>
-                  </Link>
-                  {user.isAdmin && (
-                    <Link to="/admin">
-                      <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
-                        <Settings size={16} />
-                        <span>Admin Dashboard</span>
-                      </DropdownMenuItem>
+                <DropdownMenuContent
+                  className="w-56 bg-forest-800 border-forest-700"
+                  align="end"
+                >
+                  <div className="flex items-center justify-start gap-2 p-2">
+                    <div className="flex flex-col space-y-1 leading-none">
+                      <p className="font-medium text-sm text-white">
+                        {user.name}
+                      </p>
+                      <p className="w-[200px] truncate text-xs text-gray-400">
+                        {user.email}
+                      </p>
+                      {user.isAdmin && (
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-emerald-900 text-emerald-300">
+                          <Shield className="h-3 w-3 mr-1" />
+                          Admin
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator className="bg-forest-600" />
+                  <DropdownMenuItem asChild>
+                    <Link
+                      to="/profile"
+                      className="text-gray-300 hover:text-white"
+                    >
+                      <Settings className="mr-2 h-4 w-4" />
+                      Profile Settings
                     </Link>
+                  </DropdownMenuItem>
+                  {user.isAdmin && (
+                    <DropdownMenuItem asChild>
+                      <Link
+                        to="/admin"
+                        className="text-gray-300 hover:text-white"
+                      >
+                        <Shield className="mr-2 h-4 w-4" />
+                        Admin Dashboard
+                      </Link>
+                    </DropdownMenuItem>
                   )}
-                  <DropdownMenuSeparator className="bg-emerald-800/30" />
-                  <DropdownMenuItem className="flex items-center gap-2 cursor-pointer" onClick={handleLogout}>
-                    <LogOut size={16} />
-                    <span>Logout</span>
+                  <DropdownMenuSeparator className="bg-forest-600" />
+                  <DropdownMenuItem
+                    onClick={handleSignOut}
+                    className="text-red-400 hover:text-red-300 focus:text-red-300"
+                  >
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Link to="/signin">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40"
-                >
-                  <User size={20} />
-                </Button>
-              </Link>
+              <div className="flex items-center space-x-2">
+                <Link to="/signin">
+                  <Button
+                    variant="ghost"
+                    className="text-gray-300 hover:text-white"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/signup">
+                  <Button className="bg-emerald-600 hover:bg-emerald-500 text-white">
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
             )}
-            
-            <Link to="/cart">
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40 relative"
-              >
-                <ShoppingCart size={20} />
-                {getCartCount() > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-emerald-500 text-[10px]">
-                    {getCartCount()}
-                  </Badge>
-                )}
-              </Button>
-            </Link>
+          </div>
 
-            {/* Mobile Menu Toggle */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden text-foreground hover:text-emerald-400 bg-transparent hover:bg-forest-700/40"
-              onClick={toggleMobileMenu}
-            >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </Button>
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="sm" className="text-gray-300">
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="bg-forest-900 border-forest-700">
+                <SheetHeader>
+                  <SheetTitle className="text-emerald-400">
+                    Gamecity Menu
+                  </SheetTitle>
+                </SheetHeader>
+
+                <div className="py-6 space-y-6">
+                  {/* Mobile Search */}
+                  <form onSubmit={handleSearch} className="space-y-2">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                      <Input
+                        type="text"
+                        placeholder="Search for games..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-10 bg-forest-800 border-forest-600"
+                      />
+                    </div>
+                  </form>
+
+                  {/* Mobile Navigation */}
+                  <div className="space-y-2">
+                    <Link
+                      to="/category/all"
+                      className="block px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Categories
+                    </Link>
+                    <Link
+                      to="/favorites"
+                      className="block px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      Favorites
+                    </Link>
+                    <Link
+                      to="/cart"
+                      className="flex items-center px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <ShoppingCart className="h-4 w-4 mr-2" />
+                      Cart ({totalItems})
+                    </Link>
+                  </div>
+
+                  {/* Mobile User Menu */}
+                  {user ? (
+                    <div className="space-y-2 pt-4 border-t border-forest-700">
+                      <div className="px-3 py-2">
+                        <p className="font-medium text-white">{user.name}</p>
+                        <p className="text-sm text-gray-400">{user.email}</p>
+                        {user.isAdmin && (
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-emerald-900 text-emerald-300 mt-1">
+                            <Shield className="h-3 w-3 mr-1" />
+                            Admin
+                          </span>
+                        )}
+                      </div>
+                      <Link
+                        to="/profile"
+                        className="block px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Profile Settings
+                      </Link>
+                      {user.isAdmin && (
+                        <Link
+                          to="/admin"
+                          className="block px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          Admin Dashboard
+                        </Link>
+                      )}
+                      <button
+                        onClick={() => {
+                          handleSignOut()
+                          setIsMobileMenuOpen(false)
+                        }}
+                        className="block w-full text-left px-3 py-2 text-red-400 hover:text-red-300 transition-colors"
+                      >
+                        Sign Out
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-2 pt-4 border-t border-forest-700">
+                      <Link
+                        to="/signin"
+                        className="block px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Sign In
+                      </Link>
+                      <Link
+                        to="/signup"
+                        className="block px-3 py-2 text-emerald-400 hover:text-emerald-300 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        Sign Up
+                      </Link>
+                    </div>
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </div>
+    </nav>
+  )
+}
 
-      {/* Search Overlay */}
-      {isSearchOpen && (
-        <div className="absolute top-full left-0 w-full bg-forest-800 shadow-lg p-4 animate-fade-in border-t border-forest-700">
-          <form onSubmit={handleSearchSubmit} className="container mx-auto flex gap-2">
-            <Input 
-              type="text"
-              placeholder="Search products, categories..."
-              className="flex-1 bg-forest-900 border-forest-700"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              autoFocus
-            />
-            <Button type="submit" className="bg-emerald-600 hover:bg-emerald-500 text-white">
-              Search
-            </Button>
-            <Button 
-              type="button" 
-              variant="ghost" 
-              className="border-forest-700"
-              onClick={toggleSearch}
-            >
-              Cancel
-            </Button>
-          </form>
-        </div>
-      )}
-
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-forest-800 shadow-lg animate-fade-in">
-          <div className="py-4 px-4 space-y-2">
-            <Link
-              to="/"
-              className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <div className="py-3 px-4 text-foreground">
-              <div className="mb-2 font-medium">Categories</div>
-              <div className="ml-3 space-y-2">
-                {categories.map((category) => (
-                  <Link
-                    key={category.name}
-                    to={category.path}
-                    className="flex items-center gap-2 py-2 text-sm text-muted-foreground hover:text-emerald-400"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {category.icon}
-                    <span>{category.name}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-            <Link
-              to="/build"
-              className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Build Your PC
-            </Link>
-            <Link
-              to="/about"
-              className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Contact
-            </Link>
-            
-            {user && (
-              <>
-                <div className="border-t border-forest-700 mt-4 pt-4"></div>
-                <Link
-                  to="/profile"
-                  className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Profile
-                </Link>
-                {user.isAdmin && (
-                  <Link
-                    to="/admin"
-                    className="block py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    Admin Dashboard
-                  </Link>
-                )}
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className="block w-full text-left py-3 px-4 text-foreground hover:bg-forest-700/40 rounded-md transition-colors"
-                >
-                  Logout
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      )}
-    </header>
-  );
-};
-
-export default Navbar;
+export default Navbar
