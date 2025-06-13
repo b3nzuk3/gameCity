@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/hooks/use-toast'
 
+const API_BASE_URL =
+  import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api'
+
 const ResetPassword = () => {
   const { token } = useParams()
   const navigate = useNavigate()
@@ -14,11 +17,14 @@ const ResetPassword = () => {
     e.preventDefault()
     setIsSubmitting(true)
     try {
-      const response = await fetch(`/api/auth/reset-password/${token}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password }),
-      })
+      const response = await fetch(
+        `${API_BASE_URL}/auth/reset-password/${token}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password }),
+        }
+      )
       const data = await response.json()
       if (response.ok) {
         toast({ title: 'Success', description: data.message })
