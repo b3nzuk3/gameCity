@@ -174,12 +174,12 @@ const Admin = () => {
     setProductsLoading(true)
     try {
       const data = await backendService.products.getAll()
-      const normalized = data.map((p) => ({
+      const normalized = (data.products || []).map((p) => ({
         ...p,
         count_in_stock: p.count_in_stock ?? 0,
       }))
       setProducts(normalized)
-      console.log('Admin: Loaded products:', data.length)
+      console.log('Admin: Loaded products:', normalized.length)
     } catch (error) {
       console.error('Admin: Failed to load products:', error)
       toast({
