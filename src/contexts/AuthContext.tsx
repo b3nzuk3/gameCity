@@ -41,8 +41,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         // Verify token with backend
         const response = await backendService.auth.getCurrentUser()
-        setUser(response.user)
-        console.log('User authenticated:', response.user)
+        // Ensure user object has id property
+        const userWithId = {
+          ...response.user,
+          id: response.user.id || (response.user as any)?._id,
+        }
+        setUser(userWithId)
+        console.log('User authenticated:', userWithId)
       } catch (error) {
         console.error('Auth check failed:', error)
         // Clear invalid token
@@ -61,7 +66,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       setIsLoading(true)
       const response = await backendService.auth.login(email, password)
-      setUser(response.user)
+      // Ensure user object has id property
+      const userWithId = {
+        ...response.user,
+        id: response.user.id || (response.user as any)?._id,
+      }
+      setUser(userWithId)
 
       // Save token to localStorage
       if (response.token) {
@@ -73,7 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         description: `Logged in as ${response.user.name}`,
       })
 
-      console.log('Login successful:', response.user)
+      console.log('Login successful:', userWithId)
     } catch (error) {
       console.error('Login error:', error)
       const errorMessage =

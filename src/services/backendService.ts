@@ -271,8 +271,8 @@ export const users = {
 
   update: async (userId: string, data: Partial<User>): Promise<User> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
-        method: 'PATCH',
+      const response = await fetch(`${API_BASE_URL}/users/profile`, {
+        method: 'PUT',
         headers: getAuthHeaders(),
         body: JSON.stringify(data),
       })

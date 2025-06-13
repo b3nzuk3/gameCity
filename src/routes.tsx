@@ -13,6 +13,7 @@ import Profile from '@/pages/Profile'
 import Sitemap from '@/pages/Sitemap'
 import NotFound from '@/pages/NotFound'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import ResetPassword from '@/pages/ResetPassword'
 
 export default function AppRoutes() {
   return (
@@ -43,6 +44,7 @@ export default function AppRoutes() {
         }
       />
       <Route path="/sitemap" element={<Sitemap />} />
+      <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )

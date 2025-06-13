@@ -7,19 +7,20 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useAuth } from '@/contexts/AuthContext'
-import backendService from '@/services/backendService'
 import { toast } from '@/hooks/use-toast'
 import { User, Mail, Shield, Calendar } from 'lucide-react'
 
 const Profile = () => {
   const navigate = useNavigate()
-  const { user, isLoading, updateProfile } = useAuth()
+  const { user, isLoading, updateProfile, resetPassword } = useAuth()
 
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false)
   const [profileData, setProfileData] = useState({
     name: user?.name || '',
     email: user?.email || '',
   })
+  const [resetCooldown, setResetCooldown] = useState(0)
+  const cooldownDuration = 90 // 1 min 30 sec
 
   // Update profile data when user changes
   React.useEffect(() => {
@@ -62,14 +63,33 @@ const Profile = () => {
   }
 
   const handlePasswordReset = async () => {
-    if (!user?.email) return
-
+    if (!user?.email || resetCooldown > 0) return
     try {
-      await backendService.resetPassword(user.email)
+      await resetPassword(user.email)
+      toast({
+        title: 'Password reset sent',
+        description: 'Check your email for password reset instructions.',
+      })
+      setResetCooldown(cooldownDuration)
     } catch (error) {
       console.error('Password reset error:', error)
+      toast({
+        title: 'Reset failed',
+        description: 'Could not send password reset email',
+        variant: 'destructive',
+      })
     }
   }
+
+  // Cooldown timer effect
+  React.useEffect(() => {
+    if (resetCooldown > 0) {
+      const timer = setInterval(() => {
+        setResetCooldown((prev) => prev - 1)
+      }, 1000)
+      return () => clearInterval(timer)
+    }
+  }, [resetCooldown])
 
   if (isLoading) {
     return (
@@ -219,8 +239,15 @@ const Profile = () => {
                       onClick={handlePasswordReset}
                       variant="outline"
                       className="border-forest-600"
+                      disabled={resetCooldown > 0}
                     >
-                      Send Password Reset Email
+                      {resetCooldown > 0
+                        ? `Wait ${Math.floor(resetCooldown / 60)}:${(
+                            resetCooldown % 60
+                          )
+                            .toString()
+                            .padStart(2, '0')}`
+                        : 'Send Password Reset Email'}
                     </Button>
                   </div>
                 </CardContent>
