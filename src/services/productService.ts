@@ -1,28 +1,27 @@
-
-import api from './api';
-import axios from 'axios';
-import { toast } from '@/hooks/use-toast';
+import api from './api'
+import { toast } from '@/hooks/use-toast'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 // Types
 export type Product = {
-  _id: string;
-  name: string;
-  image: string;
-  description: string;
-  brand: string;
-  category: string;
-  price: number;
-  countInStock: number;
-  rating: number;
-  numReviews: number;
-};
+  _id: string
+  name: string
+  image: string
+  description: string
+  brand: string
+  category: string
+  price: number
+  countInStock: number
+  rating: number
+  numReviews: number
+}
 
 export type ProductsResponse = {
-  products: Product[];
-  page: number;
-  pages: number;
-  count: number;
-};
+  products: Product[]
+  page: number
+  pages: number
+  count: number
+}
 
 // Mock data for local development
 const MOCK_PRODUCTS: Product[] = [
@@ -36,7 +35,7 @@ const MOCK_PRODUCTS: Product[] = [
     price: 79.99,
     countInStock: 15,
     rating: 4.5,
-    numReviews: 12
+    numReviews: 12,
   },
   {
     _id: '2',
@@ -48,9 +47,178 @@ const MOCK_PRODUCTS: Product[] = [
     price: 59.99,
     countInStock: 25,
     rating: 4.8,
-    numReviews: 18
-  }
-];
+    numReviews: 18,
+  },
+]
+
+// API calls
+const fetchProducts = async (
+  keyword: string = '',
+  pageNumber: number = 1,
+  category: string = ''
+) => {
+  const { data } = await api.get<ProductsResponse>(
+    `/products?keyword=${keyword}&pageNumber=${pageNumber}&category=${category}`
+  )
+  return data
+}
+
+const fetchProductById = async (id: string) => {
+  const { data } = await api.get<Product>(`/products/${id}`)
+  return data
+}
+
+const createProduct = async (productData: Partial<Product>) => {
+  const { data } = await api.post<Product>('/products', productData)
+  return data
+}
+
+const updateProduct = async ({
+  id,
+  productData,
+}: {
+  id: string
+  productData: Partial<Product>
+}) => {
+  const { data } = await api.put<Product>(`/products/${id}`, productData)
+  return data
+}
+
+const deleteProduct = async (id: string) => {
+  const { data } = await api.delete<{ message: string }>(`/products/${id}`)
+  return data
+}
+
+const createProductReview = async ({
+  productId,
+  reviewData,
+}: {
+  productId: string
+  reviewData: { rating: number; comment: string }
+}) => {
+  const { data } = await api.post<{ message: string }>(
+    `/products/${productId}/reviews`,
+    reviewData
+  )
+  return data
+}
+
+// React Query hooks
+export const useProducts = (
+  keyword: string = '',
+  pageNumber: number = 1,
+  category: string = ''
+) => {
+  return useQuery({
+    queryKey: ['products', keyword, pageNumber, category],
+    queryFn: () => fetchProducts(keyword, pageNumber, category),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    keepPreviousData: true,
+  })
+}
+
+export const useProduct = (id: string) => {
+  return useQuery({
+    queryKey: ['product', id],
+    queryFn: () => fetchProductById(id),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
+
+export const useCreateProduct = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: createProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      toast({
+        title: 'Product created',
+        description: 'Product has been created successfully',
+      })
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Create product failed',
+        description:
+          error.response?.data?.message || 'An unexpected error occurred',
+        variant: 'destructive',
+      })
+    },
+  })
+}
+
+export const useUpdateProduct = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: updateProduct,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      queryClient.invalidateQueries({ queryKey: ['product', data._id] })
+      toast({
+        title: 'Product updated',
+        description: 'Product has been updated successfully',
+      })
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Update product failed',
+        description:
+          error.response?.data?.message || 'An unexpected error occurred',
+        variant: 'destructive',
+      })
+    },
+  })
+}
+
+export const useDeleteProduct = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: deleteProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['products'] })
+      toast({
+        title: 'Product deleted',
+        description: 'Product has been deleted successfully',
+      })
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Delete product failed',
+        description:
+          error.response?.data?.message || 'An unexpected error occurred',
+        variant: 'destructive',
+      })
+    },
+  })
+}
+
+export const useCreateProductReview = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: createProductReview,
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ['product', variables.productId],
+      })
+      toast({
+        title: 'Review submitted',
+        description: 'Thank you for your review',
+      })
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Review submission failed',
+        description:
+          error.response?.data?.message || 'An unexpected error occurred',
+        variant: 'destructive',
+      })
+    },
+  })
+}
 
 // Services
 export const productService = {
@@ -66,29 +234,29 @@ export const productService = {
         products: MOCK_PRODUCTS,
         page: 1,
         pages: 1,
-        count: MOCK_PRODUCTS.length
-      };
+        count: MOCK_PRODUCTS.length,
+      }
     } catch (error) {
-      console.error('Get products error:', error);
-      throw error;
+      console.error('Get products error:', error)
+      throw error
     }
   },
-  
+
   // Get product by ID - now accepts parameter
   async getProductById(id: string): Promise<Product> {
     try {
       // Find product in mock data
-      const product = MOCK_PRODUCTS.find(p => p._id === id);
+      const product = MOCK_PRODUCTS.find((p) => p._id === id)
       if (!product) {
-        throw new Error('Product not found');
+        throw new Error('Product not found')
       }
-      return product;
+      return product
     } catch (error) {
-      console.error(`Get product error (ID: ${id}):`, error);
-      throw error;
+      console.error(`Get product error (ID: ${id}):`, error)
+      throw error
     }
   },
-  
+
   // Create product (admin) - now accepts parameter
   async createProduct(productData: Partial<Product>): Promise<Product> {
     try {
@@ -103,37 +271,41 @@ export const productService = {
         price: productData.price || 0,
         countInStock: productData.countInStock || 0,
         rating: 0,
-        numReviews: 0
-      };
-      
+        numReviews: 0,
+      }
+
       toast({
         title: 'Product created',
         description: 'Product has been created successfully',
-      });
-      
-      return newProduct;
+      })
+
+      return newProduct
     } catch (error) {
-      console.error('Create product error:', error);
+      console.error('Create product error:', error)
       if (axios.isAxiosError(error) && error.response) {
-        const message = error.response.data.message || 'Failed to create product';
+        const message =
+          error.response.data.message || 'Failed to create product'
         toast({
           title: 'Create product failed',
           description: message,
-          variant: 'destructive'
-        });
+          variant: 'destructive',
+        })
       } else {
         toast({
           title: 'Create product failed',
           description: 'An unexpected error occurred',
-          variant: 'destructive'
-        });
+          variant: 'destructive',
+        })
       }
-      throw error;
+      throw error
     }
   },
-  
+
   // Update product (admin) - now accepts parameters
-  async updateProduct(id: string, productData: Partial<Product>): Promise<Product> {
+  async updateProduct(
+    id: string,
+    productData: Partial<Product>
+  ): Promise<Product> {
     try {
       // In a real app, this would update in a database
       // For demo, return merged product
@@ -147,35 +319,36 @@ export const productService = {
         price: productData.price || 0,
         countInStock: productData.countInStock || 0,
         rating: productData.rating || 0,
-        numReviews: productData.numReviews || 0
-      };
-      
+        numReviews: productData.numReviews || 0,
+      }
+
       toast({
         title: 'Product updated',
         description: 'Product has been updated successfully',
-      });
-      
-      return updatedProduct;
+      })
+
+      return updatedProduct
     } catch (error) {
-      console.error(`Update product error (ID: ${id}):`, error);
+      console.error(`Update product error (ID: ${id}):`, error)
       if (axios.isAxiosError(error) && error.response) {
-        const message = error.response.data.message || 'Failed to update product';
+        const message =
+          error.response.data.message || 'Failed to update product'
         toast({
           title: 'Update product failed',
           description: message,
-          variant: 'destructive'
-        });
+          variant: 'destructive',
+        })
       } else {
         toast({
           title: 'Update product failed',
           description: 'An unexpected error occurred',
-          variant: 'destructive'
-        });
+          variant: 'destructive',
+        })
       }
-      throw error;
+      throw error
     }
   },
-  
+
   // Delete product (admin) - now accepts parameter
   async deleteProduct(id: string): Promise<{ message: string }> {
     try {
@@ -183,29 +356,30 @@ export const productService = {
       toast({
         title: 'Product deleted',
         description: 'Product has been deleted successfully',
-      });
-      
-      return { message: 'Product deleted successfully' };
+      })
+
+      return { message: 'Product deleted successfully' }
     } catch (error) {
-      console.error(`Delete product error (ID: ${id}):`, error);
+      console.error(`Delete product error (ID: ${id}):`, error)
       if (axios.isAxiosError(error) && error.response) {
-        const message = error.response.data.message || 'Failed to delete product';
+        const message =
+          error.response.data.message || 'Failed to delete product'
         toast({
           title: 'Delete product failed',
           description: message,
-          variant: 'destructive'
-        });
+          variant: 'destructive',
+        })
       } else {
         toast({
           title: 'Delete product failed',
           description: 'An unexpected error occurred',
-          variant: 'destructive'
-        });
+          variant: 'destructive',
+        })
       }
-      throw error;
+      throw error
     }
   },
-  
+
   // Create product review - now accepts parameters
   async createProductReview(
     productId: string,
@@ -216,28 +390,28 @@ export const productService = {
       toast({
         title: 'Review submitted',
         description: 'Thank you for your review',
-      });
-      
-      return { message: 'Review added successfully' };
+      })
+
+      return { message: 'Review added successfully' }
     } catch (error) {
-      console.error(`Create review error (Product ID: ${productId}):`, error);
+      console.error(`Create review error (Product ID: ${productId}):`, error)
       if (axios.isAxiosError(error) && error.response) {
-        const message = error.response.data.message || 'Failed to submit review';
+        const message = error.response.data.message || 'Failed to submit review'
         toast({
           title: 'Review submission failed',
           description: message,
-          variant: 'destructive'
-        });
+          variant: 'destructive',
+        })
       } else {
         toast({
           title: 'Review submission failed',
           description: 'An unexpected error occurred',
-          variant: 'destructive'
-        });
+          variant: 'destructive',
+        })
       }
-      throw error;
+      throw error
     }
-  }
-};
+  },
+}
 
-export default productService;
+export default productService
