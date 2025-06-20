@@ -31,7 +31,7 @@ const Footer = () => {
             </p>
             <div className="space-y-3">
               <a
-                href="https://www.google.com/maps/search/?api=1&query=123+Gaming+Street,Tech+City"
+                href="https://www.google.com/maps/place/GAMECITY+ELECTRONICS/@-1.2835,36.8247986,17z/data=!4m6!3m5!1s0x182f11ff319a2a71:0x23dfb4aee72fab6f!8m2!3d-1.2834756!4d36.8245877!16s%2Fg%2F11rcy9p60j?entry=ttu&g_ep=EgoyMDI1MDYwNC4wIKXMDSoASAFQAw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
@@ -40,21 +40,21 @@ const Footer = () => {
                   size={18}
                   className="text-yellow-500 mr-3 flex-shrink-0"
                 />
-                <span>123 Gaming Street, Tech City</span>
+                <span>GAMECITY ELECTRONICS</span>
               </a>
               <a
-                href="tel:+1234567890"
+                href="tel:0712248706"
                 className="flex items-center text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
               >
                 <Phone size={18} className="text-yellow-500 mr-3" />
-                <span>+1 (234) 567-8900</span>
+                <span>0712248706</span>
               </a>
               <a
-                href="mailto:info@gamecity.com"
+                href="mailto:gamecityelectronics@gmail.com"
                 className="flex items-center text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
               >
                 <Mail size={18} className="text-yellow-500 mr-3" />
-                <span>info@gamecity.com</span>
+                <span>gamecityelectronics@gmail.com</span>
               </a>
             </div>
           </div>
@@ -101,12 +101,6 @@ const Footer = () => {
                 className="text-muted-foreground hover:text-yellow-400 transition-colors flex items-center"
               >
                 Contact Us
-              </Link>
-              <Link
-                to="/support"
-                className="text-muted-foreground hover:text-yellow-400 transition-colors flex items-center"
-              >
-                Support Center
               </Link>
               <Link
                 to="/returns"

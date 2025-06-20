@@ -37,35 +37,43 @@ const Index = () => {
     {
       title: 'Gaming PCs',
       image:
-        'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&q=80',
+        'https://res.cloudinary.com/dq3jxutxg/image/upload/v1750431696/greenbits-store/GamingPcs_euewim.jpg',
       description: 'High-performance custom gaming rigs built to dominate.',
       path: '/category/gaming-pcs',
     },
     {
       title: 'Graphics Cards',
       image:
-        'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80',
+        'https://res.cloudinary.com/dq3jxutxg/image/upload/v1750432917/greenbits-store/AdobeStock_848719298_Preview_ag8zqj.jpg',
       description: 'Latest GPUs for gaming, rendering, and creative work.',
       path: '/category/graphics-cards',
     },
     {
       title: 'Monitors',
       image:
-        'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80',
+        'https://res.cloudinary.com/dq3jxutxg/image/upload/v1750432934/greenbits-store/AdobeStock_1452111894_Preview_hsqona.jpg',
       description: 'Ultra-wide, 4K, and high refresh rate gaming monitors.',
       path: '/category/monitors',
     },
     {
-      title: 'Components',
+      title: 'Processors',
       image:
-        'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?auto=format&fit=crop&q=80',
-      description: 'Premium PC components for your custom build.',
-      path: '/category/all',
+        'https://res.cloudinary.com/dq3jxutxg/image/upload/v1750433035/greenbits-store/AdobeStock_1479635189_Preview_kjbjw0.jpg',
+      description:
+        'The heart of your PC. Find the latest CPUs from Intel and AMD.',
+      path: '/category/processors',
+    },
+    {
+      title: 'Power Supply',
+      image:
+        'https://res.cloudinary.com/dq3jxutxg/image/upload/v1750433413/greenbits-store/andrey-matveev-vfXpYMzmSew-unsplash_nkpbwf.jpg',
+      description: 'Reliable and efficient power supplies for your build.',
+      path: '/category/power-supply',
     },
     {
       title: 'Accessories',
       image:
-        'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80',
+        'https://res.cloudinary.com/dq3jxutxg/image/upload/v1750433029/greenbits-store/AdobeStock_772458668_Preview_nonsm8.jpg',
       description: 'High-quality keyboards, mice, and other accessories.',
       path: '/category/accessories',
     },
