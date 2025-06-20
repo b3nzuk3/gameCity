@@ -14,6 +14,7 @@ interface ProductProps {
     image: string
     price: number
     rating?: number
+    numReviews?: number
     category?: string
     brand?: string
     count_in_stock?: number
@@ -50,6 +51,21 @@ const ProductCard = ({ product }: ProductProps) => {
     return category.toLowerCase().replace(/\s+/g, '-')
   }
 
+  const renderStars = (rating: number) => {
+    return (
+      <div className="flex items-center">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            className={`h-4 w-4 ${
+              i < rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+            }`}
+          />
+        ))}
+      </div>
+    )
+  }
+
   const isProductFavorite = isFavorite(product.id)
 
   return (
@@ -78,6 +94,22 @@ const ProductCard = ({ product }: ProductProps) => {
       </div>
       <CardContent className="p-4">
         <h3 className="font-medium mb-1 line-clamp-1">{product.name}</h3>
+
+        <div className="flex items-center mb-2">
+          {product.rating > 0 ? (
+            <>
+              {renderStars(product.rating)}
+              <span className="text-xs text-muted-foreground ml-2">
+                ({product.numReviews || 0} reviews)
+              </span>
+            </>
+          ) : (
+            <div className="h-4 text-xs text-muted-foreground">
+              No reviews yet
+            </div>
+          )}
+        </div>
+
         <div className="flex justify-between items-center">
           <span className="text-lg font-bold text-yellow-400">
             {formatKESPrice(product.price)}
@@ -89,12 +121,7 @@ const ProductCard = ({ product }: ProductProps) => {
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0 flex justify-between gap-2">
-        <Link
-          to={`/category/${getCategoryUrl(product.category)}?product=${
-            product.id
-          }`}
-          className="flex-1"
-        >
+        <Link to={`/product/${product.id}`} className="flex-1">
           <Button
             variant="outline"
             size="sm"
@@ -107,10 +134,20 @@ const ProductCard = ({ product }: ProductProps) => {
           size="sm"
           className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black"
           onClick={handleAddToCart}
-          disabled={product.count_in_stock === 0}
+          disabled={
+            (product.count_in_stock ??
+              product.countInStock ??
+              product.stock ??
+              0) === 0
+          }
         >
           <ShoppingCart size={14} className="mr-1" />
-          {product.count_in_stock === 0 ? 'Out of Stock' : 'Add'}
+          {(product.count_in_stock ??
+            product.countInStock ??
+            product.stock ??
+            0) === 0
+            ? 'Out of Stock'
+            : 'Add'}
         </Button>
       </CardFooter>
     </Card>

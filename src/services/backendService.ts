@@ -1,3 +1,5 @@
+import api from './api'
+
 // Backend API service for communicating with Node.js Express server
 const API_BASE_URL =
   import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api'
@@ -12,8 +14,9 @@ export interface Product {
   description?: string
   brand?: string
   rating?: number
-  num_reviews?: number
+  numReviews?: number
   count_in_stock: number
+  hasMore: boolean
 }
 
 export interface User {
@@ -64,7 +67,7 @@ export interface PaginatedProductsResponse {
 
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
-  return localStorage.getItem('gamecity_auth_token')
+  return localStorage.getItem('gamecity_token')
 }
 
 // Helper function to get auth headers
@@ -82,7 +85,11 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
     const error = await response.json()
     throw new Error(error.error || 'API request failed')
   }
-  return response.json()
+  const contentType = response.headers.get('content-type')
+  if (contentType && contentType.indexOf('application/json') !== -1) {
+    return response.json()
+  }
+  return response.text() as Promise<T>
 }
 
 // Health check
@@ -110,7 +117,7 @@ export const auth = {
 
       // Store token in localStorage
       if (data.token) {
-        localStorage.setItem('gamecity_auth_token', data.token)
+        localStorage.setItem('gamecity_token', data.token)
       }
 
       return data
@@ -154,7 +161,7 @@ export const auth = {
       return handleResponse<{ user: User }>(response)
     } catch (error) {
       console.error('Get current user failed:', error)
-      localStorage.removeItem('gamecity_auth_token')
+      localStorage.removeItem('gamecity_token')
       throw error
     }
   },
@@ -175,7 +182,7 @@ export const auth = {
   },
 
   logout: () => {
-    localStorage.removeItem('gamecity_auth_token')
+    localStorage.removeItem('gamecity_token')
   },
 }
 
@@ -185,39 +192,27 @@ export const products = {
     params: { category?: string; search?: string } = {}
   ): Promise<PaginatedProductsResponse> => {
     try {
-      const url = new URL(`${API_BASE_URL}/products`)
-      if (params.category) {
-        url.searchParams.append('category', params.category)
-      }
-      if (params.search) {
-        url.searchParams.append('search', params.search)
-      }
-
-      const response = await fetch(url.toString(), {
-        headers: getAuthHeaders(),
-      })
-
-      return handleResponse<PaginatedProductsResponse>(response)
+      const response = await api.get('/products', { params })
+      return response.data
     } catch (error) {
-      console.error('Get products failed:', error)
+      console.error('Get all products failed:', error)
       throw error
     }
   },
 
   getById: async (id: string): Promise<Product> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/products/${id}`, {
-        headers: getAuthHeaders(),
-      })
-
-      return handleResponse<Product>(response)
+      const response = await api.get(`/products/${id}`)
+      return response.data
     } catch (error) {
-      console.error('Get product failed:', error)
+      console.error(`Get product ${id} failed:`, error)
       throw error
     }
   },
 
-  create: async (productData: Omit<Product, 'id'>): Promise<Product> => {
+  create: async (
+    productData: Partial<Omit<Product, 'id'>>
+  ): Promise<Product> => {
     try {
       const response = await fetch(`${API_BASE_URL}/products`, {
         method: 'POST',

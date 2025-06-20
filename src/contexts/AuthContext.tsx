@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const checkAuth = async () => {
       try {
         setIsLoading(true)
-        const token = localStorage.getItem('gamecity_auth_token')
+        const token = localStorage.getItem('gamecity_token')
 
         if (!token) {
           setIsLoading(false)
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       } catch (error) {
         console.error('Auth check failed:', error)
         // Clear invalid token
-        localStorage.removeItem('gamecity_auth_token')
+        localStorage.removeItem('gamecity_token')
         setUser(null)
       } finally {
         setIsLoading(false)
@@ -75,7 +75,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       // Save token to localStorage
       if (response.token) {
-        localStorage.setItem('gamecity_auth_token', response.token)
+        localStorage.setItem('gamecity_token', response.token)
       }
 
       toast({

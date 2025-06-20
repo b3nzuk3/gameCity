@@ -1,12 +1,19 @@
 import api from './api'
 import { toast } from '@/hooks/use-toast'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  keepPreviousData,
+  UseQueryOptions,
+} from '@tanstack/react-query'
 
 // Types
 export type Product = {
   _id: string
   name: string
   image: string
+  images?: string[]
   description: string
   brand: string
   category: string
@@ -14,6 +21,13 @@ export type Product = {
   countInStock: number
   rating: number
   numReviews: number
+  reviews: {
+    _id: string
+    name: string
+    rating: number
+    comment: string
+    createdAt: string
+  }[]
 }
 
 export type ProductsResponse = {
@@ -29,6 +43,7 @@ const MOCK_PRODUCTS: Product[] = [
     _id: '1',
     name: 'Gaming Keyboard',
     image: '/placeholder.svg',
+    images: [],
     description: 'Mechanical RGB gaming keyboard with Cherry MX switches',
     brand: 'Logitech',
     category: 'Accessories',
@@ -36,11 +51,13 @@ const MOCK_PRODUCTS: Product[] = [
     countInStock: 15,
     rating: 4.5,
     numReviews: 12,
+    reviews: [],
   },
   {
     _id: '2',
     name: 'Gaming Mouse',
     image: '/placeholder.svg',
+    images: [],
     description: 'High precision gaming mouse with adjustable DPI',
     brand: 'Razer',
     category: 'Accessories',
@@ -48,6 +65,7 @@ const MOCK_PRODUCTS: Product[] = [
     countInStock: 25,
     rating: 4.8,
     numReviews: 18,
+    reviews: [],
   },
 ]
 
@@ -103,6 +121,13 @@ const createProductReview = async ({
   return data
 }
 
+const checkHasPurchased = async (productId: string) => {
+  const { data } = await api.get<{ hasPurchased: boolean }>(
+    `/products/${productId}/has-purchased`
+  )
+  return data
+}
+
 // React Query hooks
 export const useProducts = (
   keyword: string = '',
@@ -113,7 +138,7 @@ export const useProducts = (
     queryKey: ['products', keyword, pageNumber, category],
     queryFn: () => fetchProducts(keyword, pageNumber, category),
     staleTime: 5 * 60 * 1000, // 5 minutes
-    keepPreviousData: true,
+    placeholderData: keepPreviousData,
   })
 }
 
@@ -122,6 +147,22 @@ export const useProduct = (id: string) => {
     queryKey: ['product', id],
     queryFn: () => fetchProductById(id),
     staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
+
+export const useHasPurchased = (
+  productId: string,
+  options?: Omit<
+    UseQueryOptions<{ hasPurchased: boolean }>,
+    'queryKey' | 'queryFn'
+  >
+) => {
+  return useQuery({
+    queryKey: ['purchase-status', productId],
+    queryFn: () => checkHasPurchased(productId),
+    staleTime: 5 * 60 * 1000,
+    enabled: !!productId,
+    ...options,
   })
 }
 
@@ -196,27 +237,8 @@ export const useDeleteProduct = () => {
 }
 
 export const useCreateProductReview = () => {
-  const queryClient = useQueryClient()
-
   return useMutation({
     mutationFn: createProductReview,
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: ['product', variables.productId],
-      })
-      toast({
-        title: 'Review submitted',
-        description: 'Thank you for your review',
-      })
-    },
-    onError: (error: any) => {
-      toast({
-        title: 'Review submission failed',
-        description:
-          error.response?.data?.message || 'An unexpected error occurred',
-        variant: 'destructive',
-      })
-    },
   })
 }
 
@@ -272,6 +294,7 @@ export const productService = {
         countInStock: productData.countInStock || 0,
         rating: 0,
         numReviews: 0,
+        reviews: [],
       }
 
       toast({
@@ -320,6 +343,7 @@ export const productService = {
         countInStock: productData.countInStock || 0,
         rating: productData.rating || 0,
         numReviews: productData.numReviews || 0,
+        reviews: productData.reviews || [],
       }
 
       toast({

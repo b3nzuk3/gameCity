@@ -14,11 +14,13 @@ import Sitemap from '@/pages/Sitemap'
 import NotFound from '@/pages/NotFound'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import ResetPassword from '@/pages/ResetPassword'
+import ProductPage from '@/pages/ProductPage'
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Index />} />
+      <Route path="/product/:id" element={<ProductPage />} />
       <Route path="/category/:category" element={<CategoryPage />} />
       <Route path="/search" element={<SearchPage />} />
       <Route path="/signin" element={<SignIn />} />
