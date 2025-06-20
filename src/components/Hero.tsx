@@ -20,7 +20,7 @@ const Hero = () => {
       <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
         <div className="inline-block mb-6 px-3 py-1 rounded-full bg-yellow-500/20 backdrop-blur-sm border border-yellow-500/30">
           <span className="text-xs font-medium text-yellow-400">
-            ✨ Welcome to GreenBits Store
+            ✨ Welcome to Gamecity
           </span>
         </div>
 
