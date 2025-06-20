@@ -23,8 +23,8 @@ import {
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { useCart } from '@/contexts/CartContext'
+import backendService, { Product } from '@/services/backendService'
 import { formatKESPrice } from '@/lib/currency'
-import atlasProductService, { Product } from '@/services/atlasProductService'
 
 // Remove the hardcoded partCategories and instead define the categories to fetch
 const PART_CATEGORIES = [
@@ -84,28 +84,37 @@ const BuildPC = () => {
   const [selectedParts, setSelectedParts] = useState<
     Record<string, Product | null>
   >({})
-  const [categoryProducts, setCategoryProducts] = useState<
-    Record<string, Product[]>
-  >({})
+  const [componentData, setComponentData] = useState<Record<string, Product[]>>(
+    {}
+  )
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const fetchAll = async () => {
+    const fetchAllComponents = async () => {
       setLoading(true)
-      const results: Record<string, Product[]> = {}
-      for (const cat of PART_CATEGORIES) {
-        try {
-          results[cat.id] = await atlasProductService.getProductsByCategory(
-            cat.dbCategory
-          )
-        } catch {
-          results[cat.id] = []
-        }
+      try {
+        const componentPromises = PART_CATEGORIES.map((cat) =>
+          backendService.products.getAll({ category: cat.id })
+        )
+        const results = await Promise.all(componentPromises)
+        const componentMap: Record<string, Product[]> = {}
+        results.forEach((result, index) => {
+          componentMap[PART_CATEGORIES[index].id] = result.products
+        })
+        setComponentData(componentMap)
+      } catch (error) {
+        console.error('Failed to fetch components:', error)
+        toast({
+          title: 'Error',
+          description: 'Could not load PC components.',
+          variant: 'destructive',
+        })
+      } finally {
+        setLoading(false)
       }
-      setCategoryProducts(results)
-      setLoading(false)
     }
-    fetchAll()
+
+    fetchAllComponents()
   }, [])
 
   const handlePartSelect = (categoryId: string, part: Product) => {
@@ -172,18 +181,18 @@ const BuildPC = () => {
             </div>
 
             <Tabs defaultValue={PART_CATEGORIES[0].id} className="w-full">
-              <TabsList className="w-full flex overflow-x-auto bg-forest-800 border border-forest-700 rounded-lg p-1 mb-8 justify-start">
+              <TabsList className="w-full flex overflow-x-auto bg-gray-900 border border-gray-700 rounded-lg p-1 mb-8 justify-start">
                 {PART_CATEGORIES.map((category) => (
                   <TabsTrigger
                     key={category.id}
                     value={category.id}
-                    className="flex-shrink-0 data-[state=active]:bg-forest-700 data-[state=active]:text-foreground"
+                    className="flex-shrink-0 data-[state=active]:bg-gray-800 data-[state=active]:text-foreground"
                   >
                     <div className="flex items-center gap-2">
                       {category.icon}
                       <span>{category.name}</span>
                       {selectedParts[category.id] && (
-                        <Check size={14} className="text-emerald-400" />
+                        <Check size={14} className="text-yellow-400" />
                       )}
                     </div>
                   </TabsTrigger>
@@ -197,14 +206,14 @@ const BuildPC = () => {
                   className="space-y-4"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {categoryProducts[category.id]?.map((part) => (
+                    {componentData[category.id]?.map((part) => (
                       <Card
                         key={part.id}
-                        className={`bg-forest-800 border ${
+                        className={`bg-gray-900 border ${
                           selectedParts[category.id]?.id === part.id
-                            ? 'border-emerald-500'
-                            : 'border-forest-700'
-                        } hover:border-emerald-500/70 transition-colors cursor-pointer`}
+                            ? 'border-yellow-500'
+                            : 'border-gray-700'
+                        } hover:border-yellow-500/70 transition-colors cursor-pointer`}
                       >
                         <CardHeader className="pb-2">
                           <CardTitle className="text-lg">{part.name}</CardTitle>
@@ -212,8 +221,13 @@ const BuildPC = () => {
                         </CardHeader>
                         <CardContent>
                           <div className="flex items-center justify-between">
-                            <h3 className="font-semibold">{part.name}</h3>
-                            <p className="text-xl font-bold text-emerald-400">
+                            <div>
+                              <h3 className="font-semibold">{part.name}</h3>
+                              <p className="text-sm text-muted-foreground capitalize">
+                                {part.category}
+                              </p>
+                            </div>
+                            <p className="font-semibold">
                               {formatKESPrice(part.price)}
                             </p>
                           </div>
@@ -228,8 +242,8 @@ const BuildPC = () => {
                             }
                             className={
                               selectedParts[category.id]?.id === part.id
-                                ? 'bg-emerald-600 hover:bg-emerald-500 text-white w-full'
-                                : 'border-forest-700 w-full'
+                                ? 'bg-yellow-500 hover:bg-yellow-400 text-black w-full'
+                                : 'border-gray-700 w-full'
                             }
                           >
                             {selectedParts[category.id]?.id === part.id ? (
@@ -252,7 +266,7 @@ const BuildPC = () => {
 
           {/* Build summary */}
           <div className="w-full md:w-1/3 sticky top-24">
-            <Card className="bg-forest-800 border-forest-700">
+            <Card className="bg-gray-900 border-gray-700">
               <CardHeader>
                 <CardTitle>Your Build Summary</CardTitle>
                 <CardDescription>
@@ -263,7 +277,7 @@ const BuildPC = () => {
                 {Object.entries(selectedParts).map(([categoryId, part]) => (
                   <div
                     key={categoryId}
-                    className="flex justify-between items-center py-2 border-b border-forest-700 last:border-0"
+                    className="flex justify-between items-center py-2 border-b border-gray-700 last:border-0"
                   >
                     <div className="flex-1">
                       <p className="text-sm text-muted-foreground">
@@ -276,7 +290,7 @@ const BuildPC = () => {
                         <div>
                           <div className="flex items-center justify-between">
                             <p className="text-sm">{part.name}</p>
-                            <p className="text-sm text-emerald-400">
+                            <p className="text-sm text-yellow-400">
                               {formatKESPrice(part.price)}
                             </p>
                           </div>
@@ -305,10 +319,10 @@ const BuildPC = () => {
                   </div>
                 ))}
 
-                <div className="pt-4 border-t border-forest-700">
-                  <div className="flex items-center justify-between mt-4 pt-4 border-t border-forest-600">
+                <div className="pt-4 border-t border-gray-700">
+                  <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
                     <span className="font-semibold">Total:</span>
-                    <span className="text-xl text-emerald-400">
+                    <span className="text-xl text-yellow-400">
                       {formatKESPrice(totalPrice)}
                     </span>
                   </div>
@@ -316,7 +330,7 @@ const BuildPC = () => {
               </CardContent>
               <CardFooter className="flex flex-col gap-3">
                 <Button
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white"
+                  className="w-full bg-yellow-500 hover:bg-yellow-400 text-black"
                   disabled={selectedPartsCount === 0}
                   onClick={addAllToCart}
                 >
@@ -324,7 +338,7 @@ const BuildPC = () => {
                 </Button>
                 <Button
                   variant="outline"
-                  className="w-full border-forest-700 text-muted-foreground hover:text-foreground"
+                  className="w-full border-gray-700 text-muted-foreground hover:text-foreground"
                   onClick={() => {
                     setSelectedParts({
                       cpu: null,

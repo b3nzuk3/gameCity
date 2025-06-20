@@ -81,7 +81,7 @@ const MpesaPayment: React.FC<MpesaPaymentProps> = ({
           <Button
             onClick={handlePayment}
             disabled={loading || !phoneNumber}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white"
+            className="bg-yellow-500 hover:bg-yellow-400 text-black"
           >
             {loading ? (
               <div className="flex items-center gap-2">

@@ -57,13 +57,13 @@ const Navbar = () => {
   const totalItems = getCartCount()
 
   return (
-    <nav className="bg-forest-900 border-b border-forest-700 shadow-lg fixed top-0 left-0 right-0 z-50">
+    <nav className="bg-black border-b border-gray-800 shadow-lg fixed top-0 left-0 right-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center space-x-2 text-xl font-bold text-emerald-400 hover:text-emerald-300 transition-colors"
+            className="flex items-center space-x-2 text-xl font-bold text-yellow-400 hover:text-yellow-300 transition-colors"
           >
             <Package className="h-6 w-6" />
             <span>Gamecity</span>
@@ -79,7 +79,7 @@ const Navbar = () => {
                   placeholder="Search for games, accessories..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-forest-800 border-forest-600 text-white placeholder:text-gray-400 focus:border-emerald-500 focus:ring-emerald-500"
+                  className="w-full pl-10 pr-4 py-2 bg-gray-900 border-gray-700 text-white placeholder:text-gray-400 focus:border-yellow-500 focus:ring-yellow-500"
                 />
               </div>
             </form>
@@ -90,7 +90,7 @@ const Navbar = () => {
             {/* Navigation Links */}
             <Link
               to="/category/all"
-              className="text-gray-300 hover:text-emerald-400 transition-colors px-3 py-2 rounded-md text-sm font-medium"
+              className="text-gray-300 hover:text-yellow-400 transition-colors px-3 py-2 rounded-md text-sm font-medium"
             >
               Categories
             </Link>
@@ -98,7 +98,7 @@ const Navbar = () => {
             {/* Favorites */}
             <Link
               to="/favorites"
-              className="text-gray-300 hover:text-emerald-400 transition-colors p-2 rounded-md"
+              className="text-gray-300 hover:text-yellow-400 transition-colors p-2 rounded-md"
             >
               <Heart className="h-5 w-5" />
             </Link>
@@ -106,11 +106,11 @@ const Navbar = () => {
             {/* Cart */}
             <Link
               to="/cart"
-              className="relative text-gray-300 hover:text-emerald-400 transition-colors p-2 rounded-md"
+              className="relative text-gray-300 hover:text-yellow-400 transition-colors p-2 rounded-md"
             >
               <ShoppingCart className="h-5 w-5" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-emerald-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
@@ -122,13 +122,13 @@ const Navbar = () => {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="relative h-8 w-8 rounded-full bg-forest-800 hover:bg-forest-700"
+                    className="relative h-8 w-8 rounded-full bg-gray-800 hover:bg-gray-700"
                   >
                     <User className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
-                  className="w-56 bg-forest-800 border-forest-700"
+                  className="w-56 bg-gray-900 border-gray-700"
                   align="end"
                 >
                   <div className="flex items-center justify-start gap-2 p-2">
@@ -140,14 +140,14 @@ const Navbar = () => {
                         {user.email}
                       </p>
                       {user.isAdmin && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-emerald-900 text-emerald-300">
+                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-400">
                           <Shield className="h-3 w-3 mr-1" />
                           Admin
                         </span>
                       )}
                     </div>
                   </div>
-                  <DropdownMenuSeparator className="bg-forest-600" />
+                  <DropdownMenuSeparator className="bg-gray-700" />
                   <DropdownMenuItem asChild>
                     <Link
                       to="/profile"
@@ -168,7 +168,7 @@ const Navbar = () => {
                       </Link>
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuSeparator className="bg-forest-600" />
+                  <DropdownMenuSeparator className="bg-gray-700" />
                   <DropdownMenuItem
                     onClick={handleSignOut}
                     className="text-red-400 hover:text-red-300 focus:text-red-300"
@@ -189,7 +189,7 @@ const Navbar = () => {
                   </Button>
                 </Link>
                 <Link to="/signup">
-                  <Button className="bg-emerald-600 hover:bg-emerald-500 text-white">
+                  <Button className="bg-yellow-500 hover:bg-yellow-400 text-black">
                     Sign Up
                   </Button>
                 </Link>
@@ -205,9 +205,9 @@ const Navbar = () => {
                   <Menu className="h-5 w-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent className="bg-forest-900 border-forest-700">
+              <SheetContent className="bg-black border-gray-800">
                 <SheetHeader>
-                  <SheetTitle className="text-emerald-400">
+                  <SheetTitle className="text-yellow-400">
                     Gamecity Menu
                   </SheetTitle>
                 </SheetHeader>
@@ -222,7 +222,7 @@ const Navbar = () => {
                         placeholder="Search for games..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-10 bg-forest-800 border-forest-600"
+                        className="w-full pl-10 bg-gray-900 border-gray-700"
                       />
                     </div>
                   </form>
@@ -231,21 +231,21 @@ const Navbar = () => {
                   <div className="space-y-2">
                     <Link
                       to="/category/all"
-                      className="block px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                      className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Categories
                     </Link>
                     <Link
                       to="/favorites"
-                      className="block px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                      className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       Favorites
                     </Link>
                     <Link
                       to="/cart"
-                      className="flex items-center px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                      className="flex items-center px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <ShoppingCart className="h-4 w-4 mr-2" />
@@ -255,12 +255,12 @@ const Navbar = () => {
 
                   {/* Mobile User Menu */}
                   {user ? (
-                    <div className="space-y-2 pt-4 border-t border-forest-700">
+                    <div className="space-y-2 pt-4 border-t border-gray-800">
                       <div className="px-3 py-2">
                         <p className="font-medium text-white">{user.name}</p>
                         <p className="text-sm text-gray-400">{user.email}</p>
                         {user.isAdmin && (
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-emerald-900 text-emerald-300 mt-1">
+                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-500/20 text-yellow-400 mt-1">
                             <Shield className="h-3 w-3 mr-1" />
                             Admin
                           </span>
@@ -268,7 +268,7 @@ const Navbar = () => {
                       </div>
                       <Link
                         to="/profile"
-                        className="block px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                        className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Profile Settings
@@ -276,7 +276,7 @@ const Navbar = () => {
                       {user.isAdmin && (
                         <Link
                           to="/admin"
-                          className="block px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                          className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           Admin Dashboard
@@ -293,17 +293,17 @@ const Navbar = () => {
                       </button>
                     </div>
                   ) : (
-                    <div className="space-y-2 pt-4 border-t border-forest-700">
+                    <div className="space-y-2 pt-4 border-t border-gray-800">
                       <Link
                         to="/signin"
-                        className="block px-3 py-2 text-gray-300 hover:text-emerald-400 transition-colors"
+                        className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Sign In
                       </Link>
                       <Link
                         to="/signup"
-                        className="block px-3 py-2 text-emerald-400 hover:text-emerald-300 transition-colors"
+                        className="block px-3 py-2 text-yellow-400 hover:text-yellow-300 transition-colors"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
                         Sign Up

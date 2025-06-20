@@ -32,7 +32,7 @@ export default function AppRoutes() {
         }
       />
       <Route path="/cart" element={<Cart />} />
-      <Route path="/build" element={<BuildPC />} />
+      <Route path="/build-pc" element={<BuildPC />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/favorites" element={<Favorites />} />
       <Route

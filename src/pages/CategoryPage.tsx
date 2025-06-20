@@ -11,10 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import {
-  atlasProductService,
-  type Product,
-} from '@/services/atlasProductService'
+import backendService, { type Product } from '@/services/backendService'
 import { useCart } from '@/contexts/CartContext'
 import { Package, Filter } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -36,18 +33,6 @@ const CATEGORIES = [
   { id: 'gaming-pc', name: 'Gaming PC' },
   { id: 'accessories', name: 'Accessories' },
 ]
-
-// USD to KES conversion rate (you might want to use a real-time rate in production)
-const USD_TO_KES_RATE = 143.5
-
-// Helper function to convert USD to KES and format the price
-const formatPrice = (usdPrice: number): string => {
-  const kesPrice = usdPrice * USD_TO_KES_RATE
-  return `KES ${kesPrice.toLocaleString('en-KE', {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  })}`
-}
 
 // Helper function to normalize category names
 const normalizeCategory = (category: string): string => {
@@ -125,21 +110,13 @@ const CategoryPage = () => {
       try {
         setLoading(true)
         console.log('CategoryPage: Current category from URL:', category)
-        const data = await atlasProductService.getProducts()
-        console.log('CategoryPage: All products from backend:', data)
+        const data = await backendService.products.getAll({
+          category: category === 'all' ? undefined : category,
+        })
+        console.log('CategoryPage: Products from backend:', data)
 
-        // Filter by category if specified
-        let categoryProducts = data
-        if (category && category !== 'all') {
-          console.log('CategoryPage: Filtering products by category:', category)
-          categoryProducts = data.filter((product) =>
-            isProductInCategory(product, category)
-          )
-          console.log('CategoryPage: Filtered products:', categoryProducts)
-        }
-
-        setProducts(categoryProducts)
-        setFilteredProducts(categoryProducts)
+        setProducts(data.products)
+        setFilteredProducts(data.products)
       } catch (error) {
         console.error('CategoryPage: Error fetching products:', error)
       } finally {
@@ -259,8 +236,8 @@ const CategoryPage = () => {
                 to={`/category/${cat.id}`}
                 className={`px-4 py-2 rounded-lg whitespace-nowrap ${
                   category === cat.id
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-forest-800 text-gray-300 hover:bg-forest-700'
+                    ? 'bg-yellow-500 text-black'
+                    : 'bg-gray-900 text-gray-300 hover:bg-gray-800'
                 }`}
               >
                 {cat.name}
@@ -273,10 +250,10 @@ const CategoryPage = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {/* Stock Filter */}
           <Select value={filterBy} onValueChange={setFilterBy}>
-            <SelectTrigger className="w-full bg-forest-800 border-forest-600">
+            <SelectTrigger className="w-full bg-gray-900 border-gray-700">
               <SelectValue placeholder="Filter by stock..." />
             </SelectTrigger>
-            <SelectContent className="bg-forest-800 border-forest-600">
+            <SelectContent className="bg-gray-900 border-gray-700">
               <SelectItem value="all">All Products</SelectItem>
               <SelectItem value="in-stock">In Stock</SelectItem>
               <SelectItem value="low-stock">Low Stock</SelectItem>
@@ -286,10 +263,10 @@ const CategoryPage = () => {
 
           {/* Sort Options */}
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-full bg-forest-800 border-forest-600">
+            <SelectTrigger className="w-full bg-gray-900 border-gray-700">
               <SelectValue placeholder="Sort by..." />
             </SelectTrigger>
-            <SelectContent className="bg-forest-800 border-forest-600">
+            <SelectContent className="bg-gray-900 border-gray-700">
               <SelectItem value="name">Name (A-Z)</SelectItem>
               <SelectItem value="price-low">Price (Low to High)</SelectItem>
               <SelectItem value="price-high">Price (High to Low)</SelectItem>
@@ -304,10 +281,10 @@ const CategoryPage = () => {
               setSelectedBrands(value === 'all' ? [] : value.split(','))
             }
           >
-            <SelectTrigger className="w-full bg-forest-800 border-forest-600">
+            <SelectTrigger className="w-full bg-gray-900 border-gray-700">
               <SelectValue placeholder="Filter by brand..." />
             </SelectTrigger>
-            <SelectContent className="bg-forest-800 border-forest-600">
+            <SelectContent className="bg-gray-900 border-gray-700">
               <SelectItem value="all">All Brands</SelectItem>
               {availableBrands.map((brand) => (
                 <SelectItem key={brand} value={brand}>
@@ -330,7 +307,7 @@ const CategoryPage = () => {
                   priceRange[1],
                 ])
               }}
-              className="w-24 bg-forest-800 border-forest-600"
+              className="w-24 bg-gray-900 border-gray-700"
             />
             <span>-</span>
             <Input
@@ -344,7 +321,7 @@ const CategoryPage = () => {
                   e.target.value ? Number(e.target.value) : null,
                 ])
               }}
-              className="w-24 bg-forest-800 border-forest-600"
+              className="w-24 bg-gray-900 border-gray-700"
             />
           </div>
         </div>
@@ -355,12 +332,12 @@ const CategoryPage = () => {
             {[...Array(8)].map((_, index) => (
               <div
                 key={index}
-                className="bg-forest-800 rounded-lg p-4 animate-pulse"
+                className="bg-gray-900 rounded-lg p-4 animate-pulse"
               >
-                <div className="bg-forest-700 h-48 rounded-md mb-4"></div>
-                <div className="bg-forest-700 h-4 rounded mb-2"></div>
-                <div className="bg-forest-700 h-4 rounded w-3/4 mb-4"></div>
-                <div className="bg-forest-700 h-8 rounded"></div>
+                <div className="bg-gray-800 h-48 rounded-md mb-4"></div>
+                <div className="bg-gray-800 h-4 rounded mb-2"></div>
+                <div className="bg-gray-800 h-4 rounded w-3/4 mb-4"></div>
+                <div className="bg-gray-800 h-8 rounded"></div>
               </div>
             ))}
           </div>
@@ -404,7 +381,7 @@ const CategoryPage = () => {
                 setPriceRange([null, null])
                 setPriceFilterActive(false)
               }}
-              className="border-forest-700 text-muted-foreground hover:text-foreground"
+              className="border-gray-700 text-muted-foreground hover:text-foreground"
             >
               <Filter size={16} className="mr-2" />
               Reset Filters

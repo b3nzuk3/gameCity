@@ -34,7 +34,7 @@ const Sitemap = () => (
           <li key={link.to}>
             <Link
               to={link.to}
-              className="flex items-center text-lg text-emerald-400 hover:text-emerald-300 transition-colors"
+              className="flex items-center text-lg text-yellow-400 hover:text-yellow-300 transition-colors"
             >
               <ArrowRight size={16} className="mr-2" />
               {link.label}

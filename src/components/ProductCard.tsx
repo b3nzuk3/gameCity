@@ -53,7 +53,7 @@ const ProductCard = ({ product }: ProductProps) => {
   const isProductFavorite = isFavorite(product.id)
 
   return (
-    <Card className="bg-forest-800 border-forest-700 overflow-hidden hover:border-emerald-600/50 transition-colors group">
+    <Card className="bg-gray-900 border-gray-700 overflow-hidden hover:border-yellow-500/50 transition-colors group">
       <div className="relative aspect-square overflow-hidden">
         <img
           src={product.image}
@@ -79,7 +79,7 @@ const ProductCard = ({ product }: ProductProps) => {
       <CardContent className="p-4">
         <h3 className="font-medium mb-1 line-clamp-1">{product.name}</h3>
         <div className="flex justify-between items-center">
-          <span className="text-lg font-bold text-emerald-400">
+          <span className="text-lg font-bold text-yellow-400">
             {formatKESPrice(product.price)}
           </span>
         </div>
@@ -98,14 +98,14 @@ const ProductCard = ({ product }: ProductProps) => {
           <Button
             variant="outline"
             size="sm"
-            className="w-full border-forest-700 text-muted-foreground hover:text-foreground"
+            className="w-full border-gray-700 text-muted-foreground hover:text-foreground"
           >
             Details
           </Button>
         </Link>
         <Button
           size="sm"
-          className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white"
+          className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black"
           onClick={handleAddToCart}
           disabled={product.count_in_stock === 0}
         >

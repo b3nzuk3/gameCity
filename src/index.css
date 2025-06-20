@@ -1,48 +1,47 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 158 45% 6%;
-    --foreground: 165 9% 95%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --card: 160 38% 8%;
-    --card-foreground: 155 10% 95%;
+    --card: 0 0% 5%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 160 38% 8%;
-    --popover-foreground: 155 10% 95%;
+    --popover: 0 0% 5%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 160 84% 39%;
-    --primary-foreground: 154 61% 96%;
+    --primary: 45 100% 58%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 170 33% 16%;
-    --secondary-foreground: 151 40% 92%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 95%;
 
-    --muted: 155 25% 12%;
-    --muted-foreground: 155 10% 70%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 70%;
 
-    --accent: 140 25% 19%;
-    --accent-foreground: 151 40% 92%;
+    --accent: 45 100% 58%;
+    --accent-foreground: 0 0% 0%;
 
-    --destructive: 0 62% 30%;
-    --destructive-foreground: 10 40% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 155 20% 15%;
-    --input: 155 20% 15%;
-    --ring: 165 76% 41%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 45 100% 58%;
 
     --radius: 0.5rem;
 
-    --sidebar-background: 160 38% 9%;
-    --sidebar-foreground: 155 10% 90%;
-    --sidebar-primary: 160 84% 39%;
-    --sidebar-primary-foreground: 154 61% 96%;
-    --sidebar-accent: 158 30% 14%;
-    --sidebar-accent-foreground: 155 10% 90%;
-    --sidebar-border: 155 25% 16%;
-    --sidebar-ring: 165 76% 41%;
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 45 100% 58%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 8%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 45 100% 58%;
   }
 }
 
@@ -69,11 +68,11 @@
 }
 
 .neo-button {
-  @apply relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(16,185,129,0.3)] active:shadow-[0_0_10px_rgba(16,185,129,0.2)];
+  @apply relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,178,44,0.3)] active:shadow-[0_0_10px_rgba(255,178,44,0.2)];
 }
 
 .neo-button::before {
-  @apply content-[''] absolute -z-10 top-0 left-0 w-full h-full bg-gradient-to-r from-emerald-600/20 to-emerald-500/30 opacity-0 transition-opacity duration-300;
+  @apply content-[''] absolute -z-10 top-0 left-0 w-full h-full bg-gradient-to-r from-yellow-400/20 to-yellow-500/30 opacity-0 transition-opacity duration-300;
 }
 
 .neo-button:hover::before {

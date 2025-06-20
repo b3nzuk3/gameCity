@@ -44,6 +44,7 @@ import {
   Image as ImageIcon,
   CheckCircle2,
   XCircle,
+  Plus,
 } from 'lucide-react'
 import { formatKESPrice, parseKESInput } from '@/lib/currency'
 
@@ -136,7 +137,7 @@ const Admin = () => {
     name: 'Gamecity',
     email: 'support@gamecity.com',
     phone: '+1 (555) 123-4567',
-    currency: 'USD ($)',
+    currency: 'KES',
   })
 
   // Authentication and authorization check
@@ -311,6 +312,7 @@ const Admin = () => {
       if (currentProduct.imageFile) {
         const uploadData = new FormData()
         uploadData.append('image', currentProduct.imageFile)
+        // Note: The /api/upload route does not require authentication in this setup
         const uploadResponse = await fetch('/api/upload', {
           method: 'POST',
           body: uploadData,
@@ -332,17 +334,26 @@ const Admin = () => {
       )
       formData.append('image', imageUrl)
 
+      // Get auth token and prepare headers
+      const token = localStorage.getItem('gamecity_auth_token')
+      const headers: HeadersInit = {}
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`
+      }
+
       let response
       if (isEditing && currentProduct.id) {
         // UPDATE (PUT)
         response = await fetch(`/api/products/${currentProduct.id}`, {
           method: 'PUT',
+          headers,
           body: formData,
         })
       } else {
         // CREATE (POST)
         response = await fetch('/api/products', {
           method: 'POST',
+          headers,
           body: formData,
         })
       }
@@ -510,7 +521,7 @@ const Admin = () => {
         <div className="container mx-auto px-4 py-8 mt-16">
           <div className="flex justify-center items-center min-h-[400px]">
             <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400 mx-auto mb-4"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400 mx-auto mb-4"></div>
               <p className="text-muted-foreground">
                 Loading admin dashboard...
               </p>
@@ -548,60 +559,64 @@ const Admin = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-forest-800 border-forest-700">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="p-3 rounded-full bg-emerald-900/50 mr-4">
-                  <Package className="h-6 w-6 text-emerald-400" />
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">
-                    Total Products
-                  </p>
-                  <h3 className="text-2xl font-bold">{products.length}</h3>
-                </div>
+          <Card className="bg-gray-900 border-gray-700">
+            <CardContent className="flex items-center p-6">
+              <div className="p-3 rounded-full bg-yellow-500/20 mr-4">
+                <Package className="h-6 w-6 text-yellow-400" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Total Products
+                </p>
+                <p className="text-2xl font-bold">{products.length}</p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-forest-800 border-forest-700">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="p-3 rounded-full bg-emerald-900/50 mr-4">
-                  <Users className="h-6 w-6 text-emerald-400" />
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Total Users</p>
-                  <h3 className="text-2xl font-bold">{users.length}</h3>
-                </div>
+          <Card className="bg-gray-900 border-gray-700">
+            <CardContent className="flex items-center p-6">
+              <div className="p-3 rounded-full bg-yellow-500/20 mr-4">
+                <Users className="h-6 w-6 text-yellow-400" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Total Users
+                </p>
+                <p className="text-2xl font-bold">{users.length}</p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-forest-800 border-forest-700">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="p-3 rounded-full bg-emerald-900/50 mr-4">
-                  <ShoppingCart className="h-6 w-6 text-emerald-400" />
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Total Orders</p>
-                  <h3 className="text-2xl font-bold">{orders.length}</h3>
-                </div>
+          <Card className="bg-gray-900 border-gray-700">
+            <CardContent className="flex items-center p-6">
+              <div className="p-3 rounded-full bg-yellow-500/20 mr-4">
+                <ShoppingCart className="h-6 w-6 text-yellow-400" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Total Orders
+                </p>
+                <p className="text-2xl font-bold">{orders.length}</p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-forest-800 border-forest-700">
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <div className="p-3 rounded-full bg-emerald-900/50 mr-4">
-                  <LayoutDashboard className="h-6 w-6 text-emerald-400" />
-                </div>
-                <div>
-                  <p className="text-muted-foreground text-sm">Revenue</p>
-                  <h3 className="text-2xl font-bold">$0.00</h3>
-                </div>
+          <Card className="bg-gray-900 border-gray-700">
+            <CardContent className="flex items-center p-6">
+              <div className="p-3 rounded-full bg-yellow-500/20 mr-4">
+                <LayoutDashboard className="h-6 w-6 text-yellow-400" />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  Revenue
+                </p>
+                <p className="text-2xl font-bold">
+                  {formatKESPrice(
+                    orders
+                      .filter((order) => order.status === 'completed')
+                      .reduce((sum, order) => sum + order.totalPrice, 0)
+                  )}
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -609,95 +624,92 @@ const Admin = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="products" className="space-y-6">
-          <TabsList className="grid grid-cols-3 mb-8">
-            <TabsTrigger value="products" className="flex items-center gap-2">
-              <Package size={16} />
-              Products
-            </TabsTrigger>
-            <TabsTrigger value="users" className="flex items-center gap-2">
-              <Users size={16} />
-              Users
-            </TabsTrigger>
-            <TabsTrigger value="orders" className="flex items-center gap-2">
-              <ShoppingCart size={16} />
-              Orders
-            </TabsTrigger>
+          <TabsList className="grid w-full grid-cols-4 bg-gray-900 border border-gray-700">
+            <TabsTrigger value="products">Products</TabsTrigger>
+            <TabsTrigger value="users">Users</TabsTrigger>
+            <TabsTrigger value="orders">Orders</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
 
           {/* Products Tab */}
           <TabsContent value="products" className="space-y-6">
-            <Card className="bg-forest-800 border-forest-700">
+            <Card className="bg-gray-900 border-gray-700">
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle>Product Management</CardTitle>
                   <Button
                     onClick={handleAddProduct}
-                    className="bg-emerald-600 hover:bg-emerald-500"
+                    className="bg-yellow-500 hover:bg-yellow-400 text-black"
                   >
-                    <PlusCircle className="mr-2 h-4 w-4" />
+                    <Plus className="h-4 w-4 mr-2" />
                     Add Product
                   </Button>
                 </div>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    placeholder="Search products..."
-                    value={productSearch}
-                    onChange={(e) => setProductSearch(e.target.value)}
-                    className="pl-10 bg-forest-900 border-forest-600"
-                  />
-                </div>
               </CardHeader>
               <CardContent>
-                {productsLoading ? (
-                  <div className="flex justify-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+                {/* Search */}
+                <div className="mb-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      placeholder="Search products..."
+                      value={productSearch}
+                      onChange={(e) => setProductSearch(e.target.value)}
+                      className="pl-10 bg-gray-800 border-gray-700"
+                    />
                   </div>
-                ) : filteredProducts.length === 0 ? (
+                </div>
+
+                {/* Loading State */}
+                {productsLoading && (
+                  <div className="flex justify-center items-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"></div>
+                  </div>
+                )}
+
+                {/* Products List */}
+                {!productsLoading && filteredProducts.length === 0 && (
                   <div className="text-center py-8">
                     <Package className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                     <p className="text-muted-foreground">No products found</p>
                   </div>
-                ) : (
+                )}
+
+                {!productsLoading && filteredProducts.length > 0 && (
                   <div className="space-y-4">
                     {filteredProducts.map((product) => (
                       <div
                         key={product.id}
-                        className="flex items-center justify-between p-4 bg-forest-900 rounded-lg border border-forest-600"
+                        className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700"
                       >
                         <div className="flex items-center space-x-4">
                           <img
                             src={product.image}
                             alt={product.name}
-                            className="h-16 w-16 object-cover rounded-md"
-                            onError={(e) => {
-                              ;(e.target as HTMLImageElement).src =
-                                '/placeholder.svg'
-                            }}
+                            className="w-12 h-12 object-cover rounded"
                           />
                           <div>
                             <h3 className="font-semibold">{product.name}</h3>
                             <p className="text-sm text-muted-foreground">
                               {product.category} •{' '}
-                              {formatKESPrice(product.price)} • Stock:{' '}
-                              {product.count_in_stock ?? 0}
+                              {formatKESPrice(product.price)}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
                           <Button
-                            onClick={() => handleEditProduct(product)}
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
-                            className="border-forest-600"
+                            onClick={() => handleEditProduct(product)}
+                            className="border-gray-700 text-muted-foreground hover:text-foreground"
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button
-                            onClick={() => handleDeleteProduct(product)}
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
-                            className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
+                            onClick={() => handleDeleteProduct(product)}
+                            className="text-red-400 hover:text-red-300 hover:bg-red-500/20"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -712,35 +724,45 @@ const Admin = () => {
 
           {/* Users Tab */}
           <TabsContent value="users" className="space-y-6">
-            <Card className="bg-forest-800 border-forest-700">
+            <Card className="bg-gray-900 border-gray-700">
               <CardHeader>
                 <CardTitle>User Management</CardTitle>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    placeholder="Search users..."
-                    value={userSearch}
-                    onChange={(e) => setUserSearch(e.target.value)}
-                    className="pl-10 bg-forest-900 border-forest-600"
-                  />
-                </div>
               </CardHeader>
               <CardContent>
-                {usersLoading ? (
-                  <div className="flex justify-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+                {/* Search */}
+                <div className="mb-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                    <Input
+                      placeholder="Search users..."
+                      value={userSearch}
+                      onChange={(e) => setUserSearch(e.target.value)}
+                      className="pl-10 bg-gray-800 border-gray-700"
+                    />
                   </div>
-                ) : filteredUsers.length === 0 ? (
+                </div>
+
+                {/* Loading State */}
+                {usersLoading && (
+                  <div className="flex justify-center items-center py-8">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"></div>
+                  </div>
+                )}
+
+                {/* Users List */}
+                {!usersLoading && filteredUsers.length === 0 && (
                   <div className="text-center py-8">
                     <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                     <p className="text-muted-foreground">No users found</p>
                   </div>
-                ) : (
+                )}
+
+                {!usersLoading && filteredUsers.length > 0 && (
                   <div className="space-y-4">
                     {filteredUsers.map((userData) => (
                       <div
                         key={userData.id}
-                        className="flex items-center justify-between p-4 bg-forest-900 rounded-lg border border-forest-600"
+                        className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700"
                       >
                         <div>
                           <h3 className="font-semibold">{userData.name}</h3>
@@ -751,18 +773,18 @@ const Admin = () => {
                         </div>
                         <div className="flex items-center space-x-2">
                           <Button
-                            onClick={() => handleEditUser(userData)}
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
-                            className="border-forest-600"
+                            onClick={() => handleEditUser(userData)}
+                            className="border-gray-700 text-muted-foreground hover:text-foreground"
                           >
                             <Edit className="h-4 w-4" />
                           </Button>
                           <Button
-                            onClick={() => handleDeleteUser(userData)}
-                            variant="outline"
+                            variant="ghost"
                             size="sm"
-                            className="border-red-600 text-red-400 hover:bg-red-600 hover:text-white"
+                            onClick={() => handleDeleteUser(userData)}
+                            className="text-red-400 hover:text-red-300 hover:bg-red-500/20"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -786,7 +808,7 @@ const Admin = () => {
                     <Input
                       type="search"
                       placeholder="Search orders..."
-                      className="pl-8 bg-forest-900 border-forest-700"
+                      className="pl-8 bg-gray-800 border-gray-700"
                       value={orderSearch}
                       onChange={(e) => setOrderSearch(e.target.value)}
                     />
@@ -794,10 +816,10 @@ const Admin = () => {
                 </div>
               </div>
 
-              <div className="bg-forest-800 rounded-lg border border-forest-700">
+              <div className="bg-gray-900 rounded-lg border border-gray-700">
                 {ordersLoading ? (
                   <div className="flex justify-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"></div>
                   </div>
                 ) : orders.length === 0 ? (
                   <div className="text-center py-8">
@@ -817,7 +839,7 @@ const Admin = () => {
                         return (
                           <div
                             key={order.id || `order-${idx}`}
-                            className="flex items-center justify-between p-4 bg-forest-900 rounded-lg border border-forest-600"
+                            className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700"
                           >
                             <div className="flex flex-col space-y-2 flex-1">
                               <div>
@@ -825,7 +847,7 @@ const Admin = () => {
                                   Order #{order.id}
                                 </h3>
                                 <p className="text-sm text-muted-foreground">
-                                  {order.user.name} •{' '}
+                                  {order.user?.name || 'Unknown User'} •{' '}
                                   {formatKESPrice(order.totalPrice)} •{' '}
                                   {new Date(
                                     order.createdAt
@@ -852,7 +874,7 @@ const Admin = () => {
                                 size="sm"
                                 className={
                                   order.status === 'completed'
-                                    ? 'text-emerald-400 hover:text-emerald-300 hover:bg-emerald-900/20'
+                                    ? 'text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/20'
                                     : 'text-muted-foreground'
                                 }
                                 onClick={() => {
@@ -899,7 +921,7 @@ const Admin = () => {
 
           {/* Settings Tab */}
           <TabsContent value="settings" className="space-y-6">
-            <Card className="bg-forest-800 border-forest-700">
+            <Card className="bg-gray-900 border-gray-700">
               <CardHeader>
                 <CardTitle>Store Settings</CardTitle>
               </CardHeader>
@@ -915,7 +937,7 @@ const Admin = () => {
                         name: e.target.value,
                       })
                     }
-                    className="bg-forest-900 border-forest-600"
+                    className="bg-gray-800 border-gray-700"
                   />
                 </div>
                 <div>
@@ -930,7 +952,7 @@ const Admin = () => {
                         email: e.target.value,
                       })
                     }
-                    className="bg-forest-900 border-forest-600"
+                    className="bg-gray-800 border-gray-700"
                   />
                 </div>
                 <div>
@@ -944,30 +966,21 @@ const Admin = () => {
                         phone: e.target.value,
                       })
                     }
-                    className="bg-forest-900 border-forest-600"
+                    className="bg-gray-800 border-gray-700"
                   />
                 </div>
                 <div>
                   <Label htmlFor="storeCurrency">Currency</Label>
-                  <Select
+                  <Input
+                    id="storeCurrency"
                     value={storeSettings.currency}
-                    onValueChange={(value) =>
-                      setStoreSettings({ ...storeSettings, currency: value })
-                    }
-                  >
-                    <SelectTrigger className="bg-forest-900 border-forest-600">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent className="bg-forest-900 border-forest-600">
-                      <SelectItem value="USD ($)">USD ($)</SelectItem>
-                      <SelectItem value="EUR (€)">EUR (€)</SelectItem>
-                      <SelectItem value="GBP (£)">GBP (£)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                    readOnly
+                    className="bg-gray-800 border-gray-700 opacity-70"
+                  />
                 </div>
                 <Button
                   onClick={saveSettings}
-                  className="bg-emerald-600 hover:bg-emerald-500"
+                  className="bg-yellow-500 hover:bg-yellow-400 text-black"
                 >
                   Save Settings
                 </Button>
@@ -982,7 +995,7 @@ const Admin = () => {
 
       {/* Product Dialog */}
       <Dialog open={productDialogOpen} onOpenChange={setProductDialogOpen}>
-        <DialogContent className="bg-forest-800 border-forest-700 max-w-md">
+        <DialogContent className="bg-gray-800 border-gray-700 max-w-md">
           <DialogHeader>
             <DialogTitle>
               {isEditing ? 'Edit Product' : 'Add Product'}
@@ -1005,7 +1018,7 @@ const Admin = () => {
                       name: e.target.value,
                     })
                   }
-                  className="bg-forest-900 border-forest-600"
+                  className="bg-gray-800 border-gray-700"
                 />
               </div>
               <div>
@@ -1019,7 +1032,7 @@ const Admin = () => {
                       description: e.target.value,
                     })
                   }
-                  className="bg-forest-900 border-forest-600"
+                  className="bg-gray-800 border-gray-700"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -1037,7 +1050,7 @@ const Admin = () => {
                         price: parseKESInput(e.target.value),
                       })
                     }
-                    className="bg-forest-900 border-forest-600"
+                    className="bg-gray-800 border-gray-700"
                   />
                 </div>
                 <div>
@@ -1053,7 +1066,7 @@ const Admin = () => {
                         count_in_stock: parseInt(e.target.value) || 0,
                       })
                     }
-                    className="bg-forest-900 border-forest-600"
+                    className="bg-gray-800 border-gray-700"
                   />
                 </div>
               </div>
@@ -1070,11 +1083,11 @@ const Admin = () => {
                 >
                   <SelectTrigger
                     id="productCategory"
-                    className="w-full bg-forest-900 border-forest-600"
+                    className="w-full bg-gray-800 border-gray-700"
                   >
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
-                  <SelectContent className="bg-forest-800 border-forest-600">
+                  <SelectContent className="bg-gray-800 border-gray-700">
                     {CATEGORIES.filter((cat) => cat.id !== 'all').map(
                       (category) => (
                         <SelectItem key={category.id} value={category.name}>
@@ -1096,14 +1109,14 @@ const Admin = () => {
                       brand: e.target.value,
                     })
                   }
-                  className="bg-forest-900 border-forest-600"
+                  className="bg-gray-800 border-gray-700"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="productImage">Product Image</Label>
                 <div className="grid gap-4">
                   <div className="flex items-center gap-4">
-                    <div className="relative w-40 h-40 rounded-lg overflow-hidden bg-forest-900 border border-forest-600">
+                    <div className="relative w-40 h-40 rounded-lg overflow-hidden bg-gray-800 border border-gray-700">
                       {currentProduct.imageFile ? (
                         <img
                           src={URL.createObjectURL(currentProduct.imageFile)}
@@ -1131,7 +1144,7 @@ const Admin = () => {
                         <Button
                           type="button"
                           variant="outline"
-                          className="border-forest-600 flex-1"
+                          className="border-gray-700 flex-1"
                           onClick={() =>
                             document.getElementById('fileInput')?.click()
                           }
@@ -1169,7 +1182,7 @@ const Admin = () => {
                           })
                         }
                         placeholder="https://example.com/image.jpg"
-                        className="bg-forest-900 border-forest-600"
+                        className="bg-gray-800 border-gray-700"
                       />
                     </div>
                   </div>
@@ -1181,14 +1194,14 @@ const Admin = () => {
                 variant="outline"
                 type="button"
                 onClick={() => setProductDialogOpen(false)}
-                className="border-forest-600"
+                className="border-gray-700"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={submitLoading}
-                className="bg-emerald-600 hover:bg-emerald-500"
+                className="bg-yellow-500 hover:bg-yellow-400 text-black"
               >
                 {submitLoading ? 'Saving...' : isEditing ? 'Update' : 'Create'}
               </Button>
@@ -1199,7 +1212,7 @@ const Admin = () => {
 
       {/* User Dialog */}
       <Dialog open={userDialogOpen} onOpenChange={setUserDialogOpen}>
-        <DialogContent className="bg-forest-800 border-forest-700 max-w-md">
+        <DialogContent className="bg-gray-800 border-gray-700 max-w-md">
           <DialogHeader>
             <DialogTitle>Edit User</DialogTitle>
           </DialogHeader>
@@ -1212,7 +1225,7 @@ const Admin = () => {
                 onChange={(e) =>
                   setCurrentUser({ ...currentUser, name: e.target.value })
                 }
-                className="bg-forest-900 border-forest-600"
+                className="bg-gray-800 border-gray-700"
               />
             </div>
             <div>
@@ -1224,7 +1237,7 @@ const Admin = () => {
                 onChange={(e) =>
                   setCurrentUser({ ...currentUser, email: e.target.value })
                 }
-                className="bg-forest-900 border-forest-600"
+                className="bg-gray-800 border-gray-700"
               />
             </div>
             <div className="flex items-center space-x-2">
@@ -1235,7 +1248,7 @@ const Admin = () => {
                 onChange={(e) =>
                   setCurrentUser({ ...currentUser, isAdmin: e.target.checked })
                 }
-                className="rounded border-forest-600"
+                className="rounded border-gray-700"
               />
               <Label htmlFor="userAdmin">Administrator</Label>
             </div>
@@ -1244,14 +1257,14 @@ const Admin = () => {
             <Button
               variant="outline"
               onClick={() => setUserDialogOpen(false)}
-              className="border-forest-600"
+              className="border-gray-700"
             >
               Cancel
             </Button>
             <Button
               onClick={saveUser}
               disabled={submitLoading}
-              className="bg-emerald-600 hover:bg-emerald-500"
+              className="bg-yellow-500 hover:bg-yellow-400 text-black"
             >
               {submitLoading ? 'Saving...' : 'Update'}
             </Button>
@@ -1261,7 +1274,7 @@ const Admin = () => {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="bg-forest-800 border-forest-700 max-w-md">
+        <DialogContent className="bg-gray-800 border-gray-700 max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center">
               <AlertCircle className="h-5 w-5 text-red-400 mr-2" />
@@ -1278,14 +1291,14 @@ const Admin = () => {
             <Button
               variant="outline"
               onClick={() => setDeleteDialogOpen(false)}
-              className="border-forest-600"
+              className="border-gray-700"
             >
               Cancel
             </Button>
             <Button
               onClick={confirmDelete}
               disabled={submitLoading}
-              className="bg-red-600 hover:bg-red-500"
+              className="bg-red-500 hover:bg-red-400 text-black"
             >
               {submitLoading ? 'Deleting...' : 'Delete'}
             </Button>

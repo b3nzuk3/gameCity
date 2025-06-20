@@ -119,17 +119,17 @@ const Profile = () => {
           </div>
 
           <Tabs defaultValue="profile" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 bg-forest-800 border border-forest-700">
+            <TabsList className="grid w-full grid-cols-2 bg-gray-900 border border-gray-700">
               <TabsTrigger
                 value="profile"
-                className="data-[state=active]:bg-forest-700 data-[state=active]:text-foreground"
+                className="data-[state=active]:bg-gray-800 data-[state=active]:text-foreground"
               >
                 <User size={16} className="mr-2" />
                 Profile
               </TabsTrigger>
               <TabsTrigger
                 value="security"
-                className="data-[state=active]:bg-forest-700 data-[state=active]:text-foreground"
+                className="data-[state=active]:bg-gray-800 data-[state=active]:text-foreground"
               >
                 <Shield size={16} className="mr-2" />
                 Security
@@ -137,7 +137,7 @@ const Profile = () => {
             </TabsList>
 
             <TabsContent value="profile" className="space-y-6">
-              <Card className="bg-forest-800 border-forest-700">
+              <Card className="bg-gray-900 border-gray-700">
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <User size={20} className="mr-2" />
@@ -158,7 +158,7 @@ const Profile = () => {
                             name: e.target.value,
                           })
                         }
-                        className="bg-forest-900 border-forest-600 mt-1"
+                        className="bg-gray-800 border-gray-700 mt-1"
                       />
                     </div>
 
@@ -169,14 +169,14 @@ const Profile = () => {
                         type="email"
                         value={profileData.email}
                         disabled
-                        className="bg-forest-900 border-forest-600 mt-1 opacity-50"
+                        className="bg-gray-800 border-gray-700 mt-1 opacity-50"
                       />
                     </div>
 
                     <Button
                       type="submit"
                       disabled={isUpdatingProfile}
-                      className="bg-emerald-600 hover:bg-emerald-500"
+                      className="bg-yellow-500 hover:bg-yellow-400 text-black"
                     >
                       {isUpdatingProfile ? 'Updating...' : 'Update Profile'}
                     </Button>
@@ -184,7 +184,7 @@ const Profile = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-forest-800 border-forest-700">
+              <Card className="bg-gray-900 border-gray-700">
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Calendar size={20} className="mr-2" />
@@ -210,7 +210,7 @@ const Profile = () => {
                     </div>
                     <span
                       className={`text-sm font-medium ${
-                        user.isAdmin ? 'text-emerald-400' : 'text-gray-400'
+                        user.isAdmin ? 'text-yellow-400' : 'text-gray-400'
                       }`}
                     >
                       {user.isAdmin ? 'Administrator' : 'Customer'}
@@ -221,7 +221,7 @@ const Profile = () => {
             </TabsContent>
 
             <TabsContent value="security" className="space-y-6">
-              <Card className="bg-forest-800 border-forest-700">
+              <Card className="bg-gray-900 border-gray-700">
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <Shield size={20} className="mr-2" />
@@ -229,7 +229,7 @@ const Profile = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="p-4 bg-forest-700 rounded-lg">
+                  <div className="p-4 bg-gray-800 rounded-lg">
                     <h3 className="font-semibold mb-2">Password Reset</h3>
                     <p className="text-sm text-muted-foreground mb-4">
                       Reset your password by clicking the button below.
@@ -238,7 +238,7 @@ const Profile = () => {
                     <Button
                       onClick={handlePasswordReset}
                       variant="outline"
-                      className="border-forest-600"
+                      className="border-gray-700"
                       disabled={resetCooldown > 0}
                     >
                       {resetCooldown > 0

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import backendService from '@/services/backendService'
+import { checkHealth } from '@/services/backendService'
 import { useAuth } from '@/contexts/AuthContext'
 import {
   Database,
@@ -31,7 +31,7 @@ const DebugInfo = () => {
     setError(null)
 
     try {
-      const health = await backendService.checkHealth()
+      const health = await checkHealth()
       setHealthStatus(health)
       console.log('Backend health check:', health)
     } catch (err) {
@@ -52,7 +52,7 @@ const DebugInfo = () => {
     if (isLoading) return <RefreshCw className="h-4 w-4 animate-spin" />
     if (error) return <XCircle className="h-4 w-4 text-red-400" />
     if (healthStatus?.status === 'OK')
-      return <CheckCircle className="h-4 w-4 text-green-400" />
+      return <CheckCircle className="h-4 w-4 text-yellow-400" />
     return <AlertCircle className="h-4 w-4 text-yellow-400" />
   }
 
@@ -61,7 +61,7 @@ const DebugInfo = () => {
     if (error) return <Badge variant="destructive">Error</Badge>
     if (healthStatus?.status === 'OK')
       return (
-        <Badge variant="default" className="bg-green-600">
+        <Badge variant="default" className="bg-yellow-500 text-black">
           Connected
         </Badge>
       )
@@ -73,7 +73,7 @@ const DebugInfo = () => {
 
     if (healthStatus.database === 'Connected') {
       return (
-        <Badge variant="default" className="bg-green-600">
+        <Badge variant="default" className="bg-yellow-500 text-black">
           MongoDB Connected
         </Badge>
       )
@@ -83,7 +83,7 @@ const DebugInfo = () => {
   }
 
   return (
-    <Card className="bg-forest-800 border-forest-700">
+    <Card className="bg-gray-900 border-gray-700">
       <CardHeader>
         <CardTitle className="flex items-center text-lg">
           <Server className="mr-2 h-5 w-5" />
@@ -116,7 +116,7 @@ const DebugInfo = () => {
             <span className="ml-2 text-sm font-medium">Authentication</span>
           </div>
           {user ? (
-            <Badge variant="default" className="bg-green-600">
+            <Badge variant="default" className="bg-yellow-500 text-black">
               Logged In
             </Badge>
           ) : (
@@ -126,7 +126,7 @@ const DebugInfo = () => {
 
         {/* User Info */}
         {user && (
-          <div className="pt-2 border-t border-forest-600">
+          <div className="pt-2 border-t border-gray-700">
             <div className="text-xs text-muted-foreground mb-1">
               Current User:
             </div>
@@ -136,7 +136,7 @@ const DebugInfo = () => {
               {user.isAdmin && (
                 <Badge
                   variant="outline"
-                  className="mt-1 text-xs border-emerald-500 text-emerald-400"
+                  className="mt-1 text-xs border-yellow-500 text-yellow-400"
                 >
                   Administrator
                 </Badge>
@@ -147,7 +147,7 @@ const DebugInfo = () => {
 
         {/* Error Display */}
         {error && (
-          <div className="pt-2 border-t border-forest-600">
+          <div className="pt-2 border-t border-gray-700">
             <div className="text-xs text-red-400 mb-1">Error:</div>
             <div className="text-xs text-muted-foreground">{error}</div>
           </div>
@@ -155,7 +155,7 @@ const DebugInfo = () => {
 
         {/* Health Status Details */}
         {healthStatus && (
-          <div className="pt-2 border-t border-forest-600">
+          <div className="pt-2 border-t border-gray-700">
             <div className="text-xs text-muted-foreground mb-1">
               Last Check:
             </div>
@@ -171,7 +171,7 @@ const DebugInfo = () => {
           disabled={isLoading}
           variant="outline"
           size="sm"
-          className="w-full border-forest-600"
+          className="w-full border-gray-700"
         >
           <RefreshCw
             className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`}
@@ -180,7 +180,7 @@ const DebugInfo = () => {
         </Button>
 
         {/* Environment Info */}
-        <div className="pt-2 border-t border-forest-600">
+        <div className="pt-2 border-t border-gray-700">
           <div className="text-xs text-muted-foreground mb-1">Environment:</div>
           <div className="text-xs space-y-1">
             <div>

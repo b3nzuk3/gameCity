@@ -11,28 +11,24 @@ const Index = () => {
   // Features section data
   const features = [
     {
-      icon: <Shield className="h-10 w-10 text-emerald-500" />,
       title: 'Premium Quality',
-      description:
-        'All our products undergo rigorous quality testing to ensure reliability and performance.',
+      description: 'Hand-picked components from trusted brands',
+      icon: <Shield className="h-10 w-10 text-yellow-500" />,
     },
     {
-      icon: <Truck className="h-10 w-10 text-emerald-500" />,
       title: 'Fast Shipping',
-      description:
-        'Free shipping on orders over $100 with expedited delivery options available.',
+      description: 'Free delivery on orders over KES 50,000',
+      icon: <Truck className="h-10 w-10 text-yellow-500" />,
     },
     {
-      icon: <Sparkles className="h-10 w-10 text-emerald-500" />,
       title: 'Expert Support',
-      description:
-        'Our tech specialists are available 24/7 to help with any questions or issues.',
+      description: '24/7 technical assistance and guidance',
+      icon: <Sparkles className="h-10 w-10 text-yellow-500" />,
     },
     {
-      icon: <Zap className="h-10 w-10 text-emerald-500" />,
-      title: 'Easy Returns',
-      description:
-        '30-day hassle-free return policy on all products for your peace of mind.',
+      title: 'Performance',
+      description: 'Optimized builds for maximum performance',
+      icon: <Zap className="h-10 w-10 text-yellow-500" />,
     },
   ]
 
@@ -81,18 +77,29 @@ const Index = () => {
       <Hero />
 
       {/* Features Section */}
-      <section className="py-16 px-4 md:px-6 bg-forest-800">
+      <section className="py-16 px-4 md:px-6 bg-gray-900">
         <div className="container mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+              Why Choose Gamecity?
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              We're committed to delivering the best gaming experience with
+              premium components and exceptional service.
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="p-6 rounded-xl glass-card bg-forest-700/30 flex flex-col items-center text-center"
+                className="p-6 rounded-xl glass-card bg-gray-800/30 flex flex-col items-center text-center"
               >
-                <div className="mb-4 p-3 rounded-full bg-emerald-900/50">
+                <div className="mb-4 p-3 rounded-full bg-yellow-500/20">
                   {feature.icon}
                 </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                <h3 className="text-xl font-semibold mb-2 text-white">
+                  {feature.title}
+                </h3>
                 <p className="text-muted-foreground text-sm">
                   {feature.description}
                 </p>
@@ -106,10 +113,10 @@ const Index = () => {
       <FeaturedProducts />
 
       {/* Categories Section */}
-      <section className="py-20 px-4 md:px-6 bg-forest-800">
+      <section className="py-20 px-4 md:px-6 bg-gray-900">
         <div className="container mx-auto">
           <div className="flex flex-col items-center mb-12">
-            <span className="px-3 py-1 text-xs font-medium text-emerald-400 bg-emerald-900/50 rounded-full mb-3">
+            <span className="px-3 py-1 text-xs font-medium text-yellow-400 bg-yellow-500/20 rounded-full mb-3">
               Browse Categories
             </span>
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
@@ -128,7 +135,7 @@ const Index = () => {
                 className="group relative overflow-hidden rounded-xl shadow-lg hover-scale"
               >
                 {/* Dark overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-forest-900/90 via-forest-900/60 to-transparent z-10"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/60 to-transparent z-10"></div>
 
                 {/* Background image */}
                 <div className="h-80 overflow-hidden">
@@ -149,7 +156,7 @@ const Index = () => {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-emerald-400 border-emerald-700 hover:bg-emerald-900/30"
+                      className="text-yellow-400 border-yellow-700 hover:bg-yellow-900/30"
                     >
                       Browse
                       <ArrowRight size={16} className="ml-2" />
@@ -161,6 +168,16 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {/* Background Elements */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent z-10"></div>
+        <div className="absolute w-96 h-96 bg-yellow-500/5 rounded-full filter blur-3xl -top-48 -right-48 animate-pulse"></div>
+        <div
+          className="absolute w-96 h-96 bg-yellow-500/5 rounded-full filter blur-3xl bottom-0 -left-48 animate-pulse"
+          style={{ animationDelay: '2s' }}
+        ></div>
+      </div>
     </Layout>
   )
 }

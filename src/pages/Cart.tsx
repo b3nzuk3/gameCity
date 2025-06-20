@@ -92,7 +92,7 @@ const Cart = () => {
         <h1 className="text-3xl font-bold mb-8">Your Cart</h1>
 
         {isCartEmpty ? (
-          <div className="bg-forest-800 rounded-lg p-12 text-center">
+          <div className="bg-gray-900 rounded-lg p-12 text-center">
             <div className="flex justify-center mb-4">
               <ShoppingBag size={64} className="text-muted-foreground" />
             </div>
@@ -101,7 +101,7 @@ const Cart = () => {
               Looks like you haven't added any products to your cart yet.
             </p>
             <Link to="/category/monitors">
-              <Button className="bg-emerald-600 hover:bg-emerald-500 text-white">
+              <Button className="bg-yellow-500 hover:bg-yellow-400 text-black">
                 Browse Products
               </Button>
             </Link>
@@ -109,9 +109,9 @@ const Cart = () => {
         ) : (
           <div className="grid lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <div className="bg-forest-800 rounded-lg border border-forest-700 overflow-hidden">
+              <div className="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
                 <table className="w-full">
-                  <thead className="bg-forest-700/50">
+                  <thead className="bg-gray-800/50">
                     <tr>
                       <th className="px-4 py-3 text-left">Product</th>
                       <th className="px-4 py-3 text-left">Price</th>
@@ -119,15 +119,15 @@ const Cart = () => {
                       <th className="px-4 py-3 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-forest-700">
+                  <tbody className="divide-y divide-gray-700">
                     {cartItems.map((item) => (
                       <tr
                         key={getItemId(item)}
-                        className="hover:bg-forest-700/30"
+                        className="hover:bg-gray-800/30"
                       >
                         <td className="px-4 py-4">
                           <div className="flex items-center">
-                            <div className="h-16 w-16 flex-shrink-0 rounded bg-forest-700 overflow-hidden">
+                            <div className="h-16 w-16 flex-shrink-0 rounded bg-gray-700 overflow-hidden">
                               <img
                                 src={item.image}
                                 alt={item.name}
@@ -143,7 +143,7 @@ const Cart = () => {
                         </td>
                         <td className="px-4 py-4 whitespace-nowrap text-sm">
                           <div className="flex items-center justify-between">
-                            <span className="text-lg font-bold text-emerald-400">
+                            <span className="text-lg font-bold text-yellow-400">
                               {formatKESPrice(item.price)}
                             </span>
                             <span className="text-sm text-muted-foreground">
@@ -205,14 +205,14 @@ const Cart = () => {
                 <Link to="/category/monitors">
                   <Button
                     variant="outline"
-                    className="border-forest-700 text-muted-foreground hover:text-foreground"
+                    className="border-gray-700 text-muted-foreground hover:text-foreground"
                   >
                     Continue Shopping
                   </Button>
                 </Link>
                 <Button
                   variant="outline"
-                  className="border-forest-700 text-muted-foreground hover:text-foreground"
+                  className="border-gray-700 text-muted-foreground hover:text-foreground"
                   onClick={clearCart}
                 >
                   Clear Cart
@@ -222,7 +222,7 @@ const Cart = () => {
 
             {/* Order Summary */}
             <div>
-              <div className="bg-forest-800 rounded-lg border border-forest-700 p-6">
+              <div className="bg-gray-900 rounded-lg border border-gray-700 p-6">
                 <h2 className="text-lg font-medium mb-4">Order Summary</h2>
 
                 <div className="space-y-4 mb-6">
@@ -230,15 +230,15 @@ const Cart = () => {
                     <span>Subtotal</span>
                     <span>{formatKESPrice(subtotal)}</span>
                   </div>
-                  <div className="flex justify-between py-2 border-t border-forest-600">
+                  <div className="flex justify-between py-2 border-t border-gray-700">
                     <span>Shipping</span>
                     <span>
                       {shipping === 0 ? 'Free' : formatKESPrice(shipping)}
                     </span>
                   </div>
-                  <div className="flex justify-between py-4 border-t border-forest-600">
+                  <div className="flex justify-between py-4 border-t border-gray-700">
                     <span className="text-lg font-bold">Total</span>
-                    <span className="text-lg font-bold text-emerald-400">
+                    <span className="text-lg font-bold text-yellow-400">
                       {formatKESPrice(finalTotal)}
                     </span>
                   </div>
@@ -251,14 +251,14 @@ const Cart = () => {
                     </p>
                     <div className="flex flex-col sm:flex-row gap-2 justify-center">
                       <Button
-                        className="bg-emerald-600 hover:bg-emerald-500 text-white"
+                        className="bg-yellow-500 hover:bg-yellow-400 text-black"
                         onClick={() => navigate('/signin')}
                       >
                         Sign In
                       </Button>
                       <Button
                         variant="outline"
-                        className="border-emerald-700 text-emerald-400 hover:bg-emerald-900/30"
+                        className="border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10"
                         onClick={() => navigate('/signup')}
                       >
                         Create Account

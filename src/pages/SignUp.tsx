@@ -68,7 +68,7 @@ const SignUp = () => {
     <Layout>
       <div className="container mx-auto px-4 py-8 mt-16">
         <div className="max-w-md mx-auto">
-          <Card className="bg-forest-800 border-forest-700">
+          <Card className="bg-gray-900 border-gray-700">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl font-bold flex items-center justify-center">
                 <UserPlus className="mr-2 h-6 w-6" />
@@ -80,7 +80,7 @@ const SignUp = () => {
             </CardHeader>
             <CardContent>
               {successMessage ? (
-                <div className="text-center text-emerald-400 font-semibold py-8">
+                <div className="text-center text-yellow-400 font-semibold py-8">
                   {successMessage}
                   <br />
                   <span className="text-muted-foreground text-sm">
@@ -100,7 +100,7 @@ const SignUp = () => {
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder="Enter your full name"
-                        className="pl-10 bg-forest-900 border-forest-600"
+                        className="pl-10 bg-gray-800 border-gray-700"
                         required
                       />
                     </div>
@@ -117,7 +117,7 @@ const SignUp = () => {
                         value={formData.email}
                         onChange={handleInputChange}
                         placeholder="Enter your email"
-                        className="pl-10 bg-forest-900 border-forest-600"
+                        className="pl-10 bg-gray-800 border-gray-700"
                         required
                       />
                     </div>
@@ -134,7 +134,7 @@ const SignUp = () => {
                         value={formData.password}
                         onChange={handleInputChange}
                         placeholder="Create a password"
-                        className="pl-10 pr-10 bg-forest-900 border-forest-600"
+                        className="pl-10 pr-10 bg-gray-800 border-gray-700"
                         required
                       />
                       <button
@@ -162,7 +162,7 @@ const SignUp = () => {
                         value={formData.confirmPassword}
                         onChange={handleInputChange}
                         placeholder="Confirm your password"
-                        className={`pl-10 pr-10 bg-forest-900 border-forest-600 ${
+                        className={`pl-10 pr-10 bg-gray-800 border-gray-700 ${
                           formData.confirmPassword && !passwordsMatch
                             ? 'border-red-500'
                             : ''
@@ -193,7 +193,7 @@ const SignUp = () => {
                   <Button
                     type="submit"
                     disabled={isLoading || !isFormValid}
-                    className="w-full bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50"
+                    className="w-full bg-yellow-500 hover:bg-yellow-400 text-black disabled:opacity-50"
                   >
                     {isLoading ? 'Creating account...' : 'Sign Up'}
                   </Button>
@@ -205,7 +205,7 @@ const SignUp = () => {
                   Already have an account?{' '}
                   <Link
                     to="/signin"
-                    className="text-emerald-400 hover:text-emerald-300 underline"
+                    className="text-yellow-400 hover:text-yellow-300 underline"
                   >
                     Sign in
                   </Link>

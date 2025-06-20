@@ -4,9 +4,15 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import {
-  atlasProductService,
-  type Product,
-} from '@/services/atlasProductService'
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
+import ProductCard from './ProductCard'
+import { ProductSkeleton } from './ui/product-skeleton'
+import backendService, { type Product } from '@/services/backendService'
 import { useCart } from '@/contexts/CartContext'
 import { formatKESPrice } from '@/lib/currency'
 
@@ -16,46 +22,39 @@ const FeaturedProducts = () => {
   const { addToCart } = useCart()
 
   useEffect(() => {
-    const fetchFeaturedProducts = async () => {
+    const fetchProducts = async () => {
+      setLoading(true)
       try {
-        console.log('FeaturedProducts: Fetching products...')
-        const data = await atlasProductService.getProducts()
-        // Normalize to ensure every product has an id
-        const normalized = data.map((p) => ({
-          ...p,
-          id: p.id || (p as any)._id?.toString() || '',
-        }))
-        // Take first 4 products as featured
-        const featured = normalized.slice(0, 4)
-        console.log('FeaturedProducts: Loaded featured products:', featured)
-        setProducts(featured)
+        // We only want a few featured products, so we can use the default limit
+        const data = await backendService.products.getAll()
+        // Here we can add logic to select specific featured products if needed
+        // For now, we'll take the first 8 as "featured"
+        setProducts(data.products.slice(0, 8))
       } catch (error) {
-        console.error('FeaturedProducts: Error fetching products:', error)
+        console.error('Error fetching featured products:', error)
+        // Optionally, set an error state to show in the UI
       } finally {
         setLoading(false)
       }
     }
 
-    fetchFeaturedProducts()
+    fetchProducts()
   }, [])
 
   if (loading) {
     return (
-      <section className="py-16 bg-forest-900/50">
+      <section className="py-16 bg-gray-900/50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Featured Products
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(4)].map((_, index) => (
-              <div
-                key={index}
-                className="bg-forest-800 rounded-lg p-4 animate-pulse"
-              >
-                <div className="bg-forest-700 h-48 rounded-md mb-4"></div>
-                <div className="bg-forest-700 h-4 rounded mb-2"></div>
-                <div className="bg-forest-700 h-4 rounded w-3/4 mb-4"></div>
-                <div className="bg-forest-700 h-8 rounded"></div>
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="bg-gray-800 rounded-lg p-4 animate-pulse">
+                <div className="bg-gray-700 h-48 rounded-md mb-4"></div>
+                <div className="bg-gray-700 h-4 rounded mb-2"></div>
+                <div className="bg-gray-700 h-4 rounded w-3/4 mb-4"></div>
+                <div className="bg-gray-700 h-8 rounded"></div>
               </div>
             ))}
           </div>
@@ -66,7 +65,7 @@ const FeaturedProducts = () => {
 
   if (products.length === 0) {
     return (
-      <section className="py-16 bg-forest-900/50">
+      <section className="py-16 bg-gray-900/50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Featured Products
@@ -93,7 +92,7 @@ const FeaturedProducts = () => {
   }
 
   return (
-    <section className="py-16 bg-forest-900/50">
+    <section className="py-16 bg-gray-900/50">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
           Featured Products
@@ -103,10 +102,10 @@ const FeaturedProducts = () => {
           {products.map((product) => (
             <Card
               key={product.id}
-              className="bg-forest-800 border-forest-700 hover:bg-forest-700/50 transition-colors group"
+              className="bg-gray-800 border-gray-700 hover:bg-gray-700/50 transition-colors group"
             >
               <CardContent className="p-4">
-                <div className="aspect-square relative mb-4 overflow-hidden rounded-md bg-forest-700">
+                <div className="aspect-square relative mb-4 overflow-hidden rounded-md bg-gray-700">
                   <img
                     src={product.image}
                     alt={product.name}
@@ -135,7 +134,7 @@ const FeaturedProducts = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <h3 className="font-semibold text-sm line-clamp-2 text-white group-hover:text-emerald-400 transition-colors">
+                  <h3 className="font-semibold text-sm line-clamp-2 text-white group-hover:text-yellow-400 transition-colors">
                     {product.name}
                   </h3>
 
@@ -146,7 +145,7 @@ const FeaturedProducts = () => {
                   )}
 
                   <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-emerald-400">
+                    <span className="text-lg font-bold text-yellow-400">
                       {formatKESPrice(product.price)}
                     </span>
                   </div>
@@ -155,7 +154,7 @@ const FeaturedProducts = () => {
                     <Button
                       onClick={() => handleAddToCart(product)}
                       disabled={product.count_in_stock === 0}
-                      className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs"
+                      className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black text-xs"
                       size="sm"
                     >
                       {product.count_in_stock === 0
@@ -166,7 +165,7 @@ const FeaturedProducts = () => {
                     <Button
                       asChild
                       variant="outline"
-                      className="border-forest-600 text-muted-foreground hover:text-white text-xs"
+                      className="border-gray-600 text-muted-foreground hover:text-white text-xs"
                       size="sm"
                     >
                       <Link
@@ -187,7 +186,7 @@ const FeaturedProducts = () => {
         <div className="text-center mt-12">
           <Button
             asChild
-            className="bg-emerald-600 hover:bg-emerald-500 text-white"
+            className="bg-yellow-500 hover:bg-yellow-400 text-black"
           >
             <Link to="/category/all">View All Products</Link>
           </Button>

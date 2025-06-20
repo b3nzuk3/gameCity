@@ -105,9 +105,9 @@ const Contact = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div className="bg-forest-800 rounded-lg p-6 border border-forest-700 flex flex-col items-center text-center">
-              <div className="p-3 rounded-full bg-emerald-900/50 mb-4">
-                <Mail className="h-6 w-6 text-emerald-400" />
+            <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 flex flex-col items-center text-center">
+              <div className="p-3 rounded-full bg-yellow-500/20 mb-4">
+                <Mail className="h-6 w-6 text-yellow-400" />
               </div>
               <h3 className="text-lg font-medium mb-2">Email Us</h3>
               <p className="text-muted-foreground mb-4">
@@ -115,15 +115,15 @@ const Contact = () => {
               </p>
               <a
                 href="mailto:gamecityelectronics@gmail.com"
-                className="text-emerald-400 hover:text-emerald-300"
+                className="text-yellow-400 hover:text-yellow-300"
               >
                 gamecityelectronics@gmail.com
               </a>
             </div>
 
-            <div className="bg-forest-800 rounded-lg p-6 border border-forest-700 flex flex-col items-center text-center">
-              <div className="p-3 rounded-full bg-emerald-900/50 mb-4">
-                <Phone className="h-6 w-6 text-emerald-400" />
+            <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 flex flex-col items-center text-center">
+              <div className="p-3 rounded-full bg-yellow-500/20 mb-4">
+                <Phone className="h-6 w-6 text-yellow-400" />
               </div>
               <h3 className="text-lg font-medium mb-2">Call Us</h3>
               <p className="text-muted-foreground mb-4">
@@ -131,15 +131,15 @@ const Contact = () => {
               </p>
               <a
                 href="tel:0712248706"
-                className="text-emerald-400 hover:text-emerald-300"
+                className="text-yellow-400 hover:text-yellow-300"
               >
                 0712248706
               </a>
             </div>
 
-            <div className="bg-forest-800 rounded-lg p-6 border border-forest-700 flex flex-col items-center text-center">
-              <div className="p-3 rounded-full bg-emerald-900/50 mb-4">
-                <MapPin className="h-6 w-6 text-emerald-400" />
+            <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 flex flex-col items-center text-center">
+              <div className="p-3 rounded-full bg-yellow-500/20 mb-4">
+                <MapPin className="h-6 w-6 text-yellow-400" />
               </div>
               <h3 className="text-lg font-medium mb-2">Visit Us</h3>
               <p className="text-muted-foreground mb-4">
@@ -149,7 +149,7 @@ const Contact = () => {
                 href="https://www.google.com/maps/place/GAMECITY+ELECTRONICS/@-1.2835,36.8247986,17z/data=!4m6!3m5!1s0x182f11ff319a2a71:0x23dfb4aee72fab6f!8m2!3d-1.2834756!4d36.8245877!16s%2Fg%2F11rcy9p60j?entry=ttu&g_ep=EgoyMDI1MDYwNC4wIKXMDSoASAFQAw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-emerald-400 hover:text-emerald-300 not-italic"
+                className="text-yellow-400 hover:text-yellow-300 not-italic"
               >
                 GAMECITY ELECTRONICS
               </a>
@@ -183,7 +183,7 @@ const Contact = () => {
                       onChange={handleChange}
                       placeholder="John Doe"
                       required
-                      className="bg-forest-900 border-forest-700"
+                      className="bg-gray-900 border-gray-700"
                     />
                   </div>
 
@@ -202,7 +202,7 @@ const Contact = () => {
                       onChange={handleChange}
                       placeholder="you@example.com"
                       required
-                      className="bg-forest-900 border-forest-700"
+                      className="bg-gray-900 border-gray-700"
                     />
                   </div>
 
@@ -217,10 +217,10 @@ const Contact = () => {
                       onValueChange={handleSelectChange}
                       value={formData.inquiryType}
                     >
-                      <SelectTrigger className="bg-forest-900 border-forest-700">
+                      <SelectTrigger className="bg-gray-900 border-gray-700">
                         <SelectValue placeholder="Select inquiry type" />
                       </SelectTrigger>
-                      <SelectContent className="bg-forest-800 border-forest-700">
+                      <SelectContent className="bg-gray-800 border-gray-700">
                         <SelectItem value="general">General Inquiry</SelectItem>
                         <SelectItem value="support">
                           Technical Support
@@ -250,7 +250,7 @@ const Contact = () => {
                       onChange={handleChange}
                       placeholder="Brief summary of your inquiry"
                       required
-                      className="bg-forest-900 border-forest-700"
+                      className="bg-gray-900 border-gray-700"
                     />
                   </div>
 
@@ -269,14 +269,14 @@ const Contact = () => {
                       placeholder="Please provide details about your inquiry..."
                       rows={5}
                       required
-                      className="bg-forest-900 border-forest-700 resize-none"
+                      className="bg-gray-900 border-gray-700 resize-none"
                     />
                   </div>
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white"
+                  className="w-full bg-yellow-600 hover:bg-yellow-500 text-white"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -292,9 +292,9 @@ const Contact = () => {
             </div>
 
             {/* Business Hours Section */}
-            <div className="bg-forest-800 rounded-lg p-6 border border-forest-700 mt-8">
+            <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 mt-8">
               <div className="flex items-start mb-4">
-                <Clock className="h-5 w-5 text-emerald-400 mt-0.5 mr-2" />
+                <Clock className="h-5 w-5 text-yellow-400 mt-0.5 mr-2" />
                 <h3 className="text-lg font-medium">Business Hours</h3>
               </div>
               <ul className="space-y-2">

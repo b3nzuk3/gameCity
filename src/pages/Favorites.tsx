@@ -29,7 +29,7 @@ const Favorites = () => {
       <Layout>
         <div className="container mx-auto px-4 py-8 mt-16">
           <div className="flex justify-center items-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"></div>
           </div>
         </div>
       </Layout>
@@ -42,7 +42,7 @@ const Favorites = () => {
         <h1 className="text-3xl font-bold mb-8">Your Favorites</h1>
 
         {favorites.length === 0 ? (
-          <div className="bg-forest-800 rounded-lg p-12 text-center">
+          <div className="bg-gray-900 rounded-lg p-12 text-center">
             <div className="flex justify-center mb-4">
               <Heart size={64} className="text-muted-foreground" />
             </div>
@@ -51,7 +51,7 @@ const Favorites = () => {
               Start adding products to your favorites list while shopping.
             </p>
             <Link to="/category/all">
-              <Button className="bg-emerald-600 hover:bg-emerald-500 text-white">
+              <Button className="bg-yellow-500 hover:bg-yellow-400 text-black">
                 Browse Products
               </Button>
             </Link>
@@ -61,10 +61,10 @@ const Favorites = () => {
             {favorites.map((product) => (
               <Card
                 key={product.id}
-                className="bg-forest-800 border-forest-700 hover:bg-forest-700/50 transition-colors group"
+                className="bg-gray-900 border-gray-700 hover:bg-gray-800/50 transition-colors group"
               >
                 <CardContent className="p-4">
-                  <div className="aspect-square relative mb-4 overflow-hidden rounded-md bg-forest-700">
+                  <div className="aspect-square relative mb-4 overflow-hidden rounded-md bg-gray-700">
                     <img
                       src={product.image}
                       alt={product.name}
@@ -84,7 +84,7 @@ const Favorites = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <h3 className="font-semibold text-sm line-clamp-2 text-white group-hover:text-emerald-400 transition-colors">
+                    <h3 className="font-semibold text-sm line-clamp-2 text-white group-hover:text-yellow-400 transition-colors">
                       {product.name}
                     </h3>
 
@@ -95,7 +95,7 @@ const Favorites = () => {
                     )}
 
                     <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-emerald-400">
+                      <span className="text-lg font-bold text-yellow-400">
                         {formatKESPrice(product.price)}
                       </span>
 
@@ -110,7 +110,7 @@ const Favorites = () => {
                     <div className="flex gap-2">
                       <Button
                         onClick={() => handleAddToCart(product)}
-                        className="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white text-xs"
+                        className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black text-xs"
                         size="sm"
                       >
                         <ShoppingBag className="h-4 w-4 mr-1" />
@@ -125,7 +125,7 @@ const Favorites = () => {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="w-full border-forest-700 text-muted-foreground hover:text-foreground"
+                          className="w-full border-gray-700 text-muted-foreground hover:text-foreground"
                         >
                           Details
                         </Button>

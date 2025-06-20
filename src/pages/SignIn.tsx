@@ -52,7 +52,7 @@ const SignIn = () => {
     <Layout>
       <div className="container mx-auto px-4 py-8 mt-16">
         <div className="max-w-md mx-auto">
-          <Card className="bg-forest-800 border-forest-700">
+          <Card className="bg-gray-900 border-gray-700">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl font-bold flex items-center justify-center">
                 <LogIn className="mr-2 h-6 w-6" />
@@ -73,7 +73,7 @@ const SignIn = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       placeholder="Enter your email"
-                      className="pl-10 bg-forest-900 border-forest-600"
+                      className="pl-10 bg-gray-800 border-gray-700"
                       required
                     />
                   </div>
@@ -90,7 +90,7 @@ const SignIn = () => {
                       value={formData.password}
                       onChange={handleInputChange}
                       placeholder="Enter your password"
-                      className="pl-10 pr-10 bg-forest-900 border-forest-600"
+                      className="pl-10 pr-10 bg-gray-800 border-gray-700"
                       required
                     />
                     <button
@@ -110,7 +110,7 @@ const SignIn = () => {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-emerald-600 hover:bg-emerald-500"
+                  className="w-full bg-yellow-500 hover:bg-yellow-400 text-black"
                 >
                   {isLoading ? 'Signing in...' : 'Sign In'}
                 </Button>
@@ -121,7 +121,7 @@ const SignIn = () => {
                   Don't have an account?{' '}
                   <Link
                     to="/signup"
-                    className="text-emerald-400 hover:text-emerald-300 underline"
+                    className="text-yellow-400 hover:text-yellow-300 underline"
                   >
                     Sign up
                   </Link>

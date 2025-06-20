@@ -48,6 +48,20 @@ export interface Order {
   updatedAt: Date
 }
 
+export interface HealthStatus {
+  status: string
+  database: string
+  timestamp: string
+}
+
+export interface PaginatedProductsResponse {
+  products: Product[]
+  page: number
+  pages: number
+  total: number
+  hasMore: boolean
+}
+
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
   return localStorage.getItem('gamecity_auth_token')
@@ -72,10 +86,10 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
 }
 
 // Health check
-export const checkHealth = async () => {
+export const checkHealth = async (): Promise<HealthStatus> => {
   try {
     const response = await fetch(`${API_BASE_URL}/health`)
-    return await handleResponse(response)
+    return await handleResponse<HealthStatus>(response)
   } catch (error) {
     console.error('Health check failed:', error)
     throw error
@@ -167,13 +181,23 @@ export const auth = {
 
 // Products API
 export const products = {
-  getAll: async (): Promise<Product[]> => {
+  getAll: async (
+    params: { category?: string; search?: string } = {}
+  ): Promise<PaginatedProductsResponse> => {
     try {
-      const response = await fetch(`${API_BASE_URL}/products`, {
+      const url = new URL(`${API_BASE_URL}/products`)
+      if (params.category) {
+        url.searchParams.append('category', params.category)
+      }
+      if (params.search) {
+        url.searchParams.append('search', params.search)
+      }
+
+      const response = await fetch(url.toString(), {
         headers: getAuthHeaders(),
       })
 
-      return handleResponse<Product[]>(response)
+      return handleResponse<PaginatedProductsResponse>(response)
     } catch (error) {
       console.error('Get products failed:', error)
       throw error
