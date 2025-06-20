@@ -131,8 +131,10 @@ const backendService = {
     },
   },
   products: {
-    getAll: (): Promise<Product[]> =>
-      handleRequest<Product[]>('GET', '/products'),
+    getAll: (): Promise<{ products: Product[] }> =>
+      handleRequest<{ products: Product[] }>('GET', '/products'),
+    getBrands: (): Promise<string[]> =>
+      handleRequest<string[]>('GET', '/products/brands'),
     getById: (id: string): Promise<Product> =>
       handleRequest<Product>('GET', `/products/${id}`),
     create: (productData: Omit<Product, 'id'>): Promise<Product> =>
@@ -174,7 +176,12 @@ const backendService = {
   },
   orders: {
     getAll: (): Promise<Order[]> => handleRequest<Order[]>('GET', '/orders'),
-    // Add other order-related calls here
+    create: (orderData: any): Promise<Order> =>
+      handleRequest<Order>('POST', '/orders', orderData),
+    updateStatus: (orderId: string, status: string): Promise<Order> =>
+      handleRequest<Order>('PUT', `/orders/${orderId}/status`, { status }),
+    delete: (orderId: string): Promise<void> =>
+      handleRequest<void>('DELETE', `/orders/${orderId}`),
   },
 
   // Health check function

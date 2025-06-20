@@ -49,6 +49,7 @@ import {
 import { formatKESPrice, parseKESInput } from '@/lib/currency'
 import { Textarea } from '@/components/ui/textarea'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Combobox, type ComboboxOption } from '@/components/ui/combobox'
 
 // Define available categories
 const CATEGORIES = [
@@ -90,6 +91,7 @@ const Admin = () => {
 
   // Data states
   const [products, setProducts] = useState<Product[]>([])
+  const [brands, setBrands] = useState<ComboboxOption[]>([])
   const [users, setUsers] = useState<User[]>([])
   const [orders, setOrders] = useState<Order[]>([])
 
@@ -178,6 +180,7 @@ const Admin = () => {
     loadProducts()
     loadUsers()
     loadOrders()
+    loadBrands()
   }, [navigate, user, isLoading])
 
   // Load products
@@ -200,6 +203,22 @@ const Admin = () => {
       })
     } finally {
       setProductsLoading(false)
+    }
+  }
+
+  // Load brands
+  const loadBrands = async () => {
+    try {
+      const brandNames = await backendService.products.getBrands()
+      const brandOptions = brandNames.map((name) => ({
+        value: name.toLowerCase(),
+        label: name,
+      }))
+      setBrands(brandOptions)
+      console.log('Admin: Loaded brands:', brandOptions.length)
+    } catch (error) {
+      console.error('Admin: Failed to load brands:', error)
+      // Non-critical, so no toast needed
     }
   }
 
@@ -322,13 +341,32 @@ const Admin = () => {
     setDeleteDialogOpen(true)
   }
 
+  const handleBrandChange = (value: string) => {
+    const exists = brands.some(
+      (b) => b.value.toLowerCase() === value.toLowerCase()
+    )
+    if (!exists) {
+      setBrands((prev) => [
+        ...prev,
+        { value: value.toLowerCase(), label: value },
+      ])
+    }
+    setCurrentProduct((prev) => ({
+      ...prev,
+      brand: value,
+    }))
+  }
+
   const handleProductChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const { name, value } = e.target
+    const { name, value, type } = e.target
+    const newValue =
+      type === 'number' ? (value === '' ? '' : parseFloat(value)) : value
+
     setCurrentProduct((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: newValue,
     }))
   }
 
@@ -559,29 +597,35 @@ const Admin = () => {
       switch (deleteTarget.type) {
         case 'product':
           await backendService.products.delete(deleteTarget.id)
-          loadProducts()
+          setProducts((prev) => prev.filter((p) => p.id !== deleteTarget.id))
           break
         case 'user':
           await backendService.users.delete(deleteTarget.id)
-          loadUsers()
+          setUsers((prev) => prev.filter((u) => u.id !== deleteTarget.id))
           break
         case 'order':
           await backendService.orders.delete(deleteTarget.id)
-          loadOrders()
+          setOrders((prev) => prev.filter((o) => o.id !== deleteTarget.id))
           break
       }
-
       toast({
         title: 'Deleted successfully',
         description: `${deleteTarget.name} has been deleted.`,
       })
-    } catch (error) {
-      console.error('Delete failed:', error)
-      toast({
-        title: 'Delete failed',
-        description: 'An error occurred while deleting.',
-        variant: 'destructive',
-      })
+    } catch (error: any) {
+      if (error.message === 'Product not found') {
+        setProducts((prev) => prev.filter((p) => p.id !== deleteTarget.id))
+        toast({
+          title: 'Already deleted',
+          description: `${deleteTarget.name} was already removed.`,
+        })
+      } else {
+        toast({
+          title: 'Delete failed',
+          description: 'An error occurred while deleting.',
+          variant: 'destructive',
+        })
+      }
     } finally {
       setSubmitLoading(false)
       setDeleteDialogOpen(false)
@@ -694,8 +738,8 @@ const Admin = () => {
                 <p className="text-2xl font-bold">
                   {formatKESPrice(
                     orders
-                      .filter((order) => order.status === 'completed')
-                      .reduce((sum, order) => sum + order.totalPrice, 0)
+                      .filter((order) => order.is_delivered)
+                      .reduce((sum, order) => sum + order.total_price, 0)
                   )}
                 </p>
               </div>
@@ -929,9 +973,9 @@ const Admin = () => {
                                 </h3>
                                 <p className="text-sm text-muted-foreground">
                                   {order.user?.name || 'Unknown User'} •{' '}
-                                  {formatKESPrice(order.totalPrice)} •{' '}
+                                  {formatKESPrice(order.total_price)} •{' '}
                                   {new Date(
-                                    order.createdAt
+                                    order.paid_at || Date.now()
                                   ).toLocaleDateString()}
                                 </p>
                               </div>
@@ -939,10 +983,11 @@ const Admin = () => {
                               <div className="mt-2">
                                 <span className="font-medium">Items:</span>
                                 <ul className="ml-4 list-disc text-sm">
-                                  {(order.orderItems || []).map((item, i) => (
+                                  {(order.order_items || []).map((item, i) => (
                                     <li key={i}>
-                                      {item.name || item.product} x
-                                      {item.quantity} @{' '}
+                                      {(item.product as Product)?.name ||
+                                        item.name}{' '}
+                                      x {item.quantity} @{' '}
                                       {formatKESPrice(item.price)}
                                     </li>
                                   ))}
@@ -954,7 +999,7 @@ const Admin = () => {
                                 variant="ghost"
                                 size="sm"
                                 className={
-                                  order.status === 'completed'
+                                  order.is_delivered
                                     ? 'text-yellow-400 hover:text-yellow-300 hover:bg-yellow-500/20'
                                     : 'text-muted-foreground'
                                 }
@@ -962,18 +1007,18 @@ const Admin = () => {
                                   console.log(
                                     'Status button clicked',
                                     order.id,
-                                    order.status
+                                    order.is_delivered
                                   )
                                   order.id &&
                                     handleOrderStatus(
                                       order.id,
-                                      order.status === 'completed'
+                                      order.is_delivered
                                         ? 'pending'
                                         : 'completed'
                                     )
                                 }}
                               >
-                                {order.status === 'completed' ? (
+                                {order.is_delivered ? (
                                   <CheckCircle2 size={20} />
                                 ) : (
                                   <XCircle size={20} />
@@ -1099,12 +1144,14 @@ const Admin = () => {
                   </div>
                   <div>
                     <Label htmlFor="brand">Brand</Label>
-                    <Input
-                      id="brand"
-                      name="brand"
+                    <Combobox
+                      options={brands}
                       value={currentProduct.brand}
-                      onChange={handleProductChange}
-                      className="bg-gray-800"
+                      onChange={handleBrandChange}
+                      placeholder="Select a brand..."
+                      searchPlaceholder="Search brands or create new..."
+                      emptyPlaceholder="No brand found."
+                      allowCreation
                     />
                   </div>
                   <div>

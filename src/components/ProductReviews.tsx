@@ -22,6 +22,7 @@ import {
 import {
   useCreateProductReview,
   useHasPurchased,
+  useProductReviews,
 } from '@/services/productService'
 import { useAuth } from '@/contexts/AuthContext'
 import { Star } from 'lucide-react'
@@ -46,16 +47,13 @@ interface Review {
 
 interface ProductReviewsProps {
   productId: string
-  reviews: Review[]
 }
 
-const ProductReviews: React.FC<ProductReviewsProps> = ({
-  productId,
-  reviews,
-}) => {
+const ProductReviews: React.FC<ProductReviewsProps> = ({ productId }) => {
   const { user } = useAuth()
   const queryClient = useQueryClient()
 
+  const { data: reviews = [], refetch } = useProductReviews(productId)
   const { data: purchaseStatus, isLoading: purchaseLoading } = useHasPurchased(
     productId,
     {
@@ -82,7 +80,7 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({
             title: 'Review Submitted!',
             description: 'Thank you for your feedback.',
           })
-          queryClient.invalidateQueries({ queryKey: ['product', productId] })
+          refetch()
           form.reset()
         },
         onError: (error: any) => {

@@ -1,4 +1,3 @@
-import api from './api'
 import { toast } from '@/hooks/use-toast'
 import {
   useQuery,
@@ -7,6 +6,29 @@ import {
   keepPreviousData,
   UseQueryOptions,
 } from '@tanstack/react-query'
+import axios from 'axios'
+import backendService from './backendService'
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+// Add a request interceptor to include the auth token
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('gamecity_token')
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
 
 // Types
 export type Product = {
@@ -160,7 +182,7 @@ export const useHasPurchased = (
   return useQuery({
     queryKey: ['purchase-status', productId],
     queryFn: () => checkHasPurchased(productId),
-    staleTime: 5 * 60 * 1000,
+    staleTime: 30 * 60 * 1000, // 30 minutes
     enabled: !!productId,
     ...options,
   })
@@ -239,6 +261,16 @@ export const useDeleteProduct = () => {
 export const useCreateProductReview = () => {
   return useMutation({
     mutationFn: createProductReview,
+  })
+}
+
+export function useProductReviews(productId: string) {
+  return useQuery({
+    queryKey: ['productReviews', productId],
+    queryFn: async () => {
+      const product = await backendService.products.getById(productId)
+      return product.reviews || []
+    },
   })
 }
 
