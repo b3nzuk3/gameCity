@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '@/components/Layout'
 import DebugInfo from '@/components/DebugInfo'
@@ -47,6 +47,8 @@ import {
   Plus,
 } from 'lucide-react'
 import { formatKESPrice, parseKESInput } from '@/lib/currency'
+import { Textarea } from '@/components/ui/textarea'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 // Define available categories
 const CATEGORIES = [
@@ -72,7 +74,7 @@ type ProductFormData = {
   count_in_stock: number
   brand: string
   image: string
-  imageFile?: File | null
+  images: string[]
 }
 
 type UserFormData = {
@@ -119,9 +121,17 @@ const Admin = () => {
     category: '',
     count_in_stock: 0,
     brand: '',
-    image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400',
-    imageFile: null,
+    image: '',
+    images: [],
   })
+
+  // New state for file management
+  const [mainImageFile, setMainImageFile] = useState<File | null>(null)
+  const [additionalImageFiles, setAdditionalImageFiles] = useState<File[]>([])
+  const [mainImagePreview, setMainImagePreview] = useState<string>('')
+  const [additionalImagePreviews, setAdditionalImagePreviews] = useState<
+    string[]
+  >([])
 
   const [currentUser, setCurrentUser] = useState<UserFormData>({
     name: '',
@@ -275,9 +285,14 @@ const Admin = () => {
       category: '',
       count_in_stock: 0,
       brand: '',
-      image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400',
-      imageFile: null,
+      image: '',
+      images: [],
     })
+    // Reset file states
+    setMainImageFile(null)
+    setAdditionalImageFiles([])
+    setMainImagePreview('')
+    setAdditionalImagePreviews([])
     setProductDialogOpen(true)
   }
 
@@ -289,11 +304,16 @@ const Admin = () => {
       description: product.description || '',
       price: product.price,
       category: product.category || '',
-      count_in_stock: product.count_in_stock,
+      count_in_stock: product.count_in_stock || 0,
       brand: product.brand || '',
       image: product.image,
-      imageFile: null,
+      images: product.images || [],
     })
+    // Set previews for existing images, but clear file inputs
+    setMainImagePreview(product.image)
+    setAdditionalImagePreviews(product.images || [])
+    setMainImageFile(null)
+    setAdditionalImageFiles([])
     setProductDialogOpen(true)
   }
 
@@ -302,70 +322,131 @@ const Admin = () => {
     setDeleteDialogOpen(true)
   }
 
+  const handleProductChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target
+    setCurrentProduct((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitLoading(true)
 
+    let mainImageUrl = currentProduct.image
+    let finalAdditionalImageUrls = [...currentProduct.images]
+
     try {
-      let imageUrl = currentProduct.image
-      // If a new image file is selected, upload it first
-      if (currentProduct.imageFile) {
-        const uploadData = new FormData()
-        uploadData.append('image', currentProduct.imageFile)
-        // Note: The /api/upload route does not require authentication in this setup
-        const uploadResponse = await fetch('/api/upload', {
-          method: 'POST',
-          body: uploadData,
+      // 1. Upload main image if a new one is selected
+      if (mainImageFile) {
+        const formData = new FormData()
+        formData.append('images', mainImageFile)
+        const res = await backendService.uploads.upload(formData)
+        mainImageUrl = res.urls[0]
+      }
+
+      // 2. Upload additional images if new ones are selected
+      if (additionalImageFiles.length > 0) {
+        const formData = new FormData()
+        additionalImageFiles.forEach((file) => {
+          formData.append('images', file)
         })
-        if (!uploadResponse.ok) throw new Error('Image upload failed')
-        const uploadResult = await uploadResponse.json()
-        imageUrl = uploadResult.url
+        const res = await backendService.uploads.upload(formData)
+        finalAdditionalImageUrls = [...finalAdditionalImageUrls, ...res.urls]
       }
 
-      const formData = new FormData()
-      formData.append('name', currentProduct.name)
-      formData.append('price', currentProduct.price.toString())
-      formData.append('description', currentProduct.description || '')
-      formData.append('category', currentProduct.category || '')
-      formData.append('brand', currentProduct.brand || '')
-      formData.append(
-        'count_in_stock',
-        currentProduct.count_in_stock?.toString() || '0'
-      )
-      formData.append('image', imageUrl)
-
-      // Get auth token and prepare headers
-      const token = localStorage.getItem('gamecity_auth_token')
-      const headers: HeadersInit = {}
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`
+      if (!mainImageUrl) {
+        toast({
+          title: 'Main image is required',
+          description: 'Please select a main image for the product.',
+          variant: 'destructive',
+        })
+        setSubmitLoading(false)
+        return
       }
 
-      let response
-      if (isEditing && currentProduct.id) {
-        // UPDATE (PUT)
-        response = await fetch(`/api/products/${currentProduct.id}`, {
-          method: 'PUT',
-          headers,
-          body: formData,
+      const productDataToSubmit = {
+        ...currentProduct,
+        image: mainImageUrl,
+        images: finalAdditionalImageUrls,
+      }
+
+      if (isEditing) {
+        // 3. Update existing product
+        await backendService.products.update(
+          productDataToSubmit.id,
+          productDataToSubmit
+        )
+        toast({
+          title: 'Product updated',
+          description: `${productDataToSubmit.name} has been updated.`,
         })
       } else {
-        // CREATE (POST)
-        response = await fetch('/api/products', {
-          method: 'POST',
-          headers,
-          body: formData,
+        // 3. Create new product
+        await backendService.products.create(productDataToSubmit)
+        toast({
+          title: 'Product created',
+          description: `${productDataToSubmit.name} has been created.`,
         })
       }
 
-      if (!response.ok) throw new Error('Failed to save product')
-      await loadProducts()
       setProductDialogOpen(false)
+      loadProducts()
     } catch (error) {
-      console.error('Product creation error:', error)
-      // ...toast or error handling...
+      console.error('Failed to save product:', error)
+      toast({
+        title: 'Save failed',
+        description: 'An error occurred while saving the product.',
+        variant: 'destructive',
+      })
     } finally {
       setSubmitLoading(false)
+    }
+  }
+
+  // File handling functions
+  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setMainImageFile(file)
+      setMainImagePreview(URL.createObjectURL(file))
+    }
+  }
+
+  const handleAdditionalImagesChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = e.target.files
+    if (files) {
+      const newFiles = Array.from(files)
+      setAdditionalImageFiles((prev) => [...prev, ...newFiles])
+      const newPreviews = newFiles.map((file) => URL.createObjectURL(file))
+      setAdditionalImagePreviews((prev) => [...prev, ...newPreviews])
+    }
+  }
+
+  const removeAdditionalImage = (indexToRemove: number) => {
+    // This function needs to differentiate between newly added files and existing image URLs
+    const existingImagesCount = currentProduct.images.length
+
+    if (indexToRemove < existingImagesCount) {
+      // It's an existing image URL from the product
+      const newImageUrls = currentProduct.images.filter(
+        (_, i) => i !== indexToRemove
+      )
+      setCurrentProduct((prev) => ({ ...prev, images: newImageUrls }))
+      setAdditionalImagePreviews(newImageUrls)
+    } else {
+      // It's a newly added file
+      const fileIndex = indexToRemove - existingImagesCount
+      const newFiles = additionalImageFiles.filter((_, i) => i !== fileIndex)
+      const newPreviews = newFiles.map((file) => URL.createObjectURL(file))
+
+      setAdditionalImageFiles(newFiles)
+      setAdditionalImagePreviews([...currentProduct.images, ...newPreviews])
     }
   }
 
@@ -995,218 +1076,170 @@ const Admin = () => {
 
       {/* Product Dialog */}
       <Dialog open={productDialogOpen} onOpenChange={setProductDialogOpen}>
-        <DialogContent className="bg-gray-800 border-gray-700 max-w-md">
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle>
-              {isEditing ? 'Edit Product' : 'Add Product'}
+              {isEditing ? 'Edit Product' : 'Add New Product'}
             </DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleSubmit}>
-            <div
-              className="space-y-4"
-              role="dialog"
-              aria-label={isEditing ? 'Edit Product Form' : 'Add Product Form'}
-            >
-              <div>
-                <Label htmlFor="productName">Name</Label>
-                <Input
-                  id="productName"
-                  value={currentProduct.name}
-                  onChange={(e) =>
-                    setCurrentProduct({
-                      ...currentProduct,
-                      name: e.target.value,
-                    })
-                  }
-                  className="bg-gray-800 border-gray-700"
-                />
-              </div>
-              <div>
-                <Label htmlFor="productDescription">Description</Label>
-                <Input
-                  id="productDescription"
-                  value={currentProduct.description}
-                  onChange={(e) =>
-                    setCurrentProduct({
-                      ...currentProduct,
-                      description: e.target.value,
-                    })
-                  }
-                  className="bg-gray-800 border-gray-700"
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="productPrice">Price (KES)</Label>
-                  <Input
-                    id="productPrice"
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={currentProduct.price}
-                    onChange={(e) =>
-                      setCurrentProduct({
-                        ...currentProduct,
-                        price: parseKESInput(e.target.value),
-                      })
-                    }
-                    className="bg-gray-800 border-gray-700"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="productStock">Stock</Label>
-                  <Input
-                    id="productStock"
-                    type="number"
-                    min="0"
-                    value={currentProduct.count_in_stock}
-                    onChange={(e) =>
-                      setCurrentProduct({
-                        ...currentProduct,
-                        count_in_stock: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="bg-gray-800 border-gray-700"
-                  />
-                </div>
-              </div>
-              <div>
-                <Label htmlFor="productCategory">Category</Label>
-                <Select
-                  value={currentProduct.category}
-                  onValueChange={(value) =>
-                    setCurrentProduct({
-                      ...currentProduct,
-                      category: value,
-                    })
-                  }
-                >
-                  <SelectTrigger
-                    id="productCategory"
-                    className="w-full bg-gray-800 border-gray-700"
-                  >
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent className="bg-gray-800 border-gray-700">
-                    {CATEGORIES.filter((cat) => cat.id !== 'all').map(
-                      (category) => (
-                        <SelectItem key={category.id} value={category.name}>
-                          {category.name}
-                        </SelectItem>
-                      )
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="productBrand">Brand</Label>
-                <Input
-                  id="productBrand"
-                  value={currentProduct.brand}
-                  onChange={(e) =>
-                    setCurrentProduct({
-                      ...currentProduct,
-                      brand: e.target.value,
-                    })
-                  }
-                  className="bg-gray-800 border-gray-700"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="productImage">Product Image</Label>
-                <div className="grid gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="relative w-40 h-40 rounded-lg overflow-hidden bg-gray-800 border border-gray-700">
-                      {currentProduct.imageFile ? (
-                        <img
-                          src={URL.createObjectURL(currentProduct.imageFile)}
-                          alt="Product preview"
-                          className="w-full h-full object-cover"
-                        />
-                      ) : currentProduct.image ? (
-                        <img
-                          src={currentProduct.image}
-                          alt="Product preview"
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            ;(e.target as HTMLImageElement).src =
-                              '/placeholder.svg'
-                          }}
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center w-full h-full text-muted-foreground">
-                          <ImageIcon className="w-12 h-12" />
-                        </div>
-                      )}
-                    </div>
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-center gap-2">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="border-gray-700 flex-1"
-                          onClick={() =>
-                            document.getElementById('fileInput')?.click()
-                          }
-                        >
-                          <Upload className="w-4 h-4 mr-2" />
-                          Upload Image
-                        </Button>
-                        <input
-                          type="file"
-                          id="fileInput"
-                          accept="image/*"
-                          className="hidden"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0]
-                            if (file) {
-                              setCurrentProduct({
-                                ...currentProduct,
-                                imageFile: file,
-                                image: '', // Clear URL when file is selected
-                              })
-                            }
-                          }}
-                        />
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Or enter an image URL:
-                      </p>
-                      <Input
-                        value={currentProduct.image}
-                        onChange={(e) =>
-                          setCurrentProduct({
-                            ...currentProduct,
-                            image: e.target.value,
-                            imageFile: null, // Clear file when URL is entered
-                          })
-                        }
-                        placeholder="https://example.com/image.jpg"
-                        className="bg-gray-800 border-gray-700"
-                      />
-                    </div>
+          <CardContent>
+            <ScrollArea className="h-[70vh]">
+              <form onSubmit={handleSubmit} className="p-4 space-y-6">
+                {/* Product Details Section */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <Label htmlFor="name">Name</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      value={currentProduct.name}
+                      onChange={handleProductChange}
+                      className="bg-gray-800"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="brand">Brand</Label>
+                    <Input
+                      id="brand"
+                      name="brand"
+                      value={currentProduct.brand}
+                      onChange={handleProductChange}
+                      className="bg-gray-800"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="category">Category</Label>
+                    <Select
+                      value={currentProduct.category}
+                      onValueChange={(value) =>
+                        setCurrentProduct({
+                          ...currentProduct,
+                          category: value,
+                        })
+                      }
+                    >
+                      <SelectTrigger
+                        id="category"
+                        className="w-full bg-gray-800 border-gray-700"
+                      >
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-gray-800 border-gray-700">
+                        {CATEGORIES.filter((cat) => cat.id !== 'all').map(
+                          (category) => (
+                            <SelectItem key={category.id} value={category.name}>
+                              {category.name}
+                            </SelectItem>
+                          )
+                        )}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <Label htmlFor="price">Price (KES)</Label>
+                    <Input
+                      id="price"
+                      name="price"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={currentProduct.price}
+                      onChange={handleProductChange}
+                      className="bg-gray-800"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="count_in_stock">Stock</Label>
+                    <Input
+                      id="count_in_stock"
+                      name="count_in_stock"
+                      type="number"
+                      min="0"
+                      value={currentProduct.count_in_stock}
+                      onChange={handleProductChange}
+                      className="bg-gray-800"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="description">Description</Label>
+                    <Textarea
+                      id="description"
+                      name="description"
+                      value={currentProduct.description}
+                      onChange={handleProductChange}
+                      className="bg-gray-800"
+                      rows={6}
+                    />
                   </div>
                 </div>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() => setProductDialogOpen(false)}
-                className="border-gray-700"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                disabled={submitLoading}
-                className="bg-yellow-500 hover:bg-yellow-400 text-black"
-              >
-                {submitLoading ? 'Saving...' : isEditing ? 'Update' : 'Create'}
-              </Button>
-            </DialogFooter>
-          </form>
+
+                {/* Image Upload Section */}
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <Label>Main Image</Label>
+                    {mainImagePreview && (
+                      <div className="relative w-32 h-32">
+                        <img
+                          src={mainImagePreview}
+                          alt="Main preview"
+                          className="w-full h-full object-cover rounded-md"
+                        />
+                      </div>
+                    )}
+                    <Input
+                      type="file"
+                      onChange={handleMainImageChange}
+                      className="bg-gray-800"
+                      accept="image/*"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Additional Images</Label>
+                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                      {additionalImagePreviews.map((preview, index) => (
+                        <div key={index} className="relative w-32 h-32">
+                          <img
+                            src={preview}
+                            alt={`Preview ${index}`}
+                            className="w-full h-full object-cover rounded-md"
+                          />
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-1 right-1 h-6 w-6"
+                            onClick={() => removeAdditionalImage(index)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                    <Input
+                      type="file"
+                      multiple
+                      onChange={handleAdditionalImagesChange}
+                      className="bg-gray-800"
+                      accept="image/*"
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setProductDialogOpen(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" disabled={submitLoading}>
+                    {submitLoading ? 'Saving...' : 'Save Product'}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </ScrollArea>
+          </CardContent>
         </DialogContent>
       </Dialog>
 

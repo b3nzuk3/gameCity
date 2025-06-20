@@ -14,6 +14,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent } from '@/components/ui/card'
 import { ShoppingCart } from 'lucide-react'
 import ProductReviews from '@/components/ProductReviews'
+import SimilarProducts from '@/components/SimilarProducts'
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>()
@@ -123,6 +124,12 @@ const ProductPage = () => {
         </div>
       </div>
       <ProductReviews productId={product._id} reviews={product.reviews} />
+      {product.category && (
+        <SimilarProducts
+          category={product.category}
+          currentProductId={product._id}
+        />
+      )}
     </div>
   )
 }

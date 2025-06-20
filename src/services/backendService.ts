@@ -1,437 +1,185 @@
-import api from './api'
+import { toast } from '@/hooks/use-toast'
 
-// Backend API service for communicating with Node.js Express server
-const API_BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
 
-// Types
-export interface Product {
-  id: string
-  name: string
-  price: number
-  image: string
-  category?: string
-  description?: string
-  brand?: string
-  rating?: number
-  numReviews?: number
-  count_in_stock: number
-  hasMore: boolean
+// Type definitions
+export type AuthResponse = {
+  token: string
+  user: User
 }
 
-export interface User {
+export type Product = {
+  id: string
+  name: string
+  description?: string
+  price: number
+  category?: string
+  brand?: string
+  rating?: number
+  num_reviews?: number
+  count_in_stock?: number
+  image: string
+  images?: string[]
+  reviews?: any[] // Define a proper review type if needed
+}
+
+export type UploadsResponse = {
+  urls: string[]
+}
+
+export type User = {
   id: string
   name: string
   email: string
   isAdmin: boolean
-  createdAt?: Date
 }
 
-export interface AuthResponse {
-  user?: User
-  token?: string
-  message?: string
-}
-
-export interface Order {
+export type Order = {
   id: string
   user: User
-  orderItems: {
-    product: string
-    name: string
-    image: string
-    price: number
-    quantity: number
-  }[]
-  paymentMethod: string
-  itemsPrice: number
-  totalPrice: number
-  status: 'pending' | 'completed'
-  createdAt: Date
-  updatedAt: Date
+  order_items: any[] // Define a proper order item type
+  shipping_address: any // Define a proper shipping address type
+  payment_method: string
+  total_price: number
+  is_paid: boolean
+  paid_at?: string
+  is_delivered: boolean
+  delivered_at?: string
 }
 
-export interface HealthStatus {
+export type HealthStatus = {
   status: string
   database: string
   timestamp: string
 }
 
-export interface PaginatedProductsResponse {
-  products: Product[]
-  page: number
-  pages: number
-  total: number
-  hasMore: boolean
-}
+// Reusable request handler
+const handleRequest = async <T>(
+  method: 'GET' | 'POST' | 'PUT' | 'DELETE',
+  endpoint: string,
+  data?: any
+): Promise<T> => {
+  const token = localStorage.getItem('gamecity_token')
+  const headers: HeadersInit = {}
 
-// Helper function to get auth token
-const getAuthToken = (): string | null => {
-  return localStorage.getItem('gamecity_token')
-}
+  let body
 
-// Helper function to get auth headers
-const getAuthHeaders = (): HeadersInit => {
-  const token = getAuthToken()
-  return {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  // We don't set Content-Type for FormData, browser does it.
+  if (data instanceof FormData) {
+    body = data
+  } else if (data) {
+    headers['Content-Type'] = 'application/json'
+    body = JSON.stringify(data)
   }
-}
 
-// Helper function to handle API responses
-const handleResponse = async <T>(response: Response): Promise<T> => {
-  if (!response.ok) {
-    const error = await response.json()
-    throw new Error(error.error || 'API request failed')
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`
   }
-  const contentType = response.headers.get('content-type')
-  if (contentType && contentType.indexOf('application/json') !== -1) {
-    return response.json()
-  }
-  return response.text() as Promise<T>
-}
 
-// Health check
-export const checkHealth = async (): Promise<HealthStatus> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/health`)
-    return await handleResponse<HealthStatus>(response)
-  } catch (error) {
-    console.error('Health check failed:', error)
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method,
+      headers,
+      body,
+    })
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message || 'An unknown error occurred')
+    }
+
+    // Handle responses that don't have a body (like DELETE)
+    if (
+      response.status === 204 ||
+      response.headers.get('Content-Length') === '0'
+    ) {
+      return null as T
+    }
+
+    return response.json()
+  } catch (error: any) {
+    console.error(`API Error on ${method} ${endpoint}:`, error)
+    toast({
+      title: 'API Error',
+      description: error.message,
+      variant: 'destructive',
+    })
     throw error
   }
 }
 
-// Authentication API
-export const auth = {
-  login: async (email: string, password: string): Promise<AuthResponse> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await handleResponse<AuthResponse>(response)
-
-      // Store token in localStorage
-      if (data.token) {
-        localStorage.setItem('gamecity_token', data.token)
-      }
-
-      return data
-    } catch (error) {
-      console.error('Login failed:', error)
-      throw error
-    }
-  },
-
-  register: async (
-    name: string,
-    email: string,
-    password: string
-  ): Promise<AuthResponse> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
-      })
-      const data = await handleResponse<AuthResponse>(response)
-      // Do NOT store token on register
-      return data
-    } catch (error) {
-      console.error('Registration failed:', error)
-      throw error
-    }
-  },
-
-  getCurrentUser: async (): Promise<{ user: User }> => {
-    try {
-      const token = getAuthToken()
-      if (!token) {
-        throw new Error('No authentication token found')
-      }
-
-      const response = await fetch(`${API_BASE_URL}/auth/me`, {
-        headers: getAuthHeaders(),
-      })
-
-      return handleResponse<{ user: User }>(response)
-    } catch (error) {
-      console.error('Get current user failed:', error)
+const backendService = {
+  auth: {
+    login: (email: string, password: string): Promise<AuthResponse> =>
+      handleRequest<AuthResponse>('POST', '/auth/login', { email, password }),
+    register: (
+      name: string,
+      email: string,
+      password: string
+    ): Promise<AuthResponse> =>
+      handleRequest<AuthResponse>('POST', '/auth/register', {
+        name,
+        email,
+        password,
+      }),
+    getCurrentUser: (): Promise<{ user: User }> =>
+      handleRequest<{ user: User }>('GET', '/auth/me'),
+    resetPassword: (email: string): Promise<void> =>
+      handleRequest<void>('POST', '/auth/reset-password', { email }),
+    logout: () => {
       localStorage.removeItem('gamecity_token')
-      throw error
-    }
+    },
+  },
+  products: {
+    getAll: (): Promise<Product[]> =>
+      handleRequest<Product[]>('GET', '/products'),
+    getById: (id: string): Promise<Product> =>
+      handleRequest<Product>('GET', `/products/${id}`),
+    create: (productData: Omit<Product, 'id'>): Promise<Product> =>
+      handleRequest<Product>('POST', '/products', productData),
+    update: (
+      id: string | undefined,
+      productData: Partial<Product>
+    ): Promise<Product> => {
+      if (!id) throw new Error('Product ID is required for update')
+      return handleRequest<Product>('PUT', `/products/${id}`, productData)
+    },
+    delete: (id: string): Promise<void> =>
+      handleRequest<void>('DELETE', `/products/${id}`),
+    createReview: (
+      productId: string,
+      reviewData: { rating: number; comment: string }
+    ): Promise<Product> =>
+      handleRequest<Product>(
+        'POST',
+        `/products/${productId}/reviews`,
+        reviewData
+      ),
+    hasPurchased: (productId: string): Promise<{ hasPurchased: boolean }> =>
+      handleRequest<{ hasPurchased: boolean }>(
+        'GET',
+        `/products/${productId}/has-purchased`
+      ),
+  },
+  uploads: {
+    upload: (formData: FormData): Promise<UploadsResponse> =>
+      handleRequest<UploadsResponse>('POST', '/upload', formData),
+  },
+  users: {
+    getAll: (): Promise<User[]> => handleRequest<User[]>('GET', '/users'),
+    update: (id: string, userData: Partial<User>): Promise<User> =>
+      handleRequest<User>('PUT', `/users/${id}`, userData),
+    delete: (id: string): Promise<void> =>
+      handleRequest<void>('DELETE', `/users/${id}`),
+  },
+  orders: {
+    getAll: (): Promise<Order[]> => handleRequest<Order[]>('GET', '/orders'),
+    // Add other order-related calls here
   },
 
-  resetPassword: async (email: string): Promise<{ message: string }> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
-
-      return await handleResponse(response)
-    } catch (error) {
-      console.error('Password reset failed:', error)
-      throw error
-    }
-  },
-
-  logout: () => {
-    localStorage.removeItem('gamecity_token')
-  },
+  // Health check function
+  checkHealth: (): Promise<HealthStatus> =>
+    handleRequest<HealthStatus>('GET', '/health'),
 }
 
-// Products API
-export const products = {
-  getAll: async (
-    params: { category?: string; search?: string } = {}
-  ): Promise<PaginatedProductsResponse> => {
-    try {
-      const response = await api.get('/products', { params })
-      return response.data
-    } catch (error) {
-      console.error('Get all products failed:', error)
-      throw error
-    }
-  },
-
-  getById: async (id: string): Promise<Product> => {
-    try {
-      const response = await api.get(`/products/${id}`)
-      return response.data
-    } catch (error) {
-      console.error(`Get product ${id} failed:`, error)
-      throw error
-    }
-  },
-
-  create: async (
-    productData: Partial<Omit<Product, 'id'>>
-  ): Promise<Product> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/products`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(productData),
-      })
-
-      return await handleResponse<Product>(response)
-    } catch (error) {
-      console.error('Create product failed:', error)
-      throw error
-    }
-  },
-
-  update: async (
-    id: string,
-    productData: Partial<Product>
-  ): Promise<{ message: string }> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/products/${id}`, {
-        method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(productData),
-      })
-
-      return await handleResponse<{ message: string }>(response)
-    } catch (error) {
-      console.error('Update product failed:', error)
-      throw error
-    }
-  },
-
-  delete: async (id: string): Promise<{ message: string }> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/products/${id}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders(),
-      })
-
-      return await handleResponse<{ message: string }>(response)
-    } catch (error) {
-      console.error('Delete product failed:', error)
-      throw error
-    }
-  },
-}
-
-// Users API
-export const users = {
-  getAll: async (): Promise<User[]> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/users`, {
-        headers: getAuthHeaders(),
-      })
-
-      return await handleResponse<User[]>(response)
-    } catch (error) {
-      console.error('Get users failed:', error)
-      throw error
-    }
-  },
-
-  getById: async (id: string): Promise<User> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/users/${id}`, {
-        headers: getAuthHeaders(),
-      })
-
-      return await handleResponse<User>(response)
-    } catch (error) {
-      console.error('Get user failed:', error)
-      throw error
-    }
-  },
-
-  update: async (userId: string, data: Partial<User>): Promise<User> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/users/profile`, {
-        method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(data),
-      })
-
-      return await handleResponse<User>(response)
-    } catch (error) {
-      console.error('Update user failed:', error)
-      throw error
-    }
-  },
-
-  updatePassword: async (
-    id: string,
-    currentPassword: string,
-    newPassword: string
-  ): Promise<{ message: string }> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/users/${id}/password`, {
-        method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ currentPassword, newPassword }),
-      })
-
-      return await handleResponse<{ message: string }>(response)
-    } catch (error) {
-      console.error('Update password failed:', error)
-      throw error
-    }
-  },
-
-  delete: async (id: string): Promise<{ message: string }> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/users/${id}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders(),
-      })
-
-      return await handleResponse<{ message: string }>(response)
-    } catch (error) {
-      console.error('Delete user failed:', error)
-      throw error
-    }
-  },
-}
-
-// Upload API
-export const upload = {
-  uploadImage: async (
-    file: File
-  ): Promise<{ url: string; public_id: string }> => {
-    try {
-      const formData = new FormData()
-      formData.append('image', file)
-
-      const headers = getAuthHeaders()
-      const response = await fetch(`${API_BASE_URL}/upload`, {
-        method: 'POST',
-        headers: {
-          Authorization: headers['Authorization'] || '',
-        },
-        body: formData,
-      })
-
-      return handleResponse(response)
-    } catch (error) {
-      console.error('Upload failed:', error)
-      throw error
-    }
-  },
-}
-
-// Orders API
-export const orders = {
-  getAll: async (): Promise<Order[]> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/orders`, {
-        headers: getAuthHeaders(),
-      })
-      return handleResponse<Order[]>(response)
-    } catch (error) {
-      console.error('Get orders failed:', error)
-      throw error
-    }
-  },
-
-  create: async (orderData: {
-    orderItems: any[]
-    paymentMethod: string
-    itemsPrice: number
-    totalPrice: number
-  }): Promise<Order> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/orders`, {
-        method: 'POST',
-        headers: getAuthHeaders(),
-        body: JSON.stringify(orderData),
-      })
-      return handleResponse<Order>(response)
-    } catch (error) {
-      console.error('Create order failed:', error)
-      throw error
-    }
-  },
-
-  updateStatus: async (
-    id: string,
-    status: 'pending' | 'completed'
-  ): Promise<Order> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/orders/${id}/status`, {
-        method: 'PUT',
-        headers: getAuthHeaders(),
-        body: JSON.stringify({ status }),
-      })
-      return handleResponse<Order>(response)
-    } catch (error) {
-      console.error('Update order status failed:', error)
-      throw error
-    }
-  },
-
-  delete: async (id: string): Promise<{ message: string }> => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/orders/${id}`, {
-        method: 'DELETE',
-        headers: getAuthHeaders(),
-      })
-      return handleResponse<{ message: string }>(response)
-    } catch (error) {
-      console.error('Delete order failed:', error)
-      throw error
-    }
-  },
-}
-
-// Export all services
-export default {
-  auth,
-  products,
-  users,
-  upload,
-  orders,
-}
+export default backendService

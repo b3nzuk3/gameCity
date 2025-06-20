@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { checkHealth } from '@/services/backendService'
+import backendService from '@/services/backendService'
 import { useAuth } from '@/contexts/AuthContext'
 import {
   Database,
@@ -31,7 +31,7 @@ const DebugInfo = () => {
     setError(null)
 
     try {
-      const health = await checkHealth()
+      const health = await backendService.checkHealth()
       setHealthStatus(health)
       console.log('Backend health check:', health)
     } catch (err) {
