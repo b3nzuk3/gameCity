@@ -148,15 +148,41 @@ const ProductPage = () => {
             <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
             <p className="text-2xl font-semibold text-yellow-400 mb-4">
               {formatKESPrice(product.price)}
+              <span className="text-base text-muted-foreground ml-2 align-middle">
+                ex VAT
+              </span>
             </p>
 
-            <div className="mb-6">
-              <h3 className="font-semibold text-lg mb-2">Specifications</h3>
-              <div
-                className="prose prose-sm md:prose-base prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: product.description }}
-              />
-            </div>
+            {/* Specifications Section */}
+            {product.specifications &&
+              Object.keys(product.specifications).length > 0 && (
+                <div className="mb-8">
+                  <h3 className="font-semibold text-lg mb-2">Specifications</h3>
+                  <table className="w-full text-sm mb-4">
+                    <tbody>
+                      {Object.entries(product.specifications).map(
+                        ([key, value]) => (
+                          <tr key={key}>
+                            <td className="font-medium pr-4 py-1">{key}</td>
+                            <td className="py-1">{value}</td>
+                          </tr>
+                        )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            {/* Description Section */}
+            {product.description && (
+              <div className="mt-8">
+                <h4 className="font-semibold text-lg mb-2">
+                  Product Description
+                </h4>
+                <div className="prose prose-sm md:prose-base prose-invert max-w-none">
+                  {product.description}
+                </div>
+              </div>
+            )}
 
             <p className="text-sm text-muted-foreground mb-4 mt-4">
               Availability:{' '}

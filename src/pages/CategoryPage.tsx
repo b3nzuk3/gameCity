@@ -31,8 +31,25 @@ const CATEGORIES = [
   { id: 'cases', name: 'Cases' },
   { id: 'power-supply', name: 'Power Supply' },
   { id: 'gaming-pc', name: 'Gaming PC' },
+  { id: 'cpu-cooling', name: 'CPU Cooling' },
   { id: 'accessories', name: 'Accessories' },
 ]
+
+// Add this mapping from slug to display name
+const CATEGORY_SLUG_TO_NAME: Record<string, string> = {
+  monitors: 'Monitors',
+  'graphics-cards': 'Graphics Cards',
+  memory: 'Memory',
+  processors: 'Processors',
+  storage: 'Storage',
+  motherboards: 'Motherboards',
+  cases: 'Cases',
+  'power-supply': 'Power Supply',
+  'gaming-pc': 'Gaming PC',
+  'cpu-cooling': 'CPU Cooling',
+  accessories: 'Accessories',
+  all: 'All Products',
+}
 
 // Helper function to normalize category names
 const normalizeCategory = (category: string): string => {
@@ -109,46 +126,71 @@ const CategoryPage = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true)
-        console.log('CategoryPage: Current category from URL:', category)
-        const data = await backendService.products.getAll({
-          category: category === 'all' ? undefined : category,
-        })
-        console.log('CategoryPage: Products from backend:', data)
-
+        // Always fetch all products, filter on frontend for robust matching
+        const data = await backendService.products.getAll()
         setProducts(data.products)
-        setFilteredProducts(data.products)
+        // Filter by category if not 'all'
+        const selectedCategory = CATEGORY_SLUG_TO_NAME[category ?? 'all']
+        // Debug log: print product categories and selected category
+        console.log('Selected category:', selectedCategory)
+        data.products.forEach((product) => {
+          console.log('Product:', product.name, '| Category:', product.category)
+        })
+        const filtered =
+          !category || category === 'all'
+            ? data.products
+            : data.products.filter(
+                (product) =>
+                  normalizeCategory(product.category || '') ===
+                  normalizeCategory(selectedCategory)
+              )
+        setFilteredProducts(filtered)
       } catch (error) {
         console.error('CategoryPage: Error fetching products:', error)
       } finally {
         setLoading(false)
       }
     }
-
     fetchProducts()
   }, [category])
 
   useEffect(() => {
     let filtered = [...products]
 
-    // Apply stock filters
-    if (filterBy === 'in-stock') {
-      filtered = filtered.filter((product) => product.count_in_stock > 0)
-    } else if (filterBy === 'low-stock') {
+    // 1. Category filter (always apply first)
+    const selectedCategory = CATEGORY_SLUG_TO_NAME[category ?? 'all']
+    if (category && category !== 'all') {
       filtered = filtered.filter(
-        (product) => product.count_in_stock <= 5 && product.count_in_stock > 0
+        (product) =>
+          normalizeCategory(product.category || '') ===
+          normalizeCategory(selectedCategory)
       )
-    } else if (filterBy === 'out-of-stock') {
-      filtered = filtered.filter((product) => product.count_in_stock === 0)
     }
 
-    // Apply brand filter
+    // 2. Stock filters
+    if (filterBy === 'in-stock') {
+      filtered = filtered.filter(
+        (product) => (product.countInStock ?? product.count_in_stock ?? 0) > 0
+      )
+    } else if (filterBy === 'low-stock') {
+      filtered = filtered.filter((product) => {
+        const stock = product.countInStock ?? product.count_in_stock ?? 0
+        return stock <= 5 && stock > 0
+      })
+    } else if (filterBy === 'out-of-stock') {
+      filtered = filtered.filter(
+        (product) => (product.countInStock ?? product.count_in_stock ?? 0) === 0
+      )
+    }
+
+    // 3. Brand filter
     if (selectedBrands.length > 0) {
       filtered = filtered.filter((product) =>
         selectedBrands.includes(product.brand || '')
       )
     }
 
-    // Apply price range filter only if active
+    // 4. Price range filter only if active
     if (
       priceFilterActive &&
       (priceRange[0] !== null || priceRange[1] !== null)
@@ -160,7 +202,7 @@ const CategoryPage = () => {
       )
     }
 
-    // Apply sorting
+    // 5. Sorting
     switch (sortBy) {
       case 'name':
         filtered.sort((a, b) => a.name.localeCompare(b.name))
@@ -186,6 +228,7 @@ const CategoryPage = () => {
     selectedBrands,
     priceRange,
     priceFilterActive,
+    category,
   ])
 
   const handleAddToCart = (product: Product) => {

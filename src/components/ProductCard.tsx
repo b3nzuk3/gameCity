@@ -69,88 +69,91 @@ const ProductCard = ({ product }: ProductProps) => {
   const isProductFavorite = isFavorite(product.id)
 
   return (
-    <Card className="bg-gray-900 border-gray-700 overflow-hidden hover:border-yellow-500/50 transition-colors group">
-      <div className="relative aspect-square overflow-hidden">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          onError={(e) => {
-            ;(e.target as HTMLImageElement).src = '/placeholder.svg'
-          }}
-        />
-        <Button
-          variant="ghost"
-          size="icon"
-          className={`absolute top-2 right-2 h-8 w-8 bg-black/50 hover:bg-black/70 text-white ${
-            isProductFavorite ? 'text-red-400' : 'hover:text-red-400'
-          }`}
-          onClick={handleToggleFavorite}
-        >
-          <Heart
-            className={`h-4 w-4 ${isProductFavorite ? 'fill-current' : ''}`}
+    <Link
+      to={`/product/${product.id}`}
+      tabIndex={0}
+      role="button"
+      className="block focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-lg"
+      style={{ textDecoration: 'none', color: 'inherit' }}
+    >
+      <Card className="bg-gray-900 border-gray-700 overflow-hidden hover:border-yellow-500/50 transition-colors group cursor-pointer">
+        <div className="relative aspect-square overflow-hidden">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            onError={(e) => {
+              ;(e.target as HTMLImageElement).src = '/placeholder.svg'
+            }}
           />
-        </Button>
-      </div>
-      <CardContent className="p-4">
-        <h3 className="font-medium mb-1 line-clamp-1">{product.name}</h3>
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`absolute top-2 right-2 h-8 w-8 bg-black/50 hover:bg-black/70 text-white ${
+              isProductFavorite ? 'text-red-400' : 'hover:text-red-400'
+            }`}
+            onClick={handleToggleFavorite}
+          >
+            <Heart
+              className={`h-4 w-4 ${isProductFavorite ? 'fill-current' : ''}`}
+            />
+          </Button>
+        </div>
+        <CardContent className="p-4">
+          <h3 className="font-medium mb-1 line-clamp-1">{product.name}</h3>
 
-        <div className="flex items-center mb-2">
-          {product.rating > 0 ? (
-            <>
-              {renderStars(product.rating)}
-              <span className="text-xs text-muted-foreground ml-2">
-                ({product.numReviews || 0} reviews)
+          <div className="flex items-center mb-2">
+            {product.rating > 0 ? (
+              <>
+                {renderStars(product.rating)}
+                <span className="text-xs text-muted-foreground ml-2">
+                  ({product.numReviews || 0} reviews)
+                </span>
+              </>
+            ) : (
+              <div className="h-4 text-xs text-muted-foreground">
+                No reviews yet
+              </div>
+            )}
+          </div>
+
+          <div className="flex flex-col gap-0.5 justify-between items-start mb-1">
+            <span className="text-lg font-bold text-yellow-400">
+              {formatKESPrice(product.price)}
+              <span className="text-xs text-muted-foreground ml-2 align-middle">
+                ex VAT
               </span>
-            </>
-          ) : (
-            <div className="h-4 text-xs text-muted-foreground">
-              No reviews yet
-            </div>
-          )}
-        </div>
-
-        <div className="flex justify-between items-center">
-          <span className="text-lg font-bold text-yellow-400">
-            {formatKESPrice(product.price)}
-          </span>
-        </div>
-        <div className="text-sm text-muted-foreground mt-1">
-          Stock:{' '}
-          {product.count_in_stock ?? product.countInStock ?? product.stock ?? 0}
-        </div>
-      </CardContent>
-      <CardFooter className="p-4 pt-0 flex justify-between gap-2">
-        <Link to={`/product/${product.id}`} className="flex-1">
+            </span>
+          </div>
+          <div className="text-sm text-muted-foreground mt-1">
+            Stock: {product.countInStock ?? 0}
+          </div>
+        </CardContent>
+        <CardFooter className="p-4 pt-0 flex justify-between gap-2">
           <Button
             variant="outline"
             size="sm"
             className="w-full border-gray-700 text-muted-foreground hover:text-foreground"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              window.location.href = `/product/${product.id}`
+            }}
           >
             Details
           </Button>
-        </Link>
-        <Button
-          size="sm"
-          className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black"
-          onClick={handleAddToCart}
-          disabled={
-            (product.count_in_stock ??
-              product.countInStock ??
-              product.stock ??
-              0) === 0
-          }
-        >
-          <ShoppingCart size={14} className="mr-1" />
-          {(product.count_in_stock ??
-            product.countInStock ??
-            product.stock ??
-            0) === 0
-            ? 'Out of Stock'
-            : 'Add'}
-        </Button>
-      </CardFooter>
-    </Card>
+          <Button
+            size="sm"
+            className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black"
+            onClick={handleAddToCart}
+            disabled={(product.countInStock ?? 0) === 0}
+          >
+            <ShoppingCart size={14} className="mr-1" />
+            {(product.countInStock ?? 0) === 0 ? 'Out of Stock' : 'Add'}
+          </Button>
+        </CardFooter>
+      </Card>
+    </Link>
   )
 }
 

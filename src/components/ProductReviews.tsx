@@ -80,7 +80,9 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId }) => {
             title: 'Review Submitted!',
             description: 'Thank you for your feedback.',
           })
-          refetch()
+          queryClient.invalidateQueries({
+            queryKey: ['productReviews', productId],
+          })
           form.reset()
         },
         onError: (error: any) => {

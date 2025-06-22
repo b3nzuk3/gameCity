@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
@@ -21,6 +21,7 @@ const FeaturedProducts = () => {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const { addToCart } = useCart()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -118,98 +119,107 @@ const FeaturedProducts = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((product) => (
-            <Link
-              to={`/product/${product.id}`}
+            <Card
               key={product.id}
-              className="group"
+              className="bg-gray-800 border-gray-700 h-full flex flex-col group-hover:border-yellow-500/50 transition-colors cursor-pointer"
+              onClick={() => navigate(`/product/${product.id}`)}
+              tabIndex={0}
+              role="button"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ')
+                  navigate(`/product/${product.id}`)
+              }}
             >
-              <Card className="bg-gray-800 border-gray-700 h-full flex flex-col group-hover:border-yellow-500/50 transition-colors">
-                <CardContent className="p-4 flex flex-col flex-grow">
-                  <div className="aspect-square relative mb-4 overflow-hidden rounded-md bg-gray-700">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      onError={(e) => {
-                        ;(e.target as HTMLImageElement).src = '/placeholder.svg'
-                      }}
-                    />
-                    {product.count_in_stock <= 5 &&
-                      product.count_in_stock > 0 && (
-                        <Badge
-                          variant="destructive"
-                          className="absolute top-2 right-2 text-xs"
-                        >
-                          Low Stock
-                        </Badge>
-                      )}
-                    {product.count_in_stock === 0 && (
+              <CardContent className="p-4 flex flex-col flex-grow">
+                <div className="aspect-square relative mb-4 overflow-hidden rounded-md bg-gray-700">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      ;(e.target as HTMLImageElement).src = '/placeholder.svg'
+                    }}
+                  />
+                  {product.count_in_stock <= 5 &&
+                    product.count_in_stock > 0 && (
                       <Badge
-                        variant="secondary"
-                        className="absolute top-2 right-2 text-xs bg-gray-600"
+                        variant="destructive"
+                        className="absolute top-2 right-2 text-xs"
                       >
-                        Out of Stock
+                        Low Stock
                       </Badge>
                     )}
-                  </div>
+                  {product.count_in_stock === 0 && (
+                    <Badge
+                      variant="secondary"
+                      className="absolute top-2 right-2 text-xs bg-gray-600"
+                    >
+                      Out of Stock
+                    </Badge>
+                  )}
+                </div>
 
-                  <div className="space-y-2 flex flex-col flex-grow">
-                    <h3 className="font-semibold text-sm line-clamp-2 text-white group-hover:text-yellow-400 transition-colors">
-                      {product.name}
-                    </h3>
+                <div className="space-y-2 flex flex-col flex-grow">
+                  <h3 className="font-semibold text-sm line-clamp-2 text-white group-hover:text-yellow-400 transition-colors">
+                    {product.name}
+                  </h3>
 
-                    {product.category && (
-                      <p className="text-xs text-muted-foreground">
-                        {product.category}
-                      </p>
+                  {product.category && (
+                    <p className="text-xs text-muted-foreground">
+                      {product.category}
+                    </p>
+                  )}
+
+                  <div className="flex-grow" />
+
+                  <div className="flex items-center mb-2">
+                    {product.rating > 0 ? (
+                      <>
+                        {renderStars(product.rating)}
+                        <span className="text-xs text-muted-foreground ml-2">
+                          ({product.numReviews ?? product.num_reviews ?? 0})
+                        </span>
+                      </>
+                    ) : (
+                      <div className="h-4" /> // Placeholder for alignment
                     )}
-
-                    <div className="flex-grow" />
-
-                    <div className="flex items-center mb-2">
-                      {product.rating > 0 ? (
-                        <>
-                          {renderStars(product.rating)}
-                          <span className="text-xs text-muted-foreground ml-2">
-                            ({product.numReviews || 0})
-                          </span>
-                        </>
-                      ) : (
-                        <div className="h-4" /> // Placeholder for alignment
-                      )}
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <span className="text-lg font-bold text-yellow-400">
-                        {formatKESPrice(product.price)}
-                      </span>
-                    </div>
-
-                    <div className="flex gap-2 pt-2">
-                      <Button
-                        onClick={(e) => handleAddToCart(e, product)}
-                        disabled={product.count_in_stock === 0}
-                        className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black text-xs"
-                        size="sm"
-                      >
-                        {product.count_in_stock === 0
-                          ? 'Out of Stock'
-                          : 'Add to Cart'}
-                      </Button>
-
-                      <Button
-                        asChild
-                        variant="outline"
-                        className="border-gray-600 text-muted-foreground hover:text-white text-xs"
-                        size="sm"
-                      >
-                        <Link to={`/product/${product.id}`}>View</Link>
-                      </Button>
-                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            </Link>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-lg font-bold text-yellow-400">
+                      {formatKESPrice(product.price)}
+                      <span className="text-xs text-muted-foreground ml-2 align-middle">
+                        ex VAT
+                      </span>
+                    </span>
+                  </div>
+
+                  <div className="flex gap-2 pt-2">
+                    <Button
+                      onClick={(e) => handleAddToCart(e, product)}
+                      disabled={product.count_in_stock === 0}
+                      className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black text-xs"
+                      size="sm"
+                    >
+                      {product.count_in_stock === 0
+                        ? 'Out of Stock'
+                        : 'Add to Cart'}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="border-gray-600 text-muted-foreground hover:text-white text-xs"
+                      size="sm"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        navigate(`/product/${product.id}`)
+                      }}
+                    >
+                      View
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
 

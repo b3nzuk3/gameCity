@@ -10,7 +10,7 @@ import axios from 'axios'
 import backendService from './backendService'
 
 const api = axios.create({
-  baseURL: 'https://gamecity-backend-i2sy.onrender.com/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -50,6 +50,7 @@ export type Product = {
     comment: string
     createdAt: string
   }[]
+  specifications?: Record<string, string>
 }
 
 export type ProductsResponse = {

@@ -23,11 +23,8 @@ import {
 } from '@/components/ui/select'
 import { toast } from '@/hooks/use-toast'
 import { useAuth } from '@/contexts/AuthContext'
-import backendService, {
-  type Product,
-  type User,
-  type Order,
-} from '@/services/backendService'
+import backendService from '@/services/backendService'
+import type { Product, User, Order } from '@/services/backendService'
 import {
   Package,
   ShoppingCart,
@@ -63,8 +60,95 @@ const CATEGORIES = [
   { id: 'cases', name: 'Cases' },
   { id: 'power-supply', name: 'Power Supply' },
   { id: 'gaming-pc', name: 'Gaming PC' },
+  { id: 'cpu-cooling', name: 'CPU Cooling' },
   { id: 'accessories', name: 'Accessories' },
 ]
+
+const CATEGORY_SPECS: Record<string, string[]> = {
+  Processors: [
+    'CPU Model',
+    'CPU Speed',
+    'CPU Cores',
+    'CPU Threads',
+    'CPU Socket',
+  ],
+  Monitors: [
+    'Screen Size',
+    'Resolution',
+    'Aspect Ratio',
+    'Refresh Rate',
+    'Screen Surface Description',
+  ],
+  'Graphics Cards': [
+    'Graphics Coprocessor',
+    'Graphics RAM Size',
+    'GPU Clock Speed',
+    'Video Output Interface',
+  ],
+  Memory: [
+    'Computer Memory Size',
+    'RAM Memory Technology',
+    'Memory Speed',
+    'Compatible Devices',
+  ],
+  Storage: [
+    'Digital Storage Capacity',
+    'Hard Disk Interface',
+    'Connectivity Technology',
+    'Special Feature',
+    'Hard Disk Form Factor',
+    'Hard Disk Description',
+    'Compatible Devices',
+    'Installation Type',
+  ],
+  Motherboards: [
+    'CPU Socket',
+    'Compatible Devices',
+    'RAM Memory Technology',
+    'Compatible Processors',
+    'Chipset Type',
+    'Memory Clock Speed',
+    'Platform',
+    'Model Name',
+  ],
+  'Power Supply': [
+    'Model Name',
+    'Compatible Devices',
+    'Connector Type',
+    'Output Wattage',
+    'Form Factor',
+    'Wattage',
+    'Cooling Method',
+    'Item Weight',
+  ],
+  Cases: [
+    'Motherboard Compatibility',
+    'Case Type',
+    'Material',
+    'Power Supply Mounting Type',
+    'Cooling Method',
+    'Model Name',
+    'Item Weight',
+  ],
+  'Gaming PC': [
+    'Operating System',
+    'CPU Model',
+    'CPU Speed',
+    'Cache Size',
+    'Graphics Card Description',
+    'Memory Storage Capacity',
+    'Memory Slots Available',
+    'Specific Uses For Product',
+  ],
+  'CPU Cooling': [
+    'Power Connector Type',
+    'Voltage',
+    'Wattage',
+    'Cooling Method',
+    'Compatible Devices',
+    'Maximum Rotational Speed',
+  ],
+}
 
 type ProductFormData = {
   id?: string
@@ -72,7 +156,7 @@ type ProductFormData = {
   description: string
   price: number
   category: string
-  count_in_stock: number
+  countInStock: number
   brand: string
   image: string
   images: string[]
@@ -84,6 +168,8 @@ type UserFormData = {
   email: string
   isAdmin: boolean
 }
+
+type ProductWithSpecs = Product & { specifications?: Record<string, string> }
 
 const Admin = () => {
   const navigate = useNavigate()
@@ -121,7 +207,7 @@ const Admin = () => {
     description: '',
     price: 0,
     category: '',
-    count_in_stock: 0,
+    countInStock: 0,
     brand: '',
     image: '',
     images: [],
@@ -147,10 +233,27 @@ const Admin = () => {
   // Settings
   const [storeSettings, setStoreSettings] = useState({
     name: 'Gamecity',
-    email: 'support@gamecity.com',
-    phone: '+1 (555) 123-4567',
+    email: 'gamecityelectronics@gmail.com',
+    phone: '0712248706',
     currency: 'KES',
   })
+
+  // Add to Admin component state:
+  const [specifications, setSpecifications] = useState<Record<string, string>>(
+    {}
+  )
+
+  // Add this effect to reset specifications when category changes:
+  useEffect(() => {
+    if (!isEditing) {
+      setSpecifications({})
+    }
+  }, [currentProduct.category, isEditing])
+
+  // Add this handler:
+  const handleSpecificationChange = (key: string, value: string) => {
+    setSpecifications((prev) => ({ ...prev, [key]: value }))
+  }
 
   // Authentication and authorization check
   useEffect(() => {
@@ -188,9 +291,9 @@ const Admin = () => {
     setProductsLoading(true)
     try {
       const data = await backendService.products.getAll()
-      const normalized = (data.products || []).map((p) => ({
+      const normalized = (data.products || []).map((p: Product) => ({
         ...p,
-        count_in_stock: p.count_in_stock ?? 0,
+        countInStock: p.countInStock ?? p.count_in_stock ?? 0,
       }))
       setProducts(normalized)
       console.log('Admin: Loaded products:', normalized.length)
@@ -302,7 +405,7 @@ const Admin = () => {
       description: '',
       price: 0,
       category: '',
-      count_in_stock: 0,
+      countInStock: 0,
       brand: '',
       image: '',
       images: [],
@@ -313,9 +416,11 @@ const Admin = () => {
     setMainImagePreview('')
     setAdditionalImagePreviews([])
     setProductDialogOpen(true)
+    // Reset specifications
+    setSpecifications({})
   }
 
-  const handleEditProduct = (product: Product) => {
+  const handleEditProduct = (product: ProductWithSpecs) => {
     setIsEditing(true)
     setCurrentProduct({
       id: product.id,
@@ -323,17 +428,24 @@ const Admin = () => {
       description: product.description || '',
       price: product.price,
       category: product.category || '',
-      count_in_stock: product.count_in_stock || 0,
+      countInStock: product.countInStock ?? product.count_in_stock ?? 0,
       brand: product.brand || '',
       image: product.image,
       images: product.images || [],
     })
-    // Set previews for existing images, but clear file inputs
     setMainImagePreview(product.image)
     setAdditionalImagePreviews(product.images || [])
     setMainImageFile(null)
     setAdditionalImageFiles([])
-    setProductDialogOpen(true)
+    // Robustly map existing specs to expected keys for the selected category
+    const expectedSpecs = CATEGORY_SPECS[product.category || ''] || []
+    const mappedSpecs: Record<string, string> = {}
+    const productSpecs = product.specifications || {}
+    expectedSpecs.forEach((key) => {
+      mappedSpecs[key] = productSpecs[key] || ''
+    })
+    setSpecifications(mappedSpecs)
+    setTimeout(() => setProductDialogOpen(true), 0)
   }
 
   const handleDeleteProduct = (product: Product) => {
@@ -363,10 +475,11 @@ const Admin = () => {
     const { name, value, type } = e.target
     const newValue =
       type === 'number' ? (value === '' ? '' : parseFloat(value)) : value
-
+    // Map 'count_in_stock' input to 'countInStock' in state
+    const mappedName = name === 'count_in_stock' ? 'countInStock' : name
     setCurrentProduct((prev) => ({
       ...prev,
-      [name]: newValue,
+      [mappedName]: newValue,
     }))
   }
 
@@ -410,6 +523,7 @@ const Admin = () => {
         ...currentProduct,
         image: mainImageUrl,
         images: finalAdditionalImageUrls,
+        specifications,
       }
 
       if (isEditing) {
@@ -984,7 +1098,7 @@ const Admin = () => {
                                 <span className="font-medium">Items:</span>
                                 <ul className="ml-4 list-disc text-sm">
                                   {(order.order_items || []).map((item, i) => (
-                                    <li key={i}>
+                                    <li key={item.product || item._id || i}>
                                       {(item.product as Product)?.name ||
                                         item.name}{' '}
                                       x {item.quantity} @{' '}
@@ -1129,162 +1243,194 @@ const Admin = () => {
           </DialogHeader>
           <CardContent>
             <ScrollArea className="h-[70vh]">
-              <form onSubmit={handleSubmit} className="p-4 space-y-6">
-                {/* Product Details Section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <Label htmlFor="name">Name</Label>
-                    <Input
-                      id="name"
-                      name="name"
-                      value={currentProduct.name}
-                      onChange={handleProductChange}
-                      className="bg-gray-800"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="brand">Brand</Label>
-                    <Combobox
-                      options={brands}
-                      value={currentProduct.brand}
-                      onChange={handleBrandChange}
-                      placeholder="Select a brand..."
-                      searchPlaceholder="Search brands or create new..."
-                      emptyPlaceholder="No brand found."
-                      allowCreation
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="category">Category</Label>
-                    <Select
-                      value={currentProduct.category}
-                      onValueChange={(value) =>
-                        setCurrentProduct({
-                          ...currentProduct,
-                          category: value,
-                        })
-                      }
-                    >
-                      <SelectTrigger
-                        id="category"
-                        className="w-full bg-gray-800 border-gray-700"
+              {currentProduct && currentProduct.name ? (
+                <form onSubmit={handleSubmit} className="p-4 space-y-6">
+                  {/* Product Details Section */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <Label htmlFor="name">Name</Label>
+                      <Input
+                        id="name"
+                        name="name"
+                        value={currentProduct.name}
+                        onChange={handleProductChange}
+                        className="bg-gray-800"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="brand">Brand</Label>
+                      <Combobox
+                        options={brands}
+                        value={currentProduct.brand}
+                        onChange={handleBrandChange}
+                        placeholder="Select a brand..."
+                        searchPlaceholder="Search brands or create new..."
+                        emptyPlaceholder="No brand found."
+                        allowCreation
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="category">Category</Label>
+                      <Select
+                        value={currentProduct.category}
+                        onValueChange={(value) =>
+                          setCurrentProduct({
+                            ...currentProduct,
+                            category: value,
+                          })
+                        }
                       >
-                        <SelectValue placeholder="Select a category" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-gray-800 border-gray-700">
-                        {CATEGORIES.filter((cat) => cat.id !== 'all').map(
-                          (category) => (
-                            <SelectItem key={category.id} value={category.name}>
-                              {category.name}
-                            </SelectItem>
-                          )
-                        )}
-                      </SelectContent>
-                    </Select>
+                        <SelectTrigger
+                          id="category"
+                          className="w-full bg-gray-800 border-gray-700"
+                        >
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-gray-800 border-gray-700">
+                          {CATEGORIES.filter((cat) => cat.id !== 'all').map(
+                            (category) => (
+                              <SelectItem
+                                key={category.id}
+                                value={category.name}
+                              >
+                                {category.name}
+                              </SelectItem>
+                            )
+                          )}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <Label htmlFor="price">Price (KES)</Label>
+                      <Input
+                        id="price"
+                        name="price"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={currentProduct.price}
+                        onChange={handleProductChange}
+                        className="bg-gray-800"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="countInStock">Stock</Label>
+                      <Input
+                        id="countInStock"
+                        name="countInStock"
+                        type="number"
+                        min="0"
+                        value={currentProduct.countInStock}
+                        onChange={handleProductChange}
+                        className="bg-gray-800"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="description">Description</Label>
+                      <Textarea
+                        id="description"
+                        name="description"
+                        value={currentProduct.description}
+                        onChange={handleProductChange}
+                        className="bg-gray-800"
+                        rows={6}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <Label htmlFor="price">Price (KES)</Label>
-                    <Input
-                      id="price"
-                      name="price"
-                      type="number"
-                      min="0"
-                      step="0.01"
-                      value={currentProduct.price}
-                      onChange={handleProductChange}
-                      className="bg-gray-800"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="count_in_stock">Stock</Label>
-                    <Input
-                      id="count_in_stock"
-                      name="count_in_stock"
-                      type="number"
-                      min="0"
-                      value={currentProduct.count_in_stock}
-                      onChange={handleProductChange}
-                      className="bg-gray-800"
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="description">Description</Label>
-                    <Textarea
-                      id="description"
-                      name="description"
-                      value={currentProduct.description}
-                      onChange={handleProductChange}
-                      className="bg-gray-800"
-                      rows={6}
-                    />
-                  </div>
-                </div>
 
-                {/* Image Upload Section */}
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Main Image</Label>
-                    {mainImagePreview && (
-                      <div className="relative w-32 h-32">
-                        <img
-                          src={mainImagePreview}
-                          alt="Main preview"
-                          className="w-full h-full object-cover rounded-md"
-                        />
+                  {/* Specifications Section */}
+                  {CATEGORY_SPECS[currentProduct.category]?.length > 0 && (
+                    <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="md:col-span-2">
+                        <h4 className="font-semibold mb-2">Specifications</h4>
                       </div>
-                    )}
-                    <Input
-                      type="file"
-                      onChange={handleMainImageChange}
-                      className="bg-gray-800"
-                      accept="image/*"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Additional Images</Label>
-                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
-                      {additionalImagePreviews.map((preview, index) => (
-                        <div key={index} className="relative w-32 h-32">
-                          <img
-                            src={preview}
-                            alt={`Preview ${index}`}
-                            className="w-full h-full object-cover rounded-md"
+                      {CATEGORY_SPECS[currentProduct.category]?.map((spec) => (
+                        <div key={spec}>
+                          <Label htmlFor={`spec-${spec}`}>{spec}</Label>
+                          <Input
+                            id={`spec-${spec}`}
+                            name={spec}
+                            value={specifications[spec] || ''}
+                            onChange={(e) =>
+                              handleSpecificationChange(spec, e.target.value)
+                            }
+                            className="bg-gray-800"
                           />
-                          <Button
-                            type="button"
-                            variant="destructive"
-                            size="icon"
-                            className="absolute top-1 right-1 h-6 w-6"
-                            onClick={() => removeAdditionalImage(index)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
                         </div>
                       ))}
                     </div>
-                    <Input
-                      type="file"
-                      multiple
-                      onChange={handleAdditionalImagesChange}
-                      className="bg-gray-800"
-                      accept="image/*"
-                    />
+                  )}
+
+                  {/* Image Upload Section */}
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>Main Image</Label>
+                      {mainImagePreview && (
+                        <div className="relative w-32 h-32">
+                          <img
+                            src={mainImagePreview}
+                            alt="Main preview"
+                            className="w-full h-full object-cover rounded-md"
+                          />
+                        </div>
+                      )}
+                      <Input
+                        type="file"
+                        onChange={handleMainImageChange}
+                        className="bg-gray-800"
+                        accept="image/*"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Additional Images</Label>
+                      <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2">
+                        {additionalImagePreviews.map((preview, index) => (
+                          <div key={index} className="relative w-32 h-32">
+                            <img
+                              src={preview}
+                              alt={`Preview ${index}`}
+                              className="w-full h-full object-cover rounded-md"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-1 right-1 h-6 w-6"
+                              onClick={() => removeAdditionalImage(index)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                      <Input
+                        type="file"
+                        multiple
+                        onChange={handleAdditionalImagesChange}
+                        className="bg-gray-800"
+                        accept="image/*"
+                      />
+                    </div>
                   </div>
+                  <DialogFooter>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setProductDialogOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button type="submit" disabled={submitLoading}>
+                      {submitLoading ? 'Saving...' : 'Save Product'}
+                    </Button>
+                  </DialogFooter>
+                </form>
+              ) : (
+                <div className="py-12 text-center text-muted-foreground">
+                  Loading...
                 </div>
-                <DialogFooter>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setProductDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={submitLoading}>
-                    {submitLoading ? 'Saving...' : 'Save Product'}
-                  </Button>
-                </DialogFooter>
-              </form>
+              )}
             </ScrollArea>
           </CardContent>
         </DialogContent>

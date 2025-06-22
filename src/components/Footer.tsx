@@ -9,6 +9,7 @@ import {
   Twitter,
   Instagram,
   Youtube,
+  Globe,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -122,28 +123,63 @@ const Footer = () => {
             <h4 className="text-lg font-semibold text-white">Follow Us</h4>
             <div className="flex space-x-4">
               <a
-                href="#"
+                href="https://www.tiktok.com/@gamecityelectronics?_t=ZM-8xQIrbIx2fd&_r=1"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
+                aria-label="TikTok"
               >
-                <Facebook size={20} />
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 256 256"
+                  fill="currentColor"
+                >
+                  <path d="M232 80v32a8 8 0 0 1-8 8h-24a8 8 0 0 1-8-8V88a8 8 0 0 0-8-8h-16v72a56 56 0 1 1-56-56h8a8 8 0 0 1 8 8v24a8 8 0 0 1-8 8h-8a24 24 0 1 0 24 24V40a8 8 0 0 1 8-8h32a8 8 0 0 1 8 8v32h16a8 8 0 0 1 8 8z" />
+                </svg>
               </a>
               <a
-                href="#"
+                href="https://www.threads.com/@gamecityelectronics?igshid=NTc4MTIwNjQ2YQ=="
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
+                aria-label="Threads"
               >
-                <Twitter size={20} />
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 256 256"
+                  fill="currentColor"
+                >
+                  <path d="M128 24C69.04 24 24 69.04 24 128s45.04 104 104 104 104-45.04 104-104S186.96 24 128 24zm0 192c-48.52 0-88-39.48-88-88s39.48-88 88-88 88 39.48 88 88-39.48 88-88 88zm0-160a72 72 0 1 0 72 72 72.08 72.08 0 0 0-72-72zm0 128a56 56 0 1 1 56-56 56.06 56.06 0 0 1-56 56z" />
+                </svg>
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/gamecityelectronics?igsh=MTYycjlmMHFrZ3J0eg%3D%3D&utm_source=qr"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
+                aria-label="Instagram"
               >
                 <Instagram size={20} />
               </a>
               <a
-                href="#"
+                href="https://www.facebook.com/share/15YHoo2DLY/?mibextid=wwXIfr"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
+                aria-label="Facebook"
               >
-                <Youtube size={20} />
+                <Facebook size={20} />
+              </a>
+              <a
+                href="https://x.com/gamecity254?s=21"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
+                aria-label="X (Twitter)"
+              >
+                <Twitter size={20} />
               </a>
             </div>
             <p className="text-sm text-muted-foreground">

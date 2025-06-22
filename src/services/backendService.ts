@@ -17,10 +17,13 @@ export type Product = {
   brand?: string
   rating?: number
   num_reviews?: number
+  numReviews?: number
   count_in_stock?: number
+  countInStock?: number
   image: string
   images?: string[]
   reviews?: any[] // Define a proper review type if needed
+  specifications?: Record<string, string>
 }
 
 export type UploadsResponse = {
@@ -148,24 +151,6 @@ const backendService = {
     },
     delete: (id: string): Promise<void> =>
       handleRequest<void>('DELETE', `/products/${id}`),
-    createReview: (
-      productId: string,
-      reviewData: { rating: number; comment: string }
-    ): Promise<Product> =>
-      handleRequest<Product>(
-        'POST',
-        `/products/${productId}/reviews`,
-        reviewData
-      ),
-    hasPurchased: (productId: string): Promise<{ hasPurchased: boolean }> =>
-      handleRequest<{ hasPurchased: boolean }>(
-        'GET',
-        `/products/${productId}/has-purchased`
-      ),
-  },
-  uploads: {
-    upload: (formData: FormData): Promise<UploadsResponse> =>
-      handleRequest<UploadsResponse>('POST', '/upload', formData),
   },
   users: {
     getAll: (): Promise<User[]> => handleRequest<User[]>('GET', '/users'),
@@ -176,15 +161,18 @@ const backendService = {
   },
   orders: {
     getAll: (): Promise<Order[]> => handleRequest<Order[]>('GET', '/orders'),
-    create: (orderData: any): Promise<Order> =>
-      handleRequest<Order>('POST', '/orders', orderData),
-    updateStatus: (orderId: string, status: string): Promise<Order> =>
-      handleRequest<Order>('PUT', `/orders/${orderId}/status`, { status }),
-    delete: (orderId: string): Promise<void> =>
-      handleRequest<void>('DELETE', `/orders/${orderId}`),
+    updateStatus: (
+      id: string,
+      status: 'pending' | 'completed'
+    ): Promise<Order> =>
+      handleRequest<Order>('PUT', `/orders/${id}/status`, { status }),
+    delete: (id: string): Promise<void> =>
+      handleRequest<void>('DELETE', `/orders/${id}`),
   },
-
-  // Health check function
+  uploads: {
+    upload: (formData: FormData): Promise<UploadsResponse> =>
+      handleRequest<UploadsResponse>('POST', '/upload', formData),
+  },
   checkHealth: (): Promise<HealthStatus> =>
     handleRequest<HealthStatus>('GET', '/health'),
 }
