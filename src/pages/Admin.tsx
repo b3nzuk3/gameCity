@@ -1243,7 +1243,7 @@ const Admin = () => {
           </DialogHeader>
           <CardContent>
             <ScrollArea className="h-[70vh]">
-              {currentProduct && currentProduct.name ? (
+              {!isEditing || (currentProduct && currentProduct.name) ? (
                 <form onSubmit={handleSubmit} className="p-4 space-y-6">
                   {/* Product Details Section */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
