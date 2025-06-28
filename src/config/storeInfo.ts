@@ -1,5 +1,5 @@
 const storeInfo = {
-  name: 'Gamecity',
+  name: 'Gamecity Electronics',
   email: 'gamecityelectronics@gmail.com',
   phone: '0712248706',
   currency: 'KES',

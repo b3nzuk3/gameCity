@@ -24,7 +24,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <Link to="/" className="text-2xl font-bold text-yellow-400">
-              Gamecity
+              Gamecity Electronics
             </Link>
             <p className="text-muted-foreground leading-relaxed">
               Your premier destination for high-quality gaming components and
@@ -190,7 +190,7 @@ const Footer = () => {
 
         {/* Bottom Bar */}
         <div className="mt-16 py-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>© {currentYear} Gamecity. All rights reserved.</p>
+          <p>© {currentYear} Gamecity Electronics. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">
             <Link
               to="/privacy"

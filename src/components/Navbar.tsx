@@ -65,8 +65,12 @@ const Navbar = () => {
             to="/"
             className="flex items-center space-x-2 text-xl font-bold text-yellow-400 hover:text-yellow-300 transition-colors"
           >
-            <Package className="h-6 w-6" />
-            <span>Gamecity</span>
+            <img
+              src="/gamecity.png"
+              alt="Gamecity Logo"
+              className="h-8 w-8 object-contain"
+            />
+            <span>Gamecity Electronics</span>
           </Link>
 
           {/* Search Bar - Desktop */}
