@@ -107,112 +107,114 @@ const Cart = () => {
             </Link>
           </div>
         ) : (
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
               <div className="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
-                <table className="w-full">
-                  <thead className="bg-gray-800/50">
-                    <tr>
-                      <th className="px-4 py-3 text-left">Product</th>
-                      <th className="px-4 py-3 text-left">Price</th>
-                      <th className="px-4 py-3 text-center">Quantity</th>
-                      <th className="px-4 py-3 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-700">
-                    {cartItems.map((item) => (
-                      <tr
-                        key={getItemId(item)}
-                        className="hover:bg-gray-800/30"
-                      >
-                        <td className="px-4 py-4">
-                          <div className="flex items-center">
-                            <div className="h-16 w-16 flex-shrink-0 rounded bg-gray-700 overflow-hidden">
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="h-full w-full object-cover"
-                              />
-                            </div>
-                            <div className="ml-4">
-                              <div className="text-sm font-medium">
-                                {item.name}
+                <div className="overflow-x-auto">
+                  <table className="w-full min-w-[600px]">
+                    <thead className="bg-gray-800/50">
+                      <tr>
+                        <th className="px-4 py-3 text-left">Product</th>
+                        <th className="px-4 py-3 text-left">Price</th>
+                        <th className="px-4 py-3 text-center">Quantity</th>
+                        <th className="px-4 py-3 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-700">
+                      {cartItems.map((item) => (
+                        <tr
+                          key={getItemId(item)}
+                          className="hover:bg-gray-800/30"
+                        >
+                          <td className="px-4 py-4">
+                            <div className="flex items-center">
+                              <div className="h-16 w-16 flex-shrink-0 rounded bg-gray-700 overflow-hidden">
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                              <div className="ml-4">
+                                <div className="text-sm font-medium">
+                                  {item.name}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm">
-                          <div className="flex items-center justify-between">
-                            <span className="text-lg font-bold text-yellow-400">
-                              {formatKESPrice(item.price)}
-                            </span>
-                            <span className="text-sm text-muted-foreground">
-                              Subtotal:{' '}
-                              {formatKESPrice(item.price * item.quantity)}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-center">
-                          <div className="flex items-center justify-center">
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap text-sm">
+                            <div className="flex items-center justify-between">
+                              <span className="text-lg font-bold text-yellow-400">
+                                {formatKESPrice(item.price)}
+                              </span>
+                              <span className="text-sm text-muted-foreground">
+                                Subtotal:{' '}
+                                {formatKESPrice(item.price * item.quantity)}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap text-sm text-center">
+                            <div className="flex items-center justify-center">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0 text-muted-foreground"
+                                onClick={() =>
+                                  updateQuantity(
+                                    getItemId(item),
+                                    item.quantity - 1
+                                  )
+                                }
+                              >
+                                <MinusCircle size={16} />
+                              </Button>
+                              <span className="mx-2 w-8 text-center">
+                                {item.quantity}
+                              </span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-8 w-8 p-0 text-muted-foreground"
+                                onClick={() =>
+                                  updateQuantity(
+                                    getItemId(item),
+                                    item.quantity + 1
+                                  )
+                                }
+                              >
+                                <PlusCircle size={16} />
+                              </Button>
+                            </div>
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap text-sm text-right">
                             <Button
                               variant="ghost"
                               size="sm"
-                              className="h-8 w-8 p-0 text-muted-foreground"
-                              onClick={() =>
-                                updateQuantity(
-                                  getItemId(item),
-                                  item.quantity - 1
-                                )
-                              }
+                              className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                              onClick={() => removeFromCart(getItemId(item))}
                             >
-                              <MinusCircle size={16} />
+                              <Trash2 size={16} />
                             </Button>
-                            <span className="mx-2 w-8 text-center">
-                              {item.quantity}
-                            </span>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0 text-muted-foreground"
-                              onClick={() =>
-                                updateQuantity(
-                                  getItemId(item),
-                                  item.quantity + 1
-                                )
-                              }
-                            >
-                              <PlusCircle size={16} />
-                            </Button>
-                          </div>
-                        </td>
-                        <td className="px-4 py-4 whitespace-nowrap text-sm text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20"
-                            onClick={() => removeFromCart(getItemId(item))}
-                          >
-                            <Trash2 size={16} />
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-4">
-                <Link to="/category/monitors">
+              <div className="mt-6 flex flex-col sm:flex-row gap-4">
+                <Link to="/category/monitors" className="w-full sm:w-auto">
                   <Button
                     variant="outline"
-                    className="border-gray-700 text-muted-foreground hover:text-foreground"
+                    className="w-full border-gray-700 text-muted-foreground hover:text-foreground"
                   >
                     Continue Shopping
                   </Button>
                 </Link>
                 <Button
                   variant="outline"
-                  className="border-gray-700 text-muted-foreground hover:text-foreground"
+                  className="w-full border-gray-700 text-muted-foreground hover:text-foreground"
                   onClick={clearCart}
                 >
                   Clear Cart
@@ -221,8 +223,8 @@ const Cart = () => {
             </div>
 
             {/* Order Summary */}
-            <div>
-              <div className="bg-gray-900 rounded-lg border border-gray-700 p-6">
+            <div className="mt-8 lg:mt-0">
+              <div className="bg-gray-900 rounded-lg border border-gray-700 p-4 sm:p-6">
                 <h2 className="text-lg font-medium mb-4">Order Summary</h2>
 
                 <div className="space-y-4 mb-6">

@@ -115,6 +115,7 @@ const CategoryPage = () => {
   const [priceFilterActive, setPriceFilterActive] = useState(false)
   const [selectedBrands, setSelectedBrands] = useState<string[]>([])
   const { addToCart } = useCart()
+  const [showFilters, setShowFilters] = useState(false)
 
   // Get unique brands from products
   const availableBrands = useMemo(() => {
@@ -289,8 +290,27 @@ const CategoryPage = () => {
           </div>
         </div>
 
+        {/* Filter Toggle Button for Mobile */}
+        <div className="mb-4 flex lg:hidden">
+          <Button
+            variant="outline"
+            className="w-full border-gray-700 text-muted-foreground hover:text-foreground flex items-center justify-center gap-2"
+            onClick={() => setShowFilters((prev) => !prev)}
+            aria-expanded={showFilters}
+            aria-controls="filters-section"
+          >
+            <Filter size={18} />
+            {showFilters ? 'Hide Filters' : 'Show Filters'}
+          </Button>
+        </div>
+
         {/* Filters and Sorting */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div
+          id="filters-section"
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 ${
+            showFilters ? '' : 'hidden'
+          } lg:grid`}
+        >
           {/* Stock Filter */}
           <Select value={filterBy} onValueChange={setFilterBy}>
             <SelectTrigger className="w-full bg-gray-900 border-gray-700">

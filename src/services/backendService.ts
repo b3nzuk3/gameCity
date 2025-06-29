@@ -136,6 +136,11 @@ const backendService = {
   products: {
     getAll: (): Promise<{ products: Product[] }> =>
       handleRequest<{ products: Product[] }>('GET', '/products'),
+    getAllByCategory: (category: string): Promise<{ products: Product[] }> =>
+      handleRequest<{ products: Product[] }>(
+        'GET',
+        `/products?category=${encodeURIComponent(category)}`
+      ),
     getBrands: (): Promise<string[]> =>
       handleRequest<string[]>('GET', '/products/brands'),
     getById: (id: string): Promise<Product> =>

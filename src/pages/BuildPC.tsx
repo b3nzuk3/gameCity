@@ -94,7 +94,7 @@ const BuildPC = () => {
       setLoading(true)
       try {
         const componentPromises = PART_CATEGORIES.map((cat) =>
-          backendService.products.getAll({ category: cat.id })
+          backendService.products.getAllByCategory(cat.dbCategory)
         )
         const results = await Promise.all(componentPromises)
         const componentMap: Record<string, Product[]> = {}
@@ -123,8 +123,6 @@ const BuildPC = () => {
       [categoryId]: {
         ...part,
         categoryId,
-        categoryName: PART_CATEGORIES.find((cat) => cat.id === categoryId)
-          ?.name,
       },
     }))
 
@@ -156,7 +154,7 @@ const BuildPC = () => {
         name: part.name,
         price: part.price,
         image: '/placeholder.svg', // Default image for PC parts
-        category: part.categoryName,
+        category: part.category,
       })
     })
 
