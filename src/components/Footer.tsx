@@ -103,18 +103,6 @@ const Footer = () => {
               >
                 Contact Us
               </Link>
-              <Link
-                to="/returns"
-                className="text-muted-foreground hover:text-yellow-400 transition-colors flex items-center"
-              >
-                Returns & Exchanges
-              </Link>
-              <Link
-                to="/warranty"
-                className="text-muted-foreground hover:text-yellow-400 transition-colors flex items-center"
-              >
-                Warranty Info
-              </Link>
             </div>
           </div>
 

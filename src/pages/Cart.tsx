@@ -269,11 +269,50 @@ const Cart = () => {
 
                 {/* M-Pesa Payment */}
                 {user && (
-                  <MpesaPayment
-                    amount={finalTotal}
-                    onSuccess={handlePaymentSuccess}
-                    onError={handlePaymentError}
-                  />
+                  <>
+                    {/* WhatsApp Order Button */}
+                    <Button
+                      className="bg-green-500 hover:bg-green-600 text-white w-full mb-4 flex items-center justify-center gap-2"
+                      onClick={() => {
+                        const phone = '254712248706'
+                        const itemsList = cartItems
+                          .map(
+                            (item) =>
+                              `- ${item.name} x${
+                                item.quantity
+                              } @ KES ${item.price.toLocaleString()}`
+                          )
+                          .join('%0A')
+                        const message = `Hello, I would like to order:%0A${itemsList}%0A%0ATotal: KES ${finalTotal.toLocaleString()}`
+                        const url = `https://wa.me/${phone}?text=${message}`
+                        window.open(url, '_blank')
+                      }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-5 h-5"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M20.25 12c0-4.556-3.694-8.25-8.25-8.25S3.75 7.444 3.75 12c0 1.396.34 2.71.94 3.86L3 21l5.29-1.67A8.19 8.19 0 0012 20.25c4.556 0 8.25-3.694 8.25-8.25z"
+                        />
+                      </svg>
+                      Order on WhatsApp
+                    </Button>
+                    <div className="text-center text-muted-foreground text-sm mb-4">
+                      or
+                    </div>
+                    <MpesaPayment
+                      amount={finalTotal}
+                      onSuccess={handlePaymentSuccess}
+                      onError={handlePaymentError}
+                    />
+                  </>
                 )}
               </div>
             </div>

@@ -15,6 +15,8 @@ import NotFound from '@/pages/NotFound'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import ResetPassword from '@/pages/ResetPassword'
 import ProductPage from '@/pages/ProductPage'
+import PrivacyPolicy from '@/pages/PrivacyPolicy'
+import TermsOfService from '@/pages/TermsOfService'
 
 export default function AppRoutes() {
   return (
@@ -47,6 +49,8 @@ export default function AppRoutes() {
       />
       <Route path="/sitemap" element={<Sitemap />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/terms" element={<TermsOfService />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   )
