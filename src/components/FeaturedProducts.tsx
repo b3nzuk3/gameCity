@@ -118,7 +118,7 @@ const FeaturedProducts = () => {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
+          {products.slice(0, 4).map((product) => (
             <Card
               key={product.id}
               className="bg-gray-800 border-gray-700 h-full flex flex-col group-hover:border-yellow-500/50 transition-colors cursor-pointer"
