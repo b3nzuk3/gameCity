@@ -14,6 +14,7 @@ import Sitemap from '@/pages/Sitemap'
 import NotFound from '@/pages/NotFound'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import ResetPassword from '@/pages/ResetPassword'
+import VerifyEmail from '@/pages/VerifyEmail'
 import ProductPage from '@/pages/ProductPage'
 import PrivacyPolicy from '@/pages/PrivacyPolicy'
 import TermsOfService from '@/pages/TermsOfService'
@@ -49,6 +50,7 @@ export default function AppRoutes() {
       />
       <Route path="/sitemap" element={<Sitemap />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<TermsOfService />} />
       <Route path="*" element={<NotFound />} />
