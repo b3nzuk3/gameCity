@@ -14,6 +14,7 @@ import Sitemap from '@/pages/Sitemap'
 import NotFound from '@/pages/NotFound'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import ResetPassword from '@/pages/ResetPassword'
+import ForgotPassword from '@/pages/ForgotPassword'
 import VerifyEmail from '@/pages/VerifyEmail'
 import ProductPage from '@/pages/ProductPage'
 import PrivacyPolicy from '@/pages/PrivacyPolicy'
@@ -28,6 +29,7 @@ export default function AppRoutes() {
       <Route path="/search" element={<SearchPage />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route
         path="/admin"
         element={

@@ -129,6 +129,10 @@ const backendService = {
       handleRequest<{ user: User }>('GET', '/auth/me'),
     resetPassword: (email: string): Promise<void> =>
       handleRequest<void>('POST', '/auth/reset-password', { email }),
+    resetPasswordWithToken: (token: string, password: string): Promise<void> =>
+      handleRequest<void>('POST', `/auth/reset-password/${token}`, {
+        password,
+      }),
     logout: () => {
       localStorage.removeItem('gamecity_token')
     },
