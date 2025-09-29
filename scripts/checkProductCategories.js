@@ -11,6 +11,7 @@ const canonicalCategories = [
   'cases',
   'power supply',
   'gaming pc',
+  'oem',
   'accessories',
 ]
 
@@ -33,6 +34,8 @@ const normalizeCategory = (category) => {
     'gaming-pcs': 'gaming pc',
     'gaming pc': 'gaming pc',
     'gaming pcs': 'gaming pc',
+    oem: 'oem',
+    OEM: 'oem',
     accessories: 'accessories',
   }
   const key = category.toLowerCase().trim()

@@ -32,6 +32,7 @@ const CATEGORIES = [
   { id: 'power-supply', name: 'Power Supply' },
   { id: 'gaming-pc', name: 'Gaming PC' },
   { id: 'cpu-cooling', name: 'CPU Cooling' },
+  { id: 'oem', name: 'OEM' },
   { id: 'accessories', name: 'Accessories' },
 ]
 
@@ -47,6 +48,7 @@ const CATEGORY_SLUG_TO_NAME: Record<string, string> = {
   'power-supply': 'Power Supply',
   'gaming-pc': 'Gaming PC',
   'cpu-cooling': 'CPU Cooling',
+  oem: 'OEM',
   accessories: 'Accessories',
   all: 'All Products',
 }

@@ -61,6 +61,7 @@ const CATEGORIES = [
   { id: 'power-supply', name: 'Power Supply' },
   { id: 'gaming-pc', name: 'Gaming PC' },
   { id: 'cpu-cooling', name: 'CPU Cooling' },
+  { id: 'oem', name: 'OEM' },
   { id: 'accessories', name: 'Accessories' },
 ]
 
@@ -147,6 +148,16 @@ const CATEGORY_SPECS: Record<string, string[]> = {
     'Cooling Method',
     'Compatible Devices',
     'Maximum Rotational Speed',
+  ],
+  OEM: [
+    'Model Name',
+    'Compatible Devices',
+    'Manufacturer',
+    'Part Number',
+    'Warranty Period',
+    'Installation Type',
+    'Item Weight',
+    'Special Feature',
   ],
 }
 
