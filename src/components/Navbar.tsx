@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCart } from '@/contexts/CartContext'
@@ -36,6 +36,38 @@ const Navbar = () => {
   const { getCartCount } = useCart()
   const [searchQuery, setSearchQuery] = useState('')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isHidden, setIsHidden] = useState(false)
+  const lastScrollYRef = useRef(0)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY || 0
+      const lastY = lastScrollYRef.current
+
+      // Always show when near the top
+      if (currentY < 10) {
+        setIsHidden(false)
+        lastScrollYRef.current = currentY
+        return
+      }
+
+      // Threshold to avoid jitter on tiny scrolls
+      const threshold = 4
+      if (Math.abs(currentY - lastY) < threshold) return
+
+      // Hide on scroll down, show on scroll up
+      if (currentY > lastY) {
+        setIsHidden(true)
+      } else {
+        setIsHidden(false)
+      }
+
+      lastScrollYRef.current = currentY
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -57,7 +89,11 @@ const Navbar = () => {
   const totalItems = getCartCount()
 
   return (
-    <nav className="bg-black border-b border-gray-800 shadow-lg fixed top-0 left-0 right-0 z-50">
+    <nav
+      className={`bg-black border-b border-gray-800 shadow-lg fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
+        isHidden ? '-translate-y-full' : 'translate-y-0'
+      }`}
+    >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
