@@ -434,6 +434,21 @@ const Admin = () => {
 
   const handleEditProduct = (product: ProductWithSpecs) => {
     setIsEditing(true)
+    const formatDateTimeLocal = (value?: string | Date) => {
+      if (!value) return ''
+      const d = new Date(value)
+      if (Number.isNaN(d.getTime())) return ''
+      const pad = (n: number) => String(n).padStart(2, '0')
+      const yyyy = d.getFullYear()
+      const mm = pad(d.getMonth() + 1)
+      const dd = pad(d.getDate())
+      const hh = pad(d.getHours())
+      const min = pad(d.getMinutes())
+      return `${yyyy}-${mm}-${dd}T${hh}:${min}`
+    }
+
+    const existingOffer = (product as any).offer || {}
+
     setCurrentProduct({
       id: product.id,
       name: product.name,
@@ -444,6 +459,17 @@ const Admin = () => {
       brand: product.brand || '',
       image: product.image,
       images: product.images || [],
+      offer: {
+        enabled: !!existingOffer.enabled,
+        type: (existingOffer.type as any) || 'percentage',
+        amount: existingOffer.amount ?? 0,
+        startDate: existingOffer.startDate
+          ? formatDateTimeLocal(existingOffer.startDate)
+          : '',
+        endDate: existingOffer.endDate
+          ? formatDateTimeLocal(existingOffer.endDate)
+          : '',
+      },
     })
     setMainImagePreview(product.image)
     setAdditionalImagePreviews(product.images || [])

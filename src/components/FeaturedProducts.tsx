@@ -15,6 +15,7 @@ import { ProductSkeleton } from './ui/product-skeleton'
 import backendService, { type Product } from '@/services/backendService'
 import { useCart } from '@/contexts/CartContext'
 import { formatKESPrice } from '@/lib/currency'
+import { getDiscountPercent, getOfferPrice, isOfferActive } from '@/lib/utils'
 import { Star } from 'lucide-react'
 
 const FeaturedProducts = () => {
@@ -140,6 +141,11 @@ const FeaturedProducts = () => {
                       ;(e.target as HTMLImageElement).src = '/placeholder.svg'
                     }}
                   />
+                  {isOfferActive(product.offer) && (
+                    <Badge className="absolute top-2 left-2 bg-red-600 hover:bg-red-600 text-white text-xs">
+                      -{getDiscountPercent(product.price, product.offer)}%
+                    </Badge>
+                  )}
                   {product.count_in_stock <= 5 &&
                     product.count_in_stock > 0 && (
                       <Badge
@@ -185,13 +191,29 @@ const FeaturedProducts = () => {
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-bold text-yellow-400">
-                      {formatKESPrice(product.price)}
-                      <span className="text-xs text-muted-foreground ml-2 align-middle">
-                        ex VAT
+                  <div className="flex items-start justify-between flex-col gap-0.5">
+                    {isOfferActive(product.offer) ? (
+                      <>
+                        <span className="text-xs line-through text-muted-foreground">
+                          {formatKESPrice(product.price)}
+                        </span>
+                        <span className="text-lg font-bold text-yellow-400">
+                          {formatKESPrice(
+                            getOfferPrice(product.price, product.offer)
+                          )}
+                          <span className="text-xs text-muted-foreground ml-2 align-middle">
+                            ex VAT
+                          </span>
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-lg font-bold text-yellow-400">
+                        {formatKESPrice(product.price)}
+                        <span className="text-xs text-muted-foreground ml-2 align-middle">
+                          ex VAT
+                        </span>
                       </span>
-                    </span>
+                    )}
                   </div>
 
                   <div className="flex gap-2 pt-2">
