@@ -51,6 +51,13 @@ export type Product = {
     createdAt: string
   }[]
   specifications?: Record<string, string>
+  offer?: {
+    enabled?: boolean
+    type?: 'percentage' | 'fixed'
+    amount?: number
+    startDate?: string
+    endDate?: string
+  }
 }
 
 export type ProductsResponse = {

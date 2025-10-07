@@ -6,6 +6,7 @@ import { ShoppingCart, Star, Heart } from 'lucide-react'
 import { useCart } from '@/contexts/CartContext'
 import { useFavorites } from '@/contexts/FavoritesContext'
 import { formatKESPrice } from '@/lib/currency'
+import { getOfferPrice, getDiscountPercent, isOfferActive } from '@/lib/utils'
 
 interface ProductProps {
   product: {
@@ -20,6 +21,13 @@ interface ProductProps {
     count_in_stock?: number
     countInStock?: number
     stock?: number
+    offer?: {
+      enabled?: boolean
+      type?: 'percentage' | 'fixed'
+      amount?: number
+      startDate?: string
+      endDate?: string
+    }
   }
 }
 
@@ -86,6 +94,11 @@ const ProductCard = ({ product }: ProductProps) => {
               ;(e.target as HTMLImageElement).src = '/placeholder.svg'
             }}
           />
+          {isOfferActive(product.offer) && (
+            <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded">
+              -{getDiscountPercent(product.price, product.offer)}%
+            </div>
+          )}
           <Button
             variant="ghost"
             size="icon"
@@ -118,12 +131,26 @@ const ProductCard = ({ product }: ProductProps) => {
           </div>
 
           <div className="flex flex-col gap-0.5 justify-between items-start mb-1">
-            <span className="text-lg font-bold text-yellow-400">
-              {formatKESPrice(product.price)}
-              <span className="text-xs text-muted-foreground ml-2 align-middle">
-                ex VAT
+            {isOfferActive(product.offer) ? (
+              <>
+                <span className="text-xs line-through text-muted-foreground">
+                  {formatKESPrice(product.price)}
+                </span>
+                <span className="text-lg font-bold text-yellow-400">
+                  {formatKESPrice(getOfferPrice(product.price, product.offer))}
+                  <span className="text-xs text-muted-foreground ml-2 align-middle">
+                    ex VAT
+                  </span>
+                </span>
+              </>
+            ) : (
+              <span className="text-lg font-bold text-yellow-400">
+                {formatKESPrice(product.price)}
+                <span className="text-xs text-muted-foreground ml-2 align-middle">
+                  ex VAT
+                </span>
               </span>
-            </span>
+            )}
           </div>
           <div className="text-sm text-muted-foreground mt-1">
             Stock: {product.countInStock ?? 0}

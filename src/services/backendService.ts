@@ -24,6 +24,13 @@ export type Product = {
   images?: string[]
   reviews?: any[] // Define a proper review type if needed
   specifications?: Record<string, string>
+  offer?: {
+    enabled?: boolean
+    type?: 'percentage' | 'fixed'
+    amount?: number
+    startDate?: string
+    endDate?: string
+  }
 }
 
 export type UploadsResponse = {

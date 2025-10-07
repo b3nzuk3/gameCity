@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { useCart } from '@/contexts/CartContext'
 import { formatKESPrice } from '@/lib/currency'
+import { getOfferPrice, getDiscountPercent, isOfferActive } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent } from '@/components/ui/card'
 import { ShoppingCart, Plus, Minus } from 'lucide-react'
@@ -102,7 +103,12 @@ const ProductPage = () => {
                 {images.map((img, index) => (
                   <CarouselItem key={index}>
                     <Card>
-                      <CardContent className="flex aspect-square items-center justify-center p-0">
+                      <CardContent className="relative flex aspect-square items-center justify-center p-0">
+                        {isOfferActive(product.offer) && (
+                          <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded z-10">
+                            -{getDiscountPercent(product.price, product.offer)}%
+                          </div>
+                        )}
                         <img
                           src={img}
                           alt={`${product.name} image ${index + 1}`}
@@ -146,12 +152,30 @@ const ProductPage = () => {
 
           <div className="flex flex-col">
             <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-            <p className="text-2xl font-semibold text-yellow-400 mb-4">
-              {formatKESPrice(product.price)}
-              <span className="text-base text-muted-foreground ml-2 align-middle">
-                ex VAT
-              </span>
-            </p>
+            <div className="mb-4">
+              {isOfferActive(product.offer) ? (
+                <div className="flex flex-col">
+                  <span className="text-sm line-through text-muted-foreground">
+                    {formatKESPrice(product.price)}
+                  </span>
+                  <p className="text-2xl font-semibold text-yellow-400">
+                    {formatKESPrice(
+                      getOfferPrice(product.price, product.offer)
+                    )}
+                    <span className="text-base text-muted-foreground ml-2 align-middle">
+                      ex VAT
+                    </span>
+                  </p>
+                </div>
+              ) : (
+                <p className="text-2xl font-semibold text-yellow-400">
+                  {formatKESPrice(product.price)}
+                  <span className="text-base text-muted-foreground ml-2 align-middle">
+                    ex VAT
+                  </span>
+                </p>
+              )}
+            </div>
 
             {/* Specifications Section */}
             {product.specifications &&

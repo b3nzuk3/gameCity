@@ -35,11 +35,11 @@ const Index = () => {
   // Categories section
   const categories = [
     {
-      title: 'Gaming PCs',
+      title: 'PRE-BUILT',
       image:
         'https://res.cloudinary.com/dq3jxutxg/image/upload/v1750431696/greenbits-store/GamingPcs_euewim.jpg',
       description: 'High-performance custom gaming rigs built to dominate.',
-      path: '/category/gaming-pcs',
+      path: '/category/gaming-pc',
     },
     {
       title: 'Graphics Cards',

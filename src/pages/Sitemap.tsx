@@ -14,7 +14,7 @@ const sitemapLinks = [
   { to: '/category/motherboards', label: 'Motherboards' },
   { to: '/category/cases', label: 'Cases' },
   { to: '/category/power-supply', label: 'Power Supply' },
-  { to: '/category/gaming-pc', label: 'Gaming PC' },
+  { to: '/category/gaming-pc', label: 'PRE-BUILT' },
   { to: '/category/accessories', label: 'Accessories' },
   { to: '/build', label: 'Build Your PC' },
   { to: '/favorites', label: 'Favorites' },

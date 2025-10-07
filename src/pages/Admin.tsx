@@ -59,7 +59,7 @@ const CATEGORIES = [
   { id: 'motherboards', name: 'Motherboards' },
   { id: 'cases', name: 'Cases' },
   { id: 'power-supply', name: 'Power Supply' },
-  { id: 'gaming-pc', name: 'Gaming PC' },
+  { id: 'gaming-pc', name: 'PRE-BUILT' },
   { id: 'cpu-cooling', name: 'CPU Cooling' },
   { id: 'oem', name: 'OEM' },
   { id: 'accessories', name: 'Accessories' },
@@ -74,90 +74,83 @@ const CATEGORY_SPECS: Record<string, string[]> = {
     'CPU Socket',
   ],
   Monitors: [
-    'Screen Size',
+    'Size in Inches',
     'Resolution',
-    'Aspect Ratio',
     'Refresh Rate',
-    'Screen Surface Description',
+    'Ports',
+    'Special Features',
   ],
   'Graphics Cards': [
-    'Graphics Coprocessor',
-    'Graphics RAM Size',
-    'GPU Clock Speed',
-    'Video Output Interface',
+    'Vram in GB',
+    'No. of fans',
+    'Video output ports',
+    'Power consumption',
+    'Memory type',
   ],
-  Memory: [
-    'Computer Memory Size',
-    'RAM Memory Technology',
-    'Memory Speed',
-    'Compatible Devices',
-  ],
+  Memory: ['Cas latency', 'Memory Speed', 'No. of modules'],
   Storage: [
-    'Digital Storage Capacity',
-    'Hard Disk Interface',
-    'Connectivity Technology',
-    'Special Feature',
-    'Hard Disk Form Factor',
-    'Hard Disk Description',
-    'Compatible Devices',
-    'Installation Type',
+    'Model',
+    'Capacity',
+    'Type',
+    'Interface',
+    'Connectivity',
+    'Special Features',
   ],
   Motherboards: [
-    'CPU Socket',
-    'Compatible Devices',
-    'RAM Memory Technology',
-    'Compatible Processors',
-    'Chipset Type',
-    'Memory Clock Speed',
-    'Platform',
-    'Model Name',
+    'Model',
+    'Form Factor',
+    'Cpu socket',
+    'Ram type',
+    'Ram slots',
+    'Nvme slots',
+    'Sata ports',
+    'Special Features',
   ],
   'Power Supply': [
-    'Model Name',
-    'Compatible Devices',
-    'Connector Type',
-    'Output Wattage',
+    'Model',
     'Form Factor',
-    'Wattage',
-    'Cooling Method',
-    'Item Weight',
+    'Connectors',
+    'Watts',
+    'Power Rating',
+    'Special Features',
   ],
   Cases: [
     'Motherboard Compatibility',
-    'Case Type',
-    'Material',
-    'Power Supply Mounting Type',
-    'Cooling Method',
-    'Model Name',
-    'Item Weight',
+    'No. of fans',
+    'Fan size',
+    'Fans Connectivity',
+    'Graphics card allowance',
+    'Hard drive bays',
+    'Special Features',
   ],
-  'Gaming PC': [
-    'Operating System',
-    'CPU Model',
-    'CPU Speed',
-    'Cache Size',
-    'Graphics Card Description',
-    'Memory Storage Capacity',
-    'Memory Slots Available',
-    'Specific Uses For Product',
+  'PRE-BUILT': [
+    'Cpu socket',
+    'Ram slots',
+    'Nvme slots',
+    'Psu rating',
+    'Sata ports',
+    'Warranty Period in Months',
+    'No. Of fans included',
+    'Accessories included',
   ],
   'CPU Cooling': [
-    'Power Connector Type',
-    'Voltage',
-    'Wattage',
-    'Cooling Method',
-    'Compatible Devices',
-    'Maximum Rotational Speed',
+    'Model',
+    'Color',
+    'Cooling method',
+    'Radiator size',
+    'No. of fans',
+    'Fans size',
+    'Special Features',
   ],
   OEM: [
-    'Model Name',
-    'Compatible Devices',
-    'Manufacturer',
-    'Part Number',
-    'Warranty Period',
-    'Installation Type',
-    'Item Weight',
-    'Special Feature',
+    'Model',
+    'Cpu socket',
+    'Ram slots',
+    'Nvme slots',
+    'Power supply wattage',
+    'Sata ports',
+    'Warranty period in months',
+    'Accessories included',
   ],
 }
 
@@ -171,6 +164,13 @@ type ProductFormData = {
   brand: string
   image: string
   images: string[]
+  offer?: {
+    enabled?: boolean
+    type?: 'percentage' | 'fixed'
+    amount?: number
+    startDate?: string
+    endDate?: string
+  }
 }
 
 type UserFormData = {
@@ -222,6 +222,7 @@ const Admin = () => {
     brand: '',
     image: '',
     images: [],
+    offer: { enabled: false, type: 'percentage', amount: 0 },
   })
 
   // New state for file management
@@ -1371,6 +1372,117 @@ const Admin = () => {
                       ))}
                     </div>
                   )}
+
+                  {/* Offer Section */}
+                  <div className="space-y-4">
+                    <h4 className="font-semibold">Offer</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex items-center space-x-2">
+                        <input
+                          id="offer-enabled"
+                          type="checkbox"
+                          checked={!!currentProduct.offer?.enabled}
+                          onChange={(e) =>
+                            setCurrentProduct((prev) => ({
+                              ...prev,
+                              offer: {
+                                ...prev.offer,
+                                enabled: e.target.checked,
+                              },
+                            }))
+                          }
+                        />
+                        <Label htmlFor="offer-enabled">Enable Offer</Label>
+                      </div>
+                      <div>
+                        <Label htmlFor="offer-type">Type</Label>
+                        <select
+                          id="offer-type"
+                          className="w-full bg-gray-800 border-gray-700 rounded-md h-10 px-3"
+                          value={currentProduct.offer?.type || 'percentage'}
+                          onChange={(e) =>
+                            setCurrentProduct((prev) => ({
+                              ...prev,
+                              offer: {
+                                ...prev.offer,
+                                type: e.target.value as any,
+                              },
+                            }))
+                          }
+                          disabled={!currentProduct.offer?.enabled}
+                        >
+                          <option value="percentage">Percentage</option>
+                          <option value="fixed">Fixed Amount</option>
+                        </select>
+                      </div>
+                      <div>
+                        <Label htmlFor="offer-amount">Amount</Label>
+                        <Input
+                          id="offer-amount"
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          className="bg-gray-800"
+                          value={currentProduct.offer?.amount ?? 0}
+                          onChange={(e) =>
+                            setCurrentProduct((prev) => ({
+                              ...prev,
+                              offer: {
+                                ...prev.offer,
+                                amount: Number(e.target.value || 0),
+                              },
+                            }))
+                          }
+                          disabled={!currentProduct.offer?.enabled}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="offer-start">
+                          Start Date (optional)
+                        </Label>
+                        <Input
+                          id="offer-start"
+                          type="datetime-local"
+                          className="bg-gray-800"
+                          value={currentProduct.offer?.startDate || ''}
+                          onChange={(e) =>
+                            setCurrentProduct((prev) => ({
+                              ...prev,
+                              offer: {
+                                ...prev.offer,
+                                startDate: e.target.value,
+                              },
+                            }))
+                          }
+                          disabled={!currentProduct.offer?.enabled}
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="offer-end">End Date (optional)</Label>
+                        <Input
+                          id="offer-end"
+                          type="datetime-local"
+                          className="bg-gray-800"
+                          value={currentProduct.offer?.endDate || ''}
+                          onChange={(e) =>
+                            setCurrentProduct((prev) => ({
+                              ...prev,
+                              offer: { ...prev.offer, endDate: e.target.value },
+                            }))
+                          }
+                          disabled={!currentProduct.offer?.enabled}
+                        />
+                      </div>
+                    </div>
+                    {/* Simple validation hints */}
+                    {currentProduct.offer?.enabled && (
+                      <p className="text-xs text-muted-foreground">
+                        {currentProduct.offer?.type === 'percentage'
+                          ? 'Amount is percentage (0-100).'
+                          : 'Amount is a fixed value in KES.'}
+                      </p>
+                    )}
+                  </div>
 
                   {/* Image Upload Section */}
                   <div className="space-y-4">
