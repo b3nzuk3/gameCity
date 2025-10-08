@@ -281,9 +281,7 @@ const CategoryPage = () => {
               'All Products'}
           </h1>
           <p className="text-muted-foreground">
-            {loading
-              ? 'Loading...'
-              : `${filteredProducts.length} products found`}
+            {loading ? 'Loading...' : `${totalProducts} products found`}
           </p>
         </div>
 
