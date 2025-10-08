@@ -59,7 +59,7 @@ const CATEGORIES = [
   { id: 'motherboards', name: 'Motherboards' },
   { id: 'cases', name: 'Cases' },
   { id: 'power-supply', name: 'Power Supply' },
-  { id: 'gaming-pc', name: 'PRE-BUILT' },
+  { id: 'pre-built', name: 'PRE-BUILT' },
   { id: 'cpu-cooling', name: 'CPU Cooling' },
   { id: 'oem', name: 'OEM' },
   { id: 'accessories', name: 'Accessories' },
