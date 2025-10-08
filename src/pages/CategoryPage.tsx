@@ -119,35 +119,49 @@ const CategoryPage = () => {
   const { addToCart } = useCart()
   const [showFilters, setShowFilters] = useState(false)
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalProducts, setTotalProducts] = useState(0)
+  const productsPerPage = 10
+
   // Get unique brands from products
   const availableBrands = useMemo(() => {
     const brands = products.map((product) => product.brand).filter(Boolean)
     return Array.from(new Set(brands))
   }, [products])
 
+  // Reset to page 1 when category changes
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [category])
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         setLoading(true)
-        // Always fetch all products, filter on frontend for robust matching
-        const data = await backendService.products.getAll()
+        // Fetch products with pagination using category-specific endpoint
+        const categoryParam = category === 'all' ? 'all' : category
+        const data = await backendService.products.getAllByCategory(
+          categoryParam,
+          currentPage,
+          productsPerPage
+        )
         setProducts(data.products)
-        // Filter by category if not 'all'
-        const selectedCategory = CATEGORY_SLUG_TO_NAME[category ?? 'all']
-        // Debug log: print product categories and selected category
-        console.log('Selected category:', selectedCategory)
-        data.products.forEach((product) => {
-          console.log('Product:', product.name, '| Category:', product.category)
-        })
-        const filtered =
-          !category || category === 'all'
-            ? data.products
-            : data.products.filter(
-                (product) =>
-                  normalizeCategory(product.category || '') ===
-                  normalizeCategory(selectedCategory)
-              )
-        setFilteredProducts(filtered)
+        setTotalPages(data.pages || 1)
+        setTotalProducts(data.total || 0)
+
+        console.log(
+          'Fetched products:',
+          data.products.length,
+          'Total:',
+          data.total,
+          'Page:',
+          currentPage
+        )
+
+        // No need for additional filtering since backend handles category filtering
+        setFilteredProducts(data.products)
       } catch (error) {
         console.error('CategoryPage: Error fetching products:', error)
       } finally {
@@ -155,7 +169,7 @@ const CategoryPage = () => {
       }
     }
     fetchProducts()
-  }, [category])
+  }, [category, currentPage])
 
   useEffect(() => {
     let filtered = [...products]
@@ -451,6 +465,40 @@ const CategoryPage = () => {
               <Filter size={16} className="mr-2" />
               Reset Filters
             </Button>
+          </div>
+        )}
+
+        {/* Pagination Controls */}
+        {!loading && filteredProducts.length > 0 && totalPages > 1 && (
+          <div className="flex items-center justify-between mt-8 pt-6 border-t border-gray-700">
+            <div className="text-sm text-muted-foreground">
+              Showing {(currentPage - 1) * productsPerPage + 1} to{' '}
+              {Math.min(currentPage * productsPerPage, totalProducts)} of{' '}
+              {totalProducts} products
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(currentPage - 1)}
+                disabled={currentPage <= 1}
+                className="border-gray-700 text-muted-foreground hover:text-foreground disabled:opacity-50"
+              >
+                Previous
+              </Button>
+              <span className="text-sm text-muted-foreground px-2">
+                Page {currentPage} of {totalPages}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(currentPage + 1)}
+                disabled={currentPage >= totalPages}
+                className="border-gray-700 text-muted-foreground hover:text-foreground disabled:opacity-50"
+              >
+                Next
+              </Button>
+            </div>
           </div>
         )}
       </div>

@@ -202,6 +202,11 @@ const Admin = () => {
   const [userSearch, setUserSearch] = useState('')
   const [orderSearch, setOrderSearch] = useState('')
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const [totalProducts, setTotalProducts] = useState(0)
+
   // Dialog states
   const [productDialogOpen, setProductDialogOpen] = useState(false)
   const [userDialogOpen, setUserDialogOpen] = useState(false)
@@ -299,16 +304,25 @@ const Admin = () => {
   }, [navigate, user, isLoading])
 
   // Load products
-  const loadProducts = async () => {
+  const loadProducts = async (page: number = 1) => {
     setProductsLoading(true)
     try {
-      const data = await backendService.products.getAll()
+      const data = await backendService.products.getAll(page)
+      console.log('Raw API response:', data)
       const normalized = (data.products || []).map((p: Product) => ({
         ...p,
         countInStock: p.countInStock ?? p.count_in_stock ?? 0,
       }))
       setProducts(normalized)
-      console.log('Admin: Loaded products:', normalized.length)
+      setTotalPages(data.pages || 1)
+      setCurrentPage(data.page || 1)
+      setTotalProducts(data.total || data.count || 0)
+      console.log(
+        'Admin: Loaded products:',
+        normalized.length,
+        'Total:',
+        data.total || data.count
+      )
     } catch (error) {
       console.error('Admin: Failed to load products:', error)
       toast({
@@ -785,6 +799,39 @@ const Admin = () => {
     }
   }
 
+  // Manual cache clear function
+  const clearCache = async () => {
+    try {
+      // Call a backend endpoint to clear cache
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+        }/products/clear-cache`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('gamecity_token')}`,
+          },
+        }
+      )
+      if (response.ok) {
+        toast({
+          title: 'Cache cleared',
+          description: 'Product cache has been cleared successfully',
+        })
+        // Reload products after clearing cache
+        loadProducts(currentPage)
+      }
+    } catch (error) {
+      console.error('Failed to clear cache:', error)
+      toast({
+        title: 'Cache clear failed',
+        description: 'Failed to clear product cache',
+        variant: 'destructive',
+      })
+    }
+  }
+
   const saveSettings = () => {
     toast({
       title: 'Settings Saved',
@@ -845,7 +892,7 @@ const Admin = () => {
                 <p className="text-sm font-medium text-muted-foreground">
                   Total Products
                 </p>
-                <p className="text-2xl font-bold">{products.length}</p>
+                <p className="text-2xl font-bold">{totalProducts}</p>
               </div>
             </CardContent>
           </Card>
@@ -914,13 +961,22 @@ const Admin = () => {
               <CardHeader>
                 <div className="flex justify-between items-center">
                   <CardTitle>Product Management</CardTitle>
-                  <Button
-                    onClick={handleAddProduct}
-                    className="bg-yellow-500 hover:bg-yellow-400 text-black"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add Product
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={clearCache}
+                      variant="outline"
+                      className="border-gray-700 text-muted-foreground hover:text-foreground"
+                    >
+                      Clear Cache
+                    </Button>
+                    <Button
+                      onClick={handleAddProduct}
+                      className="bg-yellow-500 hover:bg-yellow-400 text-black"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Product
+                    </Button>
+                  </div>
                 </div>
               </CardHeader>
               <CardContent>
@@ -953,47 +1009,83 @@ const Admin = () => {
                 )}
 
                 {!productsLoading && filteredProducts.length > 0 && (
-                  <div className="space-y-4">
-                    {filteredProducts.map((product) => (
-                      <div
-                        key={product.id}
-                        className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700"
-                      >
-                        <div className="flex items-center space-x-4">
-                          <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-12 h-12 object-cover rounded"
-                          />
-                          <div>
-                            <h3 className="font-semibold">{product.name}</h3>
-                            <p className="text-sm text-muted-foreground">
-                              {product.category} •{' '}
-                              {formatKESPrice(product.price)}
-                            </p>
+                  <>
+                    <div className="space-y-4">
+                      {filteredProducts.map((product) => (
+                        <div
+                          key={product.id}
+                          className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700"
+                        >
+                          <div className="flex items-center space-x-4">
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-12 h-12 object-cover rounded"
+                            />
+                            <div>
+                              <h3 className="font-semibold">{product.name}</h3>
+                              <p className="text-sm text-muted-foreground">
+                                {product.category} •{' '}
+                                {formatKESPrice(product.price)}
+                              </p>
+                            </div>
                           </div>
+                          <div className="flex items-center space-x-2">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleEditProduct(product)}
+                              className="border-gray-700 text-muted-foreground hover:text-foreground"
+                            >
+                              <Edit className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteProduct(product)}
+                              className="text-red-400 hover:text-red-300 hover:bg-red-500/20"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Pagination Controls */}
+                    {totalPages > 1 && (
+                      <div className="flex items-center justify-between mt-6 pt-4 border-t border-gray-700">
+                        <div className="text-sm text-muted-foreground">
+                          Showing {(currentPage - 1) * 50 + 1} to{' '}
+                          {Math.min(currentPage * 50, totalProducts)} of{' '}
+                          {totalProducts} products
                         </div>
                         <div className="flex items-center space-x-2">
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
-                            onClick={() => handleEditProduct(product)}
-                            className="border-gray-700 text-muted-foreground hover:text-foreground"
+                            onClick={() => loadProducts(currentPage - 1)}
+                            disabled={currentPage <= 1}
+                            className="border-gray-700"
                           >
-                            <Edit className="h-4 w-4" />
+                            Previous
                           </Button>
+                          <span className="text-sm text-muted-foreground px-2">
+                            Page {currentPage} of {totalPages}
+                          </span>
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             size="sm"
-                            onClick={() => handleDeleteProduct(product)}
-                            className="text-red-400 hover:text-red-300 hover:bg-red-500/20"
+                            onClick={() => loadProducts(currentPage + 1)}
+                            disabled={currentPage >= totalPages}
+                            className="border-gray-700"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            Next
                           </Button>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    )}
+                  </>
                 )}
               </CardContent>
             </Card>

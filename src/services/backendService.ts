@@ -145,12 +145,42 @@ const backendService = {
     },
   },
   products: {
-    getAll: (): Promise<{ products: Product[] }> =>
-      handleRequest<{ products: Product[] }>('GET', '/products'),
-    getAllByCategory: (category: string): Promise<{ products: Product[] }> =>
-      handleRequest<{ products: Product[] }>(
+    getAll: (
+      pageNumber: number = 1
+    ): Promise<{
+      products: Product[]
+      page: number
+      pages: number
+      count: number
+    }> =>
+      handleRequest<{
+        products: Product[]
+        page: number
+        pages: number
+        count: number
+      }>('GET', `/products?pageNumber=${pageNumber}`),
+    getAllByCategory: (
+      category: string,
+      page: number = 1,
+      limit: number = 10
+    ): Promise<{
+      products: Product[]
+      page: number
+      pages: number
+      total: number
+      hasMore: boolean
+    }> =>
+      handleRequest<{
+        products: Product[]
+        page: number
+        pages: number
+        total: number
+        hasMore: boolean
+      }>(
         'GET',
-        `/products?category=${encodeURIComponent(category)}`
+        `/products/category/${encodeURIComponent(
+          category
+        )}?page=${page}&limit=${limit}`
       ),
     getBrands: (): Promise<string[]> =>
       handleRequest<string[]>('GET', '/products/brands'),
