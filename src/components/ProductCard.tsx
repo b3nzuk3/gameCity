@@ -7,6 +7,8 @@ import { useCart } from '@/contexts/CartContext'
 import { useFavorites } from '@/contexts/FavoritesContext'
 import { formatKESPrice } from '@/lib/currency'
 import { getOfferPrice, getDiscountPercent, isOfferActive } from '@/lib/utils'
+import { generateProductUrl } from '@/lib/slugUtils'
+import OptimizedImage from './OptimizedImage'
 
 interface ProductProps {
   product: {
@@ -78,7 +80,11 @@ const ProductCard = ({ product }: ProductProps) => {
 
   return (
     <Link
-      to={`/product/${product.id}`}
+      to={generateProductUrl({
+        _id: product.id.toString(),
+        name: product.name,
+        category: product.category,
+      })}
       tabIndex={0}
       role="button"
       className="block focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-lg"
@@ -86,13 +92,16 @@ const ProductCard = ({ product }: ProductProps) => {
     >
       <Card className="bg-gray-900 border-gray-700 overflow-hidden hover:border-yellow-500/50 transition-colors group cursor-pointer">
         <div className="relative aspect-square overflow-hidden">
-          <img
+          <OptimizedImage
             src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-            onError={(e) => {
-              ;(e.target as HTMLImageElement).src = '/placeholder.svg'
-            }}
+            alt={`${product.name} - Gaming ${
+              product.category || 'electronics'
+            } in Nairobi Kenya`}
+            className="w-full h-full transition-transform duration-500 group-hover:scale-110"
+            width={400}
+            height={400}
+            quality={80}
+            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
           />
           {isOfferActive(product.offer) && (
             <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded">

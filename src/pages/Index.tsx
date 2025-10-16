@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import Layout from '@/components/Layout'
 import Hero from '@/components/Hero'
 import FeaturedProducts from '@/components/FeaturedProducts'
+import SEO from '@/components/SEO'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Shield, Truck, Sparkles, Zap } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
@@ -81,6 +82,12 @@ const Index = () => {
 
   return (
     <Layout>
+      <SEO
+        title="Gaming PCs, PS5, Xbox & Graphics Cards in Nairobi | GameCity Electronics"
+        description="Shop gaming PCs, PlayStation 5, Xbox Series X, graphics cards & gaming accessories in Nairobi. Fast delivery across Kenya. Best prices guaranteed!"
+        keywords="gaming PCs Nairobi, PlayStation 5 Kenya, Xbox Series X, graphics cards, gaming accessories, RTX 4070, RTX 4080, gaming monitors, Nairobi electronics"
+        url="/"
+      />
       {/* Hero Section */}
       <Hero />
 

@@ -116,6 +116,11 @@ const fetchProductById = async (id: string) => {
   return data
 }
 
+const fetchProductBySlug = async (slug: string) => {
+  const { data } = await api.get<Product>(`/products/slug/${slug}`)
+  return data
+}
+
 const createProduct = async (productData: Partial<Product>) => {
   const { data } = await api.post<Product>('/products', productData)
   return data
@@ -176,6 +181,14 @@ export const useProduct = (id: string) => {
   return useQuery({
     queryKey: ['product', id],
     queryFn: () => fetchProductById(id),
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  })
+}
+
+export const useProductBySlug = (slug: string) => {
+  return useQuery({
+    queryKey: ['product-slug', slug],
+    queryFn: () => fetchProductBySlug(slug),
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
 }

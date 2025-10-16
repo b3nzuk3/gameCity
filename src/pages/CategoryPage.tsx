@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import { useParams } from 'react-router-dom'
 import Layout from '@/components/Layout'
+import SEO from '@/components/SEO'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -271,8 +272,25 @@ const CategoryPage = () => {
     return categories
   }
 
+  const categoryName =
+    CATEGORIES.find((cat) => cat.id === category)?.name || 'All Products'
+  const categoryDescription =
+    category === 'all'
+      ? 'Browse all gaming electronics including PCs, graphics cards, monitors, and accessories in Nairobi, Kenya.'
+      : `Shop ${categoryName.toLowerCase()} in Nairobi, Kenya. High-quality gaming ${categoryName.toLowerCase()} with fast delivery across Kenya.`
+
   return (
     <Layout>
+      <SEO
+        title={`${categoryName} - Shop Online in Nairobi Kenya | GameCity Electronics`}
+        description={categoryDescription}
+        keywords={`${categoryName.toLowerCase()}, gaming ${categoryName.toLowerCase()}, ${categoryName.toLowerCase()} Nairobi, ${categoryName.toLowerCase()} Kenya, buy ${categoryName.toLowerCase()} online`}
+        url={`/category/${category}`}
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          { name: categoryName, url: `/category/${category}` },
+        ]}
+      />
       <div className="container mx-auto px-4 py-8 mt-16">
         {/* Header */}
         <div className="mb-8">

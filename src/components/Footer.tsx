@@ -28,7 +28,8 @@ const Footer = () => {
             </Link>
             <p className="text-muted-foreground leading-relaxed">
               Your premier destination for high-quality gaming components and
-              accessories. Building dream setups since day one.
+              accessories in Nairobi, Kenya. Building dream setups since day
+              one. Fast delivery across Kenya with expert technical support.
             </p>
             <div className="space-y-3">
               <a
@@ -41,14 +42,14 @@ const Footer = () => {
                   size={18}
                   className="text-yellow-500 mr-3 flex-shrink-0"
                 />
-                <span>GAMECITY ELECTRONICS</span>
+                <span>Westlands, Nairobi, Kenya</span>
               </a>
               <a
                 href="tel:0712248706"
                 className="flex items-center text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
               >
                 <Phone size={18} className="text-yellow-500 mr-3" />
-                <span>0712248706</span>
+                <span>+254 712 248 706</span>
               </a>
               <a
                 href="mailto:gamecityelectronics@gmail.com"
@@ -57,6 +58,18 @@ const Footer = () => {
                 <Mail size={18} className="text-yellow-500 mr-3" />
                 <span>gamecityelectronics@gmail.com</span>
               </a>
+              <div className="flex items-start text-sm text-muted-foreground">
+                <Globe
+                  size={18}
+                  className="text-yellow-500 mr-3 mt-0.5 flex-shrink-0"
+                />
+                <div>
+                  <p className="font-medium">Business Hours:</p>
+                  <p>Mon - Fri: 9:00 AM - 6:00 PM</p>
+                  <p>Sat: 9:00 AM - 4:00 PM</p>
+                  <p>Sun: Closed</p>
+                </div>
+              </div>
             </div>
           </div>
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { useProduct } from '@/services/productService'
+import { useProduct, useProductBySlug } from '@/services/productService'
+import { extractProductId, generateProductUrl } from '@/lib/slugUtils'
 import {
   Carousel,
   CarouselContent,
@@ -19,6 +20,7 @@ import { ShoppingCart, Plus, Minus } from 'lucide-react'
 import ProductReviews from '@/components/ProductReviews'
 import SimilarProducts from '@/components/SimilarProducts'
 import Layout from '@/components/Layout'
+import SEO from '@/components/SEO'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 
@@ -33,7 +35,15 @@ const ProductPage = () => {
     return <div>Product ID is missing.</div>
   }
 
-  const { data: product, isLoading, isError } = useProduct(id)
+  // Check if the ID is a MongoDB ObjectId or a slug
+  const isObjectId = /^[a-f\d]{24}$/i.test(id)
+
+  // Use appropriate hook based on ID format
+  const {
+    data: product,
+    isLoading,
+    isError,
+  } = isObjectId ? useProduct(id) : useProductBySlug(id)
 
   useEffect(() => {
     if (!api) {
@@ -95,6 +105,65 @@ const ProductPage = () => {
 
   return (
     <Layout>
+      <SEO
+        title={`${product.name} - Buy in Kenya | Best Price | GameCity Electronics`}
+        description={`${product.description.substring(0, 150)}... Buy ${
+          product.name
+        } in Nairobi, Kenya. Fast delivery, best prices. ${
+          isOfferActive(product.offer)
+            ? `Now ${getDiscountPercent(product.price, product.offer)}% off!`
+            : ''
+        }`}
+        keywords={`${product.name}, ${
+          product.category
+        }, gaming, Nairobi, Kenya, buy online, ${
+          product.brand || 'gaming electronics'
+        }`}
+        url={
+          product
+            ? generateProductUrl({
+                _id: product._id,
+                name: product.name,
+                category: product.category,
+              })
+            : `/product/${id}`
+        }
+        type="product"
+        product={
+          product
+            ? {
+                name: product.name,
+                price: isOfferActive(product.offer)
+                  ? getOfferPrice(product.price, product.offer)
+                  : product.price,
+                currency: 'KES',
+                availability: 'InStock',
+                brand: product.brand || 'GameCity',
+                image: product.image,
+                description: product.description,
+              }
+            : undefined
+        }
+        breadcrumbs={[
+          { name: 'Home', url: '/' },
+          {
+            name: product?.category || 'Products',
+            url: `/category/${product?.category
+              ?.toLowerCase()
+              .replace(/\s+/g, '-')}`,
+          },
+          {
+            name: product?.name || 'Product',
+            url: product
+              ? generateProductUrl({
+                  _id: product._id,
+                  name: product.name,
+                  category: product.category,
+                })
+              : `/product/${id}`,
+          },
+        ]}
+      />
       <div className="container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           <div className="space-y-4">
