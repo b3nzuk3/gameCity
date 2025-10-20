@@ -52,7 +52,6 @@ export default defineConfig(({ mode }) => ({
           ],
           utils: ['axios', 'clsx', 'tailwind-merge'],
           query: ['@tanstack/react-query'],
-          icons: ['lucide-react'],
         },
         // Optimize chunk naming
         chunkFileNames: 'assets/[name]-[hash].js',

@@ -90,7 +90,7 @@ const ProductCard = ({ product }: ProductProps) => {
       className="block focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-lg"
       style={{ textDecoration: 'none', color: 'inherit' }}
     >
-      <Card className="bg-[#232334] border-gray-700 overflow-hidden hover:border-yellow-500/50 transition-all duration-200 group cursor-pointer hover:shadow-lg hover:shadow-yellow-500/10 active:scale-[0.98] flex flex-col h-full">
+      <Card className="bg-[#232334] border-gray-700 overflow-hidden hover:border-yellow-500/50 transition-all duration-200 group cursor-pointer hover:shadow-lg hover:shadow-yellow-500/10 active:scale-[0.98] flex flex-col h-full min-h-[400px]">
         {/* Product Image - Optimized for mobile */}
         <div className="relative aspect-square overflow-hidden">
           <OptimizedImage
@@ -99,9 +99,7 @@ const ProductCard = ({ product }: ProductProps) => {
               product.category || 'electronics'
             } in Nairobi Kenya`}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            width={400}
-            height={400}
-            quality={60}
+            quality={75}
             sizes="(max-width: 374px) 50vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
           />
 
@@ -113,15 +111,23 @@ const ProductCard = ({ product }: ProductProps) => {
           )}
 
           {/* Stock Badge */}
-          <div className="absolute top-2 right-2">
+          <div className="absolute top-2 right-2 z-10">
             <div
-              className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                (product.countInStock ?? 0) > 0
+              className={`px-2 py-1 rounded-full text-xs font-semibold shadow-lg ${
+                (product.countInStock ??
+                  product.count_in_stock ??
+                  product.stock ??
+                  0) > 0
                   ? 'bg-green-600 text-white'
                   : 'bg-red-600 text-white'
               }`}
             >
-              {(product.countInStock ?? 0) > 0 ? 'In Stock' : 'Out of Stock'}
+              {(product.countInStock ??
+                product.count_in_stock ??
+                product.stock ??
+                0) > 0
+                ? 'In Stock'
+                : 'Out of Stock'}
             </div>
           </div>
 
@@ -141,9 +147,9 @@ const ProductCard = ({ product }: ProductProps) => {
         </div>
 
         {/* Product Content - Compact for mobile */}
-        <CardContent className="p-3 sm:p-4 flex flex-col flex-grow">
-          {/* Product Title - Limited to 2 lines */}
-          <h3 className="font-semibold text-white text-sm sm:text-base mb-2 leading-tight">
+        <CardContent className="p-3 sm:p-4 flex flex-col flex-grow min-h-0">
+          {/* Product Title - Allow wrapping for long names */}
+          <h3 className="font-semibold text-white text-sm sm:text-base mb-2 leading-tight break-words hyphens-auto line-clamp-3">
             {product.name}
           </h3>
 
@@ -204,7 +210,7 @@ const ProductCard = ({ product }: ProductProps) => {
         </CardContent>
 
         {/* Action Buttons - Mobile Optimized */}
-        <CardFooter className="p-3 sm:p-4 pt-0">
+        <CardFooter className="p-3 sm:p-4 pt-0 mt-auto">
           <div className="flex gap-2 w-full">
             <Button
               variant="outline"
@@ -226,10 +232,20 @@ const ProductCard = ({ product }: ProductProps) => {
               size="sm"
               className="flex-1 bg-gradient-to-r from-[#FDB813] to-[#ff9500] hover:from-[#ff9500] hover:to-[#FDB813] text-black font-semibold text-xs sm:text-sm py-2 px-3 min-h-[44px] shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95"
               onClick={handleAddToCart}
-              disabled={(product.countInStock ?? 0) === 0}
+              disabled={
+                (product.countInStock ??
+                  product.count_in_stock ??
+                  product.stock ??
+                  0) === 0
+              }
             >
               <ShoppingCart size={14} className="mr-1" />
-              {(product.countInStock ?? 0) === 0 ? 'Out' : 'Add'}
+              {(product.countInStock ??
+                product.count_in_stock ??
+                product.stock ??
+                0) === 0
+                ? 'Out'
+                : 'Add'}
             </Button>
           </div>
         </CardFooter>

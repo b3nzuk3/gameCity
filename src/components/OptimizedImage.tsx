@@ -81,7 +81,6 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       transformations.push('c_limit') // Limit dimensions
       transformations.push('fl_progressive') // Progressive JPEG
       transformations.push('dpr_auto') // Device pixel ratio optimization
-      transformations.push('ar_1:1') // Force square aspect ratio for product cards
 
       return `${baseUrl}${transformations.join(',')}/${path}`
     }
@@ -120,7 +119,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     <div
       ref={imgRef}
       className={cn('relative overflow-hidden bg-gray-100', className)}
-      style={{ width, height }}
+      style={width && height ? { width, height } : undefined}
     >
       {/* Placeholder/Blur */}
       {!isLoaded && !isError && (
@@ -166,8 +165,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           srcSet={srcSet}
           sizes={sizes}
           alt={alt}
-          width={width}
-          height={height}
+          {...(width ? { width } : {})}
+          {...(height ? { height } : {})}
           loading={priority ? 'eager' : loading}
           onLoad={handleLoad}
           onError={handleError}
