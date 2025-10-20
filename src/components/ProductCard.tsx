@@ -90,28 +90,44 @@ const ProductCard = ({ product }: ProductProps) => {
       className="block focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-lg"
       style={{ textDecoration: 'none', color: 'inherit' }}
     >
-      <Card className="bg-gray-900 border-gray-700 overflow-hidden hover:border-yellow-500/50 transition-colors group cursor-pointer">
+      <Card className="bg-[#232334] border-gray-700 overflow-hidden hover:border-yellow-500/50 transition-all duration-200 group cursor-pointer hover:shadow-lg hover:shadow-yellow-500/10 active:scale-[0.98] flex flex-col h-full">
+        {/* Product Image - Optimized for mobile */}
         <div className="relative aspect-square overflow-hidden">
           <OptimizedImage
             src={product.image}
             alt={`${product.name} - Gaming ${
               product.category || 'electronics'
             } in Nairobi Kenya`}
-            className="w-full h-full transition-transform duration-500 group-hover:scale-110"
-            width={400}
-            height={400}
-            quality={80}
-            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            quality={75}
+            sizes="(max-width: 374px) 50vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
           />
+
+          {/* Offer Badge */}
           {isOfferActive(product.offer) && (
-            <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded">
+            <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-lg">
               -{getDiscountPercent(product.price, product.offer)}%
             </div>
           )}
+
+          {/* Stock Badge */}
+          <div className="absolute top-2 right-2">
+            <div
+              className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                (product.countInStock ?? 0) > 0
+                  ? 'bg-green-600 text-white'
+                  : 'bg-red-600 text-white'
+              }`}
+            >
+              {(product.countInStock ?? 0) > 0 ? 'In Stock' : 'Out of Stock'}
+            </div>
+          </div>
+
+          {/* Favorite Button */}
           <Button
             variant="ghost"
             size="icon"
-            className={`absolute top-2 right-2 h-8 w-8 bg-black/50 hover:bg-black/70 text-white ${
+            className={`absolute bottom-2 right-2 h-8 w-8 bg-black/50 hover:bg-black/70 text-white transition-all duration-200 ${
               isProductFavorite ? 'text-red-400' : 'hover:text-red-400'
             }`}
             onClick={handleToggleFavorite}
@@ -121,77 +137,99 @@ const ProductCard = ({ product }: ProductProps) => {
             />
           </Button>
         </div>
-        <CardContent className="p-4">
-          <h3 className="font-medium mb-1 line-clamp-1">{product.name}</h3>
 
+        {/* Product Content - Compact for mobile */}
+        <CardContent className="p-3 sm:p-4 flex flex-col flex-grow">
+          {/* Product Title - Limited to 2 lines */}
+          <h3 className="font-semibold text-white text-sm sm:text-base mb-2 leading-tight">
+            {product.name}
+          </h3>
+
+          {/* Category */}
+          {product.category && (
+            <div className="text-xs text-[#b8b8c8] mb-2 capitalize">
+              {product.category}
+            </div>
+          )}
+
+          {/* Rating - Compact */}
           <div className="flex items-center mb-2">
             {product.rating > 0 ? (
               <>
-                {renderStars(product.rating)}
-                <span className="text-xs text-muted-foreground ml-2">
-                  ({product.numReviews || 0} reviews)
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <Star
+                      key={i}
+                      className={`h-3 w-3 ${
+                        i < product.rating
+                          ? 'text-yellow-400 fill-yellow-400'
+                          : 'text-gray-400'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className="text-xs text-[#b8b8c8] ml-1">
+                  ({product.numReviews || 0})
                 </span>
               </>
             ) : (
-              <div className="h-4 text-xs text-muted-foreground">
-                No reviews yet
-              </div>
+              <div className="h-3 text-xs text-[#b8b8c8]">No reviews yet</div>
             )}
           </div>
 
-          <div className="flex flex-col gap-0.5 justify-between items-start mb-1">
+          {/* Price - Prominent */}
+          <div className="mb-2">
             {isOfferActive(product.offer) ? (
-              <>
-                <span className="text-xs line-through text-muted-foreground">
+              <div className="flex flex-col">
+                <span className="text-xs line-through text-[#b8b8c8]">
                   {formatKESPrice(product.price)}
                 </span>
-                <span className="text-lg font-bold text-yellow-400">
+                <span className="text-lg sm:text-xl font-bold text-[#FDB813]">
                   {formatKESPrice(getOfferPrice(product.price, product.offer))}
-                  <span className="text-xs text-muted-foreground ml-2 align-middle">
-                    ex VAT
-                  </span>
+                  <span className="text-xs text-[#b8b8c8] ml-1">ex VAT</span>
                 </span>
-              </>
+              </div>
             ) : (
-              <span className="text-lg font-bold text-yellow-400">
+              <span className="text-lg sm:text-xl font-bold text-[#FDB813]">
                 {formatKESPrice(product.price)}
-                <span className="text-xs text-muted-foreground ml-2 align-middle">
-                  ex VAT
-                </span>
+                <span className="text-xs text-[#b8b8c8] ml-1">ex VAT</span>
               </span>
             )}
           </div>
-          <div className="text-sm text-muted-foreground mt-1">
-            Stock: {product.countInStock ?? 0}
-          </div>
+
+          {/* Spacer to push buttons to bottom */}
+          <div className="flex-grow"></div>
         </CardContent>
-        <CardFooter className="p-4 pt-0 flex justify-between gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full border-gray-700 text-muted-foreground hover:text-foreground"
-            onClick={(e) => {
-              e.preventDefault()
-              e.stopPropagation()
-              // Navigate to the SEO-friendly URL
-              window.location.href = generateProductUrl({
-                _id: product.id.toString(),
-                name: product.name,
-                category: product.category,
-              })
-            }}
-          >
-            Details
-          </Button>
-          <Button
-            size="sm"
-            className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black"
-            onClick={handleAddToCart}
-            disabled={(product.countInStock ?? 0) === 0}
-          >
-            <ShoppingCart size={14} className="mr-1" />
-            {(product.countInStock ?? 0) === 0 ? 'Out of Stock' : 'Add'}
-          </Button>
+
+        {/* Action Buttons - Mobile Optimized */}
+        <CardFooter className="p-3 sm:p-4 pt-0">
+          <div className="flex gap-2 w-full">
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1 border-gray-600 text-white hover:bg-gray-700 hover:text-white text-xs sm:text-sm py-2 px-3 min-h-[44px]"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                window.location.href = generateProductUrl({
+                  _id: product.id.toString(),
+                  name: product.name,
+                  category: product.category,
+                })
+              }}
+            >
+              View
+            </Button>
+            <Button
+              size="sm"
+              className="flex-1 bg-gradient-to-r from-[#FDB813] to-[#ff9500] hover:from-[#ff9500] hover:to-[#FDB813] text-black font-semibold text-xs sm:text-sm py-2 px-3 min-h-[44px] shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95"
+              onClick={handleAddToCart}
+              disabled={(product.countInStock ?? 0) === 0}
+            >
+              <ShoppingCart size={14} className="mr-1" />
+              {(product.countInStock ?? 0) === 0 ? 'Out' : 'Add'}
+            </Button>
+          </div>
         </CardFooter>
       </Card>
     </Link>

@@ -90,23 +90,24 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`bg-black border-b border-gray-800 shadow-lg fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
+      className={`bg-[#0f0f19]/95 backdrop-blur-md border-b border-gray-800 shadow-lg fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
         isHidden ? '-translate-y-full' : 'translate-y-0'
       }`}
     >
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+      <div className="container mx-auto px-3 sm:px-4">
+        <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center space-x-2 text-xl font-bold text-yellow-400 hover:text-yellow-300 transition-colors"
+            className="flex items-center space-x-1 sm:space-x-2 text-lg sm:text-xl font-bold text-[#FDB813] hover:text-[#ff9500] transition-colors"
           >
             <img
               src="/gamecity.png"
               alt="Gamecity Logo"
-              className="h-8 w-8 object-contain"
+              className="h-6 w-6 sm:h-8 sm:w-8 object-contain"
             />
-            <span>Gamecity Electronics</span>
+            <span className="hidden sm:inline">Gamecity Electronics</span>
+            <span className="sm:hidden">Gamecity</span>
           </Link>
 
           {/* Search Bar - Desktop */}
@@ -237,8 +238,42 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
+          {/* Mobile Actions */}
+          <div className="md:hidden flex items-center space-x-2">
+            {/* Mobile Search Button */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-gray-300 hover:text-white p-2"
+              onClick={() => {
+                const searchInput = document.querySelector(
+                  'input[type="text"]'
+                ) as HTMLInputElement
+                if (searchInput) {
+                  searchInput.focus()
+                }
+              }}
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+
+            {/* Cart Button */}
+            <Link to="/cart" className="relative">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-gray-300 hover:text-white p-2"
+              >
+                <ShoppingCart className="h-5 w-5" />
+                {totalItems > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {totalItems}
+                  </span>
+                )}
+              </Button>
+            </Link>
+
+            {/* Mobile Menu Button */}
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-gray-300">
