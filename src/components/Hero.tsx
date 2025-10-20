@@ -6,9 +6,9 @@ import { ChevronRight } from 'lucide-react'
 const Hero = () => {
   return (
     <div className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-full h-full bg-[url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10"></div>
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/50 via-black/80 to-background"></div>
+      {/* Optimized background - CSS gradient instead of external image */}
+      <div className="absolute top-0 left-0 w-full h-full hero-gradient"></div>
+      <div className="absolute top-0 left-0 w-full h-full hero-overlay"></div>
 
       {/* Floating elements */}
       <div className="absolute w-64 h-64 bg-yellow-500/5 rounded-full filter blur-3xl -top-20 -right-20 animate-pulse"></div>

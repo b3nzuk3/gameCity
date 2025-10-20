@@ -79,6 +79,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       if (quality) transformations.push(`q_${quality}`)
       transformations.push('f_auto') // Auto format (WebP, AVIF)
       transformations.push('c_limit') // Limit dimensions
+      transformations.push('fl_progressive') // Progressive JPEG
+      transformations.push('dpr_auto') // Device pixel ratio optimization
 
       return `${baseUrl}${transformations.join(',')}/${path}`
     }

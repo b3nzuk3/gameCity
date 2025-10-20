@@ -4,6 +4,7 @@ import Layout from '@/components/Layout'
 import Hero from '@/components/Hero'
 import FeaturedProducts from '@/components/FeaturedProducts'
 import SEO from '@/components/SEO'
+import OptimizedImage from '@/components/OptimizedImage'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Shield, Truck, Sparkles, Zap } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
@@ -154,10 +155,17 @@ const Index = () => {
 
                 {/* Background image */}
                 <div className="h-80 overflow-hidden">
-                  <img
+                  <OptimizedImage
                     src={category.image}
-                    alt={category.title}
+                    alt={`${
+                      category.title
+                    } - Gaming ${category.title.toLowerCase()} in Nairobi Kenya`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    width={400}
+                    height={320}
+                    quality={75}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    priority={index < 3} // Prioritize first 3 images
                   />
                 </div>
 

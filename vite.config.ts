@@ -26,13 +26,19 @@ export default defineConfig(({ mode }) => ({
       compress: {
         drop_console: mode === 'production',
         drop_debugger: mode === 'production',
+        pure_funcs:
+          mode === 'production' ? ['console.log', 'console.info'] : [],
+        passes: 2, // Multiple passes for better compression
+      },
+      mangle: {
+        safari10: true, // Fix Safari 10 issues
       },
     },
 
     // Enable source maps for debugging
     sourcemap: mode === 'development',
 
-    // Optimize chunk splitting
+    // Optimize chunk splitting for better caching
     rollupOptions: {
       output: {
         manualChunks: {
@@ -42,14 +48,26 @@ export default defineConfig(({ mode }) => ({
             '@radix-ui/react-dialog',
             '@radix-ui/react-dropdown-menu',
             '@radix-ui/react-select',
+            '@radix-ui/react-tabs',
           ],
           utils: ['axios', 'clsx', 'tailwind-merge'],
+          query: ['@tanstack/react-query'],
         },
+        // Optimize chunk naming
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
       },
     },
 
     // Increase chunk size warning limit
     chunkSizeWarningLimit: 1000,
+
+    // Target modern browsers for better optimization
+    target: 'es2020',
+
+    // Enable CSS code splitting
+    cssCodeSplit: true,
   },
 
   // Optimize dependencies
