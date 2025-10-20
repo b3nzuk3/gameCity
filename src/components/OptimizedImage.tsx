@@ -81,6 +81,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       transformations.push('c_limit') // Limit dimensions
       transformations.push('fl_progressive') // Progressive JPEG
       transformations.push('dpr_auto') // Device pixel ratio optimization
+      transformations.push('ar_1:1') // Force square aspect ratio for product cards
 
       return `${baseUrl}${transformations.join(',')}/${path}`
     }

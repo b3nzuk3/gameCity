@@ -99,7 +99,9 @@ const ProductCard = ({ product }: ProductProps) => {
               product.category || 'electronics'
             } in Nairobi Kenya`}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            quality={75}
+            width={400}
+            height={400}
+            quality={60}
             sizes="(max-width: 374px) 50vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
           />
 

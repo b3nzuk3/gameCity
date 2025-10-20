@@ -105,6 +105,9 @@ const Navbar = () => {
               src="/gamecity.png"
               alt="Gamecity Logo"
               className="h-6 w-6 sm:h-8 sm:w-8 object-contain"
+              width="32"
+              height="32"
+              loading="eager"
             />
             <span className="hidden sm:inline">Gamecity Electronics</span>
             <span className="sm:hidden">Gamecity</span>
