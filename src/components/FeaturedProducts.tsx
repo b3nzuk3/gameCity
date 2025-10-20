@@ -123,7 +123,7 @@ const FeaturedProducts = () => {
           {products.slice(0, 4).map((product) => (
             <Card
               key={product.id}
-              className="bg-gray-800 border-gray-700 h-full flex flex-col group-hover:border-yellow-500/50 transition-colors cursor-pointer"
+              className="bg-gray-800 border-gray-700 h-full flex flex-col group-hover:border-yellow-500/50 transition-colors cursor-pointer min-h-[350px] sm:min-h-[400px]"
               onClick={() =>
                 navigate(
                   generateProductUrl({
@@ -146,7 +146,7 @@ const FeaturedProducts = () => {
                   )
               }}
             >
-              <CardContent className="p-4 flex flex-col flex-grow">
+              <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
                 <div className="aspect-square relative mb-4 overflow-hidden rounded-md bg-gray-700">
                   <img
                     src={product.image}
@@ -231,11 +231,11 @@ const FeaturedProducts = () => {
                     )}
                   </div>
 
-                  <div className="flex gap-2 pt-2">
+                  <div className="flex gap-1.5 pt-2">
                     <Button
                       onClick={(e) => handleAddToCart(e, product)}
                       disabled={product.count_in_stock === 0}
-                      className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black text-xs"
+                      className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black text-xs py-1.5 px-2 h-8 sm:h-9"
                       size="sm"
                     >
                       {product.count_in_stock === 0
@@ -244,7 +244,7 @@ const FeaturedProducts = () => {
                     </Button>
                     <Button
                       variant="outline"
-                      className="border-gray-600 text-muted-foreground hover:text-white text-xs"
+                      className="border-gray-600 text-muted-foreground hover:text-white text-xs py-1.5 px-2 h-8 sm:h-9"
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation()
