@@ -16,6 +16,7 @@ import backendService, { type Product } from '@/services/backendService'
 import { useCart } from '@/contexts/CartContext'
 import { formatKESPrice } from '@/lib/currency'
 import { getDiscountPercent, getOfferPrice, isOfferActive } from '@/lib/utils'
+import { generateProductUrl } from '@/lib/slugUtils'
 import { Star } from 'lucide-react'
 
 const FeaturedProducts = () => {
@@ -123,12 +124,26 @@ const FeaturedProducts = () => {
             <Card
               key={product.id}
               className="bg-gray-800 border-gray-700 h-full flex flex-col group-hover:border-yellow-500/50 transition-colors cursor-pointer"
-              onClick={() => navigate(`/product/${product.id}`)}
+              onClick={() =>
+                navigate(
+                  generateProductUrl({
+                    _id: product.id.toString(),
+                    name: product.name,
+                    category: product.category,
+                  })
+                )
+              }
               tabIndex={0}
               role="button"
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ')
-                  navigate(`/product/${product.id}`)
+                  navigate(
+                    generateProductUrl({
+                      _id: product.id.toString(),
+                      name: product.name,
+                      category: product.category,
+                    })
+                  )
               }}
             >
               <CardContent className="p-4 flex flex-col flex-grow">
@@ -233,7 +248,13 @@ const FeaturedProducts = () => {
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation()
-                        navigate(`/product/${product.id}`)
+                        navigate(
+                          generateProductUrl({
+                            _id: product.id.toString(),
+                            name: product.name,
+                            category: product.category,
+                          })
+                        )
                       }}
                     >
                       View

@@ -173,7 +173,12 @@ const ProductCard = ({ product }: ProductProps) => {
             onClick={(e) => {
               e.preventDefault()
               e.stopPropagation()
-              window.location.href = `/product/${product.id}`
+              // Navigate to the SEO-friendly URL
+              window.location.href = generateProductUrl({
+                _id: product.id.toString(),
+                name: product.name,
+                category: product.category,
+              })
             }}
           >
             Details
