@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server'
+// Vercel serverless function - no imports needed
 
 interface Product {
   id: string
@@ -32,7 +32,7 @@ function generateProductUrl(product: Product): string {
   return `/product/${slug}`
 }
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
     // Set proper XML content type
     const headers = new Headers()
@@ -46,34 +46,68 @@ export async function GET(request: NextRequest) {
     let products: Product[] = []
     let categories: string[] = []
 
+    // Static fallback categories
+    const staticCategories = [
+      'monitors',
+      'graphics-cards',
+      'memory',
+      'processors',
+      'storage',
+      'motherboards',
+      'cases',
+      'power-supply',
+      'pre-built',
+      'cpu-cooling',
+      'oem',
+      'accessories',
+    ]
+
     try {
-      // Replace with your actual backend URL
-      const backendUrl =
-        process.env.BACKEND_URL || 'https://your-backend-url.com'
-      const response = await fetch(
-        `${backendUrl}/api/products?pageNumber=1&limit=1000`,
-        {
-          headers: {
-            Accept: 'application/json',
-          },
-        }
-      )
+      const backendUrl = process.env.BACKEND_URL
 
-      if (response.ok) {
-        const data: ProductsResponse = await response.json()
-        products = data.products || []
-
-        // Get unique categories
-        categories = [
-          ...new Set(products.map((p) => p.category).filter(Boolean)),
-        ]
+      if (!backendUrl || backendUrl === 'https://your-backend-url.com') {
+        console.warn('BACKEND_URL not configured, using static sitemap')
+        categories = staticCategories
       } else {
-        console.warn(
-          'Failed to fetch products from backend, using static sitemap'
+        console.log('Fetching products from:', `${backendUrl}/api/products`)
+
+        const response = await fetch(
+          `${backendUrl}/api/products?pageNumber=1&limit=1000`,
+          {
+            headers: {
+              Accept: 'application/json',
+            },
+            // Add timeout
+            signal: AbortSignal.timeout(10000), // 10 second timeout
+          }
         )
+
+        if (response.ok) {
+          const data: ProductsResponse = await response.json()
+          products = data.products || []
+
+          // Get unique categories
+          categories = [
+            ...new Set(
+              products
+                .map((p) => p.category)
+                .filter((cat): cat is string => Boolean(cat))
+            ),
+          ]
+
+          console.log(
+            `Successfully fetched ${products.length} products and ${categories.length} categories`
+          )
+        } else {
+          console.warn(
+            `Backend API returned ${response.status}: ${response.statusText}`
+          )
+          categories = staticCategories
+        }
       }
     } catch (error) {
       console.warn('Error fetching products from backend:', error)
+      categories = staticCategories
     }
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -142,12 +176,30 @@ export async function GET(request: NextRequest) {
     xml += `
 </urlset>`
 
-    return new NextResponse(xml, {
+    return new Response(xml, {
       status: 200,
       headers,
     })
   } catch (error) {
     console.error('Error generating sitemap:', error)
-    return new NextResponse('Error generating sitemap', { status: 500 })
+
+    // Return a minimal sitemap even if there's an error
+    const fallbackXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.gamecityelectronics.com/</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`
+
+    const headers = new Headers()
+    headers.set('Content-Type', 'application/xml; charset=utf-8')
+
+    return new Response(fallbackXml, {
+      status: 200,
+      headers,
+    })
   }
 }
