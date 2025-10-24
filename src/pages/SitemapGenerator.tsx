@@ -45,7 +45,7 @@ const SitemapGenerator: React.FC = () => {
   const generateXMLSitemap = () => {
     if (!sitemapData) return ''
 
-    const baseUrl = 'https://gamecityelectronics.com'
+    const baseUrl = 'https://www.gamecityelectronics.com'
     const currentDate = new Date().toISOString()
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -110,12 +110,46 @@ const SitemapGenerator: React.FC = () => {
     return xml
   }
 
+  // If this is being accessed as /sitemap.xml, serve XML content
+  useEffect(() => {
+    if (window.location.pathname === '/sitemap.xml') {
+      // Set proper XML content type header
+      document.title = 'Sitemap'
+
+      // Generate and serve XML content
+      const xmlContent = generateXMLSitemap()
+
+      // Create a blob with XML content
+      const blob = new Blob([xmlContent], { type: 'application/xml' })
+      const url = URL.createObjectURL(blob)
+
+      // Trigger download or display
+      const link = document.createElement('a')
+      link.href = url
+      link.download = 'sitemap.xml'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+    }
+  }, [sitemapData])
+
   if (loading) {
     return <div>Generating sitemap...</div>
   }
 
   const xmlSitemap = generateXMLSitemap()
 
+  // If accessing /sitemap.xml, return XML content directly
+  if (window.location.pathname === '/sitemap.xml') {
+    return (
+      <div style={{ display: 'none' }}>
+        <pre>{xmlSitemap}</pre>
+      </div>
+    )
+  }
+
+  // Regular HTML view for /sitemap-generator or other paths
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-2xl font-bold mb-4">XML Sitemap</h1>

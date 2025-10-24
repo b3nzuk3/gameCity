@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://gamecityelectronics.com/sitemap.xml
+Sitemap: https://www.gamecityelectronics.com/sitemap.xml
 
 # Crawl-delay for better server performance
 Crawl-delay: 1
@@ -23,7 +23,6 @@ Allow: /build-pc
 # Block common bot traps
 Disallow: /*?*
 Disallow: /*.json$
-Disallow: /*.xml$
 Disallow: /api/*
 
 # Allow social media crawlers
