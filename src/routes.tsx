@@ -11,6 +11,7 @@ import Contact from '@/pages/Contact'
 import Favorites from '@/pages/Favorites'
 import Profile from '@/pages/Profile'
 import Sitemap from '@/pages/Sitemap'
+import DynamicSitemapGenerator from '@/pages/DynamicSitemapGenerator'
 import NotFound from '@/pages/NotFound'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import ResetPassword from '@/pages/ResetPassword'
@@ -51,6 +52,7 @@ export default function AppRoutes() {
         }
       />
       <Route path="/sitemap" element={<Sitemap />} />
+      <Route path="/sitemap.xml" element={<DynamicSitemapGenerator />} />
       <Route path="/reset-password/:token" element={<ResetPassword />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
