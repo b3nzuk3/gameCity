@@ -1,25 +1,25 @@
 {
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/((?!api).*)",
       "has": [
         {
           "type": "host",
           "value": "www.gamecityelectronics.com"
         }
       ],
-      "destination": "https://www.gamecityelectronics.co.ke/:path*",
+      "destination": "https://www.gamecityelectronics.co.ke/$1",
       "permanent": true
     },
     {
-      "source": "/:path*",
+      "source": "/((?!api).*)",
       "has": [
         {
           "type": "host",
           "value": "gamecityelectronics.com"
         }
       ],
-      "destination": "https://www.gamecityelectronics.co.ke/:path*",
+      "destination": "https://www.gamecityelectronics.co.ke/$1",
       "permanent": true
     }
   ],
