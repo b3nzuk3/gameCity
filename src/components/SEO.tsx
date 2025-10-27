@@ -27,8 +27,8 @@ const SEO: React.FC<SEOProps> = ({
   title = 'Gaming PCs, PS5, Xbox & Graphics Cards in Nairobi | GameCity Electronics',
   description = 'Shop gaming PCs, PlayStation 5, Xbox Series X, graphics cards & gaming accessories in Nairobi. Fast delivery across Kenya. Best prices guaranteed!',
   keywords = 'gaming PCs Nairobi, PlayStation 5 Kenya, Xbox Series X, graphics cards, gaming accessories, RTX 4070, RTX 4080, gaming monitors, Nairobi electronics',
-  image = 'https://gamecityelectronics.com/og-image.png',
-  url = 'https://gamecityelectronics.com',
+  image = 'https://www.gamecityelectronics.co.ke/og-image.png',
+  url = 'https://www.gamecityelectronics.co.ke',
   type = 'website',
   product,
   breadcrumbs = [],
@@ -38,18 +38,18 @@ const SEO: React.FC<SEOProps> = ({
     : `${title} | GameCity Electronics`
   const fullUrl = url.startsWith('http')
     ? url
-    : `https://gamecityelectronics.com${url}`
+    : `https://www.gamecityelectronics.co.ke${url}`
   const fullImage = image.startsWith('http')
     ? image
-    : `https://gamecityelectronics.com${image}`
+    : `https://www.gamecityelectronics.co.ke${image}`
 
   // Organization Schema
   const organizationSchema = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'GameCity Electronics',
-    url: 'https://gamecityelectronics.com',
-    logo: 'https://gamecityelectronics.com/logo.png',
+    url: 'https://www.gamecityelectronics.co.ke',
+    logo: 'https://www.gamecityelectronics.co.ke/logo.png',
     description:
       'Leading gaming electronics retailer in Nairobi, Kenya. Specializing in gaming PCs, PlayStation, Xbox, graphics cards, and gaming accessories.',
     address: {
@@ -77,7 +77,7 @@ const SEO: React.FC<SEOProps> = ({
     '@context': 'https://schema.org',
     '@type': 'ElectronicsStore',
     name: 'GameCity Electronics',
-    image: 'https://gamecityelectronics.com/store-image.jpg',
+    image: 'https://www.gamecityelectronics.co.ke/store-image.jpg',
     description: 'Gaming electronics store in Nairobi, Kenya',
     address: {
       '@type': 'PostalAddress',
@@ -90,7 +90,7 @@ const SEO: React.FC<SEOProps> = ({
       latitude: -1.2921,
       longitude: 36.8219,
     },
-    url: 'https://gamecityelectronics.com',
+    url: 'https://www.gamecityelectronics.co.ke',
     telephone: '+254-XXX-XXXXXX',
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
@@ -153,7 +153,7 @@ const SEO: React.FC<SEOProps> = ({
             name: crumb.name,
             item: crumb.url.startsWith('http')
               ? crumb.url
-              : `https://gamecityelectronics.com${crumb.url}`,
+              : `https://www.gamecityelectronics.co.ke${crumb.url}`,
           })),
         }
       : null
@@ -163,10 +163,11 @@ const SEO: React.FC<SEOProps> = ({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'GameCity Electronics',
-    url: 'https://gamecityelectronics.com',
+    url: 'https://www.gamecityelectronics.co.ke',
     potentialAction: {
       '@type': 'SearchAction',
-      target: 'https://gamecityelectronics.com/search?q={search_term_string}',
+      target:
+        'https://www.gamecityelectronics.co.ke/search?q={search_term_string}',
       'query-input': 'required name=search_term_string',
     },
   }

@@ -45,7 +45,7 @@ const SitemapGenerator: React.FC = () => {
   const generateXMLSitemap = () => {
     if (!sitemapData) return ''
 
-    const baseUrl = 'https://www.gamecityelectronics.com'
+    const baseUrl = 'https://www.gamecityelectronics.co.ke'
     const currentDate = new Date().toISOString()
 
     let xml = `<?xml version="1.0" encoding="UTF-8"?>

@@ -39,7 +39,7 @@ export async function GET(request: Request) {
     headers.set('Content-Type', 'application/xml; charset=utf-8')
     headers.set('Cache-Control', 'public, max-age=3600') // Cache for 1 hour
 
-    const baseUrl = 'https://www.gamecityelectronics.com'
+    const baseUrl = 'https://www.gamecityelectronics.co.ke'
     const currentDate = new Date().toISOString()
 
     // Fetch products from your backend API
