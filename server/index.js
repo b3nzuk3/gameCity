@@ -164,12 +164,12 @@ app.get('/test', (req, res) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error('Server error:', err)
-  res.status(500).json({
+  const status = err.status || 500
+  const message = err.message || 'Something went wrong!'
+  res.status(status).json({
     success: false,
-    error:
-      process.env.NODE_ENV === 'production'
-        ? 'Something went wrong!'
-        : err.message,
+    message,
+    details: process.env.NODE_ENV === 'production' ? undefined : err.stack,
   })
 })
 
