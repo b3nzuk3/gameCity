@@ -24,6 +24,13 @@
     }
   ],
   "rewrites": [
+    {
+      "source": "/product/:slug",
+      "has": [
+        { "type": "header", "key": "user-agent", "value": ".*(facebookexternalhit|WhatsApp|Twitterbot|Slackbot|Discordbot|LinkedInBot|TelegramBot).*" }
+      ],
+      "destination": "/api/og-product?slug=:slug"
+    },
     { "source": "/sitemap.xml", "destination": "/api/sitemap.xml" },
     { "source": "/(.*)", "destination": "/" }
   ],
