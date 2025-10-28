@@ -119,6 +119,7 @@ const ProductPage = () => {
         }, gaming, Nairobi, Kenya, buy online, ${
           product.brand || 'gaming electronics'
         }`}
+        image={product.image}
         url={
           product
             ? generateProductUrl({
