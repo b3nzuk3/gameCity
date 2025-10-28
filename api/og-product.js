@@ -57,6 +57,11 @@ export default async function handler(req, res) {
       'Cache-Control',
       'public, max-age=300, s-maxage=600, stale-while-revalidate=86400'
     )
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN')
+    res.setHeader('X-Content-Type-Options', 'nosniff')
+    res.setHeader('Access-Control-Allow-Origin', '*')
+    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
     res.status(200).send(html)
   } catch (err) {
     res.status(500).send((err && err.message) || 'Server error')
@@ -79,6 +84,8 @@ function buildHtml({ title, description, image, url }) {
     <meta property="og:image" content="${image}" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:alt" content="${escapeHtml(title)}" />
     <meta property="og:site_name" content="GameCity Electronics" />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -86,6 +93,7 @@ function buildHtml({ title, description, image, url }) {
     <meta name="twitter:title" content="${escapeHtml(title)}" />
     <meta name="twitter:description" content="${escapeHtml(description)}" />
     <meta name="twitter:image" content="${image}" />
+    <meta name="twitter:image:alt" content="${escapeHtml(title)}" />
 
     <meta http-equiv="refresh" content="0; url=${url}" />
   </head>
@@ -121,15 +129,14 @@ function optimizeImageForSharing(imageUrl) {
     const baseUrl = imageUrl.split('/upload/')[0] + '/upload/'
     const path = imageUrl.split('/upload/')[1]
 
-    // Optimize for social sharing: 1200x630, high quality, WebP format
+    // Optimize for WhatsApp and social sharing: use JPEG format for better compatibility
     const transformations = [
       'w_1200', // Width for social sharing
       'h_630', // Height for social sharing
       'c_fill', // Fill mode to maintain aspect ratio
-      'q_auto', // Auto quality
-      'f_auto', // Auto format (WebP, AVIF)
+      'q_80', // Fixed quality for WhatsApp compatibility
+      'f_jpg', // JPEG format for better WhatsApp support
       'fl_progressive', // Progressive loading
-      'dpr_auto', // Device pixel ratio
     ]
 
     return `${baseUrl}${transformations.join(',')}/${path}`

@@ -36,6 +36,10 @@
       "destination": "/api/og-product?slug=:slug"
     },
     { "source": "/sitemap.xml", "destination": "/api/sitemap.xml" },
+    {
+      "source": "/debug-whatsapp/:slug",
+      "destination": "/api/debug-whatsapp?slug=:slug"
+    },
     { "source": "/(.*)", "destination": "/" }
   ],
   "headers": [
