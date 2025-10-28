@@ -30,7 +30,18 @@
         {
           "type": "header",
           "key": "user-agent",
-          "value": ".*(facebookexternalhit|WhatsApp|Twitterbot|Slackbot|Discordbot|LinkedInBot|TelegramBot).*"
+          "value": ".*(facebookexternalhit|WhatsApp|Twitterbot|Slackbot|Discordbot|LinkedInBot|TelegramBot|facebook|twitter|linkedin|whatsapp|telegram|discord|slack|bot|crawler|spider|scraper).*"
+        }
+      ],
+      "destination": "/api/og-product?slug=:slug"
+    },
+    {
+      "source": "/product/:slug",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": "text/html"
         }
       ],
       "destination": "/api/og-product?slug=:slug"

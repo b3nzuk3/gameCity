@@ -143,6 +143,31 @@
 
   <body>
     <div id="root"></div>
+
+    <!-- Fallback for crawlers that don't get caught by rewrite rules -->
+    <script>
+      // Detect if we're on a product page and update meta tags for crawlers
+      ;(function () {
+        const path = window.location.pathname
+        const productMatch = path.match(/^\/product\/(.+)$/)
+
+        if (productMatch) {
+          const slug = productMatch[1]
+          const isCrawler =
+            /(facebookexternalhit|WhatsApp|Twitterbot|Slackbot|Discordbot|LinkedInBot|TelegramBot|facebook|twitter|linkedin|whatsapp|telegram|discord|slack|bot|crawler|spider|scraper)/i.test(
+              navigator.userAgent
+            )
+
+          if (isCrawler) {
+            // Redirect to OG endpoint for crawlers
+            window.location.href =
+              '/api/og-product?slug=' + encodeURIComponent(slug)
+            return
+          }
+        }
+      })()
+    </script>
+
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS VERY COMMENT! -->
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>

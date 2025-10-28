@@ -10,6 +10,22 @@ export default async function handler(req, res) {
       return
     }
 
+    // Log crawler detection for debugging
+    const userAgent = req.headers['user-agent'] || ''
+    const acceptHeader = req.headers['accept'] || ''
+    const isCrawler =
+      /(facebookexternalhit|WhatsApp|Twitterbot|Slackbot|Discordbot|LinkedInBot|TelegramBot|facebook|twitter|linkedin|whatsapp|telegram|discord|slack|bot|crawler|spider|scraper)/i.test(
+        userAgent
+      )
+
+    console.log('OG Product Request:', {
+      slug,
+      userAgent,
+      acceptHeader,
+      isCrawler,
+      headers: req.headers,
+    })
+
     const apiBases = [
       API_BASE,
       `${SITE_ORIGIN}/api`,
