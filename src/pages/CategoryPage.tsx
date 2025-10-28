@@ -124,7 +124,7 @@ const CategoryPage = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const [totalProducts, setTotalProducts] = useState(0)
-  const productsPerPage = 10
+  const productsPerPage = 12
 
   // Get unique brands from products
   const availableBrands = useMemo(() => {

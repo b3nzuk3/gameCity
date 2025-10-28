@@ -162,7 +162,7 @@ const backendService = {
     getAllByCategory: (
       category: string,
       page: number = 1,
-      limit: number = 10
+      limit: number = 12
     ): Promise<{
       products: Product[]
       page: number
