@@ -1,6 +1,7 @@
 export default async function handler(req, res) {
   try {
-    const SITE_ORIGIN = process.env.SITE_ORIGIN || 'https://www.gamecityelectronics.co.ke'
+    const SITE_ORIGIN =
+      process.env.SITE_ORIGIN || 'https://www.gamecityelectronics.co.ke'
     const API_BASE = process.env.API_BASE_URL || process.env.VITE_API_URL || ''
 
     const slug = String((req.query && req.query.slug) || '').trim()
@@ -9,13 +10,19 @@ export default async function handler(req, res) {
       return
     }
 
-    const apiBases = [API_BASE, `${SITE_ORIGIN}/api`, 'http://localhost:5000/api'].filter(Boolean)
+    const apiBases = [
+      API_BASE,
+      `${SITE_ORIGIN}/api`,
+      'http://localhost:5000/api',
+    ].filter(Boolean)
 
     let product = null
     let lastError
     for (const base of apiBases) {
       try {
-        const r = await fetch(`${base}/products/slug/${encodeURIComponent(slug)}`)
+        const r = await fetch(
+          `${base}/products/slug/${encodeURIComponent(slug)}`
+        )
         if (r.ok) {
           product = await r.json()
           break
@@ -26,20 +33,30 @@ export default async function handler(req, res) {
       }
     }
 
-    const title = product ? `${product.name} | GameCity Electronics` : `${toTitle(slug)} | GameCity Electronics`
-    const description = product && product.description
-      ? product.description.replace(/\s+/g, ' ').slice(0, 200)
-      : 'Find detailed specs and best prices in Nairobi, Kenya. Fast delivery across Kenya.'
-    const image = product && (product.image || (product.images && product.images[0]))
-      ? (product.image || product.images[0])
-      : `${SITE_ORIGIN}/gamecity.png`
+    const title = product
+      ? `${product.name} | GameCity Electronics`
+      : `${toTitle(slug)} | GameCity Electronics`
+    const description =
+      product && product.description
+        ? product.description.replace(/\s+/g, ' ').slice(0, 200)
+        : 'Find detailed specs and best prices in Nairobi, Kenya. Fast delivery across Kenya.'
+    const rawImage =
+      product && (product.image || (product.images && product.images[0]))
+        ? product.image || product.images[0]
+        : `${SITE_ORIGIN}/gamecity.png`
+
+    // Optimize image URL for social sharing with proper dimensions and format
+    const image = optimizeImageForSharing(rawImage)
     const url = `${SITE_ORIGIN}/product/${slug}`
 
     const html = buildHtml({ title, description, image, url })
 
     if (!product && lastError) res.setHeader('X-OG-Fallback', String(lastError))
     res.setHeader('Content-Type', 'text/html; charset=utf-8')
-    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=600, stale-while-revalidate=86400')
+    res.setHeader(
+      'Cache-Control',
+      'public, max-age=300, s-maxage=600, stale-while-revalidate=86400'
+    )
     res.status(200).send(html)
   } catch (err) {
     res.status(500).send((err && err.message) || 'Server error')
@@ -91,4 +108,44 @@ function toTitle(slug) {
   return String(slug)
     .replace(/-/g, ' ')
     .replace(/\b\w/g, (m) => m.toUpperCase())
+}
+
+function optimizeImageForSharing(imageUrl) {
+  if (!imageUrl)
+    return `${
+      process.env.SITE_ORIGIN || 'https://www.gamecityelectronics.co.ke'
+    }/gamecity.png`
+
+  // If it's a Cloudinary URL, optimize it for social sharing
+  if (imageUrl.includes('cloudinary.com')) {
+    const baseUrl = imageUrl.split('/upload/')[0] + '/upload/'
+    const path = imageUrl.split('/upload/')[1]
+
+    // Optimize for social sharing: 1200x630, high quality, WebP format
+    const transformations = [
+      'w_1200', // Width for social sharing
+      'h_630', // Height for social sharing
+      'c_fill', // Fill mode to maintain aspect ratio
+      'q_auto', // Auto quality
+      'f_auto', // Auto format (WebP, AVIF)
+      'fl_progressive', // Progressive loading
+      'dpr_auto', // Device pixel ratio
+    ]
+
+    return `${baseUrl}${transformations.join(',')}/${path}`
+  }
+
+  // If it's a local image, ensure it's using HTTPS
+  if (imageUrl.startsWith('/')) {
+    const origin =
+      process.env.SITE_ORIGIN || 'https://www.gamecityelectronics.co.ke'
+    return `${origin}${imageUrl}`
+  }
+
+  // Ensure HTTPS for external images
+  if (imageUrl.startsWith('http://')) {
+    return imageUrl.replace('http://', 'https://')
+  }
+
+  return imageUrl
 }

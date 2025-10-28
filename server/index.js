@@ -50,7 +50,8 @@ app.use(
         defaultSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         scriptSrc: ["'self'"],
-        imgSrc: ["'self'", 'data:', 'https:'],
+        imgSrc: ["'self'", 'data:', 'https:', 'https://res.cloudinary.com'],
+        connectSrc: ["'self'", 'https:', 'https://res.cloudinary.com'],
       },
     },
   })
@@ -74,6 +75,7 @@ app.use(
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    exposedHeaders: ['Cross-Origin-Resource-Policy'],
   })
 )
 

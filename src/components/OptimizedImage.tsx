@@ -85,6 +85,11 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       return `${baseUrl}${transformations.join(',')}/${path}`
     }
 
+    // Ensure HTTPS for external images
+    if (originalSrc.startsWith('http://')) {
+      return originalSrc.replace('http://', 'https://')
+    }
+
     return originalSrc
   }
 
@@ -170,6 +175,8 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           loading={priority ? 'eager' : loading}
           onLoad={handleLoad}
           onError={handleError}
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer-when-downgrade"
           className={cn(
             'w-full h-full object-cover transition-opacity duration-300',
             isLoaded ? 'opacity-100' : 'opacity-0'
