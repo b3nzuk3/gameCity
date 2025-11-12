@@ -47,3 +47,4 @@ The OG endpoint now logs:
 - All request headers
 
 Check Vercel function logs for debugging information.
+

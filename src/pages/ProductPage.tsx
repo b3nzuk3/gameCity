@@ -272,7 +272,7 @@ const ProductPage = () => {
                 <h4 className="font-semibold text-lg mb-2">
                   Product Description
                 </h4>
-                <div className="prose prose-sm md:prose-base prose-invert max-w-none">
+                <div className="prose prose-sm md:prose-base prose-invert max-w-none whitespace-pre-line">
                   {product.description}
                 </div>
               </div>
