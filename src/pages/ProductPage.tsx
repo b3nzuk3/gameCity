@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useProduct, useProductBySlug } from '@/services/productService'
 import { extractProductId, generateProductUrl } from '@/lib/slugUtils'
 import {
@@ -26,13 +26,21 @@ import { cn } from '@/lib/utils'
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const { addToCart } = useCart()
   const [quantity, setQuantity] = useState(1)
   const [api, setApi] = useState<CarouselApi>()
   const [current, setCurrent] = useState(0)
 
+  // Redirect to 404 if no ID
+  useEffect(() => {
+    if (!id) {
+      navigate('/404', { replace: true })
+    }
+  }, [id, navigate])
+
   if (!id) {
-    return <div>Product ID is missing.</div>
+    return null
   }
 
   // Check if the ID is a MongoDB ObjectId or a slug
@@ -44,6 +52,20 @@ const ProductPage = () => {
     isLoading,
     isError,
   } = isObjectId ? useProduct(id) : useProductBySlug(id)
+
+  // Redirect to 404 if no ID
+  useEffect(() => {
+    if (!id) {
+      navigate('/404', { replace: true })
+    }
+  }, [id, navigate])
+
+  // Redirect to 404 if product not found
+  useEffect(() => {
+    if (!isLoading && (isError || !product)) {
+      navigate('/404', { replace: true })
+    }
+  }, [isError, isLoading, product, navigate])
 
   useEffect(() => {
     if (!api) {
@@ -63,24 +85,26 @@ const ProductPage = () => {
     }
   }, [api])
 
-  if (isLoading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid md:grid-cols-2 gap-8">
-          <Skeleton className="w-full h-[400px] rounded-lg" />
-          <div className="space-y-4">
-            <Skeleton className="h-8 w-3/4" />
-            <Skeleton className="h-6 w-1/4" />
-            <Skeleton className="h-20 w-full" />
-            <Skeleton className="h-10 w-1/2" />
-          </div>
-        </div>
-      </div>
-    )
+  if (!id || isError || (!isLoading && !product)) {
+    return null
   }
 
-  if (isError || !product) {
-    return <div>Error loading product or product not found.</div>
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container mx-auto px-4 py-8">
+          <div className="grid md:grid-cols-2 gap-8">
+            <Skeleton className="w-full h-[400px] rounded-lg" />
+            <div className="space-y-4">
+              <Skeleton className="h-8 w-3/4" />
+              <Skeleton className="h-6 w-1/4" />
+              <Skeleton className="h-20 w-full" />
+              <Skeleton className="h-10 w-1/2" />
+            </div>
+          </div>
+        </div>
+      </Layout>
+    )
   }
 
   const images = [product.image, ...(product.images || [])].filter(Boolean)
