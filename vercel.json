@@ -21,6 +21,17 @@
       ],
       "destination": "https://www.gamecityelectronics.co.ke/$1",
       "permanent": true
+    },
+    {
+      "source": "/((?!api).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "gamecityelectronics.co.ke"
+        }
+      ],
+      "destination": "https://www.gamecityelectronics.co.ke/$1",
+      "permanent": true
     }
   ],
   "rewrites": [

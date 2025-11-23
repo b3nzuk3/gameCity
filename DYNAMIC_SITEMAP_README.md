@@ -62,7 +62,7 @@ If the backend API is unavailable, the sitemap will fall back to a static versio
 
 After deployment, test your sitemap at:
 
-- `https://www.gamecityelectronics.com/sitemap.xml`
+- `https://www.gamecityelectronics.co.ke/sitemap.xml`
 
 The sitemap should include:
 
