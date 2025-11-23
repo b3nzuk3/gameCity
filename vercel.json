@@ -5,7 +5,7 @@
       "has": [
         {
           "type": "host",
-          "value": "gamecityelectronics.com"
+          "value": "www.gamecityelectronics.com"
         }
       ],
       "destination": "https://www.gamecityelectronics.co.ke/$1",
@@ -16,7 +16,7 @@
       "has": [
         {
           "type": "host",
-          "value": "www.gamecityelectronics.com"
+          "value": "gamecityelectronics.com"
         }
       ],
       "destination": "https://www.gamecityelectronics.co.ke/$1",
@@ -61,6 +61,10 @@
     {
       "source": "/debug-whatsapp/:slug",
       "destination": "/api/debug-whatsapp?slug=:slug"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "headers": [
