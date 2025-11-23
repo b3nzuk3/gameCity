@@ -1,3 +1,4 @@
+/// <reference types="node" />
 // Vercel serverless function - no imports needed
 
 interface Product {
@@ -83,7 +84,7 @@ export async function GET(request: Request) {
         )
 
         if (response.ok) {
-          const data: ProductsResponse = await response.json()
+          const data = (await response.json()) as ProductsResponse
           products = data.products || []
 
           // Get unique categories
