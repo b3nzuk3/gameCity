@@ -23,6 +23,11 @@ const Cart = () => {
     useCart()
   const { user } = useAuth()
   const [loading, setLoading] = useState(false)
+  const [guestInfo, setGuestInfo] = useState({
+    name: '',
+    email: '',
+    phone: '',
+  })
 
   const subtotal = total
   const shipping = subtotal > 1000 ? 0 : 29.99
@@ -39,6 +44,19 @@ const Cart = () => {
     try {
       setLoading(true)
 
+      // Validate guest info if user is not logged in
+      if (!user) {
+        if (!guestInfo.name || !guestInfo.email || !guestInfo.phone) {
+          toast({
+            title: 'Missing information',
+            description: 'Please fill in all required fields',
+            variant: 'destructive',
+          })
+          setLoading(false)
+          return
+        }
+      }
+
       // Create order items from cart
       const orderItems = cartItems.map((item) => ({
         product: item.product?._id || item.product || item._id || item.id,
@@ -54,6 +72,12 @@ const Cart = () => {
         paymentMethod: 'M-Pesa',
         itemsPrice: subtotal,
         totalPrice: finalTotal,
+        // Include guest info if user is not logged in
+        ...(user ? {} : {
+          guestName: guestInfo.name,
+          guestEmail: guestInfo.email,
+          guestPhone: guestInfo.phone,
+        }),
       })
 
       // Clear cart and show success message
@@ -246,76 +270,120 @@ const Cart = () => {
                   </div>
                 </div>
 
-                {!user ? (
-                  <div className="mb-4 p-4 bg-yellow-900/40 border border-yellow-700 rounded text-yellow-200 text-center">
-                    <p className="mb-2 font-semibold">
-                      You must be signed in to checkout.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                      <Button
-                        className="bg-yellow-500 hover:bg-yellow-400 text-black"
-                        onClick={() => navigate('/signin')}
-                      >
-                        Sign In
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10"
-                        onClick={() => navigate('/signup')}
-                      >
-                        Create Account
-                      </Button>
+                {/* Guest Information Form (only shown for non-authenticated users) */}
+                {!user && (
+                  <div className="mb-4 p-4 bg-gray-800/50 border border-gray-700 rounded">
+                    <h3 className="text-sm font-medium mb-3">Contact Information</h3>
+                    <div className="space-y-3">
+                      <div>
+                        <label htmlFor="guest-name" className="block text-sm font-medium mb-1">
+                          Full Name *
+                        </label>
+                        <Input
+                          id="guest-name"
+                          type="text"
+                          placeholder="John Doe"
+                          value={guestInfo.name}
+                          onChange={(e) =>
+                            setGuestInfo({ ...guestInfo, name: e.target.value })
+                          }
+                          className="bg-gray-900 border-gray-700"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="guest-email" className="block text-sm font-medium mb-1">
+                          Email *
+                        </label>
+                        <Input
+                          id="guest-email"
+                          type="email"
+                          placeholder="john@example.com"
+                          value={guestInfo.email}
+                          onChange={(e) =>
+                            setGuestInfo({ ...guestInfo, email: e.target.value })
+                          }
+                          className="bg-gray-900 border-gray-700"
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="guest-phone" className="block text-sm font-medium mb-1">
+                          Phone Number *
+                        </label>
+                        <Input
+                          id="guest-phone"
+                          type="tel"
+                          placeholder="254712345678"
+                          value={guestInfo.phone}
+                          onChange={(e) =>
+                            setGuestInfo({ ...guestInfo, phone: e.target.value })
+                          }
+                          className="bg-gray-900 border-gray-700"
+                        />
+                      </div>
+                    </div>
+                    <div className="mt-3 pt-3 border-t border-gray-700">
+                      <p className="text-xs text-muted-foreground">
+                        Don't have an account?{' '}
+                        <Link
+                          to="/signup"
+                          className="text-yellow-400 hover:text-yellow-300 underline"
+                        >
+                          Create one
+                        </Link>{' '}
+                        or{' '}
+                        <Link
+                          to="/signin"
+                          className="text-yellow-400 hover:text-yellow-300 underline"
+                        >
+                          sign in
+                        </Link>
+                      </p>
                     </div>
                   </div>
-                ) : null}
-
-                {/* M-Pesa Payment */}
-                {user && (
-                  <>
-                    {/* WhatsApp Order Button */}
-                    <Button
-                      className="bg-green-500 hover:bg-green-600 text-white w-full mb-4 flex items-center justify-center gap-2"
-                      onClick={() => {
-                        const phone = '254712248706'
-                        const itemsList = cartItems
-                          .map(
-                            (item) =>
-                              `- ${item.name} x${
-                                item.quantity
-                              } @ KES ${item.price.toLocaleString()}`
-                          )
-                          .join('%0A')
-                        const message = `Hello, I would like to order:%0A${itemsList}%0A%0ATotal: KES ${finalTotal.toLocaleString()}`
-                        const url = `https://wa.me/${phone}?text=${message}`
-                        window.open(url, '_blank')
-                      }}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-5 h-5"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M20.25 12c0-4.556-3.694-8.25-8.25-8.25S3.75 7.444 3.75 12c0 1.396.34 2.71.94 3.86L3 21l5.29-1.67A8.19 8.19 0 0012 20.25c4.556 0 8.25-3.694 8.25-8.25z"
-                        />
-                      </svg>
-                      Order on WhatsApp
-                    </Button>
-                    <div className="text-center text-muted-foreground text-sm mb-4">
-                      or
-                    </div>
-                    <MpesaPayment
-                      amount={finalTotal}
-                      onSuccess={handlePaymentSuccess}
-                      onError={handlePaymentError}
-                    />
-                  </>
                 )}
+
+                {/* WhatsApp Order Button */}
+                <Button
+                  className="bg-green-500 hover:bg-green-600 text-white w-full mb-4 flex items-center justify-center gap-2"
+                  onClick={() => {
+                    const phone = '254712248706'
+                    const itemsList = cartItems
+                      .map(
+                        (item) =>
+                          `- ${item.name} x${
+                            item.quantity
+                          } @ KES ${item.price.toLocaleString()}`
+                      )
+                      .join('%0A')
+                    const message = `Hello, I would like to order:%0A${itemsList}%0A%0ATotal: KES ${finalTotal.toLocaleString()}`
+                    const url = `https://wa.me/${phone}?text=${message}`
+                    window.open(url, '_blank')
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-5 h-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M20.25 12c0-4.556-3.694-8.25-8.25-8.25S3.75 7.444 3.75 12c0 1.396.34 2.71.94 3.86L3 21l5.29-1.67A8.19 8.19 0 0012 20.25c4.556 0 8.25-3.694 8.25-8.25z"
+                    />
+                  </svg>
+                  Order on WhatsApp
+                </Button>
+                <div className="text-center text-muted-foreground text-sm mb-4">
+                  or
+                </div>
+                <MpesaPayment
+                  amount={finalTotal}
+                  onSuccess={handlePaymentSuccess}
+                  onError={handlePaymentError}
+                />
               </div>
             </div>
           </div>

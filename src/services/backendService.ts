@@ -206,6 +206,16 @@ const backendService = {
       handleRequest<void>('DELETE', `/users/${id}`),
   },
   orders: {
+    create: (orderData: {
+      orderItems: any[]
+      paymentMethod: string
+      itemsPrice: number
+      totalPrice: number
+      guestName?: string
+      guestEmail?: string
+      guestPhone?: string
+    }): Promise<Order> =>
+      handleRequest<Order>('POST', '/orders', orderData),
     getAll: (): Promise<Order[]> => handleRequest<Order[]>('GET', '/orders'),
     updateStatus: (
       id: string,
