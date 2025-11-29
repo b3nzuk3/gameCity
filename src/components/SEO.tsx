@@ -54,7 +54,7 @@ const SEO: React.FC<SEOProps> = ({
       'Leading gaming electronics retailer in Nairobi, Kenya. Specializing in gaming PCs, PlayStation, Xbox, graphics cards, and gaming accessories.',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Westlands',
+      streetAddress: 'Kai Plaza, 6 Tom Mboya St',
       addressLocality: 'Nairobi',
       addressCountry: 'KE',
     },
@@ -81,7 +81,7 @@ const SEO: React.FC<SEOProps> = ({
     description: 'Gaming electronics store in Nairobi, Kenya',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Westlands',
+      streetAddress: 'Kai Plaza, 6 Tom Mboya St',
       addressLocality: 'Nairobi',
       addressCountry: 'KE',
     },
