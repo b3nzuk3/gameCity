@@ -42,7 +42,7 @@ const Footer = () => {
                   size={18}
                   className="text-yellow-500 mr-3 flex-shrink-0"
                 />
-                <span>Kai Plaza, 6 Tom Mboya St, Nairobi</span>
+                <span>Kai Plaza 3rd floor shop 6, Tom Mboya St, Nairobi</span>
               </a>
               <a
                 href="tel:0712248706"
