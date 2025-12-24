@@ -104,9 +104,16 @@ const ProductCard = ({ product }: ProductProps) => {
             sizes="(max-width: 374px) 50vw, (max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
           />
 
+          {/* Condition Badge */}
+          {product.condition && (
+            <div className="absolute top-2 left-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-2 py-1 rounded-md shadow-lg z-20">
+              {product.condition}
+            </div>
+          )}
+
           {/* Offer Badge */}
           {isOfferActive(product.offer) && (
-            <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-lg">
+            <div className={`absolute ${product.condition ? 'top-10' : 'top-2'} left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded-full shadow-lg z-10`}>
               -{getDiscountPercent(product.price, product.offer)}%
             </div>
           )}
