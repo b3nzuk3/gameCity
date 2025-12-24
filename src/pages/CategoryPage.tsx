@@ -111,6 +111,7 @@ const CategoryPage = () => {
   const [loading, setLoading] = useState(true)
   const [sortBy, setSortBy] = useState('name')
   const [filterBy, setFilterBy] = useState('all')
+  const [conditionFilter, setConditionFilter] = useState<string>('all')
   const [priceRange, setPriceRange] = useState<[number | null, number | null]>([
     null,
     null,
@@ -201,14 +202,21 @@ const CategoryPage = () => {
       )
     }
 
-    // 3. Brand filter
+    // 3. Condition filter
+    if (conditionFilter !== 'all') {
+      filtered = filtered.filter(
+        (product) => product.condition === conditionFilter
+      )
+    }
+
+    // 4. Brand filter
     if (selectedBrands.length > 0) {
       filtered = filtered.filter((product) =>
         selectedBrands.includes(product.brand || '')
       )
     }
 
-    // 4. Price range filter only if active
+    // 5. Price range filter only if active
     if (
       priceFilterActive &&
       (priceRange[0] !== null || priceRange[1] !== null)
@@ -220,7 +228,7 @@ const CategoryPage = () => {
       )
     }
 
-    // 5. Sorting
+    // 6. Sorting
     switch (sortBy) {
       case 'name':
         filtered.sort((a, b) => a.name.localeCompare(b.name))
@@ -243,6 +251,7 @@ const CategoryPage = () => {
     products,
     sortBy,
     filterBy,
+    conditionFilter,
     selectedBrands,
     priceRange,
     priceFilterActive,
@@ -339,7 +348,7 @@ const CategoryPage = () => {
         {/* Filters and Sorting */}
         <div
           id="filters-section"
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8 ${
+          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8 ${
             showFilters ? '' : 'hidden'
           } lg:grid`}
         >
@@ -353,6 +362,18 @@ const CategoryPage = () => {
               <SelectItem value="in-stock">In Stock</SelectItem>
               <SelectItem value="low-stock">Low Stock</SelectItem>
               <SelectItem value="out-of-stock">Out of Stock</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Condition Filter */}
+          <Select value={conditionFilter} onValueChange={setConditionFilter}>
+            <SelectTrigger className="w-full bg-gray-900 border-gray-700">
+              <SelectValue placeholder="Filter by condition..." />
+            </SelectTrigger>
+            <SelectContent className="bg-gray-900 border-gray-700">
+              <SelectItem value="all">All Conditions</SelectItem>
+              <SelectItem value="New">New</SelectItem>
+              <SelectItem value="Pre-Owned">Pre-Owned</SelectItem>
             </SelectContent>
           </Select>
 
@@ -472,6 +493,7 @@ const CategoryPage = () => {
               onClick={() => {
                 setSortBy('name')
                 setFilterBy('all')
+                setConditionFilter('all')
                 setSelectedBrands([])
                 setPriceRange([null, null])
                 setPriceFilterActive(false)

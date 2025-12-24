@@ -15,6 +15,7 @@ export type Product = {
   price: number
   category?: string
   brand?: string
+  condition?: 'New' | 'Pre-Owned'
   rating?: number
   num_reviews?: number
   numReviews?: number

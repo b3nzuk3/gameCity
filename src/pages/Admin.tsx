@@ -162,6 +162,7 @@ type ProductFormData = {
   category: string
   countInStock: number
   brand: string
+  condition?: 'New' | 'Pre-Owned'
   image: string
   images: string[]
   offer?: {
@@ -225,6 +226,7 @@ const Admin = () => {
     category: '',
     countInStock: 0,
     brand: '',
+    condition: 'New',
     image: '',
     images: [],
     offer: { enabled: false, type: 'percentage', amount: 0 },
@@ -433,6 +435,7 @@ const Admin = () => {
       category: '',
       countInStock: 0,
       brand: '',
+      condition: 'New',
       image: '',
       images: [],
     })
@@ -471,6 +474,7 @@ const Admin = () => {
       category: product.category || '',
       countInStock: product.countInStock ?? product.count_in_stock ?? 0,
       brand: product.brand || '',
+      condition: product.condition || 'New',
       image: product.image,
       images: product.images || [],
       offer: {
@@ -1454,6 +1458,29 @@ const Admin = () => {
                         onChange={handleProductChange}
                         className="bg-gray-800"
                       />
+                    </div>
+                    <div>
+                      <Label htmlFor="condition">Condition</Label>
+                      <Select
+                        value={currentProduct.condition || 'New'}
+                        onValueChange={(value: 'New' | 'Pre-Owned') =>
+                          setCurrentProduct({
+                            ...currentProduct,
+                            condition: value,
+                          })
+                        }
+                      >
+                        <SelectTrigger
+                          id="condition"
+                          className="w-full bg-gray-800 border-gray-700"
+                        >
+                          <SelectValue placeholder="Select condition" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-gray-800 border-gray-700">
+                          <SelectItem value="New">New</SelectItem>
+                          <SelectItem value="Pre-Owned">Pre-Owned</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                     <div>
                       <Label htmlFor="description">Description</Label>

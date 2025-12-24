@@ -20,6 +20,7 @@ interface ProductProps {
     numReviews?: number
     category?: string
     brand?: string
+    condition?: 'New' | 'Pre-Owned'
     count_in_stock?: number
     countInStock?: number
     stock?: number
