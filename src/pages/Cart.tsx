@@ -167,15 +167,9 @@ const Cart = () => {
                             </div>
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-sm">
-                            <div className="flex items-center justify-between">
-                              <span className="text-lg font-bold text-yellow-400">
-                                {formatKESPrice(item.price)}
-                              </span>
-                              <span className="text-sm text-muted-foreground">
-                                Subtotal:{' '}
-                                {formatKESPrice(item.price * item.quantity)}
-                              </span>
-                            </div>
+                            <span className="text-lg font-bold text-yellow-400">
+                              {formatKESPrice(item.price)}
+                            </span>
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-sm text-center">
                             <div className="flex items-center justify-center">
