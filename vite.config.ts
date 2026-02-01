@@ -7,10 +7,6 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: '::',
     port: 8080,
-    proxy: {
-      '/api': 'http://localhost:5000',
-      '/sitemap.xml': 'http://localhost:5000',
-    },
   },
   plugins: [react()],
 

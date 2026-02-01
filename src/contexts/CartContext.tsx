@@ -83,6 +83,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [cartItems, loading])
 
+  // Helper to truncate product names for notifications
+  const truncateName = (name: string, maxLength = 30) => {
+    return name.length > maxLength ? `${name.substring(0, maxLength)}...` : name
+  }
+
   // Add item to cart
   const addToCart = (product: Product, quantity = 1) => {
     try {
@@ -105,7 +110,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
         toast({
           title: 'Cart updated',
-          description: `${product.name} quantity updated in your cart.`,
+          description: `${truncateName(product.name)} quantity updated.`,
         })
       } else {
         // Add new item to cart
@@ -122,7 +127,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
         toast({
           title: 'Added to cart',
-          description: `${product.name} added to your cart.`,
+          description: `${truncateName(product.name)} added to your cart.`,
         })
       }
     } catch (error) {
@@ -152,7 +157,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
       toast({
         title: 'Item removed',
-        description: `${itemToRemove.name} removed from your cart.`,
+        description: `${truncateName(itemToRemove.name)} removed from your cart.`,
       })
     } catch (error) {
       console.error('Remove from cart error:', error)

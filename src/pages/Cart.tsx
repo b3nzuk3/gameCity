@@ -133,9 +133,75 @@ const Cart = () => {
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <div className="bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
+              {/* Mobile View */}
+              <div className="md:hidden space-y-4">
+                {cartItems.map((item) => (
+                  <div
+                    key={getItemId(item)}
+                    className="bg-gray-900 rounded-lg border border-gray-700 p-4"
+                  >
+                    {/* Product Info Row */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="h-16 w-16 flex-shrink-0 rounded bg-gray-700 overflow-hidden">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium line-clamp-2">
+                          {item.name.length > 40
+                            ? `${item.name.substring(0, 40)}...`
+                            : item.name}
+                        </p>
+                      </div>
+                    </div>
+                    {/* Price, Quantity, Delete Row */}
+                    <div className="flex items-center justify-between border-t border-gray-700 pt-3">
+                      <span className="text-lg font-bold text-yellow-400">
+                        {formatKESPrice(item.price)}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 text-muted-foreground"
+                          onClick={() =>
+                            updateQuantity(getItemId(item), item.quantity - 1)
+                          }
+                        >
+                          <MinusCircle size={18} />
+                        </Button>
+                        <span className="w-8 text-center">{item.quantity}</span>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 text-muted-foreground"
+                          onClick={() =>
+                            updateQuantity(getItemId(item), item.quantity + 1)
+                          }
+                        >
+                          <PlusCircle size={18} />
+                        </Button>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-900/20"
+                        onClick={() => removeFromCart(getItemId(item))}
+                      >
+                        <Trash2 size={18} />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop View */}
+              <div className="hidden md:block bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
                 <div className="overflow-x-auto">
-                  <table className="w-full min-w-[600px]">
+                  <table className="w-full">
                     <thead className="bg-gray-800/50">
                       <tr>
                         <th className="px-4 py-3 text-left">Product</th>
