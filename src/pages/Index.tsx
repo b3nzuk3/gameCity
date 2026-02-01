@@ -93,30 +93,30 @@ const Index = () => {
       <Hero />
 
       {/* Features Section */}
-      <section className="py-16 px-4 md:px-6 bg-gray-900">
+      <section className="py-8 md:py-16 px-4 md:px-6 bg-gray-900">
         <div className="container mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+          <div className="text-center mb-6 md:mb-12">
+            <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-white">
               Why Choose Gamecity?
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">
               We're committed to delivering the best gaming experience with
               premium components and exceptional service.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="p-6 rounded-xl glass-card bg-gray-800/30 flex flex-col items-center text-center"
+                className="p-3 md:p-6 rounded-xl glass-card bg-gray-800/30 flex flex-col items-center text-center"
               >
-                <div className="mb-4 p-3 rounded-full bg-yellow-500/20">
+                <div className="mb-2 md:mb-4 p-2 md:p-3 rounded-full bg-yellow-500/20">
                   {feature.icon}
                 </div>
-                <h3 className="text-xl font-semibold mb-2 text-white">
+                <h3 className="text-sm md:text-xl font-semibold mb-1 md:mb-2 text-white">
                   {feature.title}
                 </h3>
-                <p className="text-muted-foreground text-sm">
+                <p className="text-muted-foreground text-xs md:text-sm">
                   {feature.description}
                 </p>
               </div>
@@ -129,32 +129,32 @@ const Index = () => {
       <FeaturedProducts />
 
       {/* Categories Section */}
-      <section className="py-20 px-4 md:px-6 bg-gray-900">
+      <section className="py-8 md:py-20 px-2 md:px-6 bg-gray-900">
         <div className="container mx-auto">
-          <div className="flex flex-col items-center mb-12">
-            <span className="px-3 py-1 text-xs font-medium text-yellow-400 bg-yellow-500/20 rounded-full mb-3">
+          <div className="flex flex-col items-center mb-6 md:mb-12">
+            <span className="px-2 py-0.5 md:px-3 md:py-1 text-xs font-medium text-yellow-400 bg-yellow-500/20 rounded-full mb-2 md:mb-3">
               Browse Categories
             </span>
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+            <h2 className="text-2xl md:text-4xl font-bold text-center mb-2 md:mb-4">
               Shop By Category
             </h2>
-            <p className="text-muted-foreground text-center max-w-2xl">
+            <p className="text-muted-foreground text-center text-sm md:text-base max-w-2xl">
               Find the perfect components for your setup by category. Whether
               you're building a new PC or upgrading your current one.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-8">
             {categories.map((category, index) => (
               <div
                 key={index}
-                className="group relative overflow-hidden rounded-xl shadow-lg hover-scale"
+                className="group relative overflow-hidden rounded-lg md:rounded-xl shadow-lg hover-scale"
               >
                 {/* Dark overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/60 to-transparent z-10"></div>
 
                 {/* Background image */}
-                <div className="h-80 overflow-hidden">
+                <div className="h-40 md:h-80 overflow-hidden">
                   <OptimizedImage
                     src={category.image}
                     alt={`${
@@ -170,19 +170,19 @@ const Index = () => {
                 </div>
 
                 {/* Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-                  <h3 className="text-xl font-bold mb-2">{category.title}</h3>
-                  <p className="text-muted-foreground text-sm mb-4">
+                <div className="absolute bottom-0 left-0 right-0 p-2 md:p-6 z-20">
+                  <h3 className="text-xs md:text-xl font-bold mb-0.5 md:mb-2">{category.title}</h3>
+                  <p className="text-muted-foreground text-[10px] md:text-sm mb-1 md:mb-4 line-clamp-2">
                     {category.description}
                   </p>
                   <Link to={category.path}>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-yellow-400 border-yellow-700 hover:bg-yellow-900/30"
+                      className="text-yellow-400 border-yellow-700 hover:bg-yellow-900/30 h-6 md:h-9 text-xs md:text-sm px-2 md:px-3"
                     >
                       Browse
-                      <ArrowRight size={16} className="ml-2" />
+                      <ArrowRight size={12} className="ml-1 md:ml-2 md:w-4 md:h-4" />
                     </Button>
                   </Link>
                 </div>

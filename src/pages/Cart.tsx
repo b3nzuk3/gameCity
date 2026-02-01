@@ -307,24 +307,24 @@ const Cart = () => {
             </div>
 
             {/* Order Summary */}
-            <div className="mt-8 lg:mt-0">
-              <div className="bg-gray-900 rounded-lg border border-gray-700 p-4 sm:p-6">
-                <h2 className="text-lg font-medium mb-4">Order Summary</h2>
+            <div className="mt-6 lg:mt-0">
+              <div className="bg-gray-900 rounded-lg border border-gray-700 p-4">
+                <h2 className="text-base font-medium mb-3">Order Summary</h2>
 
-                <div className="space-y-4 mb-6">
-                  <div className="flex justify-between py-2">
-                    <span>Subtotal</span>
-                    <span>{formatKESPrice(subtotal)}</span>
+                <div className="space-y-1 mb-4">
+                  <div className="flex justify-between py-1">
+                    <span className="text-sm">Subtotal</span>
+                    <span className="text-sm">{formatKESPrice(subtotal)}</span>
                   </div>
-                  <div className="flex justify-between py-2 border-t border-gray-700">
-                    <span>Shipping</span>
-                    <span>
+                  <div className="flex justify-between py-1 border-t border-gray-700">
+                    <span className="text-sm">Shipping</span>
+                    <span className="text-sm">
                       {shipping === 0 ? 'Free' : formatKESPrice(shipping)}
                     </span>
                   </div>
-                  <div className="flex justify-between py-4 border-t border-gray-700">
-                    <span className="text-lg font-bold">Total</span>
-                    <span className="text-lg font-bold text-yellow-400">
+                  <div className="flex justify-between py-2 border-t border-gray-700">
+                    <span className="font-bold">Total</span>
+                    <span className="font-bold text-yellow-400">
                       {formatKESPrice(finalTotal)}
                     </span>
                   </div>
@@ -332,12 +332,12 @@ const Cart = () => {
 
                 {/* Guest Information Form (only shown for non-authenticated users) */}
                 {!user && (
-                  <div className="mb-4 p-4 bg-gray-800/50 border border-gray-700 rounded">
-                    <h3 className="text-sm font-medium mb-3">Contact Information</h3>
-                    <div className="space-y-3">
+                  <div className="mb-3 p-3 bg-gray-800/50 border border-gray-700 rounded">
+                    <h3 className="text-sm font-medium mb-2">Contact Information</h3>
+                    <div className="space-y-2">
                       <div>
-                        <label htmlFor="guest-name" className="block text-sm font-medium mb-1">
-                          Full Name *
+                        <label htmlFor="guest-name" className="block text-xs font-medium mb-1">
+                          Full Name
                         </label>
                         <Input
                           id="guest-name"
@@ -347,12 +347,12 @@ const Cart = () => {
                           onChange={(e) =>
                             setGuestInfo({ ...guestInfo, name: e.target.value })
                           }
-                          className="bg-gray-900 border-gray-700"
+                          className="bg-gray-900 border-gray-700 h-9"
                         />
                       </div>
                       <div>
-                        <label htmlFor="guest-email" className="block text-sm font-medium mb-1">
-                          Email *
+                        <label htmlFor="guest-email" className="block text-xs font-medium mb-1">
+                          Email
                         </label>
                         <Input
                           id="guest-email"
@@ -362,12 +362,12 @@ const Cart = () => {
                           onChange={(e) =>
                             setGuestInfo({ ...guestInfo, email: e.target.value })
                           }
-                          className="bg-gray-900 border-gray-700"
+                          className="bg-gray-900 border-gray-700 h-9"
                         />
                       </div>
                       <div>
-                        <label htmlFor="guest-phone" className="block text-sm font-medium mb-1">
-                          Phone Number *
+                        <label htmlFor="guest-phone" className="block text-xs font-medium mb-1">
+                          Phone Number
                         </label>
                         <Input
                           id="guest-phone"
@@ -377,11 +377,11 @@ const Cart = () => {
                           onChange={(e) =>
                             setGuestInfo({ ...guestInfo, phone: e.target.value })
                           }
-                          className="bg-gray-900 border-gray-700"
+                          className="bg-gray-900 border-gray-700 h-9"
                         />
                       </div>
                     </div>
-                    <div className="mt-3 pt-3 border-t border-gray-700">
+                    <div className="mt-2 pt-2 border-t border-gray-700">
                       <p className="text-xs text-muted-foreground">
                         Don't have an account?{' '}
                         <Link
@@ -404,7 +404,7 @@ const Cart = () => {
 
                 {/* WhatsApp Order Button */}
                 <Button
-                  className="bg-green-500 hover:bg-green-600 text-white w-full mb-4 flex items-center justify-center gap-2"
+                  className="bg-green-500 hover:bg-green-600 text-white w-full mb-3 flex items-center justify-center gap-2 h-10"
                   onClick={() => {
                     const phone = '254712248706'
                     const itemsList = cartItems
@@ -436,7 +436,7 @@ const Cart = () => {
                   </svg>
                   Order on WhatsApp
                 </Button>
-                <div className="text-center text-muted-foreground text-sm mb-4">
+                <div className="text-center text-muted-foreground text-xs mb-2">
                   or
                 </div>
                 <MpesaPayment

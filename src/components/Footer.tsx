@@ -18,47 +18,46 @@ const Footer = () => {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-black pt-16 border-t border-gray-800">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+    <footer className="bg-black pt-6 md:pt-16 border-t border-gray-800">
+      <div className="container mx-auto px-3 md:px-4">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-6 md:mb-12">
           {/* Company Info */}
-          <div className="space-y-4">
-            <Link to="/" className="text-2xl font-bold text-yellow-400">
+          <div className="col-span-2 md:col-span-1 space-y-2 md:space-y-4">
+            <Link to="/" className="text-lg md:text-2xl font-bold text-yellow-400">
               Gamecity Electronics
             </Link>
-            <p className="text-muted-foreground leading-relaxed">
+            <p className="text-muted-foreground text-xs md:text-base leading-relaxed">
               Your premier destination for high-quality gaming components and
-              accessories in Nairobi, Kenya. Building dream setups since day
-              one. Fast delivery across Kenya with expert technical support.
+              accessories in Nairobi, Kenya.
             </p>
-            <div className="space-y-3">
+            <div className="space-y-1.5 md:space-y-3">
               <a
                 href="https://www.google.com/maps/place/GAMECITY+ELECTRONICS/@-1.2835,36.8247986,17z/data=!4m6!3m5!1s0x182f11ff319a2a71:0x23dfb4aee72fab6f!8m2!3d-1.2834756!4d36.8245877!16s%2Fg%2F11rcy9p60j?entry=ttu&g_ep=EgoyMDI1MDYwNC4wIKXMDSoASAFQAw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
+                className="flex items-center text-xs md:text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
               >
                 <MapPin
-                  size={18}
-                  className="text-yellow-500 mr-3 flex-shrink-0"
+                  size={14}
+                  className="text-yellow-500 mr-2 md:mr-3 flex-shrink-0 md:w-[18px] md:h-[18px]"
                 />
-                <span>Kai Plaza 3rd floor shop 6, Tom Mboya St, Nairobi</span>
+                <span>Kai Plaza 3rd floor, Tom Mboya St</span>
               </a>
               <a
                 href="tel:0712248706"
-                className="flex items-center text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
+                className="flex items-center text-xs md:text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
               >
-                <Phone size={18} className="text-yellow-500 mr-3" />
+                <Phone size={14} className="text-yellow-500 mr-2 md:mr-3 md:w-[18px] md:h-[18px]" />
                 <span>+254 712 248 706</span>
               </a>
               <a
                 href="mailto:gamecityelectronics@gmail.com"
-                className="flex items-center text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
+                className="flex items-center text-xs md:text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
               >
-                <Mail size={18} className="text-yellow-500 mr-3" />
-                <span>gamecityelectronics@gmail.com</span>
+                <Mail size={14} className="text-yellow-500 mr-2 md:mr-3 md:w-[18px] md:h-[18px]" />
+                <span className="truncate">gamecityelectronics@gmail.com</span>
               </a>
-              <div className="flex items-start text-sm text-muted-foreground">
+              <div className="hidden md:flex items-start text-sm text-muted-foreground">
                 <Globe
                   size={18}
                   className="text-yellow-500 mr-3 mt-0.5 flex-shrink-0"
@@ -74,9 +73,9 @@ const Footer = () => {
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">Quick Links</h4>
-            <div className="space-y-2">
+          <div className="space-y-2 md:space-y-4">
+            <h4 className="text-sm md:text-lg font-semibold text-white">Quick Links</h4>
+            <div className="space-y-1 md:space-y-2 text-xs md:text-base">
               <Link
                 to="/search"
                 className="text-muted-foreground hover:text-yellow-400 transition-colors flex items-center"
@@ -105,11 +104,11 @@ const Footer = () => {
           </div>
 
           {/* Customer Service */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">
+          <div className="space-y-2 md:space-y-4">
+            <h4 className="text-sm md:text-lg font-semibold text-white">
               Customer Service
             </h4>
-            <div className="space-y-2">
+            <div className="space-y-1 md:space-y-2 text-xs md:text-base">
               <Link
                 to="/contact"
                 className="text-muted-foreground hover:text-yellow-400 transition-colors flex items-center"
@@ -120,19 +119,18 @@ const Footer = () => {
           </div>
 
           {/* Social Media */}
-          <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-white">Follow Us</h4>
-            <div className="flex space-x-4">
+          <div className="space-y-2 md:space-y-4">
+            <h4 className="text-sm md:text-lg font-semibold text-white">Follow Us</h4>
+            <div className="flex space-x-2 md:space-x-4">
               <a
                 href="https://www.tiktok.com/@gamecityelectronics?_t=ZM-8xQIrbIx2fd&_r=1"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
+                className="p-1.5 md:p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
                 aria-label="TikTok"
               >
                 <svg
-                  width="20"
-                  height="20"
+                  className="w-4 h-4 md:w-5 md:h-5"
                   viewBox="0 0 256 256"
                   fill="currentColor"
                 >
@@ -143,12 +141,11 @@ const Footer = () => {
                 href="https://www.threads.com/@gamecityelectronics?igshid=NTc4MTIwNjQ2YQ=="
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
+                className="p-1.5 md:p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
                 aria-label="Threads"
               >
                 <svg
-                  width="20"
-                  height="20"
+                  className="w-4 h-4 md:w-5 md:h-5"
                   viewBox="0 0 256 256"
                   fill="currentColor"
                 >
@@ -159,51 +156,51 @@ const Footer = () => {
                 href="https://www.instagram.com/gamecityelectronics?igsh=MTYycjlmMHFrZ3J0eg%3D%3D&utm_source=qr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
+                className="p-1.5 md:p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
                 aria-label="Instagram"
               >
-                <Instagram size={20} />
+                <Instagram className="w-4 h-4 md:w-5 md:h-5" />
               </a>
               <a
                 href="https://www.facebook.com/share/15YHoo2DLY/?mibextid=wwXIfr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
+                className="p-1.5 md:p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
                 aria-label="Facebook"
               >
-                <Facebook size={20} />
+                <Facebook className="w-4 h-4 md:w-5 md:h-5" />
               </a>
               <a
                 href="https://x.com/gamecity254?s=21"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
+                className="p-1.5 md:p-2 rounded-md bg-gray-800 text-gray-400 hover:bg-yellow-500 hover:text-black transition-colors"
                 aria-label="X (Twitter)"
               >
-                <Twitter size={20} />
+                <Twitter className="w-4 h-4 md:w-5 md:h-5" />
               </a>
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs md:text-sm text-muted-foreground hidden md:block">
               Stay updated with our latest products and exclusive deals!
             </p>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-16 py-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>© {currentYear} Gamecity Electronics. All rights reserved.</p>
-          <div className="flex space-x-6 mt-4 md:mt-0">
+        <div className="mt-4 md:mt-16 py-3 md:py-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs md:text-sm text-muted-foreground">
+          <p>© {currentYear} Gamecity Electronics</p>
+          <div className="flex space-x-4 md:space-x-6 mt-2 md:mt-0">
             <Link
               to="/privacy"
               className="hover:text-yellow-400 transition-colors"
             >
-              Privacy Policy
+              Privacy
             </Link>
             <Link
               to="/terms"
               className="hover:text-yellow-400 transition-colors"
             >
-              Terms of Service
+              Terms
             </Link>
             <Link
               to="/sitemap"
