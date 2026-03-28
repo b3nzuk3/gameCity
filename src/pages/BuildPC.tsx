@@ -153,7 +153,7 @@ const BuildPC = () => {
         id: part.id,
         name: part.name,
         price: part.price,
-        image: '/placeholder.svg', // Default image for PC parts
+        image: part.image || '/placeholder.svg',
         category: part.category,
       })
     })
@@ -214,13 +214,22 @@ const BuildPC = () => {
                         } hover:border-yellow-500/70 transition-colors cursor-pointer`}
                       >
                         <CardHeader className="pb-2">
-                          <CardTitle className="text-lg">{part.name}</CardTitle>
-                          <CardDescription>{part.description}</CardDescription>
+                          <div className="flex items-start gap-3">
+                            {part.image && (
+                              <img 
+                                src={part.image} 
+                                alt={part.name}
+                                className="w-16 h-16 object-cover rounded-md flex-shrink-0"
+                              />
+                            )}
+                            <div className="min-w-0">
+                              <CardTitle className="text-lg truncate">{part.name}</CardTitle>
+                            </div>
+                          </div>
                         </CardHeader>
                         <CardContent>
                           <div className="flex items-center justify-between">
                             <div>
-                              <h3 className="font-semibold">{part.name}</h3>
                               <p className="text-sm text-muted-foreground capitalize">
                                 {part.category}
                               </p>
