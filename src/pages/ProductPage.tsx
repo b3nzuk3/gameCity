@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { useCart } from '@/contexts/CartContext'
 import { formatKESPrice } from '@/lib/currency'
-import { getOfferPrice, getDiscountPercent, isOfferActive } from '@/lib/utils'
+import { getOfferPrice, getDiscountPercent, isOfferActive, sanitizeHtml } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent } from '@/components/ui/card'
 import { ShoppingCart, Plus, Minus } from 'lucide-react'
@@ -245,7 +245,7 @@ const ProductPage = () => {
           </div>
 
           <div className="flex flex-col">
-            <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
+            <h1 className="text-3xl font-bold mb-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.name) }} />
             <div className="mb-4">
               {isOfferActive(product.offer) ? (
                 <div className="flex flex-col">
@@ -296,9 +296,10 @@ const ProductPage = () => {
                 <h4 className="font-semibold text-lg mb-2">
                   Product Description
                 </h4>
-                <div className="prose prose-sm md:prose-base prose-invert max-w-none whitespace-pre-line">
-                  {product.description}
-                </div>
+                <div
+                  className="prose prose-sm md:prose-base prose-invert max-w-none whitespace-pre-line"
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.description) }}
+                />
               </div>
             )}
 

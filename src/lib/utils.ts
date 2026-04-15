@@ -5,6 +5,12 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function sanitizeHtml(input: string): string {
+  const div = document.createElement('div')
+  div.textContent = input
+  return div.innerHTML
+}
+
 // Offer helpers
 export type OfferLike = {
   enabled?: boolean

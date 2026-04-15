@@ -3,6 +3,26 @@
 
 import { toast } from '@/hooks/use-toast'
 
+const DEMO_PASSWORDS: Record<string, string> = {
+  'admin@greenbits.com': 'Admin@123',
+  'hussenito7@gmail.com': 'Hussein@123',
+  'test@example.com': 'Test@123',
+}
+
+function hashPassword(password: string): string {
+  let hash = 0
+  for (let i = 0; i < password.length; i++) {
+    const char = password.charCodeAt(i)
+    hash = ((hash << 5) - hash) + char
+    hash = hash & hash
+  }
+  return hash.toString(16)
+}
+
+function verifyPassword(password: string, hash: string): boolean {
+  return hashPassword(password) === hash
+}
+
 export interface UserProfile {
   id: string
   email: string
@@ -40,6 +60,11 @@ export const localAuthService = {
     try {
       console.log('LocalAuth: Attempting sign in for:', email)
 
+      // Validate password minimum requirements
+      if (!password || password.length < 6) {
+        throw new Error('Invalid password')
+      }
+
       // Find user in demo users
       const user = DEMO_USERS.find(
         (u) => u.email.toLowerCase() === email.toLowerCase()
@@ -49,9 +74,13 @@ export const localAuthService = {
         throw new Error('User not found')
       }
 
-      // For demo purposes, accept any password for existing users
-      // In production, you'd verify against real authentication
-      console.log('LocalAuth: User found:', user.email)
+      // Verify password against stored hash
+      const expectedHash = DEMO_PASSWORDS[user.email]
+      if (!expectedHash || !verifyPassword(password, expectedHash)) {
+        throw new Error('Invalid password')
+      }
+
+      console.log('LocalAuth: User verified:', user.email)
 
       // Store session in localStorage
       localStorage.setItem(SESSION_KEY, JSON.stringify(user))

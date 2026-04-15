@@ -22,13 +22,41 @@ const SignUp = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const [passwordError, setPasswordError] = useState<string | null>(null)
+
+  const validatePassword = (password: string): string | null => {
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters'
+    }
+    if (!/[A-Z]/.test(password)) {
+      return 'Password must contain at least one uppercase letter'
+    }
+    if (!/[a-z]/.test(password)) {
+      return 'Password must contain at least one lowercase letter'
+    }
+    if (!/[0-9]/.test(password)) {
+      return 'Password must contain at least one number'
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      return 'Password must contain at least one special character (!@#$%^&*)'
+    }
+    return null
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (formData.password !== formData.confirmPassword) {
+      setPasswordError('Passwords do not match')
       return
     }
+
+    const validationError = validatePassword(formData.password)
+    if (validationError) {
+      setPasswordError(validationError)
+      return
+    }
+    setPasswordError(null)
 
     setIsLoading(true)
 
@@ -61,8 +89,13 @@ const SignUp = () => {
   }
 
   const passwordsMatch = formData.password === formData.confirmPassword
+  const passwordStrengthError = validatePassword(formData.password)
   const isFormValid =
-    formData.name && formData.email && formData.password && passwordsMatch
+    formData.name &&
+    formData.email &&
+    formData.password &&
+    passwordsMatch &&
+    !passwordStrengthError
 
   return (
     <Layout>
@@ -149,6 +182,16 @@ const SignUp = () => {
                         )}
                       </button>
                     </div>
+                    {passwordStrengthError && (
+                      <p className="text-red-400 text-sm mt-1">
+                        {passwordStrengthError}
+                      </p>
+                    )}
+                    {!passwordStrengthError && formData.password && (
+                      <p className="text-green-400 text-sm mt-1">
+                        Password strength: Strong
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -183,9 +226,14 @@ const SignUp = () => {
                         )}
                       </button>
                     </div>
-                    {formData.confirmPassword && !passwordsMatch && (
+                    {passwordError && (
                       <p className="text-red-400 text-sm mt-1">
-                        Passwords do not match
+                        {passwordError}
+                      </p>
+                    )}
+                    {formData.confirmPassword && passwordsMatch && !passwordError && (
+                      <p className="text-green-400 text-sm mt-1">
+                        Passwords match
                       </p>
                     )}
                   </div>
