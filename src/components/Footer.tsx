@@ -10,6 +10,7 @@ import {
   Instagram,
   Youtube,
   Globe,
+  MessageCircle,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -49,6 +50,15 @@ const Footer = () => {
               >
                 <Phone size={14} className="text-yellow-500 mr-2 md:mr-3 md:w-[18px] md:h-[18px]" />
                 <span>+254 712 248 706</span>
+              </a>
+              <a
+                href="https://wa.me/254712248706"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center text-xs md:text-sm text-muted-foreground hover:text-[#25D366] transition-colors"
+              >
+                <MessageCircle size={14} className="text-[#25D366] mr-2 md:mr-3 md:w-[18px] md:h-[18px]" />
+                <span>Chat on WhatsApp</span>
               </a>
               <a
                 href="mailto:gamecityelectronics@gmail.com"

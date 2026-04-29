@@ -1,5 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Star, CheckCircle } from 'lucide-react';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel"
 
 const GoogleIcon = () => (
   <svg viewBox="0 0 24 24" width="20" height="20" xmlns="http://www.w3.org/2000/svg">
@@ -67,6 +75,28 @@ interface PlaceDetails {
 const GoogleReviews = () => {
   const [data, setData] = useState<PlaceDetails | null>(null);
   const [loading, setLoading] = useState(true);
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap());
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
+
+  useEffect(() => {
+    if (!api) return;
+    const interval = setInterval(() => {
+      api.scrollNext();
+    }, 3000); // Autoplay every 3 seconds
+    return () => clearInterval(interval);
+  }, [api]);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -88,13 +118,34 @@ const GoogleReviews = () => {
     fetchReviews();
   }, []);
 
-  // Format reviews for display (either live from Google or fallback static ones)
-  const displayReviews = data?.reviews 
-    ? data.reviews
+  // Seeded random functions for daily shuffling
+  const getDailySeed = () => {
+    const date = new Date();
+    return date.getFullYear() * 10000 + (date.getMonth() + 1) * 100 + date.getDate();
+  };
+
+  const shuffleArray = (array: any[], seed: number) => {
+    const shuffled = [...array];
+    let m = shuffled.length, t, i;
+    while (m) {
+      const random = Math.sin(seed++) * 10000;
+      i = Math.floor((random - Math.floor(random)) * m--);
+      t = shuffled[m];
+      shuffled[m] = shuffled[i];
+      shuffled[i] = t;
+    }
+    return shuffled;
+  };
+
+  // Format reviews for display (combine live from Google with fallbacks, shuffle daily, pick 6)
+  const displayReviews = useMemo(() => {
+    let pool: any[] = [];
+    
+    if (data?.reviews) {
+      const live = data.reviews
         .filter(r => r.rating >= 4 && r.text?.text) // Only show 4+ star reviews with text
-        .slice(0, 5)
         .map((r, index) => ({
-          id: index,
+          id: `live-${index}`,
           name: r.authorAttribution?.displayName || 'Google User',
           avatar: (r.authorAttribution?.displayName || 'G').charAt(0),
           color: ['bg-blue-600', 'bg-purple-600', 'bg-emerald-600', 'bg-yellow-600'][index % 4],
@@ -102,8 +153,19 @@ const GoogleReviews = () => {
           rating: r.rating,
           text: r.text.text,
           date: r.relativePublishTimeDescription,
-        }))
-    : fallbackReviews;
+        }));
+      pool = [...pool, ...live];
+    }
+    
+    // Always add fallbacks to ensure a good pool size
+    pool = [...pool, ...fallbackReviews];
+    
+    // Remove duplicates if any (just in case)
+    const uniquePool = Array.from(new Map(pool.map(item => [item.text, item])).values());
+
+    const dailySeed = getDailySeed();
+    return shuffleArray(uniquePool, dailySeed).slice(0, 6);
+  }, [data]);
 
   const overallRating = data?.rating || 4.9;
   const totalRatings = data?.userRatingCount || 142;
@@ -140,11 +202,12 @@ const GoogleReviews = () => {
           )}
         </div>
 
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-4 md:gap-8">
+        {/* Desktop View (Masonry) */}
+        <div className="hidden md:block columns-2 lg:columns-3 gap-8">
           {loading ? (
             // Loading skeletons for cards
             [...Array(3)].map((_, i) => (
-              <div key={i} className="break-inside-avoid mb-4 md:mb-8 p-5 md:p-8 rounded-2xl glass-card bg-gray-800/40 h-64 animate-pulse">
+              <div key={i} className="break-inside-avoid mb-8 p-8 rounded-2xl glass-card bg-gray-800/40 h-64 animate-pulse">
                 <div className="flex gap-3 items-center mb-4">
                   <div className="w-12 h-12 rounded-full bg-gray-700"></div>
                   <div className="flex-1">
@@ -161,7 +224,7 @@ const GoogleReviews = () => {
             displayReviews.map((review) => (
               <div
                 key={review.id}
-                className="break-inside-avoid mb-4 md:mb-8 p-5 md:p-8 rounded-2xl glass-card bg-gray-800/40 hover-scale flex flex-col relative group transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] hover:bg-gray-800/60"
+                className="break-inside-avoid mb-8 p-8 rounded-2xl glass-card bg-gray-800/40 hover-scale flex flex-col relative group transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] hover:bg-gray-800/60"
               >
                 {/* Subtle top border highlight */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -169,15 +232,15 @@ const GoogleReviews = () => {
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
                     {review.profile_photo_url ? (
-                      <img src={review.profile_photo_url} alt={review.name} className="w-10 h-10 md:w-12 md:h-12 rounded-full shadow-inner" referrerPolicy="no-referrer" />
+                      <img src={review.profile_photo_url} alt={review.name} className="w-12 h-12 rounded-full shadow-inner" referrerPolicy="no-referrer" />
                     ) : (
-                      <div className={`w-10 h-10 md:w-12 md:h-12 rounded-full ${review.color} flex items-center justify-center text-white font-bold text-lg shadow-inner`}>
+                      <div className={`w-12 h-12 rounded-full ${review.color} flex items-center justify-center text-white font-bold text-lg shadow-inner`}>
                         {review.avatar}
                       </div>
                     )}
                     
                     <div>
-                      <h3 className="font-semibold text-sm md:text-base text-white flex items-center gap-1">
+                      <h3 className="font-semibold text-base text-white flex items-center gap-1">
                         {review.name}
                         <CheckCircle className="w-3.5 h-3.5 text-blue-400" />
                       </h3>
@@ -189,17 +252,106 @@ const GoogleReviews = () => {
                 
                 <div className="flex gap-1 mb-3">
                   {[...Array(Math.floor(review.rating))].map((_, i) => (
-                    <Star key={i} className="w-3.5 h-3.5 md:w-4 md:h-4 fill-yellow-500 text-yellow-500" />
+                    <Star key={i} className="w-4 h-4 fill-yellow-500 text-yellow-500" />
                   ))}
                 </div>
                 
-                <p className="text-gray-300 text-sm md:text-base leading-relaxed flex-grow">
+                <p className="text-gray-300 text-base leading-relaxed flex-grow">
                   "{review.text}"
                 </p>
               </div>
             ))
           )}
         </div>
+
+        {/* Mobile View (Carousel) */}
+        <div className="md:hidden w-full max-w-[90vw] mx-auto">
+          <Carousel
+            setApi={setApi}
+            opts={{
+              align: "center",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent>
+              {loading ? (
+                // Loading skeletons for cards
+                [...Array(3)].map((_, i) => (
+                  <CarouselItem key={i} className="pl-4">
+                    <div className="p-6 rounded-2xl glass-card bg-gray-800/40 h-[250px] animate-pulse">
+                      <div className="flex gap-3 items-center mb-4">
+                        <div className="w-10 h-10 rounded-full bg-gray-700"></div>
+                        <div className="flex-1">
+                          <div className="h-4 w-24 bg-gray-700 rounded mb-2"></div>
+                          <div className="h-3 w-16 bg-gray-700 rounded"></div>
+                        </div>
+                      </div>
+                      <div className="h-4 w-full bg-gray-700 rounded mb-2"></div>
+                      <div className="h-4 w-5/6 bg-gray-700 rounded mb-2"></div>
+                      <div className="h-4 w-4/6 bg-gray-700 rounded"></div>
+                    </div>
+                  </CarouselItem>
+                ))
+              ) : (
+                displayReviews.map((review) => (
+                  <CarouselItem key={review.id} className="pl-4">
+                    <div className="p-6 rounded-2xl glass-card bg-gray-800/40 flex flex-col relative h-full min-h-[200px]">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3">
+                          {review.profile_photo_url ? (
+                            <img src={review.profile_photo_url} alt={review.name} className="w-10 h-10 rounded-full shadow-inner" referrerPolicy="no-referrer" />
+                          ) : (
+                            <div className={`w-10 h-10 rounded-full ${review.color} flex items-center justify-center text-white font-bold text-lg shadow-inner`}>
+                              {review.avatar}
+                            </div>
+                          )}
+                          
+                          <div>
+                            <h3 className="font-semibold text-sm text-white flex items-center gap-1">
+                              {review.name}
+                              <CheckCircle className="w-3 h-3 text-blue-400" />
+                            </h3>
+                            <span className="text-xs text-muted-foreground">{review.date}</span>
+                          </div>
+                        </div>
+                        <GoogleIcon />
+                      </div>
+                      
+                      <div className="flex gap-1 mb-3">
+                        {[...Array(Math.floor(review.rating))].map((_, i) => (
+                          <Star key={i} className="w-3.5 h-3.5 fill-yellow-500 text-yellow-500" />
+                        ))}
+                      </div>
+                      
+                      <p className="text-gray-300 text-sm leading-relaxed flex-grow">
+                        "{review.text}"
+                      </p>
+                    </div>
+                  </CarouselItem>
+                ))
+              )}
+            </CarouselContent>
+            {/* Swiping is preferred on mobile, but keeping small side buttons for accessibility if space allows */}
+          </Carousel>
+          
+          {/* Pagination Indicators */}
+          {count > 0 && (
+            <div className="py-2 flex justify-center gap-2 mt-4">
+              {Array.from({ length: count }).map((_, index) => (
+                <button
+                  key={index}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    index === current ? "bg-yellow-500 w-6" : "bg-gray-600 w-2 hover:bg-gray-500"
+                  }`}
+                  onClick={() => api?.scrollTo(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
       </div>
     </section>
   );

@@ -11,6 +11,7 @@ import {
   Clock,
   Send,
   MessageSquare,
+  MessageCircle,
   HelpCircle,
   ShoppingCart,
   AlertCircle,
@@ -104,7 +105,7 @@ const Contact = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 mb-16">
             <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 flex flex-col items-center text-center">
               <div className="p-3 rounded-full bg-yellow-500/20 mb-4">
                 <Mail className="h-6 w-6 text-yellow-400" />
@@ -134,6 +135,24 @@ const Contact = () => {
                 className="text-yellow-400 hover:text-yellow-300"
               >
                 0712248706
+              </a>
+            </div>
+
+            <div className="bg-gray-900 rounded-lg p-6 border border-gray-700 flex flex-col items-center text-center">
+              <div className="p-3 rounded-full bg-[#25D366]/20 mb-4">
+                <MessageCircle className="h-6 w-6 text-[#25D366]" />
+              </div>
+              <h3 className="text-lg font-medium mb-2">WhatsApp Us</h3>
+              <p className="text-muted-foreground mb-4">
+                Chat with our support team instantly
+              </p>
+              <a
+                href="https://wa.me/254712248706"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[#25D366] hover:text-[#20B054]"
+              >
+                Chat on WhatsApp
               </a>
             </div>
 
