@@ -137,11 +137,11 @@ const GoogleReviews = () => {
     return shuffled;
   };
 
-  // Format reviews for display (combine live from Google with fallbacks, shuffle daily, pick 6)
+  // Format reviews for display (only use live data unless it fails, shuffle daily)
   const displayReviews = useMemo(() => {
     let pool: any[] = [];
     
-    if (data?.reviews) {
+    if (data?.reviews && data.reviews.length > 0) {
       const live = data.reviews
         .filter(r => r.rating >= 4 && r.text?.text) // Only show 4+ star reviews with text
         .map((r, index) => ({
@@ -154,13 +154,13 @@ const GoogleReviews = () => {
           text: r.text.text,
           date: r.relativePublishTimeDescription,
         }));
-      pool = [...pool, ...live];
+      pool = [...live];
+    } else {
+      // Only use fallbacks if live data completely fails to load
+      pool = [...fallbackReviews];
     }
     
-    // Always add fallbacks to ensure a good pool size
-    pool = [...pool, ...fallbackReviews];
-    
-    // Remove duplicates if any (just in case)
+    // Remove duplicates if any
     const uniquePool = Array.from(new Map(pool.map(item => [item.text, item])).values());
 
     const dailySeed = getDailySeed();
