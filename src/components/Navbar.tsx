@@ -128,13 +128,31 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-4">
-            {/* Navigation Links */}
-            <Link
-              to="/category/all"
-              className="text-gray-300 hover:text-yellow-400 transition-colors px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Categories
-            </Link>
+            {/* Navigation Links with Hover Dropdown */}
+            <div className="relative group">
+              <Link
+                to="/category/all"
+                className="text-gray-300 group-hover:text-yellow-400 transition-colors px-3 py-4 rounded-md text-sm font-medium flex items-center"
+              >
+                Categories
+              </Link>
+              
+              {/* Dropdown Menu */}
+              <div className="absolute left-0 top-[100%] pt-2 w-48 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <div className="rounded-md shadow-[0_8px_30px_rgb(0,0,0,0.5)] bg-gray-900 border border-gray-800 overflow-hidden glass-card">
+                  <div className="py-1 flex flex-col">
+                    <Link to="/category/pre-built" className="px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800 hover:text-yellow-400 transition-colors">Pre-built PCs</Link>
+                    <Link to="/category/graphics-cards" className="px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800 hover:text-yellow-400 transition-colors">Graphics Cards</Link>
+                    <Link to="/category/monitors" className="px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800 hover:text-yellow-400 transition-colors">Monitors</Link>
+                    <Link to="/category/processors" className="px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800 hover:text-yellow-400 transition-colors">Processors</Link>
+                    <Link to="/category/power-supply" className="px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800 hover:text-yellow-400 transition-colors">Power Supply</Link>
+                    <Link to="/category/accessories" className="px-4 py-2.5 text-sm text-gray-300 hover:bg-gray-800 hover:text-yellow-400 transition-colors">Accessories</Link>
+                    <div className="border-t border-gray-800 my-1"></div>
+                    <Link to="/category/all" className="px-4 py-2.5 text-sm text-yellow-500 hover:bg-gray-800 hover:text-yellow-400 font-semibold transition-colors">View All Categories</Link>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             {/* Favorites */}
             <Link

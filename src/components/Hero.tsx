@@ -6,9 +6,26 @@ import { ChevronRight } from 'lucide-react'
 const Hero = () => {
   return (
     <div className="relative h-screen flex items-center justify-center overflow-hidden">
-      {/* Optimized background - CSS gradient instead of external image */}
-      <div className="absolute top-0 left-0 w-full h-full hero-gradient"></div>
-      <div className="absolute top-0 left-0 w-full h-full hero-overlay"></div>
+      {/* Fallback Background (shows if video fails or buffers) */}
+      <div className="absolute top-0 left-0 w-full h-full hero-gradient z-0"></div>
+
+      {/* Background Video */}
+      <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="https://res.cloudinary.com/dq3jxutxg/video/upload/f_auto,q_auto/v1777433582/greenbits-store/0429_1_kjyl0t.jpg"
+          className="object-cover w-full h-full opacity-80"
+        >
+          <source 
+            src="https://res.cloudinary.com/dq3jxutxg/video/upload/f_auto,q_auto/v1777433582/greenbits-store/0429_1_kjyl0t.mov" 
+            type="video/mp4" 
+          />
+        </video>
+      </div>
+      <div className="absolute top-0 left-0 w-full h-full bg-black/50 z-10"></div>
 
       {/* Floating elements */}
       <div className="absolute w-64 h-64 bg-yellow-500/5 rounded-full filter blur-3xl -top-20 -right-20 animate-pulse"></div>
@@ -56,18 +73,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Bottom decorative curve */}
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          className="relative block w-full h-20 text-background"
-          fill="currentColor"
-        >
-          <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V0C0,0,20,20,20,20"></path>
-        </svg>
-      </div>
     </div>
   )
 }
