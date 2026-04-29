@@ -44,19 +44,24 @@ const fallbackReviews = [
 ];
 
 interface Review {
-  author_name: string;
-  author_url: string;
-  profile_photo_url: string;
+  authorAttribution: {
+    displayName: string;
+    photoUri: string;
+    uri: string;
+  };
   rating: number;
-  relative_time_description: string;
-  text: string;
-  time: number;
+  relativePublishTimeDescription: string;
+  text: {
+    text: string;
+    languageCode: string;
+  };
+  publishTime: string;
 }
 
 interface PlaceDetails {
   rating: number;
   reviews: Review[];
-  user_ratings_total: number;
+  userRatingCount: number;
 }
 
 const GoogleReviews = () => {
@@ -71,7 +76,7 @@ const GoogleReviews = () => {
           const result = await response.json();
           setData(result);
         } else {
-          console.warn('Failed to fetch real reviews (might be running locally without Vercel backend), falling back to static');
+          console.warn('Failed to fetch real reviews, falling back to static');
         }
       } catch (error) {
         console.error('Error fetching Google Reviews:', error);
@@ -86,22 +91,22 @@ const GoogleReviews = () => {
   // Format reviews for display (either live from Google or fallback static ones)
   const displayReviews = data?.reviews 
     ? data.reviews
-        .filter(r => r.rating >= 4 && r.text) // Only show 4+ star reviews with text
+        .filter(r => r.rating >= 4 && r.text?.text) // Only show 4+ star reviews with text
         .slice(0, 3)
         .map((r, index) => ({
           id: index,
-          name: r.author_name,
-          avatar: r.author_name.charAt(0),
+          name: r.authorAttribution?.displayName || 'Google User',
+          avatar: (r.authorAttribution?.displayName || 'G').charAt(0),
           color: ['bg-blue-600', 'bg-purple-600', 'bg-emerald-600', 'bg-yellow-600'][index % 4],
-          profile_photo_url: r.profile_photo_url,
+          profile_photo_url: r.authorAttribution?.photoUri || '',
           rating: r.rating,
-          text: r.text,
-          date: r.relative_time_description,
+          text: r.text.text,
+          date: r.relativePublishTimeDescription,
         }))
     : fallbackReviews;
 
   const overallRating = data?.rating || 4.9;
-  const totalRatings = data?.user_ratings_total || 142;
+  const totalRatings = data?.userRatingCount || 142;
 
   return (
     <section className="py-8 md:py-20 px-4 md:px-6 relative overflow-hidden">

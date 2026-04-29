@@ -11,16 +11,24 @@ export async function GET(request: Request) {
     }
 
     const response = await fetch(
-      `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=reviews,rating,user_ratings_total&key=${apiKey}`
+      `https://places.googleapis.com/v1/places/${placeId}`,
+      {
+        headers: {
+          'X-Goog-Api-Key': apiKey,
+          'X-Goog-FieldMask': 'rating,reviews,userRatingCount'
+        }
+      }
     );
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error('Google API Error:', errorText);
       throw new Error(`Google API responded with ${response.status}`);
     }
 
     const data: any = await response.json();
 
-    return new Response(JSON.stringify(data.result), {
+    return new Response(JSON.stringify(data), {
       status: 200,
       headers: {
         'Content-Type': 'application/json',
