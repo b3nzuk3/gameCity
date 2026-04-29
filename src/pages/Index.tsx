@@ -8,6 +8,7 @@ import OptimizedImage from '@/components/OptimizedImage'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Shield, Truck, Sparkles, Zap } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
+import GoogleReviews from '@/components/GoogleReviews'
 
 const Index = () => {
   // Features section data
@@ -127,6 +128,9 @@ const Index = () => {
 
       {/* Featured Products Section */}
       <FeaturedProducts />
+
+      {/* Google Reviews Section */}
+      <GoogleReviews />
 
       {/* Categories Section */}
       <section className="py-8 md:py-20 px-2 md:px-6 bg-gray-900">
