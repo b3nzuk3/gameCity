@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import React from 'react'
+import { Link } from 'react-router-dom'
 import Layout from '@/components/Layout'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
   Trash2,
   MinusCircle,
@@ -12,22 +11,12 @@ import {
 } from 'lucide-react'
 import { useCart } from '@/contexts/CartContext'
 import { formatKESPrice } from '@/lib/currency'
-import MpesaPayment from '@/components/MpesaPayment'
-import { toast } from '@/components/ui/use-toast'
-import backendService from '@/services/backendService'
 import { useAuth } from '@/contexts/AuthContext'
 
 const Cart = () => {
-  const navigate = useNavigate()
   const { cartItems, removeFromCart, updateQuantity, clearCart, total } =
     useCart()
   const { user } = useAuth()
-  const [loading, setLoading] = useState(false)
-  const [guestInfo, setGuestInfo] = useState({
-    name: '',
-    email: '',
-    phone: '',
-  })
 
   const subtotal = total
   const shipping = subtotal > 1000 ? 0 : 29.99
@@ -39,76 +28,6 @@ const Cart = () => {
   }
 
   const isCartEmpty = cartItems.length === 0
-
-  const handlePaymentSuccess = async () => {
-    try {
-      setLoading(true)
-
-      // Validate guest info if user is not logged in
-      if (!user) {
-        if (!guestInfo.name || !guestInfo.email || !guestInfo.phone) {
-          toast({
-            title: 'Missing information',
-            description: 'Please fill in all required fields',
-            variant: 'destructive',
-          })
-          setLoading(false)
-          return
-        }
-      }
-
-      // Create order items from cart
-      const orderItems = cartItems.map((item) => ({
-        product: item.product?._id || item.product || item._id || item.id,
-        name: item.name,
-        price: item.price,
-        image: item.image,
-        quantity: item.quantity,
-      }))
-
-      // Create order in database
-      await backendService.orders.create({
-        orderItems,
-        paymentMethod: 'M-Pesa',
-        itemsPrice: subtotal,
-        totalPrice: finalTotal,
-        // Include guest info if user is not logged in
-        ...(user ? {} : {
-          guestName: guestInfo.name,
-          guestEmail: guestInfo.email,
-          guestPhone: guestInfo.phone,
-        }),
-      })
-
-      // Clear cart and show success message
-      clearCart()
-      toast({
-        title: 'Order placed successfully',
-        description: 'Thank you for your purchase!',
-      })
-
-      // Redirect to success page or home
-      navigate('/')
-    } catch (error) {
-      console.error('Failed to create order:', error)
-      toast({
-        title: 'Order creation failed',
-        description:
-          'There was an error creating your order. Please try again.',
-        variant: 'destructive',
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handlePaymentError = (error: string) => {
-    toast({
-      title: 'Payment failed',
-      description: error,
-      variant: 'destructive',
-    })
-  }
 
   return (
     <Layout>
@@ -330,77 +249,7 @@ const Cart = () => {
                   </div>
                 </div>
 
-                {/* Guest Information Form (only shown for non-authenticated users) */}
-                {!user && (
-                  <div className="mb-3 p-3 bg-gray-800/50 border border-gray-700 rounded">
-                    <h3 className="text-sm font-medium mb-2">Contact Information</h3>
-                    <div className="space-y-2">
-                      <div>
-                        <label htmlFor="guest-name" className="block text-xs font-medium mb-1">
-                          Full Name
-                        </label>
-                        <Input
-                          id="guest-name"
-                          type="text"
-                          placeholder="John Doe"
-                          value={guestInfo.name}
-                          onChange={(e) =>
-                            setGuestInfo({ ...guestInfo, name: e.target.value })
-                          }
-                          className="bg-gray-900 border-gray-700 h-9"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="guest-email" className="block text-xs font-medium mb-1">
-                          Email
-                        </label>
-                        <Input
-                          id="guest-email"
-                          type="email"
-                          placeholder="john@example.com"
-                          value={guestInfo.email}
-                          onChange={(e) =>
-                            setGuestInfo({ ...guestInfo, email: e.target.value })
-                          }
-                          className="bg-gray-900 border-gray-700 h-9"
-                        />
-                      </div>
-                      <div>
-                        <label htmlFor="guest-phone" className="block text-xs font-medium mb-1">
-                          Phone Number
-                        </label>
-                        <Input
-                          id="guest-phone"
-                          type="tel"
-                          placeholder="254712345678"
-                          value={guestInfo.phone}
-                          onChange={(e) =>
-                            setGuestInfo({ ...guestInfo, phone: e.target.value })
-                          }
-                          className="bg-gray-900 border-gray-700 h-9"
-                        />
-                      </div>
-                    </div>
-                    <div className="mt-2 pt-2 border-t border-gray-700">
-                      <p className="text-xs text-muted-foreground">
-                        Don't have an account?{' '}
-                        <Link
-                          to="/signup"
-                          className="text-yellow-400 hover:text-yellow-300 underline"
-                        >
-                          Create one
-                        </Link>{' '}
-                        or{' '}
-                        <Link
-                          to="/signin"
-                          className="text-yellow-400 hover:text-yellow-300 underline"
-                        >
-                          sign in
-                        </Link>
-                      </p>
-                    </div>
-                  </div>
-                )}
+
 
                 {/* WhatsApp Order Button */}
                 <Button
@@ -436,14 +285,6 @@ const Cart = () => {
                   </svg>
                   Order on WhatsApp
                 </Button>
-                <div className="text-center text-muted-foreground text-xs mb-2">
-                  or
-                </div>
-                <MpesaPayment
-                  amount={finalTotal}
-                  onSuccess={handlePaymentSuccess}
-                  onError={handlePaymentError}
-                />
               </div>
             </div>
           </div>
