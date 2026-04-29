@@ -92,7 +92,7 @@ const GoogleReviews = () => {
   const displayReviews = data?.reviews 
     ? data.reviews
         .filter(r => r.rating >= 4 && r.text?.text) // Only show 4+ star reviews with text
-        .slice(0, 3)
+        .slice(0, 5)
         .map((r, index) => ({
           id: index,
           name: r.authorAttribution?.displayName || 'Google User',
@@ -140,11 +140,11 @@ const GoogleReviews = () => {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
+        <div className="columns-1 md:columns-2 lg:columns-3 gap-4 md:gap-8">
           {loading ? (
             // Loading skeletons for cards
             [...Array(3)].map((_, i) => (
-              <div key={i} className="p-5 md:p-8 rounded-2xl glass-card bg-gray-800/40 h-64 animate-pulse">
+              <div key={i} className="break-inside-avoid mb-4 md:mb-8 p-5 md:p-8 rounded-2xl glass-card bg-gray-800/40 h-64 animate-pulse">
                 <div className="flex gap-3 items-center mb-4">
                   <div className="w-12 h-12 rounded-full bg-gray-700"></div>
                   <div className="flex-1">
@@ -161,7 +161,7 @@ const GoogleReviews = () => {
             displayReviews.map((review) => (
               <div
                 key={review.id}
-                className="p-5 md:p-8 rounded-2xl glass-card bg-gray-800/40 hover-scale flex flex-col relative group transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] hover:bg-gray-800/60"
+                className="break-inside-avoid mb-4 md:mb-8 p-5 md:p-8 rounded-2xl glass-card bg-gray-800/40 hover-scale flex flex-col relative group transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.5)] hover:bg-gray-800/60"
               >
                 {/* Subtle top border highlight */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[2px] bg-gradient-to-r from-transparent via-yellow-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
