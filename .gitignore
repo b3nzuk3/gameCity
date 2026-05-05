@@ -53,3 +53,5 @@ ehthumbs.db
 
 .vercel
 .env*.local
+google-indexing-key.json
+*.json key
