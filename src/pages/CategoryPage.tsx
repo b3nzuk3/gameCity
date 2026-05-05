@@ -35,6 +35,7 @@ const CATEGORIES = [
   { id: 'cpu-cooling', name: 'CPU Cooling' },
   { id: 'oem', name: 'OEM' },
   { id: 'accessories', name: 'Accessories' },
+  { id: 'laptops', name: 'Laptops' },
 ]
 
 // Add this mapping from slug to display name
@@ -51,6 +52,7 @@ const CATEGORY_SLUG_TO_NAME: Record<string, string> = {
   'cpu-cooling': 'CPU Cooling',
   oem: 'OEM',
   accessories: 'Accessories',
+  laptops: 'Laptops',
   all: 'All Products',
 }
 
@@ -76,6 +78,7 @@ const normalizeCategory = (category: string): string => {
     'pre built': 'pre-built',
     'pre built pcs': 'pre-built',
     accessories: 'accessories',
+    laptops: 'laptops',
   }
   // Lowercase, trim, and map
   const key = category.toLowerCase().trim()

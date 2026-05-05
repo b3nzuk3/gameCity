@@ -63,6 +63,7 @@ const CATEGORIES = [
   { id: 'cpu-cooling', name: 'CPU Cooling' },
   { id: 'oem', name: 'OEM' },
   { id: 'accessories', name: 'Accessories' },
+  { id: 'laptops', name: 'Laptops' },
 ]
 
 const CATEGORY_SPECS: Record<string, string[]> = {
@@ -151,6 +152,17 @@ const CATEGORY_SPECS: Record<string, string[]> = {
     'Sata ports',
     'Warranty period in months',
     'Accessories included',
+  ],
+  'Laptops': [
+    'Model',
+    'Screen Size (inches)',
+    'Resolution',
+    'Processor',
+    'RAM (GB)',
+    'Storage (GB/TB)',
+    'Graphics Card',
+    'Battery Life (hours)',
+    'Special Features',
   ],
 }
 
