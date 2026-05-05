@@ -22,6 +22,7 @@ Sentry.init({
 });
 
 import { createRoot } from 'react-dom/client'
+import { Analytics } from '@vercel/analytics/react'
 import App from './App.tsx'
 import './index.css'
 
@@ -35,4 +36,9 @@ const SentryApp = Sentry.withErrorBoundary(App, {
   ),
 });
 
-createRoot(document.getElementById("root")!).render(<SentryApp />);
+createRoot(document.getElementById("root")!).render(
+  <>
+    <SentryApp />
+    <Analytics />
+  </>
+);
