@@ -442,8 +442,19 @@ const BuildPC = () => {
                         onChange={(e) =>
                           handleSearchChange(category.id, e.target.value)
                         }
-                        className="pl-9 bg-gray-900 border-gray-700 text-sm"
+                        className="pl-9 pr-9 bg-gray-900 border-gray-700 text-sm"
                       />
+                      {state.search && (
+                        <button
+                          type="button"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                          onClick={() => {
+                            handleSearchChange(category.id, '')
+                          }}
+                        >
+                          <X size={14} />
+                        </button>
+                      )}
                     </div>
 
                     {/* Loading state */}
