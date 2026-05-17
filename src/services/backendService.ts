@@ -163,15 +163,21 @@ const backendService = {
     getAllByCategory: (
       category: string,
       page: number = 1,
-      limit: number = 12
+      limit: number = 8,
+      search?: string
     ): Promise<{
       products: Product[]
       page: number
       pages: number
       total: number
       hasMore: boolean
-    }> =>
-      handleRequest<{
+    }> => {
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+      })
+      if (search) params.set('search', search)
+      return handleRequest<{
         products: Product[]
         page: number
         pages: number
@@ -179,10 +185,9 @@ const backendService = {
         hasMore: boolean
       }>(
         'GET',
-        `/products/category/${encodeURIComponent(
-          category
-        )}?page=${page}&limit=${limit}`
-      ),
+        `/products/category/${encodeURIComponent(category)}?${params.toString()}`
+      )
+    },
     getBrands: (): Promise<string[]> =>
       handleRequest<string[]>('GET', '/products/brands'),
     getById: (id: string): Promise<Product> =>
