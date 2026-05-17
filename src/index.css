@@ -148,6 +148,31 @@
     @apply h-11 w-full mt-4;
   }
 
+  /* Hide scrollbar for category tabs */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Custom dark scrollbar for other elements */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #374151;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #4b5563;
+  }
+
   /* Mobile-specific spacing */
   .mobile-padding {
     @apply px-3 sm:px-4 md:px-6;

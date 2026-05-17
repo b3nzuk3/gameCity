@@ -340,34 +340,73 @@ const BuildPC = () => {
               className="w-full"
               onValueChange={handleTabChange}
             >
-              <TabsList className="w-full flex overflow-x-auto bg-gray-900 border border-gray-700 rounded-lg p-1 mb-8 justify-start">
-                {PART_CATEGORIES.map((category) => (
-                  <TabsTrigger
-                    key={category.id}
-                    value={category.id}
-                    className="flex-shrink-0 data-[state=active]:bg-gray-800 data-[state=active]:text-foreground"
+              {/* Category tabs with custom scroll */}
+              <div className="relative mb-8 group">
+                {/* Left fade + arrow */}
+                <div className="absolute left-0 top-0 bottom-0 z-10 flex items-center pointer-events-none">
+                  <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-background to-transparent rounded-l-lg" />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0 rounded-full bg-gray-900/90 border border-gray-700 backdrop-blur-sm hover:bg-gray-800 shadow-lg pointer-events-auto"
+                    onClick={() => {
+                      const el = document.getElementById('category-tabs-list')
+                      if (el) el.scrollBy({ left: -200, behavior: 'smooth' })
+                    }}
                   >
-                    <div className="flex items-center gap-2">
-                      {category.icon}
-                      <span>{category.name}</span>
-                      {category.id === 'storage' ? (
-                        selectedStorage.length > 0 && (
-                          <span className="flex items-center gap-1">
-                            <Check size={14} className="text-yellow-400" />
-                            <span className="text-xs text-yellow-400">
-                              {selectedStorage.length}
+                    <ChevronLeft size={16} />
+                  </Button>
+                </div>
+
+                <TabsList
+                  id="category-tabs-list"
+                  className="w-full flex overflow-x-auto bg-gray-900 border border-gray-700 rounded-lg p-1 justify-start scrollbar-hide scroll-smooth"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                  {PART_CATEGORIES.map((category) => (
+                    <TabsTrigger
+                      key={category.id}
+                      value={category.id}
+                      className="flex-shrink-0 data-[state=active]:bg-gray-800 data-[state=active]:text-foreground rounded-md"
+                    >
+                      <div className="flex items-center gap-2">
+                        {category.icon}
+                        <span>{category.name}</span>
+                        {category.id === 'storage' ? (
+                          selectedStorage.length > 0 && (
+                            <span className="flex items-center gap-1">
+                              <Check size={14} className="text-yellow-400" />
+                              <span className="text-xs text-yellow-400">
+                                {selectedStorage.length}
+                              </span>
                             </span>
-                          </span>
-                        )
-                      ) : (
-                        selectedParts[category.id] && (
-                          <Check size={14} className="text-yellow-400" />
-                        )
-                      )}
-                    </div>
-                  </TabsTrigger>
-                ))}
-              </TabsList>
+                          )
+                        ) : (
+                          selectedParts[category.id] && (
+                            <Check size={14} className="text-yellow-400" />
+                          )
+                        )}
+                      </div>
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+
+                {/* Right fade + arrow */}
+                <div className="absolute right-0 top-0 bottom-0 z-10 flex items-center pointer-events-none">
+                  <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-background to-transparent rounded-r-lg" />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 w-8 p-0 rounded-full bg-gray-900/90 border border-gray-700 backdrop-blur-sm hover:bg-gray-800 shadow-lg pointer-events-auto"
+                    onClick={() => {
+                      const el = document.getElementById('category-tabs-list')
+                      if (el) el.scrollBy({ left: 200, behavior: 'smooth' })
+                    }}
+                  >
+                    <ChevronRight size={16} />
+                  </Button>
+                </div>
+              </div>
 
               {PART_CATEGORIES.map((category) => {
                 const state = categoryStates[category.id]
