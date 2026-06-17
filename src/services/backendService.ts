@@ -159,7 +159,7 @@ const backendService = {
         page: number
         pages: number
         count: number
-      }>('GET', `/products?pageNumber=${pageNumber}`),
+      }>('GET', `/products?page=${pageNumber}`),
     getAllByCategory: (
       category: string,
       page: number = 1,
