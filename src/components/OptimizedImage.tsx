@@ -11,7 +11,6 @@ interface OptimizedImageProps {
   placeholder?: 'blur' | 'empty'
   blurDataURL?: string
   sizes?: string
-  quality?: number
   loading?: 'lazy' | 'eager'
   onLoad?: () => void
   onError?: () => void
@@ -27,7 +26,6 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   placeholder = 'empty',
   blurDataURL,
   sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw',
-  quality = 75,
   loading = 'lazy',
   onLoad,
   onError,
@@ -61,50 +59,13 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     return () => observer.disconnect()
   }, [priority, isInView])
 
-  // Generate optimized image URL
-  const getOptimizedSrc = (
-    originalSrc: string,
-    width?: number,
-    quality?: number
-  ) => {
+  // Ensure HTTPS for external images
+  const getImageSrc = (originalSrc: string) => {
     if (!originalSrc) return ''
-
-    // If it's a Cloudinary URL, optimize it
-    if (originalSrc.includes('cloudinary.com')) {
-      const baseUrl = originalSrc.split('/upload/')[0] + '/upload/'
-      const path = originalSrc.split('/upload/')[1]
-
-      const transformations = []
-      if (width) transformations.push(`w_${width}`)
-      if (quality) transformations.push(`q_${quality}`)
-      transformations.push('f_auto') // Auto format (WebP, AVIF)
-      transformations.push('c_limit') // Limit dimensions
-      transformations.push('fl_progressive') // Progressive JPEG
-      transformations.push('dpr_auto') // Device pixel ratio optimization
-
-      return `${baseUrl}${transformations.join(',')}/${path}`
-    }
-
-    // Ensure HTTPS for external images
     if (originalSrc.startsWith('http://')) {
       return originalSrc.replace('http://', 'https://')
     }
-
     return originalSrc
-  }
-
-  // Generate srcset for responsive images
-  const generateSrcSet = (originalSrc: string) => {
-    if (!originalSrc || !originalSrc.includes('cloudinary.com'))
-      return undefined
-
-    const baseUrl = originalSrc.split('/upload/')[0] + '/upload/'
-    const path = originalSrc.split('/upload/')[1]
-
-    const sizes = [320, 640, 768, 1024, 1280, 1536]
-    return sizes
-      .map((size) => `${getOptimizedSrc(originalSrc, size, quality)} ${size}w`)
-      .join(', ')
   }
 
   const handleLoad = () => {
@@ -117,8 +78,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
     onError?.()
   }
 
-  const optimizedSrc = isInView ? getOptimizedSrc(src, width, quality) : ''
-  const srcSet = isInView ? generateSrcSet(src) : undefined
+  const imageSrc = isInView ? getImageSrc(src) : ''
 
   return (
     <div
@@ -166,8 +126,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
       {/* Actual Image */}
       {isInView && !isError && (
         <img
-          src={optimizedSrc}
-          srcSet={srcSet}
+          src={imageSrc}
           sizes={sizes}
           alt={alt}
           {...(width ? { width } : {})}
@@ -175,8 +134,6 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           loading={priority ? 'eager' : loading}
           onLoad={handleLoad}
           onError={handleError}
-          crossOrigin={src?.includes('cloudinary.com') ? 'anonymous' : undefined}
-          referrerPolicy="no-referrer-when-downgrade"
           className={cn(
             'w-full h-full object-cover transition-opacity duration-300',
             isLoaded ? 'opacity-100' : 'opacity-0'
