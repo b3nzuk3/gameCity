@@ -175,7 +175,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           loading={priority ? 'eager' : loading}
           onLoad={handleLoad}
           onError={handleError}
-          crossOrigin="anonymous"
+          crossOrigin={src?.includes('cloudinary.com') ? 'anonymous' : undefined}
           referrerPolicy="no-referrer-when-downgrade"
           className={cn(
             'w-full h-full object-cover transition-opacity duration-300',
