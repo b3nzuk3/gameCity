@@ -22,6 +22,12 @@ export type Product = {
   count_in_stock?: number
   countInStock?: number
   image: string
+  image_r2?: string
+  image_r2_variants?: {
+    thumbnail?: string
+    medium?: string
+    large?: string
+  }
   images?: string[]
   reviews?: any[] // Define a proper review type if needed
   specifications?: Record<string, string>

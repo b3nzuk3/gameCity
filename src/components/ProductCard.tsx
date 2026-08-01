@@ -9,12 +9,19 @@ import { formatKESPrice } from '@/lib/currency'
 import { getOfferPrice, getDiscountPercent, isOfferActive } from '@/lib/utils'
 import { generateProductUrl } from '@/lib/slugUtils'
 import OptimizedImage from './OptimizedImage'
+import { getProductImageUrl } from '@/utils/imageUtils'
 
 interface ProductProps {
   product: {
     id: string | number
     name: string
     image: string
+    image_r2?: string
+    image_r2_variants?: {
+      thumbnail?: string
+      medium?: string
+      large?: string
+    }
     price: number
     rating?: number
     numReviews?: number
@@ -95,7 +102,7 @@ const ProductCard = ({ product }: ProductProps) => {
         {/* Product Image - Optimized for mobile */}
         <div className="relative aspect-square overflow-hidden">
           <OptimizedImage
-            src={product.image}
+            src={getProductImageUrl(product, "thumbnail")}
             alt={`${product.name} - Gaming ${
               product.category || 'electronics'
             } in Nairobi Kenya`}

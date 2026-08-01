@@ -1,3 +1,4 @@
+import { getProductImageUrl } from "@/utils/imageUtils"
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
@@ -149,7 +150,7 @@ const FeaturedProducts = () => {
               <CardContent className="p-2 sm:p-4 flex flex-col flex-grow">
                 <div className="aspect-square relative mb-4 overflow-hidden rounded-md bg-gray-700">
                   <img
-                    src={product.image}
+                    src={getProductImageUrl(product, "medium")}
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     onError={(e) => {
