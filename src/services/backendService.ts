@@ -42,6 +42,11 @@ export type Product = {
 
 export type UploadsResponse = {
   urls: string[]
+  variants?: Array<{
+    thumbnail?: string
+    medium?: string
+    large?: string
+  }>
 }
 
 export type User = {

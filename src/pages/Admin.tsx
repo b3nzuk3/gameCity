@@ -176,7 +176,14 @@ type ProductFormData = {
   brand: string
   condition?: 'New' | 'Pre-Owned'
   image: string
+  image_r2?: string
+  image_r2_variants?: {
+    thumbnail?: string
+    medium?: string
+    large?: string
+  }
   images: string[]
+  images_r2?: string[]
   offer?: {
     enabled?: boolean
     type?: 'percentage' | 'fixed'
@@ -556,7 +563,10 @@ const Admin = () => {
     setSubmitLoading(true)
 
     let mainImageUrl = currentProduct.image
+    let mainImageR2Url = currentProduct.image_r2
+    let mainImageVariants = currentProduct.image_r2_variants
     let finalAdditionalImageUrls = [...currentProduct.images]
+    let finalAdditionalImageR2Urls = [...(currentProduct.images_r2 || [])]
 
     try {
       // 1. Upload main image if a new one is selected
@@ -565,6 +575,8 @@ const Admin = () => {
         formData.append('images', mainImageFile)
         const res = await backendService.uploads.upload(formData)
         mainImageUrl = res.urls[0]
+        mainImageR2Url = res.urls[0]
+        mainImageVariants = res.variants?.[0] || null
       }
 
       // 2. Upload additional images if new ones are selected
@@ -575,6 +587,7 @@ const Admin = () => {
         })
         const res = await backendService.uploads.upload(formData)
         finalAdditionalImageUrls = [...finalAdditionalImageUrls, ...res.urls]
+        finalAdditionalImageR2Urls = [...finalAdditionalImageR2Urls, ...res.urls]
       }
 
       if (!mainImageUrl) {
@@ -590,7 +603,10 @@ const Admin = () => {
       const productDataToSubmit = {
         ...currentProduct,
         image: mainImageUrl,
+        image_r2: mainImageR2Url,
+        image_r2_variants: mainImageVariants,
         images: finalAdditionalImageUrls,
+        images_r2: finalAdditionalImageR2Urls,
         specifications,
       }
 
