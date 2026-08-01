@@ -509,7 +509,10 @@ const Admin = () => {
       },
     })
     setMainImagePreview(product.image)
-    setAdditionalImagePreviews(product.images || [])
+    // Strip main image from additional images list (resolveAllImages includes it)
+    const galleryImages = (product.images || []).filter((img) => img !== product.image)
+    setAdditionalImagePreviews(galleryImages)
+    setCurrentProduct((prev) => ({ ...prev, images: galleryImages }))
     setMainImageFile(null)
     setAdditionalImageFiles([])
     // Robustly map existing specs to expected keys for the selected category
@@ -1674,7 +1677,7 @@ const Admin = () => {
                         type="file"
                         onChange={handleMainImageChange}
                         className="bg-gray-800"
-                        accept="image/*"
+                        accept="image/*" value=""
                       />
                     </div>
 
@@ -1705,7 +1708,7 @@ const Admin = () => {
                         multiple
                         onChange={handleAdditionalImagesChange}
                         className="bg-gray-800"
-                        accept="image/*"
+                        accept="image/*" value=""
                       />
                     </div>
                   </div>
