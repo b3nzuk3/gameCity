@@ -107,7 +107,7 @@ const ProductPage = () => {
     )
   }
 
-  const images = [product.image, ...(product.images || [])].filter(Boolean)
+  const images = [...new Set([product.image, ...(product.images || [])].filter(Boolean))]
 
   const handleAddToCart = () => {
     addToCart(
