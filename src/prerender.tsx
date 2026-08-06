@@ -2,16 +2,35 @@ import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom/server.mjs'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { HelmetProvider } from 'react-helmet-async'
+import { HelmetProvider, type HelmetServerState } from 'react-helmet-async'
 import { CartProvider } from '@/contexts/CartContext'
 import { AuthProvider } from '@/contexts/AuthContext'
 import { FavoritesProvider } from '@/contexts/FavoritesContext'
 import AppRoutes from './routes'
 import { Toaster } from '@/components/ui/toaster'
+import { fetchProductById, fetchProductBySlug } from '@/services/productService'
 
 export async function prerender(data: { url: string }) {
-  const helmetContext: { helmet?: Record<string, unknown> } = {}
+  const helmetContext: { helmet?: HelmetServerState } = {}
   const queryClient = new QueryClient()
+  const productParam = data.url.startsWith('/product/')
+    ? decodeURIComponent(data.url.slice('/product/'.length))
+    : null
+
+  if (productParam) {
+    try {
+      const isObjectId = /^[a-f\d]{24}$/i.test(productParam)
+      const product = isObjectId
+        ? await fetchProductById(productParam)
+        : await fetchProductBySlug(productParam)
+      queryClient.setQueryData(
+        [isObjectId ? 'product' : 'product-slug', productParam],
+        product
+      )
+    } catch {
+      // The client fallback handles unavailable or missing product data.
+    }
+  }
 
   const html = renderToString(
     <HelmetProvider context={helmetContext}>
