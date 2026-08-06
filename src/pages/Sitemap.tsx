@@ -2,6 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import Layout from '@/components/Layout'
 import { ArrowRight } from 'lucide-react'
+import SEO from '@/components/SEO'
 
 const sitemapLinks = [
   { to: '/', label: 'Home' },
@@ -27,6 +28,7 @@ const sitemapLinks = [
 
 const Sitemap = () => (
   <Layout>
+    <SEO title="Sitemap" description="Browse the public pages on GameCity Electronics." url="/sitemap" />
     <div className="container mx-auto px-4 py-16 mt-16">
       <h1 className="text-3xl font-bold mb-8">Sitemap</h1>
       <ul className="space-y-4">

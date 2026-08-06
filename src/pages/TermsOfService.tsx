@@ -1,8 +1,10 @@
 import React from 'react'
 import Layout from '../components/Layout'
+import SEO from '@/components/SEO'
 
 const TermsOfService = () => (
   <Layout>
+    <SEO title="Terms of Service" description="Read the GameCity Electronics terms of service." url="/terms" />
     <div className="container mx-auto px-4 py-12 mt-16 max-w-3xl">
       <h1 className="text-3xl md:text-4xl font-bold mb-6 text-yellow-400">
         Terms of Service

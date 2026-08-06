@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import SEO from '@/components/SEO'
 
 const Contact = () => {
   const { toast } = useToast()
@@ -95,6 +96,7 @@ const Contact = () => {
 
   return (
     <Layout>
+      <SEO title="Contact GameCity Electronics" description="Contact GameCity Electronics in Nairobi for gaming PCs, components, accessories, and support." url="/contact" />
       <div className="container mx-auto px-4 py-12 mt-16">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">

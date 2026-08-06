@@ -21,7 +21,7 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0, // 100% of sessions with errors
 });
 
-import { createRoot } from 'react-dom/client'
+import { hydrateRoot, createRoot } from 'react-dom/client'
 import { Analytics } from '@vercel/analytics/react'
 import App from './App.tsx'
 import './index.css'
@@ -36,9 +36,16 @@ const SentryApp = Sentry.withErrorBoundary(App, {
   ),
 });
 
-createRoot(document.getElementById("root")!).render(
+const root = document.getElementById('root')!
+const app = (
   <>
     <SentryApp />
     <Analytics />
   </>
-);
+)
+
+if (root.hasChildNodes()) {
+  hydrateRoot(root, app)
+} else {
+  createRoot(root).render(app)
+}
