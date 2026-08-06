@@ -132,10 +132,12 @@ const ProductPage = () => {
                   ? getOfferPrice(product.price, product.offer)
                   : product.price,
                 currency: 'KES',
-                availability: 'InStock',
+                availability: product.countInStock > 0 ? 'InStock' : 'OutOfStock',
                 brand: product.brand || 'GameCity',
                 image: product.image,
                 description: product.description,
+                rating: product.rating,
+                reviewCount: product.numReviews,
               }
             : undefined
         }

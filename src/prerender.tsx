@@ -1,18 +1,17 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
 import { StaticRouter } from 'react-router-dom/server.mjs'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { HelmetProvider, type HelmetServerState } from 'react-helmet-async'
-import { CartProvider } from '@/contexts/CartContext'
-import { AuthProvider } from '@/contexts/AuthContext'
-import { FavoritesProvider } from '@/contexts/FavoritesContext'
-import AppRoutes from './routes'
-import { Toaster } from '@/components/ui/toaster'
+import { dehydrate } from '@tanstack/react-query'
+import type { HelmetServerState } from 'react-helmet-async'
+import { AppContent } from './App'
+import { createAppQueryClient } from './queryClient'
 import { fetchProductById, fetchProductBySlug } from '@/services/productService'
 
+const productRequestCache = new Map<string, Promise<unknown>>()
+
 export async function prerender(data: { url: string }) {
-  const helmetContext: { helmet?: HelmetServerState } = {}
-  const queryClient = new QueryClient()
+  const helmetContext = {} as { helmet?: HelmetServerState }
+  const queryClient = createAppQueryClient()
   const productParam = data.url.startsWith('/product/')
     ? decodeURIComponent(data.url.slice('/product/'.length))
     : null
@@ -20,9 +19,15 @@ export async function prerender(data: { url: string }) {
   if (productParam) {
     try {
       const isObjectId = /^[a-f\d]{24}$/i.test(productParam)
-      const product = isObjectId
-        ? await fetchProductById(productParam)
-        : await fetchProductBySlug(productParam)
+      const cacheKey = `${isObjectId ? 'id' : 'slug'}:${productParam}`
+      let request = productRequestCache.get(cacheKey)
+      if (!request) {
+        request = isObjectId
+          ? fetchProductById(productParam)
+          : fetchProductBySlug(productParam)
+        productRequestCache.set(cacheKey, request)
+      }
+      const product = await request
       queryClient.setQueryData(
         [isObjectId ? 'product' : 'product-slug', productParam],
         product
@@ -33,22 +38,12 @@ export async function prerender(data: { url: string }) {
   }
 
   const html = renderToString(
-    <HelmetProvider context={helmetContext}>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <CartProvider>
-            <FavoritesProvider>
-              <StaticRouter location={data.url}>
-                <div className="min-h-screen bg-background">
-                  <AppRoutes />
-                  <Toaster />
-                </div>
-              </StaticRouter>
-            </FavoritesProvider>
-          </CartProvider>
-        </AuthProvider>
-      </QueryClientProvider>
-    </HelmetProvider>
+    <AppContent
+      Router={StaticRouter}
+      routerProps={{ location: data.url }}
+      queryClient={queryClient}
+      helmetContext={helmetContext}
+    />
   )
 
   const helmet = helmetContext.helmet
@@ -82,5 +77,10 @@ export async function prerender(data: { url: string }) {
     '/category/accessories',
   ]
 
-  return { html, head, links: new Set(publicRoutes) }
+  return {
+    html,
+    data: { queryState: dehydrate(queryClient) },
+    head,
+    links: new Set(publicRoutes),
+  }
 }

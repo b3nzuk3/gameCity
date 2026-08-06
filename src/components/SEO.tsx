@@ -16,6 +16,8 @@ interface SEOProps {
     brand: string
     image: string
     description: string
+    rating?: number
+    reviewCount?: number
   }
   breadcrumbs?: Array<{
     name: string
@@ -58,13 +60,7 @@ const SEO: React.FC<SEOProps> = ({
       addressLocality: 'Nairobi',
       addressCountry: 'KE',
     },
-    contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: '+254-XXX-XXXXXX',
-      contactType: 'customer service',
-      areaServed: 'KE',
-      availableLanguage: 'English',
-    },
+
     sameAs: [
       'https://www.facebook.com/gamecityelectronics',
       'https://www.instagram.com/gamecityelectronics',
@@ -91,7 +87,7 @@ const SEO: React.FC<SEOProps> = ({
       longitude: 36.8219,
     },
     url: 'https://www.gamecityelectronics.co.ke',
-    telephone: '+254-XXX-XXXXXX',
+
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
       dayOfWeek: [
@@ -133,11 +129,15 @@ const SEO: React.FC<SEOProps> = ({
           },
           url: fullUrl,
         },
-        aggregateRating: {
-          '@type': 'AggregateRating',
-          ratingValue: '4.8',
-          reviewCount: '150',
-        },
+        ...(product.rating !== undefined && product.reviewCount !== undefined
+          ? {
+              aggregateRating: {
+                '@type': 'AggregateRating',
+                ratingValue: product.rating,
+                reviewCount: product.reviewCount,
+              },
+            }
+          : {}),
       }
     : null
 

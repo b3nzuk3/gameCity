@@ -4,7 +4,7 @@ export const SITE_URL = process.env.SITE_URL || 'https://www.gamecityelectronics
 export const API_URL = (
   process.env.PRERENDER_API_URL ||
   process.env.VITE_API_URL ||
-  'http://localhost:5000/api'
+  'http://localhost:5001/api'
 ).replace(/\/$/, '')
 
 export const STATIC_ROUTES = [
@@ -57,18 +57,18 @@ export async function fetchCatalogManifest() {
   let page = 1
   let complete = true
 
-  if (limit === 0) {
-    return { products, complete: true, source: API_URL, truncated: false }
-  }
-
   try {
-    while (products.length < limit) {
+    while (true) {
       const data = await fetchJson(
         `${API_URL}/products?page=${page}&limit=${pageSize}`
       )
       const batch = Array.isArray(data.products) ? data.products : []
       products.push(...batch)
-      if (!batch.length || batch.length < pageSize || page >= (data.pages || page)) break
+      const hasMore = data.hasMore === true || page < Number(data.pages || page)
+      if (!batch.length || !hasMore || (limit > 0 && products.length >= limit)) {
+        if (limit > 0 && products.length >= limit && hasMore) complete = false
+        break
+      }
       page += 1
     }
   } catch (error) {
@@ -79,8 +79,9 @@ export async function fetchCatalogManifest() {
     console.warn(`Catalog manifest unavailable; continuing with static routes: ${error.message}`)
   }
 
+  const selectedProducts = limit > 0 ? products.slice(0, limit) : products
   const unique = new Map()
-  for (const product of products.slice(0, limit)) {
+  for (const product of selectedProducts) {
     const path = productPath(product)
     if (path && !unique.has(path)) {
       unique.set(path, {
@@ -94,9 +95,9 @@ export async function fetchCatalogManifest() {
 
   return {
     products: [...unique.values()],
-    complete: complete && products.length <= limit,
+    complete,
     source: API_URL,
-    truncated: products.length > limit,
+    truncated: limit > 0 && products.length > limit,
   }
 }
 
@@ -118,4 +119,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   console.log(
     `Catalog manifest: ${manifest.products.length} products, complete=${manifest.complete}`
   )
+  if (process.argv.includes('--inspect')) {
+    for (const product of manifest.products) console.log(product.path)
+  }
 }

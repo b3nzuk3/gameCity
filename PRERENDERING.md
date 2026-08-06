@@ -1,60 +1,111 @@
 # Static prerendering
 
-The production build uses `vite-prerender-plugin` to render the React application to HTML at build time. The client entry point uses `hydrateRoot` when prerendered markup exists, so navigation, cart, authentication, search, and other interactive behavior continue to run as before.
+The production build uses `vite-prerender-plugin` to render the React application to HTML at build time. The client entry point restores the serialized TanStack Query state before calling `hydrateRoot`, so prerendered product pages begin with the same public data used during the Node render.
 
-## Current implementation status
+## Current implementation
 
-The local API-positive build has been verified with the backend on port `5001`: 24 products were discovered and 35 pages were prerendered. The default product limit is bounded, so the manifest reports `complete=false` when more catalog pages exist.
+- React, Vite, TypeScript, React Router, and the existing API architecture are unchanged.
+- Public static/category routes and a configurable product selection are prerendered.
+- Product query data is prefetched in Node, dehydrated into `#prerender-data`, and hydrated before the first client render.
+- Auth, cart, and favorites remain browser-owned and are never serialized into public HTML.
+- Product detail requests are cached for the duration of a build.
+- Authenticated routes such as `/admin` and `/profile` are excluded.
 
-The implementation is not finished for production browser use. Prerendered pages currently produce React hydration errors (`#418`/`#423`) because the initial client render is not identical to the server-rendered HTML. Query state must be dehydrated into the document and restored before `hydrateRoot`, followed by browser verification of cart, authentication, search, filters, checkout, and fallback routes.
+## Build configuration
 
-## Prerendered routes
+The build runs:
 
-The build always prerenders the home page and the public informational routes `/contact`, `/privacy`, `/terms`, and `/sitemap`. The prerender plugin follows same-origin links discovered in the generated HTML, so linked public category routes are also included. Authenticated routes (`/admin` and `/profile`) are deliberately excluded.
+```bash
+node scripts/catalog-manifest.mjs
+npm run generate:sitemap
+vite build
+```
 
-The product catalog is discovered from the public API during the build. A bounded selection is added to `additionalPrerenderRoutes`; products outside that selection use the normal SPA fallback. Use `PRERENDER_PRODUCT_LIMIT` to control the selection size.
+Environment variables:
 
-## Metadata
+| Variable | Default | Meaning |
+|---|---:|---|
+| `PRERENDER_API_URL` | `http://localhost:5001/api` | Public catalog API used at build time |
+| `VITE_API_URL` | same API fallback | Existing client API base URL |
+| `PRERENDER_PRODUCT_LIMIT` | `24` | Maximum products selected for prerendering; `0` traverses the complete catalog |
+| `PRERENDER_PAGE_SIZE` | `100` | API page size, capped at 100 |
+| `PRERENDER_TIMEOUT_MS` | `8000` | Per-request timeout |
+| `PRERENDER_STRICT` | `false` | Fail instead of falling back to static routes when the catalog API is unavailable |
+| `SITE_URL` | `https://www.gamecityelectronics.co.ke` | Canonical site origin for the sitemap |
 
-Public pages already use the shared `SEO` component. During prerendering, `react-helmet-async` metadata is collected and injected into each generated document, including title, description, canonical, Open Graph/Twitter tags, and JSON-LD where supplied by the page.
+Examples:
 
-## Sitemap and robots
+```bash
+# Bounded local/CI build
+PRERENDER_API_URL=http://localhost:5001/api PRERENDER_PRODUCT_LIMIT=24 npm run build
 
-`npm run build` runs the catalog manifest fetcher, then `scripts/generate-sitemap.mjs`, before Vite. It writes `public/catalog-manifest.json` and `public/sitemap.xml` with static and selected product routes. `public/robots.txt` remains a static file and should reference `/sitemap.xml` in production.
+# Full catalog manifest and sitemap
+PRERENDER_API_URL=http://localhost:5001/api PRERENDER_PRODUCT_LIMIT=0 npm run build
 
-When adding a new public route:
+# Inspect selected product routes without building Vite
+PRERENDER_API_URL=http://localhost:5001/api PRERENDER_PRODUCT_LIMIT=10 node scripts/catalog-manifest.mjs --inspect
 
-1. Add the route to `src/routes.tsx`.
-2. Add it to the shared route/manifest logic and `additionalPrerenderRoutes` if it is not discovered automatically.
-3. Add it to the sitemap source.
-4. Add page-level `SEO` metadata.
+# Require the catalog API
+PRERENDER_STRICT=true PRERENDER_API_URL=http://localhost:5001/api npm run build
+```
 
-## Deployment notes
+A positive product limit is intentionally incomplete when the API reports additional pages. The manifest and sitemap report `complete=false` in that case. `PRERENDER_PRODUCT_LIMIT=0` is complete only when all API pages are successfully traversed.
 
-Deploy the generated `dist/` directory as a normal Vite static site. The host must serve the generated route directories/files and provide the existing SPA fallback for routes that are not prerendered, especially dynamic product URLs. Never prerender authenticated pages because their output must not be shared between users.
+## Product data and hydration
 
-The prerender process executes the app in Node. Browser-only work is kept in effects and therefore does not run during the server render. If a new component accesses browser globals during render, move that access into `useEffect` or guard it with `typeof window !== 'undefined'`.
+For a product route, `src/prerender.tsx` fetches the product by ID or slug and seeds the exact TanStack Query key used by `ProductPage`. The query client is dehydrated into the plugin's JSON payload. `src/main.tsx` validates and removes that payload, hydrates a fresh client, then calls `hydrateRoot`.
+
+Only public product query data is included. Authentication tokens, user data, cart contents, favorites, and other browser state are not included in the payload.
+
+If a product detail request fails, no product query is seeded. The normal client not-found behavior remains responsible for the route, and the product is not added to the manifest unless the catalog record was valid.
+
+## Catalog and sitemap behavior
+
+`scripts/catalog-manifest.mjs` follows the API's pagination metadata (`pages`/`hasMore`), normalizes and deduplicates safe product URLs, applies the configured limit, and reports whether traversal was complete. Product route selection is deterministic.
+
+`scripts/generate-sitemap.mjs` combines static/category routes with manifest product routes. It removes query-string, fragment, invalid, private, and duplicate paths; escapes XML; and emits normalized `<lastmod>` values only for valid timestamps. An incomplete or unavailable manifest is never described as a complete catalog sitemap.
+
+The current sitemap generator emits one sitemap file. Add chunk/index support before the catalog approaches the sitemap protocol URL limit; the manifest already exposes completeness and deterministic ordering needed for that change.
+
+## Deployment and fallback
+
+Deploy the generated `dist/` directory as a normal Vite static site. The host must serve generated route directories/files and retain the existing SPA fallback for product routes not selected for prerendering.
+
+When the API is unavailable and `PRERENDER_STRICT` is not `true`, the build continues with static routes and produces an explicitly incomplete manifest/sitemap. Strict production SEO builds should set `PRERENDER_STRICT=true` so missing catalog data fails clearly instead of silently reducing SEO coverage.
+
+Never prerender authenticated pages because their output must not be shared between users.
 
 ## Verification
 
-Run `PRERENDER_API_URL=http://localhost:5001/api npm run build`, inspect generated route HTML under `dist/`, check title/meta tags, and use browser DevTools to check hydration warnings before deploying.
+Required checks:
 
-The build uses the existing API architecture and fetches a bounded product manifest during the build. Product pages in that manifest receive server-rendered content and metadata. Product query-state hydration remains a required follow-up because browser hydration currently reports React mismatch errors.
+```bash
+npx tsc --noEmit
+PRERENDER_API_URL=http://localhost:5001/api PRERENDER_PRODUCT_LIMIT=3 npm run build
+PRERENDER_API_URL=http://127.0.0.1:9 npm run build
+PRERENDER_STRICT=true PRERENDER_API_URL=http://127.0.0.1:9 npm run build
+npm run lint
+npm run preview -- --host 127.0.0.1
+```
 
-## Limitations
+Inspect raw HTML under `dist/` or with `curl`. A selected product page should contain its name, description, price/availability, canonical URL, and Product JSON-LD before JavaScript runs. The built HTML should contain `id="prerender-data"` on prerendered pages.
 
-React Router's `BrowserRouter` remains the client router. The prerender entry uses `StaticRouter` only during the build, preserving the existing runtime architecture. The application continues to use client-side data fetching for catalog pages, so only static page content and page-level metadata are guaranteed before JavaScript for those pages.
+Use a real browser against preview to check the console for hydration warnings and verify product navigation, fallback product routes, cart, authentication, search, filters, checkout, and refresh behavior. In this WSL environment no Chromium/Playwright browser runner is installed, so browser hydration verification remains explicitly unverified; raw preview HTML, API-positive builds, fallback builds, strict failure behavior, typecheck, and changed-file lint were verified instead.
 
-The build's generated HTML can contain loading states for API-backed pages if their data is not available to the prerender process. This is intentional and keeps builds reliable when the backend is unavailable.
+Changed-file lint and TypeScript checks are the implementation gates. The repository's full lint command may still report unrelated baseline errors; record those separately.
 
-Generated `dist/sitemap.xml` contains static routes and selected catalog product URLs. It is not a complete catalog sitemap while the manifest is truncated or the API is unavailable. Strict mode (`PRERENDER_STRICT=true`) fails the build when the catalog cannot be fetched.
+## Adding a public route
 
-No merge to `main` is performed by this implementation.
+1. Add the route to `src/routes.tsx`.
+2. Add it to `STATIC_ROUTES` in `scripts/catalog-manifest.mjs` if it is not discovered from links.
+3. Add page-level `SEO` metadata.
+4. Verify the raw generated HTML and sitemap behavior.
 
-## Testing branch
+No merge to `main` or `master`, and no remote push, is performed by this work.
 
-This implementation is on `feat/static-prerendering-seo`.
+## Local branches
 
-Before merging, run the production build and preview it with `npm run preview`, then inspect public routes and authenticated flows in a browser.
+- Frontend: `feat/static-prerendering-seo`
+- Backend local CORS testing: `test/preview-cors`
 
-The project currently reports npm audit findings during installation; those are dependency advisories and are separate from the prerender implementation.
+The backend testing branch allows preview origins `http://localhost:4173` and `http://127.0.0.1:4173`; it must remain separate from production branches.
