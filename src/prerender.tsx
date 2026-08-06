@@ -32,7 +32,7 @@ export async function prerender(data: { url: string }) {
     </HelmetProvider>
   )
 
-  const helmet = helmetContext.helmet as any
+  const helmet = helmetContext.helmet
   const title = helmet?.title?.toString?.()
     ?.replace(/<[^>]*>/g, '')
     ?.replace(/&amp;/g, '&')
