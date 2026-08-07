@@ -1,6 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
+import { vitePrerenderPlugin } from 'vite-prerender-plugin'
 import path from 'path'
+import { readFileSync } from 'node:fs'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -8,7 +10,20 @@ export default defineConfig(({ mode }) => ({
     host: '::',
     port: 8080,
   },
-  plugins: [react()],
+  plugins: [
+    react(),
+    vitePrerenderPlugin({
+      renderTarget: '#root',
+      prerenderScript: path.resolve(__dirname, './src/prerender.tsx'),
+      additionalPrerenderRoutes: [
+        '/contact',
+        '/privacy',
+        '/terms',
+        '/sitemap',
+        ...readManifestRoutes(),
+      ],
+    }),
+  ],
 
   resolve: {
     alias: {
@@ -78,3 +93,18 @@ export default defineConfig(({ mode }) => ({
     ],
   },
 }))
+
+function readManifestRoutes(): string[] {
+  try {
+    const manifest = JSON.parse(
+      readFileSync(path.resolve(__dirname, './public/catalog-manifest.json'), 'utf8')
+    )
+    return Array.isArray(manifest.products)
+      ? manifest.products
+          .map((product: { path?: string }) => product.path)
+          .filter((route: string | undefined): route is string => Boolean(route))
+      : []
+  } catch {
+    return []
+  }
+}

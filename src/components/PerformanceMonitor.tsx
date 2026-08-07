@@ -2,6 +2,10 @@ import { useEffect } from 'react'
 
 const PerformanceMonitor: React.FC = () => {
   useEffect(() => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') {
+      return
+    }
+
     // Monitor Core Web Vitals
     const measurePerformance = () => {
       // Largest Contentful Paint (LCP)
@@ -26,13 +30,14 @@ const PerformanceMonitor: React.FC = () => {
         // First Input Delay (FID)
         const fidObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries()
-          entries.forEach((entry: any) => {
-            console.log('FID:', entry.processingStart - entry.startTime)
+          entries.forEach((entry) => {
+            const firstInput = entry as PerformanceEventTiming
+            console.log('FID:', firstInput.processingStart - firstInput.startTime)
 
-            if (entry.processingStart - entry.startTime > 100) {
+            if (firstInput.processingStart - firstInput.startTime > 100) {
               console.warn(
                 'FID is slow:',
-                entry.processingStart - entry.startTime
+                firstInput.processingStart - firstInput.startTime
               )
             }
           })
@@ -48,9 +53,13 @@ const PerformanceMonitor: React.FC = () => {
         let clsValue = 0
         const clsObserver = new PerformanceObserver((list) => {
           const entries = list.getEntries()
-          entries.forEach((entry: any) => {
-            if (!entry.hadRecentInput) {
-              clsValue += entry.value
+          entries.forEach((entry) => {
+            const layoutShift = entry as PerformanceEntry & {
+              hadRecentInput: boolean
+              value: number
+            }
+            if (!layoutShift.hadRecentInput) {
+              clsValue += layoutShift.value
             }
           })
           console.log('CLS:', clsValue)

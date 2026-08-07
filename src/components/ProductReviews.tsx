@@ -24,6 +24,7 @@ import {
   useHasPurchased,
   useProductReviews,
 } from '@/services/productService'
+import type { Product } from '@/services/productService'
 import { useAuth } from '@/contexts/AuthContext'
 import { Star } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -47,13 +48,17 @@ interface Review {
 
 interface ProductReviewsProps {
   productId: string
+  initialReviews?: Product['reviews']
 }
 
-const ProductReviews: React.FC<ProductReviewsProps> = ({ productId }) => {
+const ProductReviews: React.FC<ProductReviewsProps> = ({
+  productId,
+  initialReviews,
+}) => {
   const { user } = useAuth()
   const queryClient = useQueryClient()
 
-  const { data: reviews = [], refetch } = useProductReviews(productId)
+  const { data: reviews = [] } = useProductReviews(productId, initialReviews)
   const { data: purchaseStatus, isLoading: purchaseLoading } = useHasPurchased(
     productId,
     {
@@ -85,11 +90,11 @@ const ProductReviews: React.FC<ProductReviewsProps> = ({ productId }) => {
           })
           form.reset()
         },
-        onError: (error: any) => {
+        onError: (error: unknown) => {
           toast({
             title: 'Submission Failed',
             description:
-              error.response?.data?.message ||
+              (error instanceof Error ? error.message : undefined) ||
               'An error occurred. Please try again.',
             variant: 'destructive',
           })

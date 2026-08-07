@@ -1,0 +1,153 @@
+{
+  "generatedAt": "2026-08-06T23:21:37.411Z",
+  "siteUrl": "https://www.gamecityelectronics.co.ke",
+  "products": [
+    {
+      "id": "6a74de3a09a5f575d02a4332",
+      "name": "ASUS Dual GeForce RTX 5060 8GB Graphics Card – Nairobi Kenya",
+      "path": "/product/asus-dual-geforce-rtx-5060-8gb-graphics-card-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-06T19:19:22.861Z"
+    },
+    {
+      "id": "6a74dd9e09a5f575d02a432d",
+      "name": "EVGA SuperNOVA 1300W G+ 80 Plus Gold Power Supply Unit Modular– Nairobi Kenya",
+      "path": "/product/evga-supernova-1300w-g-80-plus-gold-power-supply-unit-modular-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-06T19:16:46.510Z"
+    },
+    {
+      "id": "6a74dba009a5f575d02a4297",
+      "name": "AMD Ryzen 7 9800X3D Processor AM5 – Nairobi Kenya",
+      "path": "/product/amd-ryzen-7-9800x3d-processor-am5-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-06T19:08:16.843Z"
+    },
+    {
+      "id": "6a74da7309a5f575d02a4274",
+      "name": "ASUS ROG Strix X870-A Gaming WiFi Motherboard AM5– Nairobi Kenya",
+      "path": "/product/asus-rog-strix-x870-a-gaming-wifi-motherboard-am5-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-06T19:03:15.473Z"
+    },
+    {
+      "id": "6a718e0d09a5f575d02a3bb2",
+      "name": "2TB 2.5-Inch SATA Internal Hard Disk Drive – Laptops, Desktops, PlayStation & Xbox – Nairobi Kenya",
+      "path": "/product/2tb-25-inch-sata-internal-hard-disk-drive-laptops-desktops-playstation-xbox-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-04T07:00:29.180Z"
+    },
+    {
+      "id": "6a718cb509a5f575d02a3bac",
+      "name": "500GB 3.5-Inch Internal Hard Disk Drive – Desktop & Surveillance – Nairobi Kenya",
+      "path": "/product/500gb-35-inch-internal-hard-disk-drive-desktop-surveillance-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-04T06:54:45.907Z"
+    },
+    {
+      "id": "6a718b3e09a5f575d02a3ba7",
+      "name": "2TB 3.5-Inch Internal Hard Disk Drive – Desktop & Surveillance – Nairobi Kenya",
+      "path": "/product/2tb-35-inch-internal-hard-disk-drive-desktop-surveillance-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-04T06:48:30.621Z"
+    },
+    {
+      "id": "6a718a6509a5f575d02a3ba1",
+      "name": "1TB 3.5-Inch Internal Hard Disk Drive – Desktop & Surveillance – Nairobi Kenya",
+      "path": "/product/1tb-35-inch-internal-hard-disk-drive-desktop-surveillance-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-04T06:44:53.944Z"
+    },
+    {
+      "id": "6a71891d09a5f575d02a3b96",
+      "name": "4TB 3.5-Inch Internal Hard Disk Drive – Desktop & Surveillance – Nairobi Kenya",
+      "path": "/product/4tb-35-inch-internal-hard-disk-drive-desktop-surveillance-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-04T06:39:25.218Z"
+    },
+    {
+      "id": "6a70589009a5f575d02a35bb",
+      "name": "Palit GeForce RTX 3080 GamingPro 12GB Graphics Card – Nairobi Kenya",
+      "path": "/product/palit-geforce-rtx-3080-gamingpro-12gb-graphics-card-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-03T09:00:00.744Z"
+    },
+    {
+      "id": "6a704c3909a5f575d02a3592",
+      "name": "Palit GeForce RTX 3080 GamingPro 10GB Graphics Card – Nairobi Kenya",
+      "path": "/product/palit-geforce-rtx-3080-gamingpro-10gb-graphics-card-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-03T08:08:27.094Z"
+    },
+    {
+      "id": "6a704b9a09a5f575d02a358c",
+      "name": "Zotac GeForce RTX 3080 Trinity 10GB Graphics Card – Nairobi Kenya",
+      "path": "/product/zotac-geforce-rtx-3080-trinity-10gb-graphics-card-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-03T08:04:42.938Z"
+    },
+    {
+      "id": "6a70491009a5f575d02a357b",
+      "name": "Palit GeForce RTX 3090 XLR8 24GB Graphics Card – Nairobi Kenya",
+      "path": "/product/palit-geforce-rtx-3090-xlr8-24gb-graphics-card-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-03T07:53:52.506Z"
+    },
+    {
+      "id": "6a6fbaa209a5f575d02a34ec",
+      "name": "ASUS H610M-A WiFi D4 Motherboard LGA1700 – Nairobi Kenya",
+      "path": "/product/asus-h610m-a-wifi-d4-motherboard-lga1700-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-02T21:46:10.821Z"
+    },
+    {
+      "id": "6a6fba0c09a5f575d02a34e7",
+      "name": "Intel Core i9-14900K Processor LGA1700 – Nairobi Kenya",
+      "path": "/product/intel-core-i9-14900k-processor-lga1700-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-02T21:43:40.632Z"
+    },
+    {
+      "id": "6a6fb97f09a5f575d02a34e1",
+      "name": "AOC 24G50Z 24-Inch FHD 260Hz Gaming Monitor – Nairobi Kenya",
+      "path": "/product/aoc-24g50z-24-inch-fhd-260hz-gaming-monitor-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-02T21:41:19.494Z"
+    },
+    {
+      "id": "6a6f8fe109a5f575d02a346e",
+      "name": "Intel Core i5-12600KF Processor LGA1700 – Nairobi Kenya",
+      "path": "/product/intel-core-i5-12600kf-processor-lga1700-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-02T18:43:45.552Z"
+    },
+    {
+      "id": "6a6f773f09a5f575d02a33e0",
+      "name": "Mid-Range Gaming PC – Intel Core i7-11700 & ASUS ROG Strix RTX 2080 Ti 11GB – Nairobi Kenya",
+      "path": "/product/mid-range-gaming-pc-intel-core-i7-11700-asus-rog-strix-rtx-2080-ti-11gb-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-02T16:58:39.016Z"
+    },
+    {
+      "id": "6a63335b5225cccb3975a0f8",
+      "name": "Gigabyte B760M DS3H DDR5 Gen5 Motherboard LGA1700  – Nairobi Kenya",
+      "path": "/product/gigabyte-b760m-ds3h-ddr5-gen5-motherboard-lga1700-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-06T18:51:42.004Z"
+    },
+    {
+      "id": "6a6332265225cccb3975a0f1",
+      "name": "ASUS TUF Gaming B560M-Plus Motherboard LGA1200 – Nairobi Kenya",
+      "path": "/product/asus-tuf-gaming-b560m-plus-motherboard-lga1200-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-06T18:54:33.880Z"
+    },
+    {
+      "id": "6a6330f85225cccb3975a0ec",
+      "name": "ASRock H310M-HDV Motherboard LGA1151 – Nairobi Kenya",
+      "path": "/product/asrock-h310m-hdv-motherboard-lga1151-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-06T18:52:06.969Z"
+    },
+    {
+      "id": "6a6265295225cccb39759fa4",
+      "name": "Dell Alienware Aurora 16 – Core i9-14900KF & RTX 5060 Ti 16GB – Nairobi Kenya",
+      "path": "/product/dell-alienware-aurora-16-core-i9-14900kf-rtx-5060-ti-16gb-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-06T18:59:02.008Z"
+    },
+    {
+      "id": "6a5d02115225cccb39759563",
+      "name": "24-Pin to 6-Pin PSU Power Adapter Cable for HP OEM PC – Nairobi Kenya",
+      "path": "/product/24-pin-to-6-pin-psu-power-adapter-cable-for-hp-oem-pc-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-01T22:06:23.728Z"
+    },
+    {
+      "id": "6a5c159b5225cccb3975937a",
+      "name": "Intel Core i5-11500 Processor LGA1200 – Nairobi Kenya",
+      "path": "/product/intel-core-i5-11500-processor-lga1200-nairobi-kenya-nairobi",
+      "updatedAt": "2026-08-01T22:06:19.234Z"
+    }
+  ],
+  "complete": false,
+  "source": "http://localhost:5001/api",
+  "truncated": true
+}

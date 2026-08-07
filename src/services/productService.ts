@@ -16,10 +16,13 @@ const api = axios.create({
   },
 })
 
+const hasWindow = typeof window !== 'undefined'
+type ApiError = { response?: { data?: { message?: string } } }
+
 // Add a request interceptor to include the auth token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('gamecity_token')
+    const token = hasWindow ? localStorage.getItem('gamecity_token') : null
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`
     }
@@ -111,12 +114,12 @@ const fetchProducts = async (
   return data
 }
 
-const fetchProductById = async (id: string) => {
+export const fetchProductById = async (id: string) => {
   const { data } = await api.get<Product>(`/products/${id}`)
   return data
 }
 
-const fetchProductBySlug = async (slug: string) => {
+export const fetchProductBySlug = async (slug: string) => {
   const { data } = await api.get<Product>(`/products/slug/${slug}`)
   return data
 }
@@ -177,19 +180,21 @@ export const useProducts = (
   })
 }
 
-export const useProduct = (id: string) => {
+export const useProduct = (id: string, enabled = true) => {
   return useQuery({
     queryKey: ['product', id],
     queryFn: () => fetchProductById(id),
     staleTime: 5 * 60 * 1000, // 5 minutes
+    enabled: enabled && !!id,
   })
 }
 
-export const useProductBySlug = (slug: string) => {
+export const useProductBySlug = (slug: string, enabled = true) => {
   return useQuery({
     queryKey: ['product-slug', slug],
     queryFn: () => fetchProductBySlug(slug),
     staleTime: 5 * 60 * 1000, // 5 minutes
+    enabled: enabled && !!slug,
   })
 }
 
@@ -221,7 +226,7 @@ export const useCreateProduct = () => {
         description: 'Product has been created successfully',
       })
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       toast({
         title: 'Create product failed',
         description:
@@ -245,7 +250,7 @@ export const useUpdateProduct = () => {
         description: 'Product has been updated successfully',
       })
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       toast({
         title: 'Update product failed',
         description:
@@ -268,7 +273,7 @@ export const useDeleteProduct = () => {
         description: 'Product has been deleted successfully',
       })
     },
-    onError: (error: any) => {
+    onError: (error: ApiError) => {
       toast({
         title: 'Delete product failed',
         description:
@@ -285,13 +290,19 @@ export const useCreateProductReview = () => {
   })
 }
 
-export function useProductReviews(productId: string) {
+export function useProductReviews(
+  productId: string,
+  initialReviews: Product['reviews'] = []
+) {
   return useQuery({
     queryKey: ['productReviews', productId],
     queryFn: async () => {
       const product = await backendService.products.getById(productId)
       return product.reviews || []
     },
+    initialData: initialReviews,
+    enabled: initialReviews === undefined,
+    staleTime: 5 * 60 * 1000,
   })
 }
 

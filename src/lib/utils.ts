@@ -6,9 +6,12 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function sanitizeHtml(input: string): string {
-  const div = document.createElement('div')
-  div.textContent = input
-  return div.innerHTML
+  return input
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
 }
 
 // Offer helpers

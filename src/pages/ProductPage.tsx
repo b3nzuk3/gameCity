@@ -1,15 +1,8 @@
-import { useState, useEffect } from 'react'
+import { lazy, Suspense, useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useProduct, useProductBySlug } from '@/services/productService'
 import { extractProductId, generateProductUrl } from '@/lib/slugUtils'
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-  type CarouselApi,
-} from '@/components/ui/carousel'
+
 import { Button } from '@/components/ui/button'
 import { useCart } from '@/contexts/CartContext'
 import { formatKESPrice } from '@/lib/currency'
@@ -17,43 +10,37 @@ import { getOfferPrice, getDiscountPercent, isOfferActive, sanitizeHtml } from '
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent } from '@/components/ui/card'
 import { ShoppingCart, Plus, Minus } from 'lucide-react'
-import ProductReviews from '@/components/ProductReviews'
-import SimilarProducts from '@/components/SimilarProducts'
+
 import Layout from '@/components/Layout'
 import SEO from '@/components/SEO'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+
+const ProductReviews = lazy(() => import('@/components/ProductReviews'))
+const SimilarProducts = lazy(() => import('@/components/SimilarProducts'))
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { addToCart } = useCart()
   const [quantity, setQuantity] = useState(1)
-  const [api, setApi] = useState<CarouselApi>()
-  const [current, setCurrent] = useState(0)
+  const [isClient, setIsClient] = useState(false)
 
-  // Redirect to 404 if no ID
   useEffect(() => {
-    if (!id) {
-      navigate('/404', { replace: true })
-    }
-  }, [id, navigate])
+    setIsClient(true)
+  }, [])
 
-  if (!id) {
-    return null
-  }
 
   // Check if the ID is a MongoDB ObjectId or a slug
-  const isObjectId = /^[a-f\d]{24}$/i.test(id)
+  const isObjectId = id ? /^[a-f\d]{24}$/i.test(id) : false
 
-  // Use appropriate hook based on ID format
-  const {
-    data: product,
-    isLoading,
-    isError,
-  } = isObjectId ? useProduct(id) : useProductBySlug(id)
+  // Keep both hooks unconditional; only the matching query is enabled.
+  const byId = useProduct(id || '', isObjectId)
+  const bySlug = useProductBySlug(id || '', Boolean(id) && !isObjectId)
+  const product = isObjectId ? byId.data : bySlug.data
+  const isLoading = isObjectId ? byId.isLoading : bySlug.isLoading
+  const isError = isObjectId ? byId.isError : bySlug.isError
 
-  // Redirect to 404 if no ID
   useEffect(() => {
     if (!id) {
       navigate('/404', { replace: true })
@@ -67,23 +54,6 @@ const ProductPage = () => {
     }
   }, [isError, isLoading, product, navigate])
 
-  useEffect(() => {
-    if (!api) {
-      return
-    }
-
-    setCurrent(api.selectedScrollSnap())
-
-    const handleSelect = () => {
-      setCurrent(api.selectedScrollSnap())
-    }
-
-    api.on('select', handleSelect)
-
-    return () => {
-      api.off('select', handleSelect)
-    }
-  }, [api])
 
   if (!id || isError || (!isLoading && !product)) {
     return null
@@ -162,10 +132,12 @@ const ProductPage = () => {
                   ? getOfferPrice(product.price, product.offer)
                   : product.price,
                 currency: 'KES',
-                availability: 'InStock',
+                availability: product.countInStock > 0 ? 'InStock' : 'OutOfStock',
                 brand: product.brand || 'GameCity',
                 image: product.image,
                 description: product.description,
+                rating: product.rating,
+                reviewCount: product.numReviews,
               }
             : undefined
         }
@@ -192,10 +164,10 @@ const ProductPage = () => {
       <div className="container mx-auto px-4 py-8">
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           <div className="space-y-4">
-            <Carousel setApi={setApi} className="w-full">
-              <CarouselContent>
+            <div className="w-full overflow-hidden">
+              <div className="flex -ml-4">
                 {images.map((img, index) => (
-                  <CarouselItem key={index}>
+                  <div key={index} className="min-w-0 shrink-0 grow-0 basis-full pl-4">
                     <Card>
                       <CardContent className="relative flex aspect-square items-center justify-center p-0">
                         {isOfferActive(product.offer) && (
@@ -210,28 +182,16 @@ const ProductPage = () => {
                         />
                       </CardContent>
                     </Card>
-                  </CarouselItem>
+                  </div>
                 ))}
-              </CarouselContent>
-              {images.length > 1 && (
-                <>
-                  <CarouselPrevious className="left-2" />
-                  <CarouselNext className="right-2" />
-                </>
-              )}
-            </Carousel>
+              </div>
+            </div>
             {images.length > 1 && (
               <div className="grid grid-cols-5 gap-2">
                 {images.map((img, index) => (
                   <button
                     key={index}
-                    onClick={() => api?.scrollTo(index)}
-                    className={cn(
-                      'overflow-hidden rounded-lg aspect-square border-2',
-                      current === index
-                        ? 'border-yellow-400'
-                        : 'border-transparent'
-                    )}
+                    className={cn('overflow-hidden rounded-lg aspect-square border-2 border-transparent')}
                   >
                     <img
                       src={img}
@@ -354,12 +314,19 @@ const ProductPage = () => {
             </div>
           </div>
         </div>
-        <ProductReviews productId={product._id} />
-        {product.category && (
-          <SimilarProducts
-            category={product.category}
-            currentProductId={product._id}
-          />
+        {isClient && (
+          <Suspense fallback={null}>
+            <ProductReviews
+              productId={product._id}
+              initialReviews={product.reviews}
+            />
+            {product.category && (
+              <SimilarProducts
+                category={product.category}
+                currentProductId={product._id}
+              />
+            )}
+          </Suspense>
         )}
       </div>
     </Layout>
