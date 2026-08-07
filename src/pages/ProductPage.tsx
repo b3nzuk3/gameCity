@@ -316,7 +316,10 @@ const ProductPage = () => {
         </div>
         {isClient && (
           <Suspense fallback={null}>
-            <ProductReviews productId={product._id} />
+            <ProductReviews
+              productId={product._id}
+              initialReviews={product.reviews}
+            />
             {product.category && (
               <SimilarProducts
                 category={product.category}

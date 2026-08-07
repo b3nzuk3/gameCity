@@ -290,13 +290,19 @@ export const useCreateProductReview = () => {
   })
 }
 
-export function useProductReviews(productId: string) {
+export function useProductReviews(
+  productId: string,
+  initialReviews: Product['reviews'] = []
+) {
   return useQuery({
     queryKey: ['productReviews', productId],
     queryFn: async () => {
       const product = await backendService.products.getById(productId)
       return product.reviews || []
     },
+    initialData: initialReviews,
+    enabled: initialReviews === undefined,
+    staleTime: 5 * 60 * 1000,
   })
 }
 
