@@ -9,6 +9,7 @@
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
+    "test:middleware": "node --test tests/middleware.test.mjs",
     "preview": "vite preview",
     "index": "node scripts/google-indexing.js"
   },

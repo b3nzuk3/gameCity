@@ -46,17 +46,7 @@
       ],
       "destination": "/api/og-product?slug=:slug"
     },
-    {
-      "source": "/product/:slug",
-      "has": [
-        {
-          "type": "header",
-          "key": "accept",
-          "value": "text/html"
-        }
-      ],
-      "destination": "/api/og-product?slug=:slug"
-    },
+
     { "source": "/sitemap.xml", "destination": "/api/sitemap.xml" },
     {
       "source": "/debug-whatsapp/:slug",
