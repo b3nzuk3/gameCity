@@ -2,7 +2,13 @@ export default async function handler(req, res) {
   try {
     const SITE_ORIGIN =
       process.env.SITE_ORIGIN || 'https://www.gamecityelectronics.co.ke'
-    const API_BASE = process.env.API_BASE_URL || process.env.VITE_API_URL || ''
+    const API_BASE = normalizeApiBase(
+      process.env.API_BASE_URL ||
+        process.env.VITE_API_URL ||
+        process.env.VITE_BACKEND_URL ||
+        process.env.BACKEND_URL ||
+        ''
+    )
 
     const slug = String((req.query && req.query.slug) || '').trim()
     if (!slug) {
@@ -39,7 +45,7 @@ export default async function handler(req, res) {
         const r = await fetch(
           `${base}/products/slug/${encodeURIComponent(slug)}`
         )
-        if (r.ok) {
+        if (r.ok && r.headers.get('content-type')?.includes('application/json')) {
           product = await r.json()
           break
         }
@@ -49,13 +55,16 @@ export default async function handler(req, res) {
       }
     }
 
-    const title = product
-      ? `${product.name} | GameCity Electronics`
-      : `${toTitle(slug)} | GameCity Electronics`
-    const description =
-      product && product.description
-        ? product.description.replace(/\s+/g, ' ').slice(0, 200)
-        : 'Find detailed specs and best prices in Nairobi, Kenya. Fast delivery across Kenya.'
+    if (!product) {
+      res.setHeader('Cache-Control', 'public, max-age=60, s-maxage=60')
+      res.status(404).send('Product not found')
+      return
+    }
+
+    const title = `${product.name} | GameCity Electronics`
+    const description = product.description
+      ? product.description.replace(/\s+/g, ' ').slice(0, 200)
+      : 'Find detailed specs and best prices in Nairobi, Kenya. Fast delivery across Kenya.'
     const rawImage =
       product && (product.image || (product.images && product.images[0]))
         ? product.image || product.images[0]
@@ -128,10 +137,10 @@ function escapeHtml(input) {
     .replace(/'/g, '&#039;')
 }
 
-function toTitle(slug) {
-  return String(slug)
-    .replace(/-/g, ' ')
-    .replace(/\b\w/g, (m) => m.toUpperCase())
+function normalizeApiBase(value) {
+  const base = String(value || '').replace(/\/$/, '')
+  if (!base) return ''
+  return base.endsWith('/api') ? base : `${base}/api`
 }
 
 function optimizeImageForSharing(imageUrl) {
