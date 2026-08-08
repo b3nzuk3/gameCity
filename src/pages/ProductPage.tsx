@@ -24,6 +24,7 @@ const ProductPage = () => {
   const navigate = useNavigate()
   const { addToCart } = useCart()
   const [quantity, setQuantity] = useState(1)
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
@@ -40,6 +41,10 @@ const ProductPage = () => {
   const product = isObjectId ? byId.data : bySlug.data
   const isLoading = isObjectId ? byId.isLoading : bySlug.isLoading
   const isError = isObjectId ? byId.isError : bySlug.isError
+
+  useEffect(() => {
+    setSelectedImageIndex(0)
+  }, [product?._id])
 
   useEffect(() => {
     if (!id) {
@@ -78,6 +83,7 @@ const ProductPage = () => {
   }
 
   const images = [...new Set([product.image, ...(product.images || [])].filter(Boolean))]
+  const selectedImage = images[selectedImageIndex] || images[0]
 
   const handleAddToCart = () => {
     addToCart(
@@ -165,33 +171,36 @@ const ProductPage = () => {
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           <div className="space-y-4">
             <div className="w-full overflow-hidden">
-              <div className="flex -ml-4">
-                {images.map((img, index) => (
-                  <div key={index} className="min-w-0 shrink-0 grow-0 basis-full pl-4">
-                    <Card>
-                      <CardContent className="relative flex aspect-square items-center justify-center p-0">
-                        {isOfferActive(product.offer) && (
-                          <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded z-10">
-                            -{getDiscountPercent(product.price, product.offer)}%
-                          </div>
-                        )}
-                        <img
-                          src={img}
-                          alt={`${product.name} image ${index + 1}`}
-                          className="w-full h-full object-contain rounded-lg"
-                        />
-                      </CardContent>
-                    </Card>
-                  </div>
-                ))}
-              </div>
+              <Card>
+                <CardContent className="relative flex aspect-square items-center justify-center p-0">
+                  {isOfferActive(product.offer) && (
+                    <div className="absolute top-2 left-2 bg-red-600 text-white text-xs font-semibold px-2 py-1 rounded z-10">
+                      -{getDiscountPercent(product.price, product.offer)}%
+                    </div>
+                  )}
+                  <img
+                    src={selectedImage}
+                    alt={`${product.name} image ${selectedImageIndex + 1}`}
+                    className="w-full h-full object-contain rounded-lg"
+                  />
+                </CardContent>
+              </Card>
             </div>
             {images.length > 1 && (
               <div className="grid grid-cols-5 gap-2">
                 {images.map((img, index) => (
                   <button
                     key={index}
-                    className={cn('overflow-hidden rounded-lg aspect-square border-2 border-transparent')}
+                    type="button"
+                    onClick={() => setSelectedImageIndex(index)}
+                    aria-label={`View product image ${index + 1}`}
+                    aria-pressed={selectedImageIndex === index}
+                    className={cn(
+                      'overflow-hidden rounded-lg aspect-square border-2',
+                      selectedImageIndex === index
+                        ? 'border-yellow-500'
+                        : 'border-transparent'
+                    )}
                   >
                     <img
                       src={img}
