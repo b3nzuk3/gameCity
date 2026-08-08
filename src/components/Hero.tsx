@@ -16,11 +16,11 @@ const Hero = () => {
           loop
           muted
           playsInline
-          poster="https://res.cloudinary.com/dq3jxutxg/video/upload/f_auto,q_auto/v1777433582/greenbits-store/0429_1_kjyl0t.jpg"
+          poster="https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/homepage/hero/gamecity-hero-poster.webp"
           className="object-cover w-full h-full opacity-80"
         >
           <source 
-            src="https://res.cloudinary.com/dq3jxutxg/video/upload/f_auto,q_auto/v1777433582/greenbits-store/0429_1_kjyl0t.mov" 
+            src="https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/homepage/hero/gamecity-hero.mp4"
             type="video/mp4" 
           />
         </video>
