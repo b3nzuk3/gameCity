@@ -1,5 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
+import { withValidAggregateRating } from '@/lib/productStructuredData'
 
 interface SEOProps {
   title?: string
@@ -129,15 +130,10 @@ const SEO: React.FC<SEOProps> = ({
           },
           url: fullUrl,
         },
-        ...(product.rating !== undefined && product.reviewCount !== undefined
-          ? {
-              aggregateRating: {
-                '@type': 'AggregateRating',
-                ratingValue: product.rating,
-                reviewCount: product.reviewCount,
-              },
-            }
-          : {}),
+        ...withValidAggregateRating({
+          rating: product.rating,
+          reviewCount: product.reviewCount,
+        }),
       }
     : null
 
