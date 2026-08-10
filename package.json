@@ -10,6 +10,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "test:middleware": "node --test tests/middleware.test.mjs",
+    "test:seo": "node --test tests/seo-metadata.test.mjs",
     "preview": "vite preview",
     "index": "node scripts/google-indexing.js"
   },

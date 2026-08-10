@@ -15,6 +15,7 @@ import Layout from '@/components/Layout'
 import SEO from '@/components/SEO'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import { conciseDescription } from '@/lib/seoMetadata'
 
 const ProductReviews = lazy(() => import('@/components/ProductReviews'))
 const SimilarProducts = lazy(() => import('@/components/SimilarProducts'))
@@ -107,7 +108,7 @@ const ProductPage = () => {
     <Layout>
       <SEO
         title={`${product.name} - Buy in Kenya | Best Price | GameCity Electronics`}
-        description={`${product.description.substring(0, 150)}... Buy ${
+        description={`${conciseDescription(product.description, 120)} Buy ${
           product.name
         } in Nairobi, Kenya. Fast delivery, best prices. ${
           isOfferActive(product.offer)
