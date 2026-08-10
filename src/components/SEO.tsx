@@ -1,6 +1,7 @@
 import React from 'react'
 import { Helmet } from 'react-helmet-async'
 import { withValidAggregateRating } from '@/lib/productStructuredData'
+import { buildSeoMetadata, SITE_URL } from '@/lib/seoMetadata'
 
 interface SEOProps {
   title?: string
@@ -27,24 +28,24 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = 'Gaming PCs, PS5, Xbox & Graphics Cards in Nairobi | GameCity Electronics',
-  description = 'Shop gaming PCs, PlayStation 5, Xbox Series X, graphics cards & gaming accessories in Nairobi. Fast delivery across Kenya. Best prices guaranteed!',
-  keywords = 'gaming PCs Nairobi, PlayStation 5 Kenya, Xbox Series X, graphics cards, gaming accessories, RTX 4070, RTX 4080, gaming monitors, Nairobi electronics',
-  image = 'https://www.gamecityelectronics.co.ke/og-image.png',
-  url = 'https://www.gamecityelectronics.co.ke',
-  type = 'website',
+  title,
+  description,
+  keywords,
+  image,
+  url,
+  type,
   product,
   breadcrumbs = [],
 }) => {
-  const fullTitle = title.includes('GameCity Electronics')
-    ? title
-    : `${title} | GameCity Electronics`
-  const fullUrl = url.startsWith('http')
-    ? url
-    : `https://www.gamecityelectronics.co.ke${url}`
-  const fullImage = image.startsWith('http')
-    ? image
-    : `https://www.gamecityelectronics.co.ke${image}`
+  const metadata = buildSeoMetadata({ title, description, keywords, image, url, type })
+  const {
+    title: fullTitle,
+    description: pageDescription,
+    canonical: fullUrl,
+    image: fullImage,
+    type: pageType,
+    keywords: pageKeywords,
+  } = metadata
 
   // Organization Schema
   const organizationSchema = {
@@ -52,7 +53,7 @@ const SEO: React.FC<SEOProps> = ({
     '@type': 'Organization',
     name: 'GameCity Electronics',
     url: 'https://www.gamecityelectronics.co.ke',
-    logo: 'https://www.gamecityelectronics.co.ke/logo.png',
+    logo: `${SITE_URL}/logo.png`,
     description:
       'Leading gaming electronics retailer in Nairobi, Kenya. Specializing in gaming PCs, PlayStation, Xbox, graphics cards, and gaming accessories.',
     address: {
@@ -149,7 +150,7 @@ const SEO: React.FC<SEOProps> = ({
             name: crumb.name,
             item: crumb.url.startsWith('http')
               ? crumb.url
-              : `https://www.gamecityelectronics.co.ke${crumb.url}`,
+              : `${SITE_URL}${crumb.url}`,
           })),
         }
       : null
@@ -163,7 +164,7 @@ const SEO: React.FC<SEOProps> = ({
     potentialAction: {
       '@type': 'SearchAction',
       target:
-        'https://www.gamecityelectronics.co.ke/search?q={search_term_string}',
+        `${SITE_URL}/search?q={search_term_string}`,
       'query-input': 'required name=search_term_string',
     },
   }
@@ -173,15 +174,15 @@ const SEO: React.FC<SEOProps> = ({
       {/* Primary Meta Tags */}
       <title>{fullTitle}</title>
       <meta name="title" content={fullTitle} />
-      <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
+      <meta name="description" content={pageDescription} />
+      <meta name="keywords" content={pageKeywords} />
       <link rel="canonical" href={fullUrl} />
 
       {/* Open Graph / Facebook */}
-      <meta property="og:type" content={type} />
+      <meta property="og:type" content={pageType} />
       <meta property="og:url" content={fullUrl} />
       <meta property="og:title" content={fullTitle} />
-      <meta property="og:description" content={description} />
+      <meta property="og:description" content={pageDescription} />
       <meta property="og:image" content={fullImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
@@ -189,11 +190,11 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:locale" content="en_KE" />
 
       {/* Twitter */}
-      <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:url" content={fullUrl} />
-      <meta property="twitter:title" content={fullTitle} />
-      <meta property="twitter:description" content={description} />
-      <meta property="twitter:image" content={fullImage} />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:url" content={fullUrl} />
+      <meta name="twitter:title" content={fullTitle} />
+      <meta name="twitter:description" content={pageDescription} />
+      <meta name="twitter:image" content={fullImage} />
 
       {/* Product-specific meta tags */}
       {product && (
