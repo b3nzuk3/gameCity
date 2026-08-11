@@ -1,6 +1,6 @@
 import { toast } from '@/hooks/use-toast'
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api'
 
 // Type definitions
 export type AuthResponse = {
@@ -158,7 +158,8 @@ const backendService = {
   },
   products: {
     getAll: (
-      pageNumber: number = 1
+      pageNumber: number = 1,
+      search?: string
     ): Promise<{
       products: Product[]
       page: number
@@ -170,7 +171,10 @@ const backendService = {
         page: number
         pages: number
         count: number
-      }>('GET', `/products?page=${pageNumber}`),
+      }>('GET', `/products?${new URLSearchParams({
+        page: String(pageNumber),
+        ...(search?.trim() ? { search: search.trim() } : {}),
+      }).toString()}`),
     getAllByCategory: (
       category: string,
       page: number = 1,
