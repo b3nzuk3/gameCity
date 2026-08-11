@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCart } from '@/contexts/CartContext'
+import backendService, { type Product } from '@/services/backendService'
+import { generateProductUrl } from '@/lib/slugUtils'
+import { formatKESPrice } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -35,9 +38,51 @@ const Navbar = () => {
   const { user, logout } = useAuth()
   const { getCartCount } = useCart()
   const [searchQuery, setSearchQuery] = useState('')
+  const [suggestions, setSuggestions] = useState<Product[]>([])
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [highlightedSuggestion, setHighlightedSuggestion] = useState(-1)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isHidden, setIsHidden] = useState(false)
   const lastScrollYRef = useRef(0)
+  const requestIdRef = useRef(0)
+
+  useEffect(() => {
+    const query = searchQuery.trim()
+    if (query.length < 2) {
+      setSuggestions([])
+      setSuggestionsLoading(false)
+      setHighlightedSuggestion(-1)
+      return
+    }
+
+    const requestId = ++requestIdRef.current
+    setSuggestionsLoading(true)
+    setSearchOpen(true)
+    const timer = window.setTimeout(async () => {
+      try {
+        const result = await backendService.products.getAll(1, query)
+        if (requestId === requestIdRef.current) {
+          setSuggestions(result.products.slice(0, 6))
+          setHighlightedSuggestion(-1)
+        }
+      } catch {
+        if (requestId === requestIdRef.current) setSuggestions([])
+      } finally {
+        if (requestId === requestIdRef.current) setSuggestionsLoading(false)
+      }
+    }, 300)
+
+    return () => window.clearTimeout(timer)
+  }, [searchQuery])
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (!(event.target as HTMLElement).closest('[data-navbar-search]')) setSearchOpen(false)
+    }
+    document.addEventListener('mousedown', handleOutsideClick)
+    return () => document.removeEventListener('mousedown', handleOutsideClick)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,7 +119,68 @@ const Navbar = () => {
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`)
       setSearchQuery('')
+      setIsMobileMenuOpen(false)
+      setSearchOpen(false)
+      setSuggestions([])
     }
+  }
+
+  const selectSuggestion = (product: Product) => {
+    navigate(generateProductUrl({ _id: product.id, name: product.name, category: product.category }))
+    setSearchQuery('')
+    setSuggestions([])
+    setSearchOpen(false)
+    setIsMobileMenuOpen(false)
+  }
+
+  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Escape') {
+      setSearchOpen(false)
+      setHighlightedSuggestion(-1)
+      return
+    }
+    if (!searchOpen || suggestions.length === 0) return
+    if (event.key === 'ArrowDown') {
+      event.preventDefault()
+      setHighlightedSuggestion((current) => (current + 1) % suggestions.length)
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault()
+      setHighlightedSuggestion((current) => (current - 1 + suggestions.length) % suggestions.length)
+    } else if (event.key === 'Enter' && highlightedSuggestion >= 0) {
+      event.preventDefault()
+      selectSuggestion(suggestions[highlightedSuggestion])
+    }
+  }
+
+  const renderSuggestions = () => {
+    if (!searchOpen || !searchQuery.trim()) return null
+    return (
+      <div className="absolute left-0 right-0 top-full mt-2 overflow-hidden rounded-lg border border-gray-700 bg-[#171725] shadow-2xl z-[60]" role="listbox">
+        {suggestionsLoading ? (
+          <div className="px-4 py-5 text-center text-sm text-gray-400">Searching...</div>
+        ) : suggestions.length === 0 ? (
+          <div className="px-4 py-5 text-center text-sm text-gray-400">No results found</div>
+        ) : (
+          suggestions.map((product, index) => (
+            <button
+              key={product.id}
+              type="button"
+              role="option"
+              aria-selected={highlightedSuggestion === index}
+              className={`flex w-full items-center gap-3 px-3 py-2 text-left transition-colors ${highlightedSuggestion === index ? 'bg-gray-800' : 'hover:bg-gray-800/80'}`}
+              onMouseDown={(event) => event.preventDefault()}
+              onClick={() => selectSuggestion(product)}
+            >
+              <img src={product.image} alt="" className="h-10 w-10 rounded object-cover bg-gray-800" />
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm text-white">{product.name}</span>
+                <span className="block text-xs text-gray-400">{formatKESPrice(product.price)}</span>
+              </span>
+            </button>
+          ))
+        )}
+      </div>
+    )
   }
 
   const handleSignOut = async () => {
@@ -111,7 +217,7 @@ const Navbar = () => {
           </Link>
 
           {/* Search Bar - Desktop */}
-          <div className="hidden md:flex flex-1 max-w-lg mx-8">
+          <div data-navbar-search className="hidden md:flex relative flex-1 max-w-lg mx-8">
             <form onSubmit={handleSearch} className="w-full">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -120,10 +226,16 @@ const Navbar = () => {
                   placeholder="Search for games, accessories..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => searchQuery.trim().length >= 2 && setSearchOpen(true)}
+                  onKeyDown={handleSearchKeyDown}
+                  role="combobox"
+                  aria-expanded={searchOpen}
+                  aria-controls="navbar-search-suggestions"
                   className="w-full pl-10 pr-4 py-2 bg-gray-900 border-gray-700 text-white placeholder:text-gray-400 focus:border-yellow-500 focus:ring-yellow-500"
                 />
               </div>
             </form>
+            {renderSuggestions()}
           </div>
 
           {/* Desktop Menu */}
@@ -264,12 +376,7 @@ const Navbar = () => {
               size="sm"
               className="text-gray-300 hover:text-white p-2"
               onClick={() => {
-                const searchInput = document.querySelector(
-                  'input[type="text"]'
-                ) as HTMLInputElement
-                if (searchInput) {
-                  searchInput.focus()
-                }
+                setIsMobileMenuOpen(true)
               }}
             >
               <Search className="h-5 w-5" />
@@ -307,6 +414,7 @@ const Navbar = () => {
 
                 <div className="py-6 space-y-6">
                   {/* Mobile Search */}
+                  <div data-navbar-search className="relative">
                   <form onSubmit={handleSearch} className="space-y-2">
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -315,10 +423,17 @@ const Navbar = () => {
                         placeholder="Search for games..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
+                        onFocus={() => searchQuery.trim().length >= 2 && setSearchOpen(true)}
+                        onKeyDown={handleSearchKeyDown}
+                        role="combobox"
+                        aria-expanded={searchOpen}
+                        aria-controls="mobile-search-suggestions"
                         className="w-full pl-10 bg-gray-900 border-gray-700"
                       />
                     </div>
                   </form>
+                  {renderSuggestions()}
+                  </div>
 
                   {/* Mobile Navigation */}
                   <div className="space-y-2">

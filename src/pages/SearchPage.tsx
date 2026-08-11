@@ -33,9 +33,7 @@ const SearchPage = () => {
       }
       try {
         setLoading(true)
-        const data = await backendService.products.getAll({
-          search: searchTerm,
-        })
+        const data = await backendService.products.getAll(1, searchTerm)
         setProducts(data.products)
       } catch (error) {
         console.error(
@@ -52,7 +50,7 @@ const SearchPage = () => {
   }, [searchTerm])
 
   const sortedProducts = React.useMemo(() => {
-    let sorted = [...products]
+    const sorted = [...products]
     switch (sortBy) {
       case 'name':
         sorted.sort((a, b) => a.name.localeCompare(b.name))
