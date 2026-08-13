@@ -374,6 +374,7 @@ const Navbar = () => {
             <Button
               variant="ghost"
               size="sm"
+              aria-label="Open search"
               className="text-gray-300 hover:text-white p-2"
               onClick={() => {
                 setIsMobileMenuOpen(true)
@@ -383,26 +384,32 @@ const Navbar = () => {
             </Button>
 
             {/* Cart Button */}
-            <Link to="/cart" className="relative">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-gray-300 hover:text-white p-2"
-              >
-                <ShoppingCart className="h-5 w-5" />
-                {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {totalItems}
-                  </span>
-                )}
-              </Button>
+            <Link
+              to="/cart"
+              aria-label="View cart"
+              className="relative inline-flex items-center justify-center rounded-md text-sm font-medium text-gray-300 hover:text-white p-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            >
+              <ShoppingCart className="h-5 w-5" aria-hidden="true" />
+              {totalItems > 0 && (
+                <span
+                  aria-hidden="true"
+                  className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                >
+                  {totalItems}
+                </span>
+              )}
             </Link>
 
             {/* Mobile Menu Button */}
             <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-gray-300">
-                  <Menu className="h-5 w-5" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  aria-label="Open menu"
+                  className="text-gray-300"
+                >
+                  <Menu className="h-5 w-5" aria-hidden="true" />
                 </Button>
               </SheetTrigger>
               <SheetContent className="bg-black border-gray-800">

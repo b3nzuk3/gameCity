@@ -13,6 +13,7 @@
     "test:seo": "node --test tests/seo-metadata.test.mjs",
     "test:search": "node --test tests/search.test.mjs",
     "test:geo": "node --test tests/geo.test.mjs",
+    "test:accessibility-llms": "node --test tests/accessibility-llms.test.mjs",
     "preview": "vite preview",
     "index": "node scripts/google-indexing.js"
   },

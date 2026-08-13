@@ -1,0 +1,13 @@
+# Gamecity Electronics
+
+Gamecity Electronics is a gaming components and accessories retailer based in Nairobi, Kenya. This document identifies public pages that describe the store, catalog, policies, and contact options.
+
+## Public resources
+
+- [Homepage](https://www.gamecityelectronics.co.ke/)
+- [Product catalog and search](https://www.gamecityelectronics.co.ke/search)
+- [All categories](https://www.gamecityelectronics.co.ke/category/all)
+- [Sitemap](https://www.gamecityelectronics.co.ke/sitemap.xml)
+- [Contact](https://www.gamecityelectronics.co.ke/contact)
+- [Privacy policy](https://www.gamecityelectronics.co.ke/privacy)
+- [Terms of service](https://www.gamecityelectronics.co.ke/terms)
