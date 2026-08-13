@@ -55,3 +55,8 @@ ehthumbs.db
 .env*.local
 google-indexing-key.json
 *.json key
+# Service-account credentials and local indexing helper are kept outside Git.
+/secrets/
+/scripts/google_indexing.py
+__pycache__/
+*.py[cod]

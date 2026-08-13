@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import Layout from '@/components/Layout'
 import SEO from '@/components/SEO'
 import { Button } from '@/components/ui/button'
@@ -15,10 +15,11 @@ import {
 import backendService, { type Product } from '@/services/backendService'
 import { useCart } from '@/contexts/CartContext'
 import { Package, Filter } from 'lucide-react'
-import { Link } from 'react-router-dom'
 import { Input } from '@/components/ui/input'
 import { formatKESPrice } from '@/lib/currency'
 import ProductCard from '@/components/ProductCard'
+import { CATEGORY_PAGE_SIZE, useCategoryProducts } from '@/services/productService'
+import { generateProductUrl } from '@/lib/slugUtils'
 
 // Define available categories
 const CATEGORIES = [
@@ -109,9 +110,15 @@ const isProductInCategory = (
 
 const CategoryPage = () => {
   const { category } = useParams<{ category: string }>()
-  const [products, setProducts] = useState<Product[]>([])
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
+  const [searchParams] = useSearchParams()
+  const currentPage = Math.max(1, Number(searchParams.get('page') || 1))
+  const categoryParam = category === 'all' ? 'all' : category || 'all'
+  const categoryQuery = useCategoryProducts(categoryParam, currentPage, CATEGORY_PAGE_SIZE)
+  const products = useMemo(
+    () => categoryQuery.data?.products || [],
+    [categoryQuery.data?.products]
+  )
+  const loading = categoryQuery.isLoading
   const [sortBy, setSortBy] = useState('name')
   const [filterBy, setFilterBy] = useState('all')
   const [conditionFilter, setConditionFilter] = useState<string>('all')
@@ -125,10 +132,9 @@ const CategoryPage = () => {
   const [showFilters, setShowFilters] = useState(false)
 
   // Pagination state
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
-  const [totalProducts, setTotalProducts] = useState(0)
-  const productsPerPage = 12
+  const totalPages = categoryQuery.data?.pages || 1
+  const totalProducts = categoryQuery.data?.total || 0
+  const productsPerPage = CATEGORY_PAGE_SIZE
 
   // Get unique brands from products
   const availableBrands = useMemo(() => {
@@ -136,47 +142,13 @@ const CategoryPage = () => {
     return Array.from(new Set(brands))
   }, [products])
 
-  // Reset to page 1 when category changes
   useEffect(() => {
-    setCurrentPage(1)
-  }, [category])
+    if (categoryQuery.error) console.error('CategoryPage: Error fetching products:', categoryQuery.error)
+  }, [categoryQuery.error])
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        setLoading(true)
-        // Fetch products with pagination using category-specific endpoint
-        const categoryParam = category === 'all' ? 'all' : category
-        const data = await backendService.products.getAllByCategory(
-          categoryParam,
-          currentPage,
-          productsPerPage
-        )
-        setProducts(data.products)
-        setTotalPages(data.pages || 1)
-        setTotalProducts(data.total || 0)
-
-        console.log(
-          'Fetched products:',
-          data.products.length,
-          'Total:',
-          data.total,
-          'Page:',
-          currentPage
-        )
-
-        // No need for additional filtering since backend handles category filtering
-        setFilteredProducts(data.products)
-      } catch (error) {
-        console.error('CategoryPage: Error fetching products:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchProducts()
-  }, [category, currentPage])
-
-  useEffect(() => {
+  // Derive synchronously so prerendered HTML contains the product cards on the
+  // first render. Effects do not run during server-side rendering.
+  const filteredProducts = useMemo(() => {
     let filtered = [...products]
 
     // 1. Category filter (always apply first)
@@ -207,23 +179,16 @@ const CategoryPage = () => {
 
     // 3. Condition filter
     if (conditionFilter !== 'all') {
-      filtered = filtered.filter(
-        (product) => product.condition === conditionFilter
-      )
+      filtered = filtered.filter((product) => product.condition === conditionFilter)
     }
 
     // 4. Brand filter
     if (selectedBrands.length > 0) {
-      filtered = filtered.filter((product) =>
-        selectedBrands.includes(product.brand || '')
-      )
+      filtered = filtered.filter((product) => selectedBrands.includes(product.brand || ''))
     }
 
     // 5. Price range filter only if active
-    if (
-      priceFilterActive &&
-      (priceRange[0] !== null || priceRange[1] !== null)
-    ) {
+    if (priceFilterActive && (priceRange[0] !== null || priceRange[1] !== null)) {
       filtered = filtered.filter(
         (product) =>
           (priceRange[0] === null || product.price >= priceRange[0]) &&
@@ -245,11 +210,9 @@ const CategoryPage = () => {
       case 'rating':
         filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0))
         break
-      default:
-        break
     }
 
-    setFilteredProducts(filtered)
+    return filtered
   }, [
     products,
     sortBy,
@@ -260,6 +223,26 @@ const CategoryPage = () => {
     priceFilterActive,
     category,
   ])
+
+  const productLinks = useMemo(() => {
+    const nameCounts = new Map<string, number>()
+    return new Map(
+      filteredProducts.map((product) => {
+        const key = product.name.trim().toLowerCase()
+        const occurrence = nameCounts.get(key) || 0
+        nameCounts.set(key, occurrence + 1)
+        const baseUrl = generateProductUrl({
+          _id: product.id,
+          name: product.name,
+          category: product.category,
+        })
+        const href = occurrence === 0
+          ? baseUrl
+          : baseUrl.replace(/-nairobi$/, `-${product.id}-nairobi`)
+        return [product.id, href] as const
+      })
+    )
+  }, [filteredProducts])
 
   const handleAddToCart = (product: Product) => {
     addToCart({
@@ -485,7 +468,7 @@ const CategoryPage = () => {
                     Out of Stock
                   </Badge>
                 )}
-                <ProductCard product={product} />
+                <ProductCard product={{ ...product, href: productLinks.get(product.id) }} />
               </div>
             ))}
           </div>
@@ -523,27 +506,25 @@ const CategoryPage = () => {
               {totalProducts} products
             </div>
             <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage(currentPage - 1)}
-                disabled={currentPage <= 1}
-                className="border-gray-700 text-muted-foreground hover:text-foreground disabled:opacity-50"
+              <Link
+                to={`/category/${categoryParam}${currentPage > 2 ? `?page=${currentPage - 1}` : ''}`}
+                aria-disabled={currentPage <= 1}
+                tabIndex={currentPage <= 1 ? -1 : 0}
+                className="inline-flex h-9 items-center justify-center rounded-md border border-gray-700 px-3 text-sm text-muted-foreground hover:text-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50"
               >
                 Previous
-              </Button>
+              </Link>
               <span className="text-sm text-muted-foreground px-2">
                 Page {currentPage} of {totalPages}
               </span>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage(currentPage + 1)}
-                disabled={currentPage >= totalPages}
-                className="border-gray-700 text-muted-foreground hover:text-foreground disabled:opacity-50"
+              <Link
+                to={`/category/${categoryParam}?page=${currentPage + 1}`}
+                aria-disabled={currentPage >= totalPages}
+                tabIndex={currentPage >= totalPages ? -1 : 0}
+                className="inline-flex h-9 items-center justify-center rounded-md border border-gray-700 px-3 text-sm text-muted-foreground hover:text-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50"
               >
                 Next
-              </Button>
+              </Link>
             </div>
           </div>
         )}
