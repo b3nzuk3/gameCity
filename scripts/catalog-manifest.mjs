@@ -94,6 +94,9 @@ export async function fetchCatalogManifest() {
         path,
         category: product.category || null,
         updatedAt: product.updatedAt || product.updated_at || null,
+        // Keep the single catalog response available to the prerenderer. This
+        // prevents product/category HTML generation from refetching the API.
+        data: product,
       })
     }
   }
@@ -123,6 +126,9 @@ export function categoryRoutesFromManifest(manifest, pageSize = 12) {
 
 export async function writeCatalogManifest(output = 'public/catalog-manifest.json') {
   const manifest = await fetchCatalogManifest()
+  if (strict && (!manifest.complete || manifest.truncated)) {
+    throw new Error('Production catalog is incomplete; refusing to write a prerender manifest')
+  }
   await writeFile(
     output,
     `${JSON.stringify({

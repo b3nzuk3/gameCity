@@ -1,5 +1,6 @@
 import React from 'react'
 import { renderToString } from 'react-dom/server'
+import catalog from '../public/catalog-manifest.json'
 import { StaticRouter } from 'react-router-dom/server.mjs'
 import { dehydrate } from '@tanstack/react-query'
 import type { HelmetServerState } from 'react-helmet-async'
@@ -7,12 +8,29 @@ import { AppContent } from './App'
 import { createAppQueryClient } from './queryClient'
 import {
   CATEGORY_PAGE_SIZE,
-  fetchProductById,
-  fetchProductBySlug,
-  fetchProductsByCategory,
 } from '@/services/productService'
 
-const productRequestCache = new Map<string, Promise<unknown>>()
+type CatalogEntry = {
+  id: string
+  path: string
+  category?: string | null
+  data?: Record<string, unknown>
+}
+
+// The manifest is loaded once per Vercel build. All product and category routes
+// reuse this snapshot instead of making route-by-route API requests.
+if (!catalog.complete || catalog.truncated || catalog.products.some((entry) => !entry.data)) {
+  throw new Error('Prerender catalog snapshot is incomplete or missing product data')
+}
+
+const normalizeCategory = (value: string) => value.toLowerCase().trim().replace(/\s+/g, '-')
+
+const categoryProducts = (category: string) => {
+  const normalized = normalizeCategory(category)
+  return catalog.products
+    .filter((entry) => normalized === 'all' || normalizeCategory(entry.category || '') === normalized)
+    .map((entry) => entry.data as Record<string, unknown>)
+}
 
 export async function prerender(data: { url: string }) {
   const helmetContext = {} as { helmet?: HelmetServerState }
@@ -22,31 +40,24 @@ export async function prerender(data: { url: string }) {
     : null
 
   if (productParam) {
-    try {
-      const isObjectId = /^[a-f\d]{24}$/i.test(productParam)
-      const cacheKey = `${isObjectId ? 'id' : 'slug'}:${productParam}`
-      let request = productRequestCache.get(cacheKey)
-      if (!request) {
-        request = isObjectId
-          ? fetchProductById(productParam)
-          : fetchProductBySlug(productParam)
-        productRequestCache.set(cacheKey, request)
-      }
-      const product = await request
-      queryClient.setQueryData(
-        [isObjectId ? 'product' : 'product-slug', productParam],
-        product
-      )
-    } catch {
-      // The client fallback handles unavailable or missing product data.
-    }
+    const entry = catalog.products.find((item) => item.path === data.url)
+    if (!entry?.data) throw new Error(`Product route is missing from catalog snapshot: ${data.url}`)
+    queryClient.setQueryData(['product-slug', productParam], entry.data)
   }
 
   const categoryMatch = data.url.match(/^\/category\/([^/?]+)(?:\?page=(\d+))?$/)
   if (categoryMatch) {
     const category = decodeURIComponent(categoryMatch[1])
     const page = Math.max(1, Number(categoryMatch[2] || 1))
-    const products = await fetchProductsByCategory(category, page, CATEGORY_PAGE_SIZE)
+    const allProducts = categoryProducts(category)
+    const start = (page - 1) * CATEGORY_PAGE_SIZE
+    const products = {
+      products: allProducts.slice(start, start + CATEGORY_PAGE_SIZE),
+      page,
+      pages: Math.max(1, Math.ceil(allProducts.length / CATEGORY_PAGE_SIZE)),
+      total: allProducts.length,
+      hasMore: start + CATEGORY_PAGE_SIZE < allProducts.length,
+    }
     queryClient.setQueryData(
       ['category-products', category, page, CATEGORY_PAGE_SIZE],
       products
