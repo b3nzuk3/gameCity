@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-13T17:14:11.092Z",
+  "generatedAt": "2026-08-13T17:54:08.414Z",
   "siteUrl": "https://www.gamecityelectronics.co.ke",
   "products": [
     {
@@ -5067,7 +5067,7 @@
       "name": "Sapphire Radeon RX 6600 8GB Graphics Card – Nairobi Kenya",
       "path": "/product/sapphire-radeon-rx-6600-8gb-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-13T17:14:01.648Z",
+      "updatedAt": "2026-08-13T17:14:25.391Z",
       "data": {
         "_id": "6a25e5c0c1830e4cdddbc4ef",
         "name": "Sapphire Radeon RX 6600 8GB Graphics Card – Nairobi Kenya",
@@ -5083,7 +5083,7 @@
         "brand": "sapphire",
         "category": "Graphics Cards",
         "price": 29000,
-        "countInStock": 1,
+        "countInStock": 0,
         "condition": "Pre-Owned",
         "rating": 0,
         "numReviews": 0,
@@ -5103,15 +5103,10 @@
         },
         "reviews": [],
         "createdAt": "2026-06-07T21:42:24.856Z",
-        "updatedAt": "2026-08-13T17:14:01.648Z",
-        "__v": 2,
+        "updatedAt": "2026-08-13T17:14:25.391Z",
+        "__v": 3,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621881162-29cee5c7-4766-4205-8a77-5a97d24aca1a.webp",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641224261-6577d5f0-7353-4224-bb05-2b025e51b780.jpg",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641228647-bd7bfdc9-05ce-4d21-b4d4-b0b3c6a94ff9.jpg",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641233085-f702fe41-6e6f-4126-bbfd-6ec7382f8cf0.jpg",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641237362-5dc036ec-d99e-454e-8816-553d8119ff19.jpg"
-        ],
+        "images_r2": [],
         "image_r2_variants": {
           "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621881162-29cee5c7-4766-4205-8a77-5a97d24aca1a-thumbnail.webp",
           "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621881162-29cee5c7-4766-4205-8a77-5a97d24aca1a-medium.webp",
@@ -5125,21 +5120,21 @@
       "name": "Gigabyte GeForce RTX 3050 8GB Graphics Card – Nairobi Kenya",
       "path": "/product/gigabyte-geforce-rtx-3050-8gb-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-01T22:04:38.617Z",
+      "updatedAt": "2026-08-13T17:19:13.062Z",
       "data": {
         "_id": "6a25e4edc1830e4cdddbc4ea",
         "name": "Gigabyte GeForce RTX 3050 8GB Graphics Card – Nairobi Kenya",
         "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621876033-1a0a530a-b2d1-4436-806d-36c539d0128a.webp",
         "images": [
           "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621876033-1a0a530a-b2d1-4436-806d-36c539d0128a.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528726732-a69137dd-96df-49f9-89ff-c31f5ccb0f9c.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528732480-2c3fc180-057c-4ee8-af6e-ae679de161c9.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641327964-4c6fc9e1-e5a4-408b-89b1-ecd13f8c0478.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641332141-0f8eeb36-b078-4b8b-8443-a72e2cdd10ec.jpg"
         ],
         "description": "Enter the world of ray tracing and AI-powered gaming with the Gigabyte GeForce RTX 3050 8GB — an accessible entry-level NVIDIA GPU now available in Nairobi at KES 32,000. Built on NVIDIA's Ampere architecture, this card delivers smooth 1080p gaming performance and introduces ray tracing and DLSS technology at an affordable price, making it an excellent choice for budget-conscious gamers in the Kenyan market.\nKey Features:\n•8GB GDDR6 memory for smooth and responsive 1080p gameplay\n•NVIDIA Ampere architecture for efficient and capable gaming performance\n•DLSS support — AI-powered performance boost for higher frame rates\n•Ray tracing for immersive, cinematic in-game visuals\n•PCIe 4.0 support for fast data transfer speeds\n•Low power consumption — ideal for budget builds with smaller PSUs\n•Compatible with most ATX and mid-tower cases in Kenya\nIdeal for: Entry-level 1080p gaming, everyday computing, budget gaming builds, first-time GPU upgrades, and gamers looking for an affordable NVIDIA ray tracing capable graphics card in Kenya.\nPrice: KES 32,000 — great value in the entry-level GPU price range for Kenyan gamers looking for a capable and affordable NVIDIA graphics card with ray tracing support.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "gigabyte",
         "category": "Graphics Cards",
         "price": 32000,
-        "countInStock": 1,
+        "countInStock": 0,
         "condition": "Pre-Owned",
         "rating": 0,
         "numReviews": 0,
@@ -5153,17 +5148,16 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-06-07T21:38:53.986Z",
-        "updatedAt": "2026-08-01T22:04:38.617Z",
-        "__v": 1,
+        "updatedAt": "2026-08-13T17:19:13.062Z",
+        "__v": 3,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621876033-1a0a530a-b2d1-4436-806d-36c539d0128a.webp",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528726732-a69137dd-96df-49f9-89ff-c31f5ccb0f9c.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528732480-2c3fc180-057c-4ee8-af6e-ae679de161c9.webp"
-        ],
+        "images_r2": [],
         "image_r2_variants": {
           "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621876033-1a0a530a-b2d1-4436-806d-36c539d0128a-thumbnail.webp",
           "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621876033-1a0a530a-b2d1-4436-806d-36c539d0128a-medium.webp",
@@ -5177,16 +5171,16 @@
       "name": "XFX Radeon RX 7900 XTX 24GB Graphics Card – Nairobi Kenya",
       "path": "/product/xfx-radeon-rx-7900-xtx-24gb-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-01T22:04:33.230Z",
+      "updatedAt": "2026-08-13T17:17:35.948Z",
       "data": {
         "_id": "6a25e3f1c1830e4cdddbc4e0",
         "name": "XFX Radeon RX 7900 XTX 24GB Graphics Card – Nairobi Kenya",
         "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621870435-e4da9459-94c4-44e6-939c-8021c401a3a9.webp",
         "images": [
           "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621870435-e4da9459-94c4-44e6-939c-8021c401a3a9.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528693118-8692a09b-dd0c-4d3c-a98b-60cc55e6eca6.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528700037-4e77ef68-779e-46e2-a28f-92c6a4bcb369.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528710433-3980cef6-62a3-49c6-a62a-f534c8fd5c31.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641442773-3bfcf246-e5c3-4377-a920-c546119db28a.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641448133-1545adb9-5a21-42ab-8fd6-ad797fcd1b37.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641452300-9b811e62-b0f5-4815-bae1-67351e129bec.jpg"
         ],
         "description": "Experience ultimate flagship gaming performance with the XFX Radeon RX 7900 XTX 24GB — AMD's most powerful consumer GPU now available in Nairobi at KES 95,000. Built on AMD's cutting-edge RDNA 3 architecture, this card delivers breathtaking 4K gaming performance and exceptional memory bandwidth, making it the most powerful AMD graphics card available in the Kenyan market.\nKey Features:\n•24GB GDDR6 memory — massive VRAM for ultra-high resolution gaming and professional workloads\n•AMD RDNA 3 architecture for outstanding power efficiency and raw performance\n•AMD FidelityFX Super Resolution (FSR) support — AI-powered performance boost\n•Advanced ray tracing for stunning, true-to-life in-game visuals\n•PCIe 4.0 support for fast data transfer speeds\n•Multiple display outputs — supports up to 4 monitors simultaneously\n•Compatible with most ATX and full-tower cases in Kenya\nIdeal for: 4K gaming, competitive esports, 3D rendering, video editing, VR gaming, and content creators demanding the absolute highest level of GPU performance in Kenya.\nPrice: KES 95,000 — exceptional value for AMD's flagship consumer GPU in Nairobi, offering top-tier 4K gaming performance for Kenyan gamers and professionals seeking the best.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi",
         "brand": "xfx",
@@ -5212,13 +5206,13 @@
         },
         "reviews": [],
         "createdAt": "2026-06-07T21:34:41.244Z",
-        "updatedAt": "2026-08-01T22:04:33.230Z",
-        "__v": 1,
+        "updatedAt": "2026-08-13T17:17:35.948Z",
+        "__v": 2,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621870435-e4da9459-94c4-44e6-939c-8021c401a3a9.webp",
         "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528693118-8692a09b-dd0c-4d3c-a98b-60cc55e6eca6.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528700037-4e77ef68-779e-46e2-a28f-92c6a4bcb369.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528710433-3980cef6-62a3-49c6-a62a-f534c8fd5c31.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641442773-3bfcf246-e5c3-4377-a920-c546119db28a.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641448133-1545adb9-5a21-42ab-8fd6-ad797fcd1b37.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641452300-9b811e62-b0f5-4815-bae1-67351e129bec.jpg"
         ],
         "image_r2_variants": {
           "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621870435-e4da9459-94c4-44e6-939c-8021c401a3a9-thumbnail.webp",
@@ -5233,17 +5227,17 @@
       "name": "Insta360 GO Ultra 4K Action Camera – Nairobi Kenya",
       "path": "/product/insta360-go-ultra-4k-action-camera-nairobi-kenya-nairobi",
       "category": "Accessories",
-      "updatedAt": "2026-08-01T22:08:15.497Z",
+      "updatedAt": "2026-08-13T17:18:47.458Z",
       "data": {
         "_id": "6a25e2e9c1830e4cdddbc4db",
         "name": "Insta360 GO Ultra 4K Action Camera – Nairobi Kenya",
         "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622092960-d7265504-d1d7-44d9-a9f3-b86d67c74b59.webp",
         "images": [
           "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622092960-d7265504-d1d7-44d9-a9f3-b86d67c74b59.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528653545-595cdfaf-1c30-407d-ac9d-d5f7912cabeb.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528660545-452a3120-9e09-4188-938f-dc1f0726f418.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528667051-0774ec02-1db3-4feb-8d26-51e307303e43.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528673793-9eb9fcdd-5a48-4f8f-8c0b-90e23126ce1c.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641510270-2dcdc5da-455b-4bfd-9423-71be1efeac94.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641514667-34a7275a-9059-4474-bc91-065fbadb1bc5.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641519112-ba03f707-76d2-4356-a516-65376ac3ba9f.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641523598-78df5662-bac0-47c3-9db7-f0d68862209f.jpg"
         ],
         "description": "Capture every adventure in stunning 4K detail with the Insta360 GO Ultra — a compact and powerful 4K action camera now available in Nairobi at KES 57,000. Designed for content creators, gamers and adventurers who want effortless, high-quality 4K footage in a tiny and versatile form factor, the Insta360 GO Ultra delivers impressive video quality and intelligent stabilization, making it an excellent choice for creators in the Kenyan market.\nKey Features:\n•4K video recording for stunning, ultra-high-resolution footage\n•Compact and lightweight design — wear it anywhere for hands-free recording\n•Advanced FlowState stabilization for smooth, shake-free video in any situation\n•Water-resistant design for outdoor and adventure filming\n•Versatile mounting options — clip, magnet and adhesive mounts included\n•AI-powered editing features for quick and effortless content creation\n•Long battery life for extended recording sessions\n•Compatible with iOS and Android via the Insta360 app for easy editing and sharing\nIdeal for: Content creators, vloggers, gamers, outdoor adventurers, travel enthusiasts, and anyone looking for a compact and capable 4K action camera in Kenya.\nPrice: KES 57,000 — excellent value for a premium compact 4K action camera in Nairobi for Kenyan content creators and adventurers looking for stunning, effortless footage.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "insta 360",
@@ -5256,18 +5250,20 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-06-07T21:30:17.291Z",
-        "updatedAt": "2026-08-01T22:08:15.497Z",
-        "__v": 1,
+        "updatedAt": "2026-08-13T17:18:47.458Z",
+        "__v": 2,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622092960-d7265504-d1d7-44d9-a9f3-b86d67c74b59.webp",
         "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528653545-595cdfaf-1c30-407d-ac9d-d5f7912cabeb.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528660545-452a3120-9e09-4188-938f-dc1f0726f418.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528667051-0774ec02-1db3-4feb-8d26-51e307303e43.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528673793-9eb9fcdd-5a48-4f8f-8c0b-90e23126ce1c.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641510270-2dcdc5da-455b-4bfd-9423-71be1efeac94.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641514667-34a7275a-9059-4474-bc91-065fbadb1bc5.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641519112-ba03f707-76d2-4356-a516-65376ac3ba9f.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641523598-78df5662-bac0-47c3-9db7-f0d68862209f.jpg"
         ],
         "image_r2_variants": {
           "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622092960-d7265504-d1d7-44d9-a9f3-b86d67c74b59-thumbnail.webp",
@@ -5282,7 +5278,7 @@
       "name": "AOC Q27G42ZE 27-Inch QHD 260Hz 0.3ms Gaming Monitor – Nairobi Kenya",
       "path": "/product/aoc-q27g42ze-27-inch-qhd-260hz-03ms-gaming-monitor-nairobi-kenya-nairobi",
       "category": "Monitors",
-      "updatedAt": "2026-08-01T21:59:09.335Z",
+      "updatedAt": "2026-08-13T17:19:51.772Z",
       "data": {
         "_id": "6a25e1d3c1830e4cdddbc4d6",
         "name": "AOC Q27G42ZE 27-Inch QHD 260Hz 0.3ms Gaming Monitor – Nairobi Kenya",
@@ -5295,7 +5291,7 @@
         "brand": "aoc",
         "category": "Monitors",
         "price": 39000,
-        "countInStock": 5,
+        "countInStock": 0,
         "condition": "New",
         "rating": 0,
         "numReviews": 0,
@@ -5309,16 +5305,16 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-06-07T21:25:39.168Z",
-        "updatedAt": "2026-08-01T21:59:09.335Z",
-        "__v": 1,
+        "updatedAt": "2026-08-13T17:19:51.772Z",
+        "__v": 2,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621546641-b406e68f-a187-4541-892a-9f0f9f7203f0.3ms gaming monitor – nairobi kenya",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528640787-962bc41e-3ea8-4369-9bc3-351c36f7b0bf.3ms gaming monitor – nairobi kenya"
-        ],
+        "images_r2": [],
         "image_r2_variants": {
           "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621546641-b406e68f-a187-4541-892a-9f0f9f7203f0.3ms gaming monitor – nairobi kenya",
           "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621546641-b406e68f-a187-4541-892a-9f0f9f7203f0.3ms gaming monitor – nairobi kenya",
@@ -5332,20 +5328,18 @@
       "name": "Next-Gen Gaming PC – AMD Ryzen 5 7500F & RTX 5060 8GB – Nairobi Kenya",
       "path": "/product/next-gen-gaming-pc-amd-ryzen-5-7500f-rtx-5060-8gb-nairobi-kenya-nairobi",
       "category": "PRE-BUILT",
-      "updatedAt": "2026-07-31T22:42:41.620Z",
+      "updatedAt": "2026-08-13T17:21:38.564Z",
       "data": {
         "_id": "6a1ee1e6c1830e4cdddbbbc1",
         "name": "Next-Gen Gaming PC – AMD Ryzen 5 7500F & RTX 5060 8GB – Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537713473-ad323377-f0af-469b-9c1f-36376861ece7.webp",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641669480-be509f44-c6aa-4b4d-ba0d-5d19174c376c.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537713473-ad323377-f0af-469b-9c1f-36376861ece7.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537719556-774c10c1-f306-4c52-a52c-a805a6f19394.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537726355-1d521702-1051-4c1f-8207-eac0212c25c9.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537732604-c0650394-8e3d-4005-b301-fbd41d1aa0c8.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537738944-6f1e9120-16f0-450e-9828-66a1164916e9.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537745140-673bc31e-88f7-4f4c-bdb5-009f9554f81b.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537751632-d3f42fdd-a034-4730-9ecf-1047dd57790f.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537757696-5a2ecdab-79f8-4063-a594-645c9ad66c30.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641669480-be509f44-c6aa-4b4d-ba0d-5d19174c376c.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641676334-6c8decbc-a889-4bb2-8356-1ff8baafa606.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641680936-9c28bbbc-70d9-4d7f-8a6e-91dbc1b9a8c3.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641685163-0757a906-24cc-4d33-9755-04fa97c3e88f.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641689927-86033629-1274-458c-9441-76bc1e262ac2.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641694846-7386cbf1-73c2-430d-8e76-fb483712fbd8.jpg"
         ],
         "description": "Experience next-generation gaming performance with this expertly assembled Next-Gen Gaming PC — a powerful and future-proof gaming machine now available in Nairobi at KES 166,000. Featuring the AMD Ryzen 5 7500F processor paired with the NVIDIA RTX 5060 8GB graphics card on a modern DDR5 platform, this build delivers exceptional 1080p and 1440p gaming performance across all the latest titles, making it one of the best value next-gen gaming PCs available in the Kenyan market.\nFull Specifications:\n•Processor: AMD Ryzen 5 7500F — 6 cores, 12 threads, up to 5.00GHz for fast and responsive gaming\n•Graphics Card: NVIDIA RTX 5060 8GB — next-gen Blackwell GPU for smooth 1080p and 1440p gaming with DLSS 4 support\n•Motherboard: Gigabyte B650M-K — reliable and capable AMD AM5 platform with DDR5 support\n•RAM: 16GB DDR5 — fast and future-proof memory for smooth gaming and multitasking\n•Storage: 512GB NVMe SSD — fast boot times and quick game and application loading\n•CPU Cooler: Thermalright Assassin X Redefined 120mm — efficient and quiet CPU cooling for sustained performance\n•Power Supply: 750W PSU — stable and reliable power delivery for all components\n•Case: Tortox Fishtank Mid Tower with 6 ARGB Fans — stunning showcase design with excellent airflow and immersive RGB lighting\nIdeal for: 1080p and 1440p gaming, content creation, streaming, and gamers looking for a powerful and future-proof next-gen gaming PC built on the latest AMD and NVIDIA platform in Kenya.\nPrice: KES 166,000 — outstanding value for a complete ready-to-use next-gen gaming PC in Nairobi. A perfect choice for Kenyan gamers looking to experience the latest gaming technology.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "gigabyte",
@@ -5368,22 +5362,27 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-06-02T14:00:06.435Z",
-        "updatedAt": "2026-07-31T22:42:41.620Z",
-        "__v": 1,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537713473-ad323377-f0af-469b-9c1f-36376861ece7.webp",
+        "updatedAt": "2026-08-13T17:21:38.564Z",
+        "__v": 2,
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641669480-be509f44-c6aa-4b4d-ba0d-5d19174c376c.jpg",
         "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537719556-774c10c1-f306-4c52-a52c-a805a6f19394.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537726355-1d521702-1051-4c1f-8207-eac0212c25c9.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537732604-c0650394-8e3d-4005-b301-fbd41d1aa0c8.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537738944-6f1e9120-16f0-450e-9828-66a1164916e9.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537745140-673bc31e-88f7-4f4c-bdb5-009f9554f81b.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537751632-d3f42fdd-a034-4730-9ecf-1047dd57790f.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537757696-5a2ecdab-79f8-4063-a594-645c9ad66c30.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641676334-6c8decbc-a889-4bb2-8356-1ff8baafa606.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641680936-9c28bbbc-70d9-4d7f-8a6e-91dbc1b9a8c3.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641685163-0757a906-24cc-4d33-9755-04fa97c3e88f.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641689927-86033629-1274-458c-9441-76bc1e262ac2.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641694846-7386cbf1-73c2-430d-8e76-fb483712fbd8.jpg"
         ],
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641669480-be509f44-c6aa-4b4d-ba0d-5d19174c376c.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641669480-be509f44-c6aa-4b4d-ba0d-5d19174c376c.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786641669480-be509f44-c6aa-4b4d-ba0d-5d19174c376c.jpg"
+        },
         "id": "6a1ee1e6c1830e4cdddbbbc1"
       }
     },
@@ -5392,7 +5391,7 @@
       "name": "Mid-Range Gaming PC – Intel Core i5-13400 & XFX RX 6600 8GB – Nairobi Kenya",
       "path": "/product/mid-range-gaming-pc-intel-core-i5-13400-xfx-rx-6600-8gb-nairobi-kenya-nairobi",
       "category": "PRE-BUILT",
-      "updatedAt": "2026-07-31T22:41:49.262Z",
+      "updatedAt": "2026-08-13T17:22:10.137Z",
       "data": {
         "_id": "6a1ed730c1830e4cdddbbb8d",
         "name": "Mid-Range Gaming PC – Intel Core i5-13400 & XFX RX 6600 8GB – Nairobi Kenya",
@@ -5409,7 +5408,7 @@
         "brand": "asus",
         "category": "PRE-BUILT",
         "price": 108000,
-        "countInStock": 1,
+        "countInStock": 0,
         "condition": "New",
         "rating": 0,
         "numReviews": 0,
@@ -5432,16 +5431,10 @@
         },
         "reviews": [],
         "createdAt": "2026-06-02T13:14:24.401Z",
-        "updatedAt": "2026-07-31T22:41:49.262Z",
-        "__v": 1,
+        "updatedAt": "2026-08-13T17:22:10.137Z",
+        "__v": 2,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537679447-4bce0614-bfe0-4556-b0cb-387cda9d27dc.webp",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537685019-80ca19da-dcdd-47d4-b1cf-093b6efeddef.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537690506-def1cb4c-87bc-44f5-b382-2cb327c45019.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537696277-5a94af5c-baf8-44cc-a7b1-8572d14d4d0c.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537701425-fb94ab9d-65b5-48a7-8c08-b4bdc9db74a5.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537706595-17b45bba-d34a-4821-b16a-304cc2a1d771.webp"
-        ],
+        "images_r2": [],
         "id": "6a1ed730c1830e4cdddbbb8d"
       }
     },
@@ -7224,6 +7217,6 @@
     }
   ],
   "complete": true,
-  "source": "https://gamecity-backend-n8t8.onrender.com/api",
+  "source": "http://localhost:5001/api",
   "truncated": false
 }
