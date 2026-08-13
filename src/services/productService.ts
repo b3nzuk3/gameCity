@@ -39,8 +39,10 @@ export type Product = {
   name: string
   image: string
   images?: string[]
+  images_r2?: string[]
   description: string
   brand: string
+  condition?: 'New' | 'Pre-Owned'
   category: string
   price: number
   countInStock: number

@@ -21,7 +21,8 @@ export const STATIC_ROUTES = [
   '/category/accessories',
 ]
 
-const limit = Math.max(0, Number(process.env.PRERENDER_PRODUCT_LIMIT || 24))
+// Fetch the complete catalog by default. Set PRERENDER_PRODUCT_LIMIT explicitly for a bounded preview build.
+const limit = Math.max(0, Number(process.env.PRERENDER_PRODUCT_LIMIT || 0))
 const pageSize = Math.min(100, Math.max(1, Number(process.env.PRERENDER_PAGE_SIZE || 100)))
 const timeoutMs = Math.max(1000, Number(process.env.PRERENDER_TIMEOUT_MS || 8000))
 const strict = process.env.PRERENDER_STRICT === 'true'
@@ -34,10 +35,10 @@ export const slugifyProduct = (name) =>
     .replace(/[\s_-]+/g, '-')
     .replace(/^-+|-+$/g, '')}-nairobi`
 
-export const productPath = (product) => {
+export const productPath = (product, suffix = '') => {
   const name = product?.name
   if (!name || (!product?._id && !product?.id)) return null
-  return `/product/${slugifyProduct(name)}`
+  return `/product/${slugifyProduct(name).replace(/-nairobi$/, '')}${suffix}-nairobi`
 }
 
 const fetchJson = async (url) => {
@@ -82,7 +83,10 @@ export async function fetchCatalogManifest() {
   const selectedProducts = limit > 0 ? products.slice(0, limit) : products
   const unique = new Map()
   for (const product of selectedProducts) {
-    const path = productPath(product)
+    const basePath = productPath(product)
+    const path = basePath && unique.has(basePath)
+      ? productPath(product, `-${String(product._id || product.id)}`)
+      : basePath
     if (path && !unique.has(path)) {
       unique.set(path, {
         id: String(product._id || product.id),

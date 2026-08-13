@@ -12,6 +12,7 @@
     "test:middleware": "node --test tests/middleware.test.mjs",
     "test:seo": "node --test tests/seo-metadata.test.mjs",
     "test:search": "node --test tests/search.test.mjs",
+    "test:geo": "node --test tests/geo.test.mjs",
     "preview": "vite preview",
     "index": "node scripts/google-indexing.js"
   },

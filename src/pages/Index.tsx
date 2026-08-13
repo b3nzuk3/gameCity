@@ -185,7 +185,7 @@ const Index = () => {
                       size="sm"
                       className="text-yellow-400 border-yellow-700 hover:bg-yellow-900/30 h-6 md:h-9 text-xs md:text-sm px-2 md:px-3"
                     >
-                      Browse
+                      View {category.title}
                       <ArrowRight size={12} className="ml-1 md:ml-2 md:w-4 md:h-4" />
                     </Button>
                   </Link>

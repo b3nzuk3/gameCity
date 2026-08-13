@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useProduct, useProductBySlug } from '@/services/productService'
 import { extractProductId, generateProductUrl } from '@/lib/slugUtils'
 
@@ -23,6 +23,7 @@ const SimilarProducts = lazy(() => import('@/components/SimilarProducts'))
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
   const { addToCart } = useCart()
   const [quantity, setQuantity] = useState(1)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
@@ -121,15 +122,7 @@ const ProductPage = () => {
           product.brand || 'gaming electronics'
         }`}
         image={product.image}
-        url={
-          product
-            ? generateProductUrl({
-                _id: product._id,
-                name: product.name,
-                category: product.category,
-              })
-            : `/product/${id}`
-        }
+        url={location.pathname}
         type="product"
         product={
           product
@@ -140,9 +133,11 @@ const ProductPage = () => {
                   : product.price,
                 currency: 'KES',
                 availability: product.countInStock > 0 ? 'InStock' : 'OutOfStock',
-                brand: product.brand || 'GameCity',
+                brand: product.brand || undefined,
                 image: product.image,
                 description: product.description,
+                category: product.category,
+                condition: product.condition,
                 rating: product.rating,
                 reviewCount: product.numReviews,
               }
@@ -158,13 +153,7 @@ const ProductPage = () => {
           },
           {
             name: product?.name || 'Product',
-            url: product
-              ? generateProductUrl({
-                  _id: product._id,
-                  name: product.name,
-                  category: product.category,
-                })
-              : `/product/${id}`,
+            url: location.pathname,
           },
         ]}
       />
@@ -216,6 +205,11 @@ const ProductPage = () => {
 
           <div className="flex flex-col">
             <h1 className="text-3xl font-bold mb-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.name) }} />
+            <dl className="mb-4 grid grid-cols-1 gap-1 text-sm text-muted-foreground">
+              {product.brand && <div><dt className="inline font-medium">Brand: </dt><dd className="inline">{product.brand}</dd></div>}
+              {product.category && <div><dt className="inline font-medium">Category: </dt><dd className="inline"><Link className="underline hover:text-yellow-400" to={`/category/${product.category.toLowerCase().replace(/\s+/g, '-')}`}>{product.category}</Link></dd></div>}
+              {product.condition && <div><dt className="inline font-medium">Condition: </dt><dd className="inline">{product.condition}</dd></div>}
+            </dl>
             <div className="mb-4">
               {isOfferActive(product.offer) ? (
                 <div className="flex flex-col">
@@ -246,7 +240,7 @@ const ProductPage = () => {
               Object.keys(product.specifications).length > 0 && (
                 <div className="mb-8">
                   <h3 className="font-semibold text-lg mb-2">Specifications</h3>
-                  <table className="w-full text-sm mb-4">
+                  <table className="w-full text-sm mb-4" aria-label={`${product.name} specifications`}>
                     <tbody>
                       {Object.entries(product.specifications).map(
                         ([key, value]) => (
