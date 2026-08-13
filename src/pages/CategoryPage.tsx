@@ -109,9 +109,9 @@ const isProductInCategory = (
 }
 
 const CategoryPage = () => {
-  const { category } = useParams<{ category: string }>()
+  const { category, page: routePage } = useParams<{ category: string; page?: string }>()
   const [searchParams] = useSearchParams()
-  const currentPage = Math.max(1, Number(searchParams.get('page') || 1))
+  const currentPage = Math.max(1, Number(routePage || searchParams.get('page') || 1))
   const categoryParam = category === 'all' ? 'all' : category || 'all'
   const categoryQuery = useCategoryProducts(categoryParam, currentPage, CATEGORY_PAGE_SIZE)
   const products = useMemo(
@@ -135,6 +135,8 @@ const CategoryPage = () => {
   const totalPages = categoryQuery.data?.pages || 1
   const totalProducts = categoryQuery.data?.total || 0
   const productsPerPage = CATEGORY_PAGE_SIZE
+  const pageHref = (page: number) =>
+    `/category/${categoryParam}?page=${page}`
 
   // Get unique brands from products
   const availableBrands = useMemo(() => {
@@ -507,7 +509,7 @@ const CategoryPage = () => {
             </div>
             <div className="flex items-center space-x-2">
               <Link
-                to={`/category/${categoryParam}${currentPage > 2 ? `?page=${currentPage - 1}` : ''}`}
+                to={pageHref(Math.max(1, currentPage - 1))}
                 aria-disabled={currentPage <= 1}
                 tabIndex={currentPage <= 1 ? -1 : 0}
                 className="inline-flex h-9 items-center justify-center rounded-md border border-gray-700 px-3 text-sm text-muted-foreground hover:text-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50"
@@ -518,7 +520,7 @@ const CategoryPage = () => {
                 Page {currentPage} of {totalPages}
               </span>
               <Link
-                to={`/category/${categoryParam}?page=${currentPage + 1}`}
+                to={pageHref(currentPage + 1)}
                 aria-disabled={currentPage >= totalPages}
                 tabIndex={currentPage >= totalPages ? -1 : 0}
                 className="inline-flex h-9 items-center justify-center rounded-md border border-gray-700 px-3 text-sm text-muted-foreground hover:text-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50"

@@ -36,6 +36,11 @@
   ],
   "rewrites": [
     {
+      "source": "/category/:category",
+      "has": [{ "type": "query", "key": "page", "value": "(?<page>[0-9]+)" }],
+      "destination": "/category/:category/page/:page"
+    },
+    {
       "source": "/product/:slug",
       "has": [
         {

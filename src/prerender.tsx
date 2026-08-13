@@ -45,10 +45,10 @@ export async function prerender(data: { url: string }) {
     queryClient.setQueryData(['product-slug', productParam], entry.data)
   }
 
-  const categoryMatch = data.url.match(/^\/category\/([^/?]+)(?:\?page=(\d+))?$/)
+  const categoryMatch = data.url.match(/^\/category\/([^/?]+)(?:\/page\/(\d+))?(?:\?page=(\d+))?$/)
   if (categoryMatch) {
     const category = decodeURIComponent(categoryMatch[1])
-    const page = Math.max(1, Number(categoryMatch[2] || 1))
+    const page = Math.max(1, Number(categoryMatch[2] || categoryMatch[3] || 1))
     const allProducts = categoryProducts(category)
     const start = (page - 1) * CATEGORY_PAGE_SIZE
     const products = {
@@ -96,12 +96,7 @@ export async function prerender(data: { url: string }) {
     '/privacy',
     '/terms',
     '/sitemap',
-    '/category/pre-built',
-    '/category/graphics-cards',
-    '/category/monitors',
-    '/category/processors',
-    '/category/power-supply',
-    '/category/accessories',
+    ...readCategoryRoutes(),
   ]
 
   return {
@@ -110,4 +105,21 @@ export async function prerender(data: { url: string }) {
     head,
     links: new Set(publicRoutes),
   }
+}
+
+function readCategoryRoutes(): string[] {
+  const counts = new Map<string, number>([['all', catalog.products.length]])
+  for (const product of catalog.products) {
+    const category = normalizeCategory(product.category || '')
+    if (category) counts.set(category, (counts.get(category) || 0) + 1)
+  }
+  return [...counts.entries()].flatMap(([category, total]) => {
+    const pages = Math.max(1, Math.ceil(total / CATEGORY_PAGE_SIZE))
+    return [
+      `/category/${category}`,
+      ...Array.from({ length: pages }, (_, index) =>
+        `/category/${category}/page/${index + 1}`
+      ),
+    ]
+  })
 }

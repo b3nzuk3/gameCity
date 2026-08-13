@@ -119,7 +119,7 @@ export function categoryRoutesFromManifest(manifest, pageSize = 12) {
   return [...counts.entries()].flatMap(([category, total]) => {
     const pages = Math.max(1, Math.ceil(total / pageSize))
     return Array.from({ length: pages }, (_, index) =>
-      `/category/${category}${index === 0 ? '' : `?page=${index + 1}`}`
+      `/category/${category}/page/${index + 1}`
     )
   })
 }

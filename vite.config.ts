@@ -123,7 +123,7 @@ function readCategoryRoutes(): string[] {
     return [...counts.entries()].flatMap(([category, total]) => {
       const pages = Math.max(1, Math.ceil(total / 12))
       return Array.from({ length: pages }, (_, index) =>
-        `/category/${category}${index === 0 ? '' : `?page=${index + 1}`}`
+        `/category/${category}/page/${index + 1}`
       )
     })
   } catch {

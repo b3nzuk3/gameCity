@@ -26,6 +26,7 @@ export default function AppRoutes() {
       <Route path="/" element={<Index />} />
       <Route path="/product/:id" element={<ProductPage />} />
       <Route path="/category/:category" element={<CategoryPage />} />
+      <Route path="/category/:category/page/:page" element={<CategoryPage />} />
       <Route path="/search" element={<SearchPage />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
