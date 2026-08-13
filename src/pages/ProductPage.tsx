@@ -1,5 +1,5 @@
 import { lazy, Suspense, useState, useEffect } from 'react'
-import { Link, useParams, useNavigate } from 'react-router-dom'
+import { Link, useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useProduct, useProductBySlug } from '@/services/productService'
 import { extractProductId, generateProductUrl } from '@/lib/slugUtils'
 
@@ -23,6 +23,7 @@ const SimilarProducts = lazy(() => import('@/components/SimilarProducts'))
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const location = useLocation()
   const { addToCart } = useCart()
   const [quantity, setQuantity] = useState(1)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
@@ -121,15 +122,7 @@ const ProductPage = () => {
           product.brand || 'gaming electronics'
         }`}
         image={product.image}
-        url={
-          product
-            ? generateProductUrl({
-                _id: product._id,
-                name: product.name,
-                category: product.category,
-              })
-            : `/product/${id}`
-        }
+        url={location.pathname}
         type="product"
         product={
           product
@@ -160,13 +153,7 @@ const ProductPage = () => {
           },
           {
             name: product?.name || 'Product',
-            url: product
-              ? generateProductUrl({
-                  _id: product._id,
-                  name: product.name,
-                  category: product.category,
-                })
-              : `/product/${id}`,
+            url: location.pathname,
           },
         ]}
       />
