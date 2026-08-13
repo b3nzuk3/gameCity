@@ -313,6 +313,11 @@ const CategoryPage = () => {
           <p className="text-muted-foreground">
             {loading ? 'Loading...' : `${totalProducts} products found`}
           </p>
+          <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
+            {category === 'all'
+              ? 'Browse GameCity Electronics products for gaming, PC building, and creative work in Nairobi, Kenya.'
+              : `Browse ${categoryName.toLowerCase()} from GameCity Electronics. Compare products, specifications, prices, and stock availability.`}
+          </p>
         </div>
 
         {/* Category Navigation */}

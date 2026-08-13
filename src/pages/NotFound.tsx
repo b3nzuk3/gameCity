@@ -26,6 +26,7 @@ const NotFound = () => {
         description="The page you're looking for doesn't exist. Browse our gaming electronics collection in Nairobi, Kenya."
         type="website"
         url="/404"
+        noindex
       />
       <div className="min-h-[60vh] flex items-center justify-center px-4 py-16">
         <div className="text-center max-w-md">

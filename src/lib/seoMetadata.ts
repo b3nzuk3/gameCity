@@ -1,6 +1,25 @@
 export const SITE_URL = 'https://www.gamecityelectronics.co.ke'
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/og-image.png`
 
+/** Canonical business facts published by GameCity's existing public pages. */
+export const BUSINESS_IDENTITY = {
+  name: 'GameCity Electronics',
+  url: SITE_URL,
+  logo: `${SITE_URL}/logo.png`,
+  description: 'Gaming electronics store in Nairobi, Kenya',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Kai Plaza 3rd floor shop 6, Tom Mboya St',
+    addressLocality: 'Nairobi',
+    addressCountry: 'KE',
+  },
+  sameAs: [
+    'https://www.facebook.com/gamecityelectronics',
+    'https://www.instagram.com/gamecityelectronics',
+    'https://twitter.com/gamecityelectronics',
+  ],
+} as const
+
 export const HOMEPAGE_SEO = {
   title:
     'Custom-Built PCs for Gaming & Streaming, Graphics Design, Architectural Design and Machine learning | GameCity Electronics',
