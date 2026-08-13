@@ -92,6 +92,7 @@ export async function fetchCatalogManifest() {
         id: String(product._id || product.id),
         name: product.name,
         path,
+        category: product.category || null,
         updatedAt: product.updatedAt || product.updated_at || null,
       })
     }
@@ -103,6 +104,21 @@ export async function fetchCatalogManifest() {
     source: API_URL,
     truncated: limit > 0 && products.length > limit,
   }
+}
+
+export function categoryRoutesFromManifest(manifest, pageSize = 12) {
+  const counts = new Map([['all', manifest.products.length]])
+  for (const product of manifest.products) {
+    const category = String(product.category || '').trim().toLowerCase().replace(/\s+/g, '-')
+    if (category) counts.set(category, (counts.get(category) || 0) + 1)
+  }
+
+  return [...counts.entries()].flatMap(([category, total]) => {
+    const pages = Math.max(1, Math.ceil(total / pageSize))
+    return Array.from({ length: pages }, (_, index) =>
+      `/category/${category}${index === 0 ? '' : `?page=${index + 1}`}`
+    )
+  })
 }
 
 export async function writeCatalogManifest(output = 'public/catalog-manifest.json') {

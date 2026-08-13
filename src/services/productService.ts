@@ -8,6 +8,7 @@ import {
 } from '@tanstack/react-query'
 import axios from 'axios'
 import backendService from './backendService'
+import type { Product as BackendProduct } from './backendService'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
@@ -70,6 +71,27 @@ export type ProductsResponse = {
   page: number
   pages: number
   count: number
+}
+
+export type CategoryProductsResponse = {
+  products: BackendProduct[]
+  page: number
+  pages: number
+  total: number
+  hasMore: boolean
+}
+
+export const CATEGORY_PAGE_SIZE = 12
+
+export const fetchProductsByCategory = async (
+  category: string,
+  pageNumber = 1,
+  limit = CATEGORY_PAGE_SIZE
+) => {
+  const { data } = await api.get<CategoryProductsResponse>(
+    `/products/category/${encodeURIComponent(category)}?page=${pageNumber}&limit=${limit}`
+  )
+  return data
 }
 
 // Mock data for local development
@@ -178,6 +200,19 @@ export const useProducts = (
     queryKey: ['products', keyword, pageNumber, category],
     queryFn: () => fetchProducts(keyword, pageNumber, category),
     staleTime: 5 * 60 * 1000, // 5 minutes
+    placeholderData: keepPreviousData,
+  })
+}
+
+export const useCategoryProducts = (
+  category: string,
+  pageNumber = 1,
+  limit = CATEGORY_PAGE_SIZE
+) => {
+  return useQuery({
+    queryKey: ['category-products', category, pageNumber, limit],
+    queryFn: () => fetchProductsByCategory(category, pageNumber, limit),
+    staleTime: 5 * 60 * 1000,
     placeholderData: keepPreviousData,
   })
 }

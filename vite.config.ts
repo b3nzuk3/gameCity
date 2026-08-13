@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => ({
         '/terms',
         '/sitemap',
         ...readManifestRoutes(),
+        ...readCategoryRoutes(),
       ],
     }),
   ],
@@ -104,6 +105,27 @@ function readManifestRoutes(): string[] {
           .map((product: { path?: string }) => product.path)
           .filter((route: string | undefined): route is string => Boolean(route))
       : []
+  } catch {
+    return []
+  }
+}
+
+function readCategoryRoutes(): string[] {
+  try {
+    const manifest = JSON.parse(
+      readFileSync(path.resolve(__dirname, './public/catalog-manifest.json'), 'utf8')
+    )
+    const counts = new Map<string, number>([['all', manifest.products.length]])
+    for (const product of manifest.products) {
+      const category = String(product.category || '').trim().toLowerCase().replace(/\s+/g, '-')
+      if (category) counts.set(category, (counts.get(category) || 0) + 1)
+    }
+    return [...counts.entries()].flatMap(([category, total]) => {
+      const pages = Math.max(1, Math.ceil(total / 12))
+      return Array.from({ length: pages }, (_, index) =>
+        `/category/${category}${index === 0 ? '' : `?page=${index + 1}`}`
+      )
+    })
   } catch {
     return []
   }

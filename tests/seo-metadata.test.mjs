@@ -63,3 +63,9 @@ test('non-homepage routes do not contain the homepage canonical', () => {
     assert.notEqual(canonicalFrom(readRoute(route)), homepageCanonical, route)
   }
 })
+
+test('prerendered category pages expose crawlable product links', () => {
+  for (const route of ['/category/graphics-cards', '/category/pre-built', '/category/accessories']) {
+    assert.match(readRoute(route), /href="\/product\/[^"]+"/, route)
+  }
+})

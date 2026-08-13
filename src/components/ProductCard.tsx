@@ -38,6 +38,7 @@ interface ProductProps {
       startDate?: string
       endDate?: string
     }
+    href?: string
   }
 }
 
@@ -88,7 +89,7 @@ const ProductCard = ({ product }: ProductProps) => {
 
   return (
     <Link
-      to={generateProductUrl({
+      to={product.href || generateProductUrl({
         _id: product.id.toString(),
         name: product.name,
         category: product.category,

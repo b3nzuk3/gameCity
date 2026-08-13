@@ -5,7 +5,12 @@ import { dehydrate } from '@tanstack/react-query'
 import type { HelmetServerState } from 'react-helmet-async'
 import { AppContent } from './App'
 import { createAppQueryClient } from './queryClient'
-import { fetchProductById, fetchProductBySlug } from '@/services/productService'
+import {
+  CATEGORY_PAGE_SIZE,
+  fetchProductById,
+  fetchProductBySlug,
+  fetchProductsByCategory,
+} from '@/services/productService'
 
 const productRequestCache = new Map<string, Promise<unknown>>()
 
@@ -35,6 +40,17 @@ export async function prerender(data: { url: string }) {
     } catch {
       // The client fallback handles unavailable or missing product data.
     }
+  }
+
+  const categoryMatch = data.url.match(/^\/category\/([^/?]+)(?:\?page=(\d+))?$/)
+  if (categoryMatch) {
+    const category = decodeURIComponent(categoryMatch[1])
+    const page = Math.max(1, Number(categoryMatch[2] || 1))
+    const products = await fetchProductsByCategory(category, page, CATEGORY_PAGE_SIZE)
+    queryClient.setQueryData(
+      ['category-products', category, page, CATEGORY_PAGE_SIZE],
+      products
+    )
   }
 
   const html = renderToString(
