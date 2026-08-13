@@ -18,6 +18,7 @@ test('mobile Navbar icon-only controls have accessible names', async () => {
   const source = await readFile(new URL('src/components/Navbar.tsx', root), 'utf8')
 
   assert.match(source, /aria-label="Open search"/)
-  assert.match(source, /to="\/cart"[\s\S]{0,120}aria-label="View cart"/)
+  assert.ok((source.match(/aria-label="View cart"/g) ?? []).length >= 2)
+  assert.match(source, /to="\/favorites"[\s\S]{0,120}aria-label="View favorites"/)
   assert.match(source, /aria-label="Open menu"/)
 })

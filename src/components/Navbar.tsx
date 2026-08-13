@@ -269,19 +269,21 @@ const Navbar = () => {
             {/* Favorites */}
             <Link
               to="/favorites"
+              aria-label="View favorites"
               className="text-gray-300 hover:text-yellow-400 transition-colors p-2 rounded-md"
             >
-              <Heart className="h-5 w-5" />
+              <Heart className="h-5 w-5" aria-hidden="true" />
             </Link>
 
             {/* Cart */}
             <Link
               to="/cart"
+              aria-label="View cart"
               className="relative text-gray-300 hover:text-yellow-400 transition-colors p-2 rounded-md"
             >
-              <ShoppingCart className="h-5 w-5" />
+              <ShoppingCart className="h-5 w-5" aria-hidden="true" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span aria-hidden="true" className="absolute -top-1 -right-1 bg-yellow-500 text-black text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {totalItems}
                 </span>
               )}
