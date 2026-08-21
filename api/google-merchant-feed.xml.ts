@@ -6,7 +6,7 @@
  * sitemap, robots, routing, prerendering or any SEO output.
  */
 
-import { SITE_URL, buildMerchantFeed, fetchAllProducts } from '../lib/google-merchant-feed.ts'
+import { SITE_URL, buildMerchantFeed, fetchAllProducts } from '../lib/google-merchant-feed'
 
 export const config = {
   maxDuration: 30,
