@@ -15,6 +15,7 @@
     "test:geo": "node --test tests/geo.test.mjs",
     "test:accessibility-llms": "node --test tests/accessibility-llms.test.mjs",
     "test:catalog-crawl": "node --test tests/catalog-crawl.test.mjs",
+ "test:merchant-feed": "node --test tests/google-merchant-feed.test.mjs",
     "preview": "vite preview",
     "index": "node scripts/google-indexing.js"
   },

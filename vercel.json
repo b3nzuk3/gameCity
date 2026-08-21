@@ -52,6 +52,7 @@
       "destination": "/api/og-product?slug=:slug"
     },
 
+    { "source": "/google-merchant-feed.xml", "destination": "/api/google-merchant-feed.xml" },
     { "source": "/sitemap.xml", "destination": "/api/sitemap.xml" },
     {
       "source": "/debug-whatsapp/:slug",
