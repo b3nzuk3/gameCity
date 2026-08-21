@@ -8,7 +8,7 @@ import {
   isOfferActive,
   mapFeedItem,
   slugify,
-} from '../lib/google-merchant-feed.ts'
+} from '../api/google-merchant-feed.xml.ts'
 
 const validProduct = {
   _id: '64b1f0c9a1b2c3d4e5f60708',
