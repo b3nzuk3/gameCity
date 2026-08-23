@@ -40,18 +40,6 @@
       "has": [{ "type": "query", "key": "page", "value": "(?<page>[0-9]+)" }],
       "destination": "/category/:category/page/:page"
     },
-    {
-      "source": "/product/:slug",
-      "has": [
-        {
-          "type": "header",
-          "key": "user-agent",
-          "value": ".*(facebookexternalhit|WhatsApp|Twitterbot|Slackbot|Discordbot|LinkedInBot|TelegramBot|facebook|twitter|linkedin|whatsapp|telegram|discord|slack|bot|crawler|spider|scraper).*"
-        }
-      ],
-      "destination": "/api/og-product?slug=:slug"
-    },
-
     { "source": "/google-merchant-feed.xml", "destination": "/api/google-merchant-feed.xml" },
     { "source": "/sitemap.xml", "destination": "/api/sitemap.xml" },
     {

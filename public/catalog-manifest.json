@@ -1,13 +1,320 @@
 {
-  "generatedAt": "2026-08-13T17:54:08.414Z",
+  "generatedAt": "2026-08-23T19:18:32.993Z",
   "siteUrl": "https://www.gamecityelectronics.co.ke",
   "products": [
+    {
+      "id": "6a8969b146b0249ef2a42457",
+      "name": "Thermalright Assassin X 120 Refined SE ARGB CPU Cooler White",
+      "path": "/product/thermalright-assassin-x-120-refined-se-argb-cpu-cooler-white-nairobi",
+      "category": "CPU Cooling",
+      "updatedAt": "2026-08-22T09:19:45.798Z",
+      "data": {
+        "_id": "6a8969b146b0249ef2a42457",
+        "name": "Thermalright Assassin X 120 Refined SE ARGB CPU Cooler White",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787390345438-16cc5bfe-7f01-410f-af8a-2500e213fd8e.jpg",
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787390345438-16cc5bfe-7f01-410f-af8a-2500e213fd8e.jpg",
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787390345438-16cc5bfe-7f01-410f-af8a-2500e213fd8e.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787390345438-16cc5bfe-7f01-410f-af8a-2500e213fd8e.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787390345438-16cc5bfe-7f01-410f-af8a-2500e213fd8e.jpg"
+        },
+        "images": [
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787390345438-16cc5bfe-7f01-410f-af8a-2500e213fd8e.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787390377181-84a6aecd-e828-4a74-b3d0-daf13ced25e1.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787390381855-74961d28-176e-4a8e-a787-7c2bb40e8e73.jpg"
+        ],
+        "images_r2": [
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787390377181-84a6aecd-e828-4a74-b3d0-daf13ced25e1.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787390381855-74961d28-176e-4a8e-a787-7c2bb40e8e73.jpg"
+        ],
+        "description": "Keep your processor cool and your build looking stunning with the Thermalright Assassin X 120 Refined SE ARGB CPU Cooler in White a high-performance and visually impressive air CPU cooler now available in Nairobi at KES 5,000. Renowned for its exceptional thermal performance and outstanding value, the Assassin X 120 Refined SE delivers class-leading air cooling with premium ARGB lighting in a clean white finish, making it one of the best value CPU coolers available in the Kenyan market and a perfect choice for white-themed builds.\nKey Features:\n• 120mm ARGB fan for efficient airflow and stunning lighting effects\n• Clean white finish perfect for white-themed and clean aesthetic builds\n• Four heat pipes for superior heat dissipation and consistent CPU temperatures\n• Compatible with Intel LGA1700, LGA1200, LGA115X and AMD AM5, AM4 sockets\n• Low noise operation for a quiet gaming and working environment\n• Nickel-plated copper heat pipes for improved thermal conductivity and durability\n• ARGB lighting compatible with most major motherboard RGB sync software\n• Compact design suitable for most mid-tower and full-tower cases\n• Easy installation with included mounting hardware for broad compatibility\nIdeal for: White-themed gaming builds, budget-friendly workstations, ARGB builds, and PC builders looking for a reliable, high-performance and attractive white air CPU cooler in Kenya.\nPrice: KES 5,000 outstanding value in the budget-to-mid-range CPU cooler price range for Kenyan builders looking for class-leading air cooling performance with premium ARGB lighting in a stunning white finish.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
+        "brand": "thermalright",
+        "category": "CPU Cooling",
+        "price": 5000,
+        "countInStock": 12,
+        "condition": "New",
+        "rating": 0,
+        "numReviews": 0,
+        "specifications": {
+          "Model": "Thermalright Assassin X 120 Refined SE ARGB White",
+          "Color": "White",
+          "Cooling method": "Air",
+          "Radiator size": "135mm",
+          "No. of fans": "1",
+          "Fans size": "120mm",
+          "Special Features": "ARGB"
+        },
+        "offer": {
+          "enabled": false,
+          "type": "percentage",
+          "amount": 0
+        },
+        "reviews": [],
+        "createdAt": "2026-08-22T09:19:45.798Z",
+        "updatedAt": "2026-08-22T09:19:45.798Z",
+        "__v": 0,
+        "id": "6a8969b146b0249ef2a42457"
+      }
+    },
+    {
+      "id": "6a88015146b0249ef2a41f94",
+      "name": "Gainward GeForce RTX 3070 Ti 8GB Triple Fan Graphics Card",
+      "path": "/product/gainward-geforce-rtx-3070-ti-8gb-triple-fan-graphics-card-nairobi",
+      "category": "Graphics Cards",
+      "updatedAt": "2026-08-21T07:42:09.294Z",
+      "data": {
+        "_id": "6a88015146b0249ef2a41f94",
+        "name": "Gainward GeForce RTX 3070 Ti 8GB Triple Fan Graphics Card",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787298111831-e475beb6-1881-4639-b206-2db3d01f23fe.jpg",
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787298111831-e475beb6-1881-4639-b206-2db3d01f23fe.jpg",
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787298111831-e475beb6-1881-4639-b206-2db3d01f23fe.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787298111831-e475beb6-1881-4639-b206-2db3d01f23fe.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787298111831-e475beb6-1881-4639-b206-2db3d01f23fe.jpg"
+        },
+        "images": [
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787298111831-e475beb6-1881-4639-b206-2db3d01f23fe.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787298120838-64f8aeb9-58e9-41fa-b544-323e16c30754.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787298125628-26a11634-9027-4fdd-84d9-bd15682c1908.jpg"
+        ],
+        "images_r2": [
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787298120838-64f8aeb9-58e9-41fa-b544-323e16c30754.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787298125628-26a11634-9027-4fdd-84d9-bd15682c1908.jpg"
+        ],
+        "description": "Unleash powerful gaming performance with the Gainward GeForce RTX 3070 Ti 8GB Triple Fan a high-end GPU now available in Nairobi at KES 59,000. Powered by NVIDIA's Ampere architecture and featuring Gainward's reliable triple fan cooling solution, this card delivers exceptional 1440p and capable 4K gaming performance, making it an outstanding choice for serious gamers and content creators in the Kenyan market.\nKey Features:\n• 8GB GDDR6X memory for smooth high-resolution 1440p and capable 4K gaming\n• NVIDIA Ampere architecture for outstanding performance and power efficiency\n• Triple fan cooling for exceptional thermal performance and quiet operation\n• DLSS support AI-powered performance boost for higher frame rates\n• Advanced ray tracing for stunning, cinematic in-game visuals\n• PCIe 4.0 support for fast data transfer speeds\n• Multiple display outputs supports up to 4 monitors simultaneously\n• Compatible with most ATX and mid-tower cases in Kenya\nIdeal for: 1440p and 4K gaming, content creation, video editing, streaming, and gamers looking for a powerful and capable NVIDIA RTX 3070 Ti graphics card in Kenya.\nPrice: KES 59,000 excellent value in the high-performance GPU price range for Kenyan gamers and creators looking for a powerful and proven Gainward RTX 3070 Ti graphics card.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
+        "brand": "gainward ",
+        "category": "Graphics Cards",
+        "price": 59000,
+        "countInStock": 1,
+        "condition": "Pre-Owned",
+        "rating": 0,
+        "numReviews": 0,
+        "specifications": {
+          "Vram in GB": "8",
+          "No. of fans": "3",
+          "Video output ports": "HDMI and DisplayPort ",
+          "Power consumption": "250W",
+          "Memory type": "GDDR6X"
+        },
+        "offer": {
+          "enabled": false,
+          "type": "percentage",
+          "amount": 0
+        },
+        "reviews": [],
+        "createdAt": "2026-08-21T07:42:09.294Z",
+        "updatedAt": "2026-08-21T07:42:09.294Z",
+        "__v": 0,
+        "id": "6a88015146b0249ef2a41f94"
+      }
+    },
+    {
+      "id": "6a86fad346b0249ef2a41ad2",
+      "name": "Mid-High Range Gaming PC Intel Core i7-10700 & MSI RTX 3060 12GB",
+      "path": "/product/mid-high-range-gaming-pc-intel-core-i7-10700-msi-rtx-3060-12gb-nairobi",
+      "category": "PRE-BUILT",
+      "updatedAt": "2026-08-22T06:26:12.007Z",
+      "data": {
+        "_id": "6a86fad346b0249ef2a41ad2",
+        "name": "Mid-High Range Gaming PC Intel Core i7-10700 & MSI RTX 3060 12GB",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787230909588-407cbc20-fb77-4358-83dc-7626ad669c4f.jpg",
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787230909588-407cbc20-fb77-4358-83dc-7626ad669c4f.jpg",
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787230909588-407cbc20-fb77-4358-83dc-7626ad669c4f.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787230909588-407cbc20-fb77-4358-83dc-7626ad669c4f.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787230909588-407cbc20-fb77-4358-83dc-7626ad669c4f.jpg"
+        },
+        "images": [
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787230909588-407cbc20-fb77-4358-83dc-7626ad669c4f.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787230916191-c3abb0c6-2618-47e2-a118-449045df9719.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787230923643-1b60d04b-103f-4ecd-8e9e-a1d6bbcd13d4.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787230928318-c0a2eb99-8e56-4a48-89cd-91b3759ab0b7.jpg"
+        ],
+        "images_r2": [],
+        "description": "Experience smooth and immersive gaming with this expertly assembled Mid-High Range Gaming PC a powerful and well-balanced gaming machine now available in Nairobi at KES 130,000. Featuring the Intel Core i7-10700 processor paired with the MSI GeForce RTX 3060 12GB Ventus 2X graphics card, this build delivers excellent 1080p and smooth 1440p gaming performance across all the latest titles, making it an outstanding value complete gaming PC available in the Kenyan market.\nFull Specifications:\n• Processor: Intel Core i7-10700 8 cores, 16 threads, up to 4.80GHz for smooth gaming and multitasking\n• Graphics Card: MSI GeForce RTX 3060 12GB Ventus 2X capable mid-range GPU for excellent 1080p and smooth 1440p gaming with DLSS support\n• Motherboard: Gigabyte B460M DS3H reliable and affordable Intel platform with DDR4 support\n• RAM: 16GB DDR4 smooth multitasking and responsive system performance\n• Storage: 512GB NVMe SSD fast boot times and quick game and application loading\n• CPU Cooler: Thermalright Assassin X 120mm SE efficient and quiet CPU cooling for sustained performance\n• Power Supply: Aztech Nova 750W stable and reliable power delivery for all components\n• Case: Darkflash M305 Micro ATX with 3 Fans excellent airflow and a clean gaming aesthetic\nIdeal for: 1080p and 1440p gaming, content creation, streaming, and gamers looking for a powerful and capable complete gaming PC in Kenya.\nPrice: KES 130,000 exceptional value for a complete ready-to-use mid-high range gaming PC in Nairobi. A perfect choice for Kenyan gamers looking for serious gaming performance at an accessible price.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
+        "brand": "gigabyte",
+        "category": "PRE-BUILT",
+        "price": 130000,
+        "countInStock": 1,
+        "condition": "New",
+        "rating": 0,
+        "numReviews": 0,
+        "specifications": {
+          "Cpu socket": "LGA1200 ",
+          "Ram slots": "4",
+          "Nvme slots": "1",
+          "Psu rating": "80-Plus ",
+          "Sata ports": "4",
+          "Warranty Period in Months": "6",
+          "No. Of fans included": "3",
+          "Accessories included": "None"
+        },
+        "offer": {
+          "enabled": false,
+          "type": "percentage",
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
+        },
+        "reviews": [],
+        "createdAt": "2026-08-20T13:02:11.864Z",
+        "updatedAt": "2026-08-22T06:26:12.007Z",
+        "__v": 1,
+        "id": "6a86fad346b0249ef2a41ad2"
+      }
+    },
+    {
+      "id": "6a85c36546b0249ef2a4171d",
+      "name": "MSI GeForce RTX 3070 Ventus 3X 8GB Graphics Card",
+      "path": "/product/msi-geforce-rtx-3070-ventus-3x-8gb-graphics-card-nairobi",
+      "category": "Graphics Cards",
+      "updatedAt": "2026-08-19T14:53:25.227Z",
+      "data": {
+        "_id": "6a85c36546b0249ef2a4171d",
+        "name": "MSI GeForce RTX 3070 Ventus 3X 8GB Graphics Card",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787151153447-763d2590-ac81-4f7d-a04d-fff3581d4a65.jpg",
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787151153447-763d2590-ac81-4f7d-a04d-fff3581d4a65.jpg",
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787151153447-763d2590-ac81-4f7d-a04d-fff3581d4a65.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787151153447-763d2590-ac81-4f7d-a04d-fff3581d4a65.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787151153447-763d2590-ac81-4f7d-a04d-fff3581d4a65.jpg"
+        },
+        "images": [
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787151153447-763d2590-ac81-4f7d-a04d-fff3581d4a65.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787151197440-01814a08-f482-444f-9430-a3318ab3b7da.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787151201659-c25a5f32-0e4b-49c8-b8ef-4596c8c0ac55.jpg"
+        ],
+        "images_r2": [
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787151197440-01814a08-f482-444f-9430-a3318ab3b7da.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787151201659-c25a5f32-0e4b-49c8-b8ef-4596c8c0ac55.jpg"
+        ],
+        "description": "Dominate your games with the MSI GeForce RTX 3070 Ventus 3X 8GB a powerful high-end GPU now available in Nairobi at KES 55,000. Powered by NVIDIA's Ampere architecture and featuring MSI's reliable triple fan Ventus cooling solution, this card delivers exceptional 1440p and capable 4K gaming performance, making it an outstanding choice for serious gamers and content creators in the Kenyan market.\nKey Features:\n• 8GB GDDR6 memory for smooth high-resolution 1440p and capable 4K gaming\n• NVIDIA Ampere architecture for outstanding performance and power efficiency\n• MSI Ventus triple fan cooling for exceptional thermal performance and quiet operation\n• DLSS support AI-powered performance boost for higher frame rates\n• Advanced ray tracing for stunning, cinematic in-game visuals\n• PCIe 4.0 support for fast data transfer speeds\n• Multiple display outputs supports up to 4 monitors simultaneously\n• Compatible with most ATX and mid-tower cases in Kenya\nIdeal for: 1440p and 4K gaming, content creation, video editing, streaming, and gamers looking for a powerful and capable NVIDIA RTX 3070 graphics card in Kenya.\nPrice: KES 55,000 excellent value in the high-performance GPU price range for Kenyan gamers and creators looking for a powerful and proven MSI Ventus 3X RTX 3070 graphics card.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
+        "brand": "msi",
+        "category": "Graphics Cards",
+        "price": 55000,
+        "countInStock": 6,
+        "condition": "New",
+        "rating": 0,
+        "numReviews": 0,
+        "specifications": {
+          "Vram in GB": "8",
+          "No. of fans": "3",
+          "Video output ports": "HDMI and DisplayPort ",
+          "Power consumption": "220W",
+          "Memory type": "GDDR6 "
+        },
+        "offer": {
+          "enabled": false,
+          "type": "percentage",
+          "amount": 0
+        },
+        "reviews": [],
+        "createdAt": "2026-08-19T14:53:25.227Z",
+        "updatedAt": "2026-08-19T14:53:25.227Z",
+        "__v": 0,
+        "id": "6a85c36546b0249ef2a4171d"
+      }
+    },
+    {
+      "id": "6a84637346b0249ef2a413b4",
+      "name": "ASUS Prime GeForce RTX 5070 12GB Triple Fan Graphics Card",
+      "path": "/product/asus-prime-geforce-rtx-5070-12gb-triple-fan-graphics-card-nairobi",
+      "category": "Graphics Cards",
+      "updatedAt": "2026-08-18T13:51:47.431Z",
+      "data": {
+        "_id": "6a84637346b0249ef2a413b4",
+        "name": "ASUS Prime GeForce RTX 5070 12GB Triple Fan Graphics Card",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787061103880-3a021a2b-5e32-4265-b22b-c9dddeec8e17.jpg",
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787061103880-3a021a2b-5e32-4265-b22b-c9dddeec8e17.jpg",
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787061103880-3a021a2b-5e32-4265-b22b-c9dddeec8e17.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787061103880-3a021a2b-5e32-4265-b22b-c9dddeec8e17.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787061103880-3a021a2b-5e32-4265-b22b-c9dddeec8e17.jpg"
+        },
+        "images": [
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787061103880-3a021a2b-5e32-4265-b22b-c9dddeec8e17.jpg"
+        ],
+        "images_r2": [],
+        "description": "Experience next-generation gaming performance with the ASUS Prime GeForce RTX 5070 12GB Triple Fan a powerful and reliable Blackwell GPU now available in Nairobi at KES 120,000. Powered by NVIDIA's latest Blackwell architecture and featuring ASUS's trusted triple fan cooling solution, this card delivers exceptional 1440p and stunning 4K gaming performance, making it an outstanding choice for serious gamers and content creators in the Kenyan market.\nKey Features:\n• NVIDIA Blackwell architecture for outstanding next-gen performance and power efficiency\n• 12GB GDDR7 memory for smooth high-resolution gaming and content creation\n• ASUS Prime triple fan cooling for exceptional thermal performance and quiet operation\n• DLSS 4 support AI-powered performance boost for higher frame rates\n• Ray tracing for stunning, cinematic in-game visuals\n• PCIe 5.0 support for ultra-fast data transfer speeds\n• Multiple display outputs supports up to 4 monitors simultaneously\n• Compatible with most ATX and mid-tower cases in Kenya\nIdeal for: 1440p and 4K gaming, content creation, video editing, streaming, and gamers looking for a powerful and future-proof next-gen NVIDIA RTX 5070 graphics card in Kenya.\nPrice: KES 120,000 excellent value in the high-performance GPU price range for Kenyan gamers and creators looking for a powerful and capable ASUS Prime NVIDIA RTX 5070 graphics card.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
+        "brand": "asus",
+        "category": "Graphics Cards",
+        "price": 120000,
+        "countInStock": 1,
+        "condition": "New",
+        "rating": 0,
+        "numReviews": 0,
+        "specifications": {
+          "Vram in GB": "12",
+          "No. of fans": "3",
+          "Video output ports": "HDMI and DisplayPort ",
+          "Power consumption": "250W",
+          "Memory type": "GDDR7"
+        },
+        "offer": {
+          "enabled": false,
+          "type": "percentage",
+          "amount": 0
+        },
+        "reviews": [],
+        "createdAt": "2026-08-18T13:51:47.431Z",
+        "updatedAt": "2026-08-18T13:51:47.431Z",
+        "__v": 0,
+        "id": "6a84637346b0249ef2a413b4"
+      }
+    },
+    {
+      "id": "6a84620d46b0249ef2a41397",
+      "name": "Intel Core i5-14400F Processor LGA1700",
+      "path": "/product/intel-core-i5-14400f-processor-lga1700-nairobi",
+      "category": "Processors",
+      "updatedAt": "2026-08-18T13:45:49.634Z",
+      "data": {
+        "_id": "6a84620d46b0249ef2a41397",
+        "name": "Intel Core i5-14400F Processor LGA1700",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787060745391-c0a7db80-d81c-49ce-bb5e-0f4e91ffeb07.jpg",
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787060745391-c0a7db80-d81c-49ce-bb5e-0f4e91ffeb07.jpg",
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787060745391-c0a7db80-d81c-49ce-bb5e-0f4e91ffeb07.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787060745391-c0a7db80-d81c-49ce-bb5e-0f4e91ffeb07.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787060745391-c0a7db80-d81c-49ce-bb5e-0f4e91ffeb07.jpg"
+        },
+        "images": [
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1787060745391-c0a7db80-d81c-49ce-bb5e-0f4e91ffeb07.jpg"
+        ],
+        "images_r2": [],
+        "description": "Build a powerful and capable gaming PC with the Intel Core i5-14400F a solid and excellent value 14th generation processor now available in Nairobi at KES 22,000. Part of Intel's Raptor Lake Refresh lineup, this processor delivers outstanding gaming and productivity performance at an accessible price, making it one of the best value mid-range CPUs available in the Kenyan market.\nKey Features:\n• 10 cores and 16 threads 6 Performance cores and 4 Efficient cores for smooth gaming and multitasking performance\n• Up to 4.70GHz maximum turbo frequency for fast and responsive computing\n• No integrated graphics dedicated GPU required for display output\n• Compatible with Intel 600 and 700 series motherboards (LGA1700 socket)\n• Supports DDR4 and DDR5 memory for flexible build options\n• PCIe 4.0 support for fast storage and graphics performance\n• Intel Thread Director for intelligent workload distribution across cores\nIdeal for: Mid-range gaming builds, content creation, everyday computing, and buyers looking for a powerful and capable 14th generation Intel processor at an affordable price in Kenya.\nPrice: KES 22,000 outstanding value in the mid-range CPU price range for Kenyan builders and gamers looking for a dependable and capable Raptor Lake Refresh processor without paying for integrated graphics.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
+        "brand": "intel",
+        "category": "Processors",
+        "price": 22000,
+        "countInStock": 5,
+        "condition": "New",
+        "rating": 0,
+        "numReviews": 0,
+        "specifications": {
+          "CPU Model": "Intel Core i5-14400F Processor",
+          "CPU Speed": "4.70GHz ",
+          "CPU Cores": "10",
+          "CPU Threads": "16",
+          "CPU Socket": "LGA1700 "
+        },
+        "offer": {
+          "enabled": false,
+          "type": "percentage",
+          "amount": 0
+        },
+        "reviews": [],
+        "createdAt": "2026-08-18T13:45:49.634Z",
+        "updatedAt": "2026-08-18T13:45:49.634Z",
+        "__v": 0,
+        "id": "6a84620d46b0249ef2a41397"
+      }
+    },
     {
       "id": "6a7dea1e45f74265e37aad93",
       "name": "Seagate Barracuda 8TB Internal Hard Disk Drive Desktop & Surveillance",
       "path": "/product/seagate-barracuda-8tb-internal-hard-disk-drive-desktop-surveillance-nairobi",
       "category": "Storage",
-      "updatedAt": "2026-08-13T16:00:30.457Z",
+      "updatedAt": "2026-08-18T13:44:20.825Z",
       "data": {
         "_id": "6a7dea1e45f74265e37aad93",
         "name": "Seagate Barracuda 8TB Internal Hard Disk Drive Desktop & Surveillance",
@@ -34,16 +341,20 @@
           "Model": "Seagate Barracuda 8TB Internal Hard Disk Drive Desktop & Surveillance",
           "Capacity": "8TB",
           "Type": "3.5\" SATA",
-          "Interface": ""
+          "Interface": "",
+          "Connectivity": "",
+          "Special Features": ""
         },
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-08-13T16:00:30.457Z",
-        "updatedAt": "2026-08-13T16:00:30.457Z",
+        "updatedAt": "2026-08-18T13:44:20.825Z",
         "__v": 0,
         "id": "6a7dea1e45f74265e37aad93"
       }
@@ -250,7 +561,7 @@
       "name": "Intel Core i7-8700 Processor LGA1151 – Nairobi Kenya",
       "path": "/product/intel-core-i7-8700-processor-lga1151-nairobi-kenya-nairobi",
       "category": "Processors",
-      "updatedAt": "2026-08-11T21:16:17.043Z",
+      "updatedAt": "2026-08-21T07:30:02.573Z",
       "data": {
         "_id": "6a7b9121507a1a66c94753a6",
         "name": "Intel Core i7-8700 Processor LGA1151 – Nairobi Kenya",
@@ -269,7 +580,7 @@
         "brand": "intel",
         "category": "Processors",
         "price": 16000,
-        "countInStock": 1,
+        "countInStock": 0,
         "condition": "Pre-Owned",
         "rating": 0,
         "numReviews": 0,
@@ -283,11 +594,13 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-08-11T21:16:17.043Z",
-        "updatedAt": "2026-08-11T21:16:17.043Z",
+        "updatedAt": "2026-08-21T07:30:02.573Z",
         "__v": 0,
         "id": "6a7b9121507a1a66c94753a6"
       }
@@ -344,7 +657,7 @@
       "name": "ASUS Dual GeForce RTX 5060 8GB Graphics Card – Nairobi Kenya",
       "path": "/product/asus-dual-geforce-rtx-5060-8gb-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-06T19:19:22.861Z",
+      "updatedAt": "2026-08-17T08:09:52.853Z",
       "data": {
         "_id": "6a74de3a09a5f575d02a4332",
         "name": "ASUS Dual GeForce RTX 5060 8GB Graphics Card – Nairobi Kenya",
@@ -362,7 +675,7 @@
         "description": "Step into next-generation gaming with the ASUS Dual GeForce RTX 5060 8GB — a powerful and reliable Blackwell GPU now available in Nairobi at KES 56,000. Powered by NVIDIA's latest Blackwell architecture and featuring ASUS's trusted Dual fan cooling solution, this card delivers exceptional 1080p and smooth 1440p gaming performance at an accessible price, making it an outstanding choice for gamers looking for next-gen performance in the Kenyan market.\nKey Features:\n• 8GB GDDR7 memory for fast and smooth 1080p and 1440p gameplay\n• NVIDIA Blackwell architecture for next-gen gaming performance and power efficiency\n• ASUS Dual fan cooling for efficient heat dissipation and quiet operation\n• DLSS 4 support — AI-powered performance boost for higher frame rates\n• Ray tracing for immersive, cinematic in-game visuals\n• PCIe 5.0 support for ultra-fast data transfer speeds\n• Axial-tech fan design for improved airflow and lower noise levels\n• Compatible with most ATX and mid-tower cases in Kenya\nIdeal for: 1080p and 1440p gaming, content creation, everyday computing, and gamers looking for a reliable and capable next-gen NVIDIA RTX 5060 graphics card in Kenya.\nPrice: KES 56,000 — excellent value in the mid-range GPU price range for Kenyan gamers looking for a dependable and future-proof next-gen NVIDIA RTX 5060 graphics card from a trusted brand.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "asus",
         "category": "Graphics Cards",
-        "price": 56000,
+        "price": 60000,
         "countInStock": 5,
         "condition": "New",
         "rating": 0,
@@ -377,11 +690,13 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-08-06T19:19:22.861Z",
-        "updatedAt": "2026-08-06T19:19:22.861Z",
+        "updatedAt": "2026-08-17T08:09:52.853Z",
         "__v": 0,
         "id": "6a74de3a09a5f575d02a4332"
       }
@@ -485,7 +800,7 @@
       "name": "ASUS ROG Strix X870-A Gaming WiFi Motherboard AM5– Nairobi Kenya",
       "path": "/product/asus-rog-strix-x870-a-gaming-wifi-motherboard-am5-nairobi-kenya-nairobi",
       "category": "Motherboards",
-      "updatedAt": "2026-08-06T19:03:15.473Z",
+      "updatedAt": "2026-08-21T07:30:24.460Z",
       "data": {
         "_id": "6a74da7309a5f575d02a4274",
         "name": "ASUS ROG Strix X870-A Gaming WiFi Motherboard AM5– Nairobi Kenya",
@@ -500,14 +815,12 @@
           "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786042985778-92b4fe02-5cbd-464b-83be-39950b9784bd.jpg",
           "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786042992193-9d7c6a83-70bb-498a-a4c7-bf83e36e9e52.jpg"
         ],
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786042992193-9d7c6a83-70bb-498a-a4c7-bf83e36e9e52.jpg"
-        ],
+        "images_r2": [],
         "description": "Build the ultimate AMD gaming PC with the ASUS ROG Strix X870-A Gaming WiFi — a premium and feature-packed ATX motherboard now available in Nairobi at KES 30,000. Designed for AMD Ryzen 9000, 8000 and 7000 series processors on the AM5 platform, this board combines flagship ROG features, advanced connectivity and robust power delivery, making it an outstanding choice for serious gamers and enthusiasts looking for a top-tier AMD platform in the Kenyan market.\nKey Features:\n• AMD X870 chipset — supports AMD Ryzen 9000, 8000 and 7000 series processors on the AM5 platform\n• ATX form factor — compatible with most standard mid-tower and full-tower cases\n• Built-in WiFi 7 and Bluetooth 5.4 for the fastest and most reliable wireless connectivity\n• 2.5Gb LAN for ultra-fast wired network speeds\n• PCIe 5.0 support for next-gen storage and graphics performance\n• DDR5 memory support for fast and future-proof system performance\n• Multiple M.2 slots for fast NVMe SSD storage\n• Robust VRM design for stable power delivery and overclocking headroom\n• Aura Sync RGB lighting for a premium ROG gaming aesthetic\n• USB 3.2 Gen 2 and USB4 ports for high-speed peripheral connectivity\nIdeal for: High-end AMD gaming builds, content creation workstations, overclocking enthusiasts, and PC builders looking for a premium and feature-packed X870 motherboard in Kenya.\nPrice: KES 30,000 — excellent value in the premium motherboard price range for Kenyan builders looking for a flagship AMD X870 platform with top-tier features and the latest connectivity.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "asus",
         "category": "Motherboards",
         "price": 30000,
-        "countInStock": 1,
+        "countInStock": 0,
         "condition": "Pre-Owned",
         "rating": 0,
         "numReviews": 0,
@@ -518,17 +831,20 @@
           "Ram type": "DDR5",
           "Ram slots": "4",
           "Nvme slots": "4",
+          "Sata ports": "",
           "Special Features": "Wifi 7"
         },
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-08-06T19:03:15.473Z",
-        "updatedAt": "2026-08-06T19:03:15.473Z",
-        "__v": 0,
+        "updatedAt": "2026-08-21T07:30:24.460Z",
+        "__v": 1,
         "id": "6a74da7309a5f575d02a4274"
       }
     },
@@ -763,7 +1079,7 @@
       "name": "Palit GeForce RTX 3080 GamingPro 12GB Graphics Card – Nairobi Kenya",
       "path": "/product/palit-geforce-rtx-3080-gamingpro-12gb-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-03T09:00:00.744Z",
+      "updatedAt": "2026-08-21T07:30:53.026Z",
       "data": {
         "_id": "6a70589009a5f575d02a35bb",
         "name": "Palit GeForce RTX 3080 GamingPro 12GB Graphics Card – Nairobi Kenya",
@@ -779,15 +1095,12 @@
           "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785747592053-f399c01e-bcea-4ca1-b9f7-9bd9312a9e98.jpg",
           "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785747597000-df1d902f-5646-4f55-b85c-e39c3ef4c3b2.jpg"
         ],
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785747592053-f399c01e-bcea-4ca1-b9f7-9bd9312a9e98.jpg",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785747597000-df1d902f-5646-4f55-b85c-e39c3ef4c3b2.jpg"
-        ],
+        "images_r2": [],
         "description": "Dominate your games with the Palit GeForce RTX 3080 GamingPro 12GB — a powerful high-end GPU now available in Nairobi at KES 70,000. Built on NVIDIA's Ampere architecture and featuring Palit's reliable GamingPro triple-fan cooling solution, this card delivers breathtaking 4K gaming performance and exceptional memory bandwidth, making it one of the best value high-end graphics cards available in the Kenyan market.\nKey Features:\n• 12GB GDDR6X memory — generous high-bandwidth VRAM for ultra-high resolution gaming and professional workloads\n• NVIDIA Ampere architecture for outstanding performance and power efficiency\n• Palit GamingPro triple-fan cooling for exceptional thermal performance and quiet operation\n• Factory overclocked for extra performance straight out of the box\n• DLSS support — AI-powered performance boost for higher frame rates\n• Advanced ray tracing for stunning, true-to-life in-game visuals\n• PCIe 4.0 support for fast data transfer speeds\n• Multiple display outputs — supports up to 4 monitors simultaneously\n• Compatible with most ATX and full-tower cases in Kenya\nIdeal for: 4K gaming, competitive esports, 3D rendering, video editing, VR gaming, and content creators looking for high-end GPU performance with generous VRAM at an accessible price in Kenya.\nPrice: KES 70,000 — exceptional value in the high-end GPU price range for Kenyan gamers and professionals looking for a powerful and proven Palit RTX 3080 GamingPro 12GB graphics card.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "palit",
         "category": "Graphics Cards",
         "price": 70000,
-        "countInStock": 1,
+        "countInStock": 0,
         "condition": "Pre-Owned",
         "rating": 0,
         "numReviews": 0,
@@ -801,12 +1114,14 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-08-03T09:00:00.744Z",
-        "updatedAt": "2026-08-03T09:00:00.744Z",
-        "__v": 0,
+        "updatedAt": "2026-08-21T07:30:53.026Z",
+        "__v": 1,
         "id": "6a70589009a5f575d02a35bb"
       }
     },
@@ -1378,7 +1693,7 @@
       "name": "Dell Alienware Aurora 16 – Core i9-14900KF & RTX 5060 Ti 16GB – Nairobi Kenya",
       "path": "/product/dell-alienware-aurora-16-core-i9-14900kf-rtx-5060-ti-16gb-nairobi-kenya-nairobi",
       "category": "OEM",
-      "updatedAt": "2026-08-06T18:59:02.008Z",
+      "updatedAt": "2026-08-17T08:10:12.567Z",
       "data": {
         "_id": "6a6265295225cccb39759fa4",
         "name": "Dell Alienware Aurora 16 – Core i9-14900KF & RTX 5060 Ti 16GB – Nairobi Kenya",
@@ -1418,16 +1733,10 @@
         },
         "reviews": [],
         "createdAt": "2026-07-23T19:02:01.533Z",
-        "updatedAt": "2026-08-06T18:59:02.008Z",
-        "__v": 2,
+        "updatedAt": "2026-08-17T08:10:12.567Z",
+        "__v": 3,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621986037-15b33996-3f1c-4e93-a8f6-030dd42eb9c2.webp",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786042720063-4d2b0d8a-ffcb-4be7-9470-f04fc533c43c.jpg",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786042724807-fa64d114-6c61-487e-aa0a-3151bdaf76ae.jpg",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786042729111-d1cb4819-95bc-47ad-a134-632c3cd8d7b5.jpg",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786042733506-e286137c-8b38-4ace-aafe-d045f032b59f.jpg",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786042738140-616ec197-80a4-4cd5-a247-7987dea03b9b.jpg"
-        ],
+        "images_r2": [],
         "image_r2_variants": {
           "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621986037-15b33996-3f1c-4e93-a8f6-030dd42eb9c2-thumbnail.webp",
           "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621986037-15b33996-3f1c-4e93-a8f6-030dd42eb9c2-medium.webp",
@@ -2138,7 +2447,7 @@
       "name": "ASUS ROG Strix RTX 2080 Ti Gaming OC 11GB Graphics Card – Nairobi Kenya",
       "path": "/product/asus-rog-strix-rtx-2080-ti-gaming-oc-11gb-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-07T09:28:14.689Z",
+      "updatedAt": "2026-08-21T07:32:04.734Z",
       "data": {
         "_id": "6a508c1a5225cccb39757e74",
         "name": "ASUS ROG Strix RTX 2080 Ti Gaming OC 11GB Graphics Card – Nairobi Kenya",
@@ -2153,7 +2462,7 @@
         "brand": "asus",
         "category": "Graphics Cards",
         "price": 45000,
-        "countInStock": 1,
+        "countInStock": 0,
         "condition": "Pre-Owned",
         "rating": 0,
         "numReviews": 0,
@@ -2166,14 +2475,10 @@
         },
         "reviews": [],
         "createdAt": "2026-07-10T06:07:22.475Z",
-        "updatedAt": "2026-08-07T09:28:14.689Z",
-        "__v": 2,
+        "updatedAt": "2026-08-21T07:32:04.734Z",
+        "__v": 3,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622036926-f7f42f16-e5f5-4209-8fe5-db9c7d6ef89f.webp",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786094880541-74e4e7d3-c643-4064-a487-73c90bc224b4.jpg",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786094886662-c3a42d92-0028-4b5b-9570-9cd69edf393c.jpg",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786094890882-92f5887e-52b5-432b-9bf1-47cfd3097892.jpg"
-        ],
+        "images_r2": [],
         "image_r2_variants": {
           "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622036926-f7f42f16-e5f5-4209-8fe5-db9c7d6ef89f-thumbnail.webp",
           "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622036926-f7f42f16-e5f5-4209-8fe5-db9c7d6ef89f-medium.webp",
@@ -3269,7 +3574,7 @@
       "name": "AMD Ryzen 7 5700X Processor AM4 – Nairobi Kenya",
       "path": "/product/amd-ryzen-7-5700x-processor-am4-nairobi-kenya-nairobi",
       "category": "Processors",
-      "updatedAt": "2026-08-01T22:00:12.733Z",
+      "updatedAt": "2026-08-14T17:35:11.335Z",
       "data": {
         "_id": "6a3d535bc1830e4cdddbde0a",
         "name": "AMD Ryzen 7 5700X Processor AM4 – Nairobi Kenya",
@@ -3280,8 +3585,8 @@
         "description": "Build a powerful and capable AMD gaming PC with the AMD Ryzen 7 5700X — an excellent value 8-core Zen 3 processor now available in Nairobi at KES 24,500. Built on AMD's acclaimed Zen 3 architecture, this processor delivers outstanding gaming and productivity performance at an accessible price, making it one of the best value mid-to-high range AMD processors available in the Kenyan market.\nKey Features:\n•8 cores and 16 threads for smooth multitasking and exceptional gaming performance\n•Up to 4.60GHz maximum boost frequency for fast and responsive computing\n•No integrated graphics — dedicated GPU required for display output\n•Compatible with AMD AM4 motherboards for broad platform compatibility\n•Supports DDR4 memory for fast and efficient system performance\n•PCIe 4.0 support for next-gen storage and graphics performance\n•AMD Precision Boost 2 for intelligent and automatic performance optimization\n•Built on TSMC 7nm process for excellent power efficiency\nIdeal for: Mid-to-high range gaming builds, content creation, video editing, streaming, and buyers looking for a powerful and capable AMD Zen 3 processor at an accessible price in Kenya.\nPrice: KES 24,500 — outstanding value in the mid-to-high range CPU price range for Kenyan builders and gamers looking for a powerful and proven AMD Ryzen 7 processor at an affordable price.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "ryzen",
         "category": "Processors",
-        "price": 24500,
-        "countInStock": 5,
+        "price": 25000,
+        "countInStock": 10,
         "condition": "New",
         "rating": 0,
         "numReviews": 0,
@@ -3295,11 +3600,13 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-06-25T16:12:11.252Z",
-        "updatedAt": "2026-08-01T22:00:12.733Z",
+        "updatedAt": "2026-08-14T17:35:11.335Z",
         "__v": 1,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621609586-609cb2c9-94cc-4b7f-99b6-823825f11f8e.webp",
         "images_r2": [],
@@ -3430,7 +3737,7 @@
       "name": "Samsung 32GB 2Rx8 DDR5 6000MHz Desktop Memory RAM – Nairobi Kenya",
       "path": "/product/samsung-32gb-2rx8-ddr5-6000mhz-desktop-memory-ram-nairobi-kenya-nairobi",
       "category": "Memory",
-      "updatedAt": "2026-07-31T22:50:18.540Z",
+      "updatedAt": "2026-08-21T07:33:51.827Z",
       "data": {
         "_id": "6a3d3e53c1830e4cdddbdd93",
         "name": "Samsung 32GB 2Rx8 DDR5 6000MHz Desktop Memory RAM – Nairobi Kenya",
@@ -3441,7 +3748,7 @@
         "description": "Elevate your PC's performance with the Samsung 32GB 2Rx8 DDR5 6000MHz Desktop Memory — a high-speed and reliable RAM kit now available in Nairobi at KES 52,000. Designed for serious gamers, content creators and power users who demand fast and responsive system performance, this DDR5 memory delivers exceptional speeds and rock-solid stability, making it an excellent choice for high-performance builds in the Kenyan market.\nKey Features:\n•32GB DDR5 memory — ample capacity for gaming, multitasking and content creation\n•6000MHz high-speed frequency for ultra-fast data transfer and smooth system performance\n•2Rx8 dual-rank configuration for improved memory bandwidth and performance\n•Intel XMP and AMD EXPO support for easy one-click performance optimization\n•Low latency for improved system responsiveness and gaming performance\n•Compatible with Intel 12th, 13th and 14th Gen and AMD Ryzen 7000 series platforms\nSamsung build quality for exceptional reliability and long-term stability\nIdeal for: High-performance gaming builds, content creation, video editing, streaming, and PC enthusiasts looking for fast and reliable DDR5 memory in Kenya.\nPrice: KES 52,000 — excellent value in the high-performance RAM price range for Kenyan gamers and builders looking for fast, reliable and high-capacity DDR5 memory from a trusted brand.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "samsung",
         "category": "Memory",
-        "price": 52000,
+        "price": 60000,
         "countInStock": 2,
         "condition": "New",
         "rating": 0,
@@ -3449,14 +3756,21 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-06-25T14:42:27.402Z",
-        "updatedAt": "2026-07-31T22:50:18.540Z",
+        "updatedAt": "2026-08-21T07:33:51.827Z",
         "__v": 1,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785538213406-e07e19e1-d194-448b-8b0f-e9065efcd19e.webp",
         "images_r2": [],
+        "specifications": {
+          "Cas latency": "",
+          "Memory Speed": "",
+          "No. of modules": ""
+        },
         "id": "6a3d3e53c1830e4cdddbdd93"
       }
     },
@@ -4808,7 +5122,7 @@
       "name": "MSI GeForce RTX 5070 12GB Ventus 2X Graphics Card – Nairobi Kenya",
       "path": "/product/msi-geforce-rtx-5070-12gb-ventus-2x-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-13T16:44:00.396Z",
+      "updatedAt": "2026-08-18T13:49:00.921Z",
       "data": {
         "_id": "6a25ecafc1830e4cdddbc51f",
         "name": "MSI GeForce RTX 5070 12GB Ventus 2X Graphics Card – Nairobi Kenya",
@@ -4816,11 +5130,11 @@
         "images": [
           "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786639410341-df387bb5-e7ac-44d2-95a1-187b71b92a9c.jpg"
         ],
-        "description": "Experience next-generation gaming performance with the MSI GeForce RTX 5070 Ventus 2X — a powerful mid-to-high-end Blackwell GPU now available in Nairobi at KES 99,000. Powered by NVIDIA's latest Blackwell architecture, this card delivers exceptional 1440p and 4K gaming performance with MSI's reliable dual-fan Ventus cooling solution, making it an outstanding choice for serious gamers and content creators in the Kenyan market.\nKey Features:\n•NVIDIA Blackwell architecture for outstanding next-gen performance and power efficiency\n•Dual-fan Ventus 2X cooling for efficient heat dissipation and quiet operation\n•DLSS 4 support — AI-powered performance boost for higher frame rates\n•Advanced ray tracing for stunning, cinematic in-game visuals\n•PCIe 5.0 support for ultra-fast data transfer speeds\n•Multiple display outputs — supports up to 4 monitors simultaneously\n•Compatible with most ATX and mid-tower cases in Kenya\nIdeal for: 1440p and 4K gaming, content creation, video editing, streaming, and gamers looking for a powerful and future-proof next-gen NVIDIA graphics card in Kenya.\nPrice: KES 99,000 — excellent value in the high-performance GPU price range for Kenyan gamers and creators looking for a powerful and capable NVIDIA RTX 5070 graphics card.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
+        "description": "Experience next-generation gaming performance with the MSI GeForce RTX 5070 Ventus 2X. A powerful mid-to-high-end Blackwell GPU now available in Nairobi at KES 105,000. Powered by NVIDIA's latest Blackwell architecture, this card delivers exceptional 1440p and 4K gaming performance with MSI's reliable dual-fan Ventus cooling solution, making it an outstanding choice for serious gamers and content creators in the Kenyan market.\nKey Features:\n•NVIDIA Blackwell architecture for outstanding next-gen performance and power efficiency\n•Dual-fan Ventus 2X cooling for efficient heat dissipation and quiet operation\n•DLSS 4 support AI-powered performance boost for higher frame rates\n•Advanced ray tracing for stunning, cinematic in-game visuals\n•PCIe 5.0 support for ultra-fast data transfer speeds\n•Multiple display outputs. supports up to 4 monitors simultaneously\n•Compatible with most ATX and mid-tower cases in Kenya\nIdeal for: 1440p and 4K gaming, content creation, video editing, streaming, and gamers looking for a powerful and future-proof next-gen NVIDIA graphics card in Kenya.\nPrice: KES 105,000. excellent value in the high-performance GPU price range for Kenyan gamers and creators looking for a powerful and capable NVIDIA RTX 5070 graphics card.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "msi",
         "category": "Graphics Cards",
-        "price": 99000,
-        "countInStock": 0,
+        "price": 105000,
+        "countInStock": 1,
         "condition": "New",
         "rating": 0,
         "numReviews": 0,
@@ -4840,7 +5154,7 @@
         },
         "reviews": [],
         "createdAt": "2026-06-07T22:11:59.471Z",
-        "updatedAt": "2026-08-13T16:44:00.396Z",
+        "updatedAt": "2026-08-18T13:49:00.921Z",
         "__v": 1,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786639410341-df387bb5-e7ac-44d2-95a1-187b71b92a9c.jpg",
         "images_r2": [],
@@ -4964,7 +5278,7 @@
       "name": "Colorful iGame GeForce RTX 3080 Ti 12GB Graphics Card – Nairobi Kenya",
       "path": "/product/colorful-igame-geforce-rtx-3080-ti-12gb-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-13T16:50:51.772Z",
+      "updatedAt": "2026-08-21T07:34:51.536Z",
       "data": {
         "_id": "6a25e7c2c1830e4cdddbc4fb",
         "name": "Colorful iGame GeForce RTX 3080 Ti 12GB Graphics Card – Nairobi Kenya",
@@ -4978,7 +5292,7 @@
         "brand": "colorful",
         "category": "Graphics Cards",
         "price": 70000,
-        "countInStock": 1,
+        "countInStock": 0,
         "condition": "Pre-Owned",
         "rating": 0,
         "numReviews": 0,
@@ -4998,13 +5312,10 @@
         },
         "reviews": [],
         "createdAt": "2026-06-07T21:50:58.778Z",
-        "updatedAt": "2026-08-13T16:50:51.772Z",
-        "__v": 2,
+        "updatedAt": "2026-08-21T07:34:51.536Z",
+        "__v": 3,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786639836530-63d134d7-84fc-4573-9303-1d62ed0c5be6.jpg",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786639843192-28a095f7-ea1e-4c11-86d2-ff607749e5e3.jpg",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786639847657-9460cc16-93af-4475-9c29-a0b65f11f76b.jpg"
-        ],
+        "images_r2": [],
         "image_r2_variants": {
           "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786639836530-63d134d7-84fc-4573-9303-1d62ed0c5be6.jpg",
           "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786639836530-63d134d7-84fc-4573-9303-1d62ed0c5be6.jpg",
@@ -5772,13 +6083,13 @@
       "name": "Aztech Prime 850W 80 Plus Bronze Modular Power Supply Unit – Nairobi Kenya",
       "path": "/product/aztech-prime-850w-80-plus-bronze-modular-power-supply-unit-nairobi-kenya-nairobi",
       "category": "Power Supply",
-      "updatedAt": "2026-07-31T22:40:28.731Z",
+      "updatedAt": "2026-08-14T17:52:19.722Z",
       "data": {
         "_id": "69f270f330ac66719040cca3",
         "name": "Aztech Prime 850W 80 Plus Bronze Modular Power Supply Unit – Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537625846-5229f67a-7834-4bae-a7f7-11772b80109c.webp",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786729935415-e6d7d732-834b-4379-8518-5e036734890d.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537625846-5229f67a-7834-4bae-a7f7-11772b80109c.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786729935415-e6d7d732-834b-4379-8518-5e036734890d.jpg"
         ],
         "description": "Power your gaming PC or workstation with confidence using the Aztech Prime 850W 80 Plus Bronze Modular Power Supply Unit — a robust and reliable PSU now available in Nairobi at KES 13,000. Designed for mid-to-high-end gaming builds that require stable and clean power delivery, the Aztech Prime 850W is an excellent choice for Kenyan builders running demanding GPUs and processors without breaking the bank.\nKey Features:\n•850W power output — sufficient for most high-end single GPU gaming builds\n•80 Plus Bronze certified — up to 85% power efficiency for reduced energy consumption and lower electricity bills\n•Fully modular design — attach only the cables you need for a cleaner and more manageable build\n•PCIe Gen 5 12-pin 600W cable included — ready for the latest high-end GPUs straight out of the box\n•Stable and clean power delivery for consistent system performance\n•Active PFC for improved power efficiency and reduced energy consumption\n•Multiple PCIe connectors for high-end GPU configurations\n•Over-voltage, under-voltage and short-circuit protection for component safety\n120mm quiet fan for efficient cooling and low noise operation\n•Compatible with ATX mid-tower and full-tower cases\nIdeal for: High-end gaming builds, content creation workstations, and PC builders looking for a powerful, efficient and modular PSU to support demanding components in Kenya.\nPrice: KES 13,000 — great value in the mid-to-high-range PSU price range for Kenyan builders looking for a powerful, modular and 80 Plus Bronze certified power supply for their gaming PC.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "aztech",
@@ -5791,6 +6102,7 @@
         "specifications": {
           "Model": "Aztech Prime 850W 80 Plus Bronze Modular",
           "Form Factor": "ATX",
+          "Connectors": "",
           "Watts": "850",
           "Power Rating": "80-Plus Bronze",
           "Special Features": "modular, pcie Gen 5 cable"
@@ -5798,14 +6110,21 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-04-29T20:58:27.915Z",
-        "updatedAt": "2026-07-31T22:40:28.731Z",
+        "updatedAt": "2026-08-14T17:52:19.722Z",
         "__v": 1,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785537625846-5229f67a-7834-4bae-a7f7-11772b80109c.webp",
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786729935415-e6d7d732-834b-4379-8518-5e036734890d.jpg",
         "images_r2": [],
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786729935415-e6d7d732-834b-4379-8518-5e036734890d.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786729935415-e6d7d732-834b-4379-8518-5e036734890d.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786729935415-e6d7d732-834b-4379-8518-5e036734890d.jpg"
+        },
         "id": "69f270f330ac66719040cca3"
       }
     },
@@ -5814,14 +6133,14 @@
       "name": "Upsiren Thermal Putty 50g 16.8W/m.k – Thermal Pad Replacement – Nairobi Kenya",
       "path": "/product/upsiren-thermal-putty-50g-168wmk-thermal-pad-replacement-nairobi-kenya-nairobi",
       "category": "Accessories",
-      "updatedAt": "2026-07-31T20:10:31.659Z",
+      "updatedAt": "2026-08-14T17:54:06.323Z",
       "data": {
         "_id": "69f2691630ac66719040cc98",
         "name": "Upsiren Thermal Putty 50g 16.8W/m.k – Thermal Pad Replacement – Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528622038-7ce1a3d2-3a29-4cf5-9dc0-9265973c8cbe.k – thermal pad replacement – nairobi kenya",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730035841-d21861b4-916f-4ad3-9e71-5f38909cc6f6.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528622038-7ce1a3d2-3a29-4cf5-9dc0-9265973c8cbe.k – thermal pad replacement – nairobi kenya",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528628489-b92eebe4-c3c8-4874-8736-55081b8cf284.k – thermal pad replacement – nairobi kenya"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730035841-d21861b4-916f-4ad3-9e71-5f38909cc6f6.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730041944-56bb3fff-34b8-434b-95b1-c2756dbdeda5.jpg"
         ],
         "description": "Achieve optimal thermal performance with the Upsiren Thermal Putty 50g — a premium high-conductivity thermal pad replacement now available in Nairobi at KES 10,000. With an impressive thermal conductivity rating of 16.8W/m.k, this thermal putty delivers superior heat transfer between components and heatsinks, making it an excellent choice for PC builders, laptop repair technicians and overclockers looking for the best thermal solution in Kenya.\nKey Features:\n•16.8W/m.k thermal conductivity — exceptional heat transfer performance\n50g generous quantity — sufficient for multiple applications and repairs\n•Thermal pad replacement — ideal for GPUs, CPUs, VRAMs, MOSFETs and other components\n•Soft and pliable putty consistency — easy to apply and conform to any surface\n•Non-electrically conductive — safe for use around sensitive electronic components\n•Excellent gap-filling properties for uneven or irregular surfaces\n•Long-lasting and stable performance under high temperatures\n•Compatible with laptops, desktops, gaming consoles and other electronic devices\nIdeal for: PC builders, laptop repair technicians, overclockers, console repairs, GPU and CPU thermal pad replacements, and anyone looking for a high-performance thermal solution in Kenya.\nPrice: KES 10,000 — premium thermal putty at a competitive price in Nairobi for technicians and builders looking for a superior and versatile thermal management solution.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "upsiren",
@@ -5834,16 +6153,23 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-04-29T20:24:54.441Z",
-        "updatedAt": "2026-07-31T20:10:31.659Z",
-        "__v": 1,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528622038-7ce1a3d2-3a29-4cf5-9dc0-9265973c8cbe.k – thermal pad replacement – nairobi kenya",
+        "updatedAt": "2026-08-14T17:54:06.323Z",
+        "__v": 2,
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730035841-d21861b4-916f-4ad3-9e71-5f38909cc6f6.jpg",
         "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528628489-b92eebe4-c3c8-4874-8736-55081b8cf284.k – thermal pad replacement – nairobi kenya"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730041944-56bb3fff-34b8-434b-95b1-c2756dbdeda5.jpg"
         ],
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730035841-d21861b4-916f-4ad3-9e71-5f38909cc6f6.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730035841-d21861b4-916f-4ad3-9e71-5f38909cc6f6.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730035841-d21861b4-916f-4ad3-9e71-5f38909cc6f6.jpg"
+        },
         "id": "69f2691630ac66719040cc98"
       }
     },
@@ -5852,7 +6178,7 @@
       "name": "Intel Core i5-12500 Processor LGA1700 – Nairobi Kenya",
       "path": "/product/intel-core-i5-12500-processor-lga1700-nairobi-kenya-nairobi",
       "category": "Processors",
-      "updatedAt": "2026-07-31T20:10:18.203Z",
+      "updatedAt": "2026-08-21T07:35:50.614Z",
       "data": {
         "_id": "69f10be330ac66719040ca73",
         "name": "Intel Core i5-12500 Processor LGA1700 – Nairobi Kenya",
@@ -5864,7 +6190,7 @@
         "brand": "intel",
         "category": "Processors",
         "price": 15000,
-        "countInStock": 2,
+        "countInStock": 0,
         "condition": "Pre-Owned",
         "rating": 0,
         "numReviews": 0,
@@ -5878,11 +6204,13 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-04-28T19:34:59.381Z",
-        "updatedAt": "2026-07-31T20:10:18.203Z",
+        "updatedAt": "2026-08-21T07:35:50.614Z",
         "__v": 1,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528615361-d8aa4a5a-e2ee-4f74-a33f-ebc5f5abcd89.webp",
         "images_r2": [],
@@ -6120,13 +6448,13 @@
       "name": "Redragon Zeus Pro H510 Wireless Gaming Headset 7.1 Surround 3-Mode Connectivity – Nairobi Kenya",
       "path": "/product/redragon-zeus-pro-h510-wireless-gaming-headset-71-surround-3-mode-connectivity-nairobi-kenya-nairobi",
       "category": "Accessories",
-      "updatedAt": "2026-08-01T21:58:51.743Z",
+      "updatedAt": "2026-08-14T17:55:27.134Z",
       "data": {
         "_id": "69ed2ab630ac66719040c6d1",
         "name": "Redragon Zeus Pro H510 Wireless Gaming Headset 7.1 Surround 3-Mode Connectivity – Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621528315-d8c5b526-bfee-4ab0-961d-3e7a4320f41e.1 surround 3-mode connectivity – nairobi kenya",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730123216-760b00d3-28a5-463d-8bc8-26af27e5fad6.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621528315-d8c5b526-bfee-4ab0-961d-3e7a4320f41e.1 surround 3-mode connectivity – nairobi kenya",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730123216-760b00d3-28a5-463d-8bc8-26af27e5fad6.jpg",
           "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528575417-fe69fd7c-f04b-4a13-a2f3-2e8245e4b7bc.1 surround 3-mode connectivity – nairobi kenya"
         ],
         "description": "Experience premium audio and crystal-clear communication with the Redragon Zeus Pro H510 Gaming Headset — a versatile and feature-packed headset now available in Nairobi at KES 7,500. Designed for serious gamers who demand exceptional sound quality and flexible connectivity, the Zeus Pro H510 delivers immersive audio performance across multiple platforms, making it one of the best value gaming headsets available in the Kenyan market.\nKey Features:\n•7.1 virtual surround sound for immersive and positional in-game audio\n•53mm large-aperture drivers for powerful bass and crystal-clear highs\n•Detachable noise-cancelling microphone for clear and flexible in-game communication\n•Three connectivity modes — Bluetooth, USB 2.4GHz wireless and 3.5mm for maximum flexibility\n•Soft memory foam ear cushions for comfortable extended gaming sessions\n•RGB lighting for a premium gaming aesthetic\n•Compatible with PC, PS4, PS5, Xbox and Nintendo Switch\n•Durable and lightweight build for long-term comfort and reliability\nIdeal for: PC gaming, console gaming, online multiplayer, streaming, and gamers looking for a versatile and feature-rich wireless gaming headset in Kenya.\nPrice: KES 7,500 — excellent value in the mid-range gaming headset price range for Kenyan gamers looking for premium audio quality and flexible wireless connectivity.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
@@ -6140,20 +6468,20 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-04-25T20:57:26.621Z",
-        "updatedAt": "2026-08-01T21:58:51.743Z",
-        "__v": 1,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621528315-d8c5b526-bfee-4ab0-961d-3e7a4320f41e.1 surround 3-mode connectivity – nairobi kenya",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528575417-fe69fd7c-f04b-4a13-a2f3-2e8245e4b7bc.1 surround 3-mode connectivity – nairobi kenya"
-        ],
+        "updatedAt": "2026-08-14T17:55:27.134Z",
+        "__v": 2,
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730123216-760b00d3-28a5-463d-8bc8-26af27e5fad6.jpg",
+        "images_r2": [],
         "image_r2_variants": {
-          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621528315-d8c5b526-bfee-4ab0-961d-3e7a4320f41e.1 surround 3-mode connectivity – nairobi kenya",
-          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621528315-d8c5b526-bfee-4ab0-961d-3e7a4320f41e.1 surround 3-mode connectivity – nairobi kenya",
-          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621528315-d8c5b526-bfee-4ab0-961d-3e7a4320f41e.1 surround 3-mode connectivity – nairobi kenya"
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730123216-760b00d3-28a5-463d-8bc8-26af27e5fad6.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730123216-760b00d3-28a5-463d-8bc8-26af27e5fad6.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730123216-760b00d3-28a5-463d-8bc8-26af27e5fad6.jpg"
         },
         "id": "69ed2ab630ac66719040c6d1"
       }
@@ -6163,15 +6491,15 @@
       "name": "Redragon Zeus X Gaming Headset 7.1 Virtual Surround Sound – Nairobi Kenya",
       "path": "/product/redragon-zeus-x-gaming-headset-71-virtual-surround-sound-nairobi-kenya-nairobi",
       "category": "Accessories",
-      "updatedAt": "2026-08-01T21:58:46.178Z",
+      "updatedAt": "2026-08-14T17:57:23.571Z",
       "data": {
         "_id": "69ed298030ac66719040c6ca",
         "name": "Redragon Zeus X Gaming Headset 7.1 Virtual Surround Sound – Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621523521-15e7be3f-e58f-49b5-933d-bd496959a6c0.1 virtual surround sound – nairobi kenya",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730229343-9625c377-8db8-4ee8-8da2-028a41d047c9.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621523521-15e7be3f-e58f-49b5-933d-bd496959a6c0.1 virtual surround sound – nairobi kenya",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528555953-9aa32792-5046-4f88-b5f5-c131e3a503d1.1 virtual surround sound – nairobi kenya",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528562453-992ed241-b397-420d-93eb-7c9542e3d581.1 virtual surround sound – nairobi kenya"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730229343-9625c377-8db8-4ee8-8da2-028a41d047c9.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730235163-39e5d4e2-bf3c-4110-96bf-7ad85459065e.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730239614-e4635440-05ba-474b-a82d-09c829f1e374.jpg"
         ],
         "description": "Hear every detail of the battlefield with the Redragon Zeus X Gaming Headset — an immersive and feature-packed gaming headphones now available in Nairobi at KES 6,800. Designed for gamers who want clear, powerful audio and precise in-game communication, the Zeus X delivers exceptional sound quality and comfort at an affordable price, making it one of the best value gaming headsets available in the Kenyan market.\nKey Features:\n•7.1 virtual surround sound for immersive and positional in-game audio\n•50mm large-aperture drivers for deep bass and clear highs\n•Noise-cancelling retractable microphone for clear in-game communication\n•Soft memory foam ear cushions for comfortable extended gaming sessions\n•RGB lighting for a premium gaming aesthetic\n•Compatible with PC, PS4, PS5, Xbox and Nintendo Switch\n•USB and 3.5mm connectivity options for flexible setup\n•Durable braided cable for long-term reliability\nIdeal for: PC gaming, console gaming, online multiplayer, streaming, and gamers looking for an affordable and feature-rich gaming headset in Kenya.\nPrice: KES 6,800 — great value in the budget-to-mid-range gaming headset price range for Kenyan gamers looking for immersive audio and clear communication without breaking the bank.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "redragon",
@@ -6184,21 +6512,23 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-04-25T20:52:16.247Z",
-        "updatedAt": "2026-08-01T21:58:46.178Z",
-        "__v": 1,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621523521-15e7be3f-e58f-49b5-933d-bd496959a6c0.1 virtual surround sound – nairobi kenya",
+        "updatedAt": "2026-08-14T17:57:23.571Z",
+        "__v": 2,
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730229343-9625c377-8db8-4ee8-8da2-028a41d047c9.jpg",
         "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528555953-9aa32792-5046-4f88-b5f5-c131e3a503d1.1 virtual surround sound – nairobi kenya",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528562453-992ed241-b397-420d-93eb-7c9542e3d581.1 virtual surround sound – nairobi kenya"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730235163-39e5d4e2-bf3c-4110-96bf-7ad85459065e.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730239614-e4635440-05ba-474b-a82d-09c829f1e374.jpg"
         ],
         "image_r2_variants": {
-          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621523521-15e7be3f-e58f-49b5-933d-bd496959a6c0.1 virtual surround sound – nairobi kenya",
-          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621523521-15e7be3f-e58f-49b5-933d-bd496959a6c0.1 virtual surround sound – nairobi kenya",
-          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621523521-15e7be3f-e58f-49b5-933d-bd496959a6c0.1 virtual surround sound – nairobi kenya"
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730229343-9625c377-8db8-4ee8-8da2-028a41d047c9.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730229343-9625c377-8db8-4ee8-8da2-028a41d047c9.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730229343-9625c377-8db8-4ee8-8da2-028a41d047c9.jpg"
         },
         "id": "69ed298030ac66719040c6ca"
       }
@@ -6295,13 +6625,13 @@
       "name": "Deepcool AK400 V5 ARGB 120mm Air CPU Cooler White – Nairobi Kenya",
       "path": "/product/deepcool-ak400-v5-argb-120mm-air-cpu-cooler-white-nairobi-kenya-nairobi",
       "category": "CPU Cooling",
-      "updatedAt": "2026-07-31T21:06:51.930Z",
+      "updatedAt": "2026-08-14T18:00:23.986Z",
       "data": {
         "_id": "69ed250f30ac66719040c67f",
         "name": "Deepcool AK400 V5 ARGB 120mm Air CPU Cooler White – Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785532009157-f3c4b913-b4c7-4c5b-9709-734896438240.webp",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730420158-3bb32fe8-e219-4895-81b1-056e69b69015.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785532009157-f3c4b913-b4c7-4c5b-9709-734896438240.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730420158-3bb32fe8-e219-4895-81b1-056e69b69015.jpg"
         ],
         "description": "Keep your processor cool and your build looking great with the Deepcool AK400 V5 ARGB 120mm Air CPU Cooler — a high-performance and visually stunning cooler now available in Nairobi at KES 4,200. Designed for gamers and PC builders who want reliable CPU cooling with premium ARGB lighting, the AK400 V5 delivers excellent thermal performance at an accessible price, making it one of the best value air coolers available in the Kenyan market.\nKey Features:\n•120mm ARGB fan for efficient airflow and stunning lighting effects\n•Four heat pipes for superior heat dissipation and consistent CPU temperatures\n•Compatible with Intel LGA1700, LGA1200, LGA115X and AMD AM5, AM4 sockets\n•Low noise operation for a quiet gaming and working environment\n•Tool-free installation for easy mounting and setup\n•ARGB lighting compatible with most major motherboard RGB sync software\n•Compact design suitable for most mid-tower and full-tower cases\nIdeal for: Gaming builds, budget-friendly workstations, ARGB builds, and PC builders looking for a reliable and attractive air CPU cooler in Kenya.\nPrice: KES 4,200 — outstanding value in the budget-to-mid-range CPU cooler price range for Kenyan builders looking for efficient and visually impressive CPU cooling.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "deepcool",
@@ -6312,9 +6642,10 @@
         "rating": 0,
         "numReviews": 0,
         "specifications": {
-          "Color": "White",
           "Model": "Deepcool AK400 V5 ARGB 120mm Air CPU Cooler",
+          "Color": "White",
           "Cooling method": "Air",
+          "Radiator size": "",
           "No. of fans": "1",
           "Fans size": "120120mmm",
           "Special Features": "ARGB"
@@ -6322,14 +6653,21 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-04-25T20:33:19.642Z",
-        "updatedAt": "2026-07-31T21:06:51.930Z",
+        "updatedAt": "2026-08-14T18:00:23.986Z",
         "__v": 1,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785532009157-f3c4b913-b4c7-4c5b-9709-734896438240.webp",
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730420158-3bb32fe8-e219-4895-81b1-056e69b69015.jpg",
         "images_r2": [],
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730420158-3bb32fe8-e219-4895-81b1-056e69b69015.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730420158-3bb32fe8-e219-4895-81b1-056e69b69015.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730420158-3bb32fe8-e219-4895-81b1-056e69b69015.jpg"
+        },
         "id": "69ed250f30ac66719040c67f"
       }
     },
@@ -6338,16 +6676,14 @@
       "name": "Mid-High Range Gaming PC – AMD Ryzen 7 5700X & RTX 3060 12GB – Nairobi Kenya",
       "path": "/product/mid-high-range-gaming-pc-amd-ryzen-7-5700x-rtx-3060-12gb-nairobi-kenya-nairobi",
       "category": "PRE-BUILT",
-      "updatedAt": "2026-07-31T21:06:44.650Z",
+      "updatedAt": "2026-08-14T18:01:07.197Z",
       "data": {
         "_id": "69ed233c30ac66719040c665",
         "name": "Mid-High Range Gaming PC – AMD Ryzen 7 5700X & RTX 3060 12GB – Nairobi Kenya",
         "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531974125-6fbd47f6-439c-40b2-b801-eeb48bdb3dcd.webp",
         "images": [
           "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531974125-6fbd47f6-439c-40b2-b801-eeb48bdb3dcd.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531981572-6a0c5edf-99b0-482e-aaec-27caa455ad79.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531990456-3af7c3bc-ed5f-4c4d-8309-073def98956e.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531999963-f19ea8b4-bb96-4cdd-958b-49aa093e8627.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531981572-6a0c5edf-99b0-482e-aaec-27caa455ad79.webp"
         ],
         "description": "Build your ultimate gaming setup with this expertly assembled Mid-High Range Gaming PC — a powerful and well-balanced gaming machine now available in Nairobi at KES 139,000. Featuring the AMD Ryzen 7 5700X processor paired with the NVIDIA RTX 3060 12GB graphics card, this build delivers exceptional 1080p and smooth 1440p gaming performance across all the latest titles, making it an outstanding value complete gaming PC available in the Kenyan market.\nFull Specifications:\n• Processor: AMD Ryzen 7 5700X — 8 cores, 16 threads, up to 4.60GHz for smooth gaming and multitasking\n• Graphics Card: NVIDIA RTX 3060 12GB — capable mid-range GPU for exceptional 1080p and smooth 1440p gaming with DLSS support\n• Motherboard: Gigabyte B550M Aorus Elite — reliable and feature-packed AMD platform with DDR4 support\n• RAM: 16GB DDR4 — smooth multitasking and responsive system performance\n• Storage: 512GB NVMe SSD — fast boot times and quick game and application loading\n• CPU Cooler: Deepcool 120mm Air Cooler — efficient and quiet CPU cooling for sustained performance\n• Power Supply: Aztech Nova 750W — stable and reliable power delivery for all components\n• Case: Aerocool B509A Flow with 6 ARGB Fans — outstanding airflow and stunning RGB lighting\nIdeal for: 1080p and 1440p gaming, content creation, streaming, and gamers looking for a powerful and capable complete gaming PC in Kenya.\nPrice: KES 139,000 — exceptional value for a complete ready-to-use mid-high range gaming PC in Nairobi. A perfect choice for Kenyan gamers looking for serious gaming performance at an accessible price.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "gigabyte",
@@ -6376,14 +6712,10 @@
         },
         "reviews": [],
         "createdAt": "2026-04-25T20:25:32.859Z",
-        "updatedAt": "2026-07-31T21:06:44.650Z",
-        "__v": 1,
+        "updatedAt": "2026-08-14T18:01:07.197Z",
+        "__v": 2,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531974125-6fbd47f6-439c-40b2-b801-eeb48bdb3dcd.webp",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531981572-6a0c5edf-99b0-482e-aaec-27caa455ad79.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531990456-3af7c3bc-ed5f-4c4d-8309-073def98956e.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531999963-f19ea8b4-bb96-4cdd-958b-49aa093e8627.webp"
-        ],
+        "images_r2": [],
         "id": "69ed233c30ac66719040c665"
       }
     },
@@ -6392,13 +6724,13 @@
       "name": "Aztech Alpha 1000W 80 Plus Gold Power Supply Unit – Nairobi Kenya",
       "path": "/product/aztech-alpha-1000w-80-plus-gold-power-supply-unit-nairobi-kenya-nairobi",
       "category": "Power Supply",
-      "updatedAt": "2026-07-31T21:06:08.984Z",
+      "updatedAt": "2026-08-14T18:02:55.993Z",
       "data": {
         "_id": "69ed213330ac66719040c656",
         "name": "Aztech Alpha 1000W 80 Plus Gold Power Supply Unit – Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531966157-4ea55741-75a1-4ea4-ae91-3d25afb1d2f5.webp",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730571635-4febd041-0d15-4415-bf2a-5f0304aab832.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531966157-4ea55741-75a1-4ea4-ae91-3d25afb1d2f5.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730571635-4febd041-0d15-4415-bf2a-5f0304aab832.jpg"
         ],
         "description": "Power your high-end gaming PC with confidence using the Aztech Alpha 1000W 80 Plus Gold Power Supply Unit — a robust and reliable PSU now available in Nairobi at KES 19,000. Designed for demanding gaming builds and workstations that require stable and clean power delivery, the Aztech Alpha 1000W is an excellent choice for Kenyan builders running high-end GPUs and processors.\nKey Features:\n•1000W power output — sufficient for the most demanding high-end gaming builds\n•80 Plus Gold certified — up to 90% power efficiency for reduced energy consumption and lower electricity bills\n•PCIe Gen 5 12-pin 600W cable included — ready for the latest high-end GPUs straight out of the box\n•Stable and clean power delivery for consistent system performance\n•Active PFC for improved power efficiency\n•Multiple PCIe connectors for high-end single and dual GPU configurations\n•Fully sleeved cables for clean cable management and improved airflow\n•Over-voltage, under-voltage and short-circuit protection for component safety\n•120mm quiet fan for efficient cooling and low noise operation\n•Compatible with ATX mid-tower and full-tower cases\nIdeal for: High-end gaming builds, workstations, multi-GPU setups, and PC builders looking for a powerful and reliable PSU to support demanding components in Kenya.\nPrice: KES 19,000 — great value in the high-wattage PSU price range for Kenyan builders looking for a powerful and dependable 80 Plus Gold certified power supply for their gaming PC.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "aztech",
@@ -6411,6 +6743,7 @@
         "specifications": {
           "Model": "Aztech Alpha 1000W 80 Plus Gold",
           "Form Factor": "ATX",
+          "Connectors": "",
           "Watts": "1000W",
           "Power Rating": "80 plus gold",
           "Special Features": "PCIe Gen 5 12-pin 600W cable included"
@@ -6418,14 +6751,21 @@
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-04-25T20:16:51.828Z",
-        "updatedAt": "2026-07-31T21:06:08.984Z",
+        "updatedAt": "2026-08-14T18:02:55.993Z",
         "__v": 1,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531966157-4ea55741-75a1-4ea4-ae91-3d25afb1d2f5.webp",
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730571635-4febd041-0d15-4415-bf2a-5f0304aab832.jpg",
         "images_r2": [],
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730571635-4febd041-0d15-4415-bf2a-5f0304aab832.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730571635-4febd041-0d15-4415-bf2a-5f0304aab832.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730571635-4febd041-0d15-4415-bf2a-5f0304aab832.jpg"
+        },
         "id": "69ed213330ac66719040c656"
       }
     },
@@ -6525,7 +6865,7 @@
       "name": "T-Force Delta RGB 32GB (16*2) DDR5 6000MHz Desktop Gaming RAM – Nairobi Kenya",
       "path": "/product/t-force-delta-rgb-32gb-162-ddr5-6000mhz-desktop-gaming-ram-nairobi-kenya-nairobi",
       "category": "Memory",
-      "updatedAt": "2026-08-01T22:05:33.383Z",
+      "updatedAt": "2026-08-17T13:42:43.553Z",
       "data": {
         "_id": "69ed0f1330ac66719040c5a7",
         "name": "T-Force Delta RGB 32GB (16*2) DDR5 6000MHz Desktop Gaming RAM – Nairobi Kenya",
@@ -6536,8 +6876,8 @@
         "description": "Elevate your gaming PC's performance with the T-Force Delta RGB 32GB DDR5 6000MHz Desktop Gaming Memory — a high-speed, visually stunning RAM kit now available in Nairobi at KES 60,000. Designed for serious gamers and content creators, this DDR5 memory delivers blazing fast speeds and eye-catching RGB lighting, making it a perfect upgrade for any high-performance gaming build in Kenya.\nKey Features:\n•32GB DDR5 memory — ample capacity for gaming, multitasking and content creation\n•6000MHz high-speed frequency for ultra-fast data transfer and smooth gameplay\n•Stunning Delta RGB lighting for a premium gaming aesthetic\n•Intel XMP 3.0 and AMD EXPO support for easy one-click overclocking\n•Low latency for improved system responsiveness and gaming performance\n•Compatible with Intel 12th, 13th and 14th •Gen and AMD Ryzen 7000, 8000 and 9000 series platforms\n•Sleek aluminum heatspreader for efficient heat dissipation during intensive use\nIdeal for: High-performance gaming builds, content creation, video editing, streaming, and PC enthusiasts looking for fast and reliable DDR5 memory in Kenya.\nPrice: KES 60,000 — excellent value in the high-performance RAM price range for Kenyan gamers and builders looking for a fast, reliable and visually impressive DDR5 memory upgrade.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "team group",
         "category": "Memory",
-        "price": 60000,
-        "countInStock": 1,
+        "price": 62000,
+        "countInStock": 0,
         "condition": "New",
         "rating": 0,
         "numReviews": 0,
@@ -6555,7 +6895,7 @@
         },
         "reviews": [],
         "createdAt": "2026-04-25T18:59:31.019Z",
-        "updatedAt": "2026-08-01T22:05:33.383Z",
+        "updatedAt": "2026-08-17T13:42:43.553Z",
         "__v": 1,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621930921-9059fd83-4f89-4029-9177-0b3f5344b53b.webp",
         "images_r2": [],
@@ -6622,7 +6962,7 @@
       "name": "Gigabyte B550M DS3H AM4 Motherboard – Nairobi Kenya",
       "path": "/product/gigabyte-b550m-ds3h-am4-motherboard-nairobi-kenya-nairobi",
       "category": "Motherboards",
-      "updatedAt": "2026-08-01T22:07:25.283Z",
+      "updatedAt": "2026-08-14T18:05:11.311Z",
       "data": {
         "_id": "69ec660130ac66719040c53a",
         "name": "Gigabyte B550M DS3H AM4 Motherboard – Nairobi Kenya",
@@ -6635,7 +6975,7 @@
         "brand": "gigabyte",
         "category": "Motherboards",
         "price": 16000,
-        "countInStock": 10,
+        "countInStock": 0,
         "condition": "New",
         "rating": 0,
         "numReviews": 0,
@@ -6645,21 +6985,23 @@
           "Cpu socket": "AM4",
           "Ram type": "DDR4",
           "Ram slots": "4",
-          "Nvme slots": "2"
+          "Nvme slots": "2",
+          "Sata ports": "",
+          "Special Features": ""
         },
         "offer": {
           "enabled": false,
           "type": "percentage",
-          "amount": 0
+          "amount": 0,
+          "startDate": null,
+          "endDate": null
         },
         "reviews": [],
         "createdAt": "2026-04-25T06:58:09.616Z",
-        "updatedAt": "2026-08-01T22:07:25.283Z",
-        "__v": 1,
+        "updatedAt": "2026-08-14T18:05:11.311Z",
+        "__v": 2,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622042558-fc74ae66-6ad0-4aa8-91c5-815610a4d641.webp",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531933845-78fc35b6-344d-4be4-85f7-03c4341505a1.webp"
-        ],
+        "images_r2": [],
         "image_r2_variants": {
           "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622042558-fc74ae66-6ad0-4aa8-91c5-815610a4d641-thumbnail.webp",
           "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622042558-fc74ae66-6ad0-4aa8-91c5-815610a4d641-medium.webp",
@@ -6673,15 +7015,13 @@
       "name": "XFX Radeon RX 7900 XT 20GB Graphics Card with AI Accelerators – Nairobi Kenya",
       "path": "/product/xfx-radeon-rx-7900-xt-20gb-graphics-card-with-ai-accelerators-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-01T22:01:11.602Z",
+      "updatedAt": "2026-08-14T18:05:44.281Z",
       "data": {
         "_id": "69ec62fe30ac66719040c527",
         "name": "XFX Radeon RX 7900 XT 20GB Graphics Card with AI Accelerators – Nairobi Kenya",
         "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621668815-21c4a9f7-15ca-4205-a338-43d9678f0266.webp",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621668815-21c4a9f7-15ca-4205-a338-43d9678f0266.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531903900-c9670b5a-0634-4756-b3ef-d2a7028d61bb.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531913356-f7fc7bea-00cf-4320-b506-c5ec5e40e28c.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621668815-21c4a9f7-15ca-4205-a338-43d9678f0266.webp"
         ],
         "description": "Experience flagship-level gaming with the XFX Radeon RX 7900 XT 20GB — a top-tier high-end GPU now available in Nairobi at KES 85,000. Built on AMD's cutting-edge RDNA 3 architecture, this card delivers breathtaking 4K gaming performance and exceptional memory bandwidth, making it one of the most powerful graphics cards available in the Kenyan market.\nKey Features:\n•20GB GDDR6 memory — massive VRAM for ultra-high resolution gaming and professional workloads\n•AMD RDNA 3 architecture for outstanding power efficiency and raw performance\n•AMD FidelityFX Super Resolution (FSR) support — AI-powered performance boost\n•Advanced ray tracing for stunning, true-to-life in-game visuals\n•PCIe 4.0 support for fast data transfer speeds\n•Multiple display outputs — supports up to 4 monitors simultaneously\n•Compatible with most ATX and full-tower cases in Kenya\nIdeal for: 4K gaming, competitive esports, 3D rendering, video editing, VR gaming, and content creators demanding the highest level of GPU performance in Kenya.\nPrice: KES 85,000 — exceptional value in the high-end GPU price range for Kenyan gamers and professionals looking for a powerful and future-proof AMD graphics card.\nPerfect for Gaming, Photo & Video-Editing, 3D Modelling, Streaming, Graphics Rendering, Architectural Design and Ai Machine Learning\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "xfx",
@@ -6707,13 +7047,10 @@
         },
         "reviews": [],
         "createdAt": "2026-04-25T06:45:18.278Z",
-        "updatedAt": "2026-08-01T22:01:11.602Z",
-        "__v": 1,
+        "updatedAt": "2026-08-14T18:05:44.281Z",
+        "__v": 2,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621668815-21c4a9f7-15ca-4205-a338-43d9678f0266.webp",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531903900-c9670b5a-0634-4756-b3ef-d2a7028d61bb.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785531913356-f7fc7bea-00cf-4320-b506-c5ec5e40e28c.webp"
-        ],
+        "images_r2": [],
         "image_r2_variants": {
           "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621668815-21c4a9f7-15ca-4205-a338-43d9678f0266-thumbnail.webp",
           "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621668815-21c4a9f7-15ca-4205-a338-43d9678f0266-medium.webp",
@@ -6727,13 +7064,13 @@
       "name": "Intel Core i7-14700 Processor with Stock Cooler LGA1700– Nairobi Kenya",
       "path": "/product/intel-core-i7-14700-processor-with-stock-cooler-lga1700-nairobi-kenya-nairobi",
       "category": "Processors",
-      "updatedAt": "2026-07-31T20:08:56.686Z",
+      "updatedAt": "2026-08-14T18:07:32.251Z",
       "data": {
         "_id": "69ea682130ac66719040c37d",
         "name": "Intel Core i7-14700 Processor with Stock Cooler LGA1700– Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528533094-5124b240-84ad-468d-9840-6afd7c303130.webp",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730848110-e201825c-c504-46c5-a372-cc369ddee5b4.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528533094-5124b240-84ad-468d-9840-6afd7c303130.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730848110-e201825c-c504-46c5-a372-cc369ddee5b4.jpg"
         ],
         "description": "Unleash serious computing power with the Intel Core i7-14700 — a high-performance processor with stock cooler included, now available in Nairobi at KES 45,000. Part of Intel's 14th generation Raptor Lake Refresh lineup, this CPU delivers exceptional multi-core performance for gaming, content creation and heavy multitasking, making it one of the best value high-end processors in the Kenyan market.\nKey Features:\n•20 cores and 28 threads — 8 Performance cores and 12 Efficient cores for powerful multitasking\n•Up to 5.4GHz maximum turbo frequency for blazing fast single-core performance\n•Compatible with Intel 600 and 700 series motherboards (LGA1700 socket)\n•Supports DDR4 and DDR5 memory for flexible build options\n•Intel UHD Graphics 770 integrated graphics included\n•Stock cooler included — ready to use out of the box\n•PCIe 5.0 support for next-gen storage and graphics performance\nIdeal for: High-performance gaming builds, video editing, 3D rendering, streaming, content creation, and power users looking for a capable all-round processor in Kenya.\nPrice: KES 45,000 — excellent value in the high-performance CPU price range for Kenyan gamers and creators looking for a powerful and versatile Intel processor.\nPerfect for Gaming, Photo & Video-Editing, 3D Modelling, Streaming, Graphics Rendering, Architectural Design and Ai Machine Learning\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "intel",
@@ -6759,10 +7096,15 @@
         },
         "reviews": [],
         "createdAt": "2026-04-23T18:42:41.621Z",
-        "updatedAt": "2026-07-31T20:08:56.686Z",
+        "updatedAt": "2026-08-14T18:07:32.251Z",
         "__v": 1,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528533094-5124b240-84ad-468d-9840-6afd7c303130.webp",
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730848110-e201825c-c504-46c5-a372-cc369ddee5b4.jpg",
         "images_r2": [],
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730848110-e201825c-c504-46c5-a372-cc369ddee5b4.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730848110-e201825c-c504-46c5-a372-cc369ddee5b4.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730848110-e201825c-c504-46c5-a372-cc369ddee5b4.jpg"
+        },
         "id": "69ea682130ac66719040c37d"
       }
     },
@@ -6771,19 +7113,19 @@
       "name": "MSI GeForce RTX 3060 12GB Ventus 2X Graphics Card – Nairobi Kenya",
       "path": "/product/msi-geforce-rtx-3060-12gb-ventus-2x-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-07-31T20:08:47.923Z",
+      "updatedAt": "2026-08-21T07:29:23.367Z",
       "data": {
         "_id": "69ea546530ac66719040c352",
         "name": "MSI GeForce RTX 3060 12GB Ventus 2X Graphics Card – Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528524910-be99b298-eb1d-41cb-92dc-f61442f65745.webp",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730961998-91aea667-263e-4090-9226-edbc3e367994.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528524910-be99b298-eb1d-41cb-92dc-f61442f65745.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730961998-91aea667-263e-4090-9226-edbc3e367994.jpg"
         ],
         "description": "Step up your gaming experience with the MSI GeForce RTX 3060 12GB Ventus 2X — a reliable and capable mid-range GPU now available in Nairobi at KES 48,000. Powered by NVIDIA's Ampere architecture, this card delivers smooth 1080p and 1440p gaming performance while offering excellent value for money in the Kenyan market.\nKey Features:\n•12GB GDDR6 memory — generous VRAM for smooth multitasking and future-proofing\n•Dual-fan Ventus 2X cooling for efficient heat dissipation and quiet operation\n•DLSS support — AI-powered performance boost for higher frame rates\n•Ray tracing for immersive, cinematic in-game visuals\n•PCIe 4.0 support for fast data transfer speeds\n•Compatible with most ATX and mid-tower cases in Kenya\nIdeal for: 1080p and 1440p gaming, content creation, video editing, and streaming.\nPrice: KES 48,000 — excellent value in the mid-range GPU price range for Kenyan gamers looking for a dependable and future-proof NVIDIA graphics card.\nPerfect for Gaming, Photo & Video-Editing, 3D Modelling, Streaming, Graphics Rendering, Architectural Design and Ai Machine Learning\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "msi",
         "category": "Graphics Cards",
-        "price": 48000,
-        "countInStock": 0,
+        "price": 55000,
+        "countInStock": 6,
         "condition": "New",
         "rating": 0,
         "numReviews": 0,
@@ -6803,10 +7145,15 @@
         },
         "reviews": [],
         "createdAt": "2026-04-23T17:18:29.885Z",
-        "updatedAt": "2026-07-31T20:08:47.923Z",
+        "updatedAt": "2026-08-21T07:29:23.367Z",
         "__v": 1,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528524910-be99b298-eb1d-41cb-92dc-f61442f65745.webp",
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730961998-91aea667-263e-4090-9226-edbc3e367994.jpg",
         "images_r2": [],
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730961998-91aea667-263e-4090-9226-edbc3e367994.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730961998-91aea667-263e-4090-9226-edbc3e367994.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786730961998-91aea667-263e-4090-9226-edbc3e367994.jpg"
+        },
         "id": "69ea546530ac66719040c352"
       }
     },
@@ -6815,21 +7162,19 @@
       "name": "XFX Radeon RX 6600 8GB Graphics Card – Nairobi Kenya",
       "path": "/product/xfx-radeon-rx-6600-8gb-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-07-31T20:08:40.535Z",
+      "updatedAt": "2026-08-14T18:10:29.703Z",
       "data": {
         "_id": "69ea4dea30ac66719040c324",
         "name": "XFX Radeon RX 6600 8GB Graphics Card – Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528506686-e0204d3b-ec09-4398-bfde-99cd5006bfff.webp",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731025842-e879f44d-4847-497f-8ee3-955a8c8f3b18.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528506686-e0204d3b-ec09-4398-bfde-99cd5006bfff.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528513071-ad5a28bb-92d0-4247-bf7b-14d657bc094a.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528518078-3c6cc435-59a9-4708-ac90-638b583b26a8.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731025842-e879f44d-4847-497f-8ee3-955a8c8f3b18.jpg"
         ],
         "description": "Enjoy smooth and immersive gaming with the XFX Radeon RX 6600 8GB — a capable mid-range GPU now available in Nairobi at KES 32,000. Built on AMD's RDNA 2 architecture, this card delivers excellent 1080p gaming performance at an affordable price, making it one of the best value graphics cards available in the Kenyan market.\nKey Features:\n•8GB GDDR6 memory for smooth and responsive 1080p gameplay\n•AMD RDNA 2 architecture for efficient and powerful gaming performance\n•AMD FidelityFX Super Resolution (FSR) support — AI-powered performance boost\n•PCIe 4.0 support for fast data transfer speeds\n•Triple display support via DisplayPort and HDMI outputs\n•Compact design compatible with most ATX and mid-tower cases in Kenya\nIdeal for: 1080p gaming, casual content creation, everyday computing, and budget-conscious gamers looking for great performance in Kenya.\nPrice: KES 32,000 — outstanding value in the budget-to-mid-range GPU price range for Kenyan gamers looking for reliable AMD performance without breaking the bank.\nPerfect for Gaming, Photo & Video-Editing, 3D Modelling, Streaming, Graphics Rendering, Architectural Design and Ai Machine Learning\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "xfx",
         "category": "Graphics Cards",
         "price": 32000,
-        "countInStock": 3,
+        "countInStock": 0,
         "condition": "New",
         "rating": 0,
         "numReviews": 0,
@@ -6849,13 +7194,15 @@
         },
         "reviews": [],
         "createdAt": "2026-04-23T16:50:50.465Z",
-        "updatedAt": "2026-07-31T20:08:40.535Z",
-        "__v": 2,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528506686-e0204d3b-ec09-4398-bfde-99cd5006bfff.webp",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528513071-ad5a28bb-92d0-4247-bf7b-14d657bc094a.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528518078-3c6cc435-59a9-4708-ac90-638b583b26a8.webp"
-        ],
+        "updatedAt": "2026-08-14T18:10:29.703Z",
+        "__v": 3,
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731025842-e879f44d-4847-497f-8ee3-955a8c8f3b18.jpg",
+        "images_r2": [],
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731025842-e879f44d-4847-497f-8ee3-955a8c8f3b18.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731025842-e879f44d-4847-497f-8ee3-955a8c8f3b18.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731025842-e879f44d-4847-497f-8ee3-955a8c8f3b18.jpg"
+        },
         "id": "69ea4dea30ac66719040c324"
       }
     },
@@ -6864,14 +7211,13 @@
       "name": "ASUS TUF Gaming X570-Plus WiFi Motherboard AM4 – Nairobi Kenya",
       "path": "/product/asus-tuf-gaming-x570-plus-wifi-motherboard-am4-nairobi-kenya-nairobi",
       "category": "Motherboards",
-      "updatedAt": "2026-07-31T20:08:22.594Z",
+      "updatedAt": "2026-08-14T18:12:39.869Z",
       "data": {
         "_id": "69e92aab30ac66719040c2ab",
         "name": "ASUS TUF Gaming X570-Plus WiFi Motherboard AM4 – Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528489671-1911d54c-9136-47ff-bedd-89b2d628d738.webp",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731155278-77d1eb0a-2826-4ae2-8fb8-dab6de7c543b.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528489671-1911d54c-9136-47ff-bedd-89b2d628d738.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528497995-ba344921-23cf-431c-9483-55ffbf14471e.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731155278-77d1eb0a-2826-4ae2-8fb8-dab6de7c543b.jpg"
         ],
         "description": "Build a tough and reliable gaming PC with the ASUS TUF Gaming X570-Plus WiFi — a battle-hardened ATX motherboard now available in Nairobi at KES 26,500. Designed for AMD Ryzen 3000, 4000 and 5000 series processors, this board combines military-grade durability with excellent performance and connectivity for serious gamers and builders.\nKey Features:\n•AMD X570 chipset — supports AMD Ryzen 3000, 4000 and 5000 series processors\n•ATX form factor — compatible with most standard mid-tower and full-tower cases\n•Built-in WiFi 5 and Bluetooth 5.0 for reliable wireless connectivity\n•Gigabit LAN with TUF LANGuard protection for stable wired networking\n•PCIe 4.0 support for next-gen storage and graphics performance\n•Robust VRM design with TUF component certification for long-term durability\n•Multiple M.2 slots for fast NVMe SSD storage\n•Aura Sync RGB lighting for a premium gaming aesthetic\n•USB 3.2 Gen 2 ports for high-speed peripheral connectivity\nIdeal for: AMD Ryzen gaming builds, content creation, productivity workstations, and PC enthusiasts looking for a durable and reliable X570 platform in Kenya.\nPrice: KES 26,500 — great value in the mid-range motherboard price range for Kenyan gamers and builders looking for a dependable AMD platform.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "asus",
@@ -6900,12 +7246,15 @@
         },
         "reviews": [],
         "createdAt": "2026-04-22T20:08:11.457Z",
-        "updatedAt": "2026-07-31T20:08:22.594Z",
-        "__v": 1,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528489671-1911d54c-9136-47ff-bedd-89b2d628d738.webp",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528497995-ba344921-23cf-431c-9483-55ffbf14471e.webp"
-        ],
+        "updatedAt": "2026-08-14T18:12:39.869Z",
+        "__v": 2,
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731155278-77d1eb0a-2826-4ae2-8fb8-dab6de7c543b.jpg",
+        "images_r2": [],
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731155278-77d1eb0a-2826-4ae2-8fb8-dab6de7c543b.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731155278-77d1eb0a-2826-4ae2-8fb8-dab6de7c543b.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731155278-77d1eb0a-2826-4ae2-8fb8-dab6de7c543b.jpg"
+        },
         "id": "69e92aab30ac66719040c2ab"
       }
     },
@@ -6914,20 +7263,19 @@
       "name": "ASUS Prime Z790-P WiFi Motherboard LGA1700 – Nairobi Kenya",
       "path": "/product/asus-prime-z790-p-wifi-motherboard-lga1700-nairobi-kenya-nairobi",
       "category": "Motherboards",
-      "updatedAt": "2026-07-31T20:08:04.725Z",
+      "updatedAt": "2026-08-14T18:13:59.096Z",
       "data": {
         "_id": "69e7da4a5c45cb7308374cc3",
         "name": "ASUS Prime Z790-P WiFi Motherboard LGA1700 – Nairobi Kenya",
-        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528469189-a0801115-887d-4d16-8005-be9b9999a951.webp",
+        "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731234564-b5deb112-df72-48f5-8eb3-112bff65f969.jpg",
         "images": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528469189-a0801115-887d-4d16-8005-be9b9999a951.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528479259-9b0a76fa-73e7-4c01-ad2c-96834ff7e207.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731234564-b5deb112-df72-48f5-8eb3-112bff65f969.jpg"
         ],
         "description": "Power up your next gaming or productivity build with the ASUS Prime Z790-P WiFi — a feature-packed ATX motherboard now available in Nairobi at KES 38,000. Designed for Intel 12th, 13th and 14th generation processors, this board delivers excellent performance, reliability and connectivity for both gamers and professionals.\nKey Features:\n•Intel Z790 chipset — supports 12th, 13th and 14th Gen Intel Core processors\n•ATX form factor — compatible with most standard mid-tower and full-tower cases\n•Built-in WiFi 6 and Bluetooth 5.2 for fast, reliable wireless connectivity\n•2.5Gb LAN for ultra-fast wired network speeds\n•PCIe 5.0 and DDR5 support for next-gen performance\n•Robust VRM design for stable power delivery and overclocking support\n•Multiple M.2 slots for fast NVMe SSD storage\n•USB 3.2 Gen 2 ports for high-speed peripheral connectivity\nIdeal for: High-performance gaming builds, content creation, productivity workstations, and PC enthusiasts looking for a reliable Z790 platform in Kenya.\nPrice: KES 38,000 — excellent value in the mid-to-high range motherboard price range for Kenyan builders and gamers.\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "asus",
         "category": "Motherboards",
         "price": 38000,
-        "countInStock": 2,
+        "countInStock": 1,
         "condition": "New",
         "rating": 0,
         "numReviews": 0,
@@ -6950,12 +7298,15 @@
         },
         "reviews": [],
         "createdAt": "2026-04-21T20:12:58.389Z",
-        "updatedAt": "2026-07-31T20:08:04.725Z",
-        "__v": 1,
-        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528469189-a0801115-887d-4d16-8005-be9b9999a951.webp",
-        "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528479259-9b0a76fa-73e7-4c01-ad2c-96834ff7e207.webp"
-        ],
+        "updatedAt": "2026-08-14T18:13:59.096Z",
+        "__v": 2,
+        "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731234564-b5deb112-df72-48f5-8eb3-112bff65f969.jpg",
+        "images_r2": [],
+        "image_r2_variants": {
+          "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731234564-b5deb112-df72-48f5-8eb3-112bff65f969.jpg",
+          "medium": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731234564-b5deb112-df72-48f5-8eb3-112bff65f969.jpg",
+          "large": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731234564-b5deb112-df72-48f5-8eb3-112bff65f969.jpg"
+        },
         "id": "69e7da4a5c45cb7308374cc3"
       }
     },
@@ -7019,15 +7370,15 @@
       "name": "Gigabyte GeForce RTX 3060 Gaming OC 12GB Graphics Card – Nairobi Kenya",
       "path": "/product/gigabyte-geforce-rtx-3060-gaming-oc-12gb-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-01T22:09:07.472Z",
+      "updatedAt": "2026-08-14T18:15:43.282Z",
       "data": {
         "_id": "69e7d63d5c45cb7308374c97",
         "name": "Gigabyte GeForce RTX 3060 Gaming OC 12GB Graphics Card – Nairobi Kenya",
         "image": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622144594-003a6e2f-545a-4e13-8c24-e000791ee63b.webp",
         "images": [
           "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622144594-003a6e2f-545a-4e13-8c24-e000791ee63b.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528427169-011628d6-b10b-4cae-b92c-ff6b3a938bb8.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528439146-6d30908c-abe0-489e-88c8-5c5e42c58909.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731334297-23783fe2-fb7d-403a-9ed9-e35d6d4bfe64.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731339326-4bfb9b32-6362-4730-8567-819043f1f8b9.jpg"
         ],
         "description": "Get reliable, high-performance gaming with the Gigabyte GeForce RTX 3060 Gaming OC 12GB — a proven mid-range GPU now available in Nairobi at KES 48,000. Built on NVIDIA's Ampere architecture, this card delivers smooth 1080p and 1440p gaming while offering excellent value for money in the Kenyan market.\nKey Features:\n•12GB GDDR6 memory — generous VRAM for smooth multitasking and future-proofing\n•Triple-fan Gaming OC cooling for low temperatures and quiet operation\n•Factory overclocked for extra performance out of the box\n•DLSS support — AI-powered performance boost\n•Ray tracing for immersive, cinematic in-game visuals\n•Compatible with most ATX and mid-tower cases in Kenya\nIdeal for: 1080p and 1440p gaming, content creation, video editing, and streaming.\nPrice: KES 48,000 — excellent value in the mid-range GPU price range for Kenyan gamers looking for a reliable and capable graphics card.\nPerfect for Gaming, Photo & Video-Editing, 3D Modelling, Streaming, Graphics Rendering, Architectural Design and Ai Machine Learning\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "gigabyte",
@@ -7053,12 +7404,12 @@
         },
         "reviews": [],
         "createdAt": "2026-04-21T19:55:41.581Z",
-        "updatedAt": "2026-08-01T22:09:07.472Z",
-        "__v": 1,
+        "updatedAt": "2026-08-14T18:15:43.282Z",
+        "__v": 2,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622144594-003a6e2f-545a-4e13-8c24-e000791ee63b.webp",
         "images_r2": [
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528427169-011628d6-b10b-4cae-b92c-ff6b3a938bb8.webp",
-          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785528439146-6d30908c-abe0-489e-88c8-5c5e42c58909.webp"
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731334297-23783fe2-fb7d-403a-9ed9-e35d6d4bfe64.jpg",
+          "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1786731339326-4bfb9b32-6362-4730-8567-819043f1f8b9.jpg"
         ],
         "image_r2_variants": {
           "thumbnail": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785622144594-003a6e2f-545a-4e13-8c24-e000791ee63b-thumbnail.webp",
@@ -7122,7 +7473,7 @@
       "name": "Zotac GeForce RTX 5060 8GB Twin Edge Graphics Card – Nairobi Kenya",
       "path": "/product/zotac-geforce-rtx-5060-8gb-twin-edge-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-01T22:03:57.541Z",
+      "updatedAt": "2026-08-17T08:11:21.386Z",
       "data": {
         "_id": "69e7d2505c45cb7308374c73",
         "name": "Zotac GeForce RTX 5060 8GB Twin Edge Graphics Card – Nairobi Kenya",
@@ -7133,7 +7484,7 @@
         "description": "Upgrade your gaming rig with the Zotac GeForce RTX 5060 8GB Twin Edge — NVIDIA's latest generation GPU delivering smooth, high-frame-rate gaming at 1080p and 1440p, available now in Nairobi at KES 56,000. Built for serious gamers who want next-gen performance at an accessible price, the Twin Edge is powered by NVIDIA's Blackwell architecture and handles today's most demanding titles with ease.\nKey Features:\n•8GB GDDR7 memory for fast, smooth gameplay\n•Dual-fan Twin Edge cooling for quiet, efficient performance\n•DLSS 4 support — AI-powered performance boost\n•Ray tracing for cinematic in-game visuals\n•Compatible with most ATX and mid-tower cases in Kenya\nIdeal for: FPS games, open-world titles, content creation, and streaming.\nPrice: KES 56,000 — one of the most competitive prices for an RTX 5060 in Nairobi. Great value in the mid-range GPU price range for Kenyan gamers.\nPerfect for Gaming, Photo & Video-Editing, 3D Modelling, Streaming, Graphics Rendering, Architectural Design and Ai Machine Learning\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi",
         "brand": "zotac",
         "category": "Graphics Cards",
-        "price": 56000,
+        "price": 60000,
         "countInStock": 1,
         "condition": "New",
         "rating": 0,
@@ -7154,7 +7505,7 @@
         },
         "reviews": [],
         "createdAt": "2026-04-21T19:38:56.302Z",
-        "updatedAt": "2026-08-01T22:03:57.541Z",
+        "updatedAt": "2026-08-17T08:11:21.386Z",
         "__v": 1,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621834769-f89ace21-7263-4345-a6ce-968e6e81f3b6.webp",
         "images_r2": [],
@@ -7171,7 +7522,7 @@
       "name": "MSI GeForce RTX 5060 8GB Ventus 2X Graphics Card – Nairobi Kenya",
       "path": "/product/msi-geforce-rtx-5060-8gb-ventus-2x-graphics-card-nairobi-kenya-nairobi",
       "category": "Graphics Cards",
-      "updatedAt": "2026-08-01T21:58:03.896Z",
+      "updatedAt": "2026-08-17T08:12:21.284Z",
       "data": {
         "_id": "69e7d1095c45cb7308374c6e",
         "name": "MSI GeForce RTX 5060 8GB Ventus 2X Graphics Card – Nairobi Kenya",
@@ -7182,8 +7533,8 @@
         "description": "The MSI GeForce RTX 5060 Ventus 2X 8GB is built for serious gamers who want next-gen performance at an accessible price of KES. 56,000. Powered by NVIDIA's Blackwell architecture, it handles today's most demanding titles with ease.\nKey Features:\n•8GB GDDR7 memory for fast, smooth gameplay\n•Dual-fan Ventus cooling for quiet, efficient performance\n•DLSS 4 support — AI-powered performance boost\n•Ray tracing for cinematic in-game visuals\n•Compatible with most ATX and mid-tower cases in Kenya\nIdeal for: FPS games, open-world titles, content creation, and streaming.\nPrice: KES 56,000 — one of the most competitive prices for an RTX 5060 in Nairobi. Great value in the mid-range GPU price range for Kenyan gamers.\nPerfect for Gaming, Photo & Video-Editing, 3D Modelling, Streaming, Graphics Rendering, Architectural Design and Ai Machine Learning\nAvailable at our Nairobi shop. Visit us today or order online for fast delivery within Nairobi.",
         "brand": "msi",
         "category": "Graphics Cards",
-        "price": 56000,
-        "countInStock": 10,
+        "price": 60000,
+        "countInStock": 0,
         "condition": "New",
         "rating": 0,
         "numReviews": 0,
@@ -7203,7 +7554,7 @@
         },
         "reviews": [],
         "createdAt": "2026-04-21T19:33:29.768Z",
-        "updatedAt": "2026-08-01T21:58:03.896Z",
+        "updatedAt": "2026-08-17T08:12:21.284Z",
         "__v": 1,
         "image_r2": "https://pub-5e82d594e79e436e9cfd3a07c9c7eb7d.r2.dev/greenbits-store/1785621480756-05299c1d-2546-4bdd-9be4-fa74801db2d8.webp",
         "images_r2": [],
