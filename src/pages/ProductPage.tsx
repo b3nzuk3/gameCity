@@ -1,4 +1,11 @@
-import { lazy, Suspense, useState, useEffect } from 'react'
+import {
+  lazy,
+  Suspense,
+  useState,
+  useEffect,
+  useRef,
+  type CSSProperties,
+} from 'react'
 import { Link, useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useProduct, useProductBySlug } from '@/services/productService'
 import { extractProductId, generateProductUrl } from '@/lib/slugUtils'
@@ -9,7 +16,7 @@ import { formatKESPrice } from '@/lib/currency'
 import { getOfferPrice, getDiscountPercent, isOfferActive, sanitizeHtml } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent } from '@/components/ui/card'
-import { ShoppingCart, Plus, Minus } from 'lucide-react'
+import { ShoppingCart, Plus, Minus, ChevronDown, ChevronUp } from 'lucide-react'
 
 import Layout from '@/components/Layout'
 import SEO from '@/components/SEO'
@@ -28,6 +35,10 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState(1)
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [isClient, setIsClient] = useState(false)
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false)
+  const [descriptionCanExpand, setDescriptionCanExpand] = useState(false)
+  const [descriptionHeight, setDescriptionHeight] = useState(112)
+  const descriptionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setIsClient(true)
@@ -47,6 +58,28 @@ const ProductPage = () => {
   useEffect(() => {
     setSelectedImageIndex(0)
   }, [product?._id])
+
+  useEffect(() => {
+    setIsDescriptionExpanded(false)
+
+    const descriptionElement = descriptionRef.current
+    if (!descriptionElement) return
+
+    const updateDescriptionMeasurements = () => {
+      const fullHeight = descriptionElement.scrollHeight
+      setDescriptionHeight(fullHeight)
+      setDescriptionCanExpand(fullHeight > 113)
+    }
+
+    updateDescriptionMeasurements()
+
+    if (typeof ResizeObserver === 'undefined') return
+
+    const resizeObserver = new ResizeObserver(updateDescriptionMeasurements)
+    resizeObserver.observe(descriptionElement)
+
+    return () => resizeObserver.disconnect()
+  }, [product?._id, product?.description])
 
   useEffect(() => {
     if (!id) {
@@ -261,9 +294,44 @@ const ProductPage = () => {
                   Product Description
                 </h4>
                 <div
-                  className="prose prose-sm md:prose-base prose-invert max-w-none whitespace-pre-line"
+                  ref={descriptionRef}
+                  id="product-description-content"
+                  data-product-description-content
+                  className={cn(
+                    'prose prose-sm md:prose-base prose-invert max-w-none overflow-hidden whitespace-pre-line transition-[max-height] duration-200 ease-out motion-reduce:transition-none md:max-h-none md:overflow-visible',
+                    isDescriptionExpanded
+                      ? 'max-h-[var(--product-description-height)]'
+                      : 'max-h-28'
+                  )}
+                  style={
+                    {
+                      '--product-description-height': `${descriptionHeight}px`,
+                    } as CSSProperties
+                  }
                   dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.description) }}
                 />
+                {descriptionCanExpand && (
+                  <button
+                    data-product-description-toggle
+                    type="button"
+                    aria-expanded={isDescriptionExpanded}
+                    aria-controls="product-description-content"
+                    onClick={() => {
+                      if (!isDescriptionExpanded && descriptionRef.current) {
+                        setDescriptionHeight(descriptionRef.current.scrollHeight)
+                      }
+                      setIsDescriptionExpanded((expanded) => !expanded)
+                    }}
+                    className="mt-2 inline-flex items-center gap-1 rounded-sm text-sm font-medium text-yellow-400 transition-colors hover:text-yellow-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-background md:hidden"
+                  >
+                    {isDescriptionExpanded ? 'Show less' : 'See more'}
+                    {isDescriptionExpanded ? (
+                      <ChevronUp className="h-4 w-4" aria-hidden="true" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4" aria-hidden="true" />
+                    )}
+                  </button>
+                )}
               </div>
             )}
 

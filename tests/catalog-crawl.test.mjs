@@ -64,6 +64,17 @@ test('representative pagination pages expose distinct product links', () => {
   assert.equal([...second].some((path) => third.has(path)), false)
 })
 
+test('stable pagination pages keep self-referencing canonicals', () => {
+  for (const page of [1, 2, 3]) {
+    const html = readFileSync(`dist/category/graphics-cards/page/${page}/index.html`, 'utf8')
+    const canonical = html.match(/<link[^>]+rel="canonical"[^>]+href="([^"]+)"/)?.[1]
+    assert.equal(
+      canonical,
+      `https://www.gamecityelectronics.co.ke/category/graphics-cards/page/${page}`
+    )
+  }
+})
+
 test('every category pagination page matches its catalog slice', () => {
   const categoryEntries = new Map([['all', manifest.products]])
   for (const product of manifest.products) {

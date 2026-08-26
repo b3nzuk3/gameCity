@@ -1,9 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCart } from '@/contexts/CartContext'
 import backendService, { type Product } from '@/services/backendService'
 import { generateProductUrl } from '@/lib/slugUtils'
+import {
+  isMobileHeaderAtTop,
+  isMobileHeaderState,
+  nextMobileHeaderScrollState,
+} from '@/lib/mobileHeader'
 import { formatKESPrice } from '@/lib/currency'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -32,6 +37,12 @@ import {
   Package,
   Shield,
 } from 'lucide-react'
+import MobileMenuCategories from '@/components/MobileMenuCategories'
+
+const useBrowserLayoutEffect =
+  typeof window === 'undefined' ? useEffect : useLayoutEffect
+
+type MobileHeaderState = 'top' | 'compact' | 'hidden'
 
 const Navbar = () => {
   const navigate = useNavigate()
@@ -43,8 +54,11 @@ const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false)
   const [highlightedSuggestion, setHighlightedSuggestion] = useState(-1)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isHidden, setIsHidden] = useState(false)
-  const lastScrollYRef = useRef(0)
+  const [mobileHeaderState, setMobileHeaderState] =
+    useState<MobileHeaderState>('top')
+  const [mobileMainHeight, setMobileMainHeight] = useState(56)
+  const mobileHeaderStateRef = useRef<MobileHeaderState>('top')
+  const mainRowRef = useRef<HTMLDivElement>(null)
   const requestIdRef = useRef(0)
 
   useEffect(() => {
@@ -84,34 +98,109 @@ const Navbar = () => {
     return () => document.removeEventListener('mousedown', handleOutsideClick)
   }, [])
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentY = window.scrollY || 0
-      const lastY = lastScrollYRef.current
+  useBrowserLayoutEffect(() => {
+    const historyState = window.history.state || {}
+    const restorationTarget = Number.isFinite(historyState.gameCityCatalogScrollY)
+      ? Math.max(0, historyState.gameCityCatalogScrollY)
+      : null
+    const hasCatalogRestoration = Boolean(
+      historyState.gameCityCatalogSnapshotKey &&
+        restorationTarget !== null &&
+        !isMobileHeaderAtTop(restorationTarget)
+    )
+    const storedState: MobileHeaderState = isMobileHeaderState(
+      historyState.gameCityMobileHeaderState
+    )
+      ? historyState.gameCityMobileHeaderState
+      : 'compact'
+    const restoredAwayFromTopState =
+      storedState === 'top' ? 'compact' : storedState
+    let isRestoring = Boolean(
+      hasCatalogRestoration &&
+        restorationTarget !== null &&
+        Math.abs(window.scrollY - restorationTarget) > 1
+    )
+    let anchorScrollY = isRestoring
+      ? restorationTarget ?? window.scrollY
+      : window.scrollY
 
-      // Always show when near the top
-      if (currentY < 10) {
-        setIsHidden(false)
-        lastScrollYRef.current = currentY
-        return
+    const commitHeaderState = (nextState: MobileHeaderState, force = false) => {
+      if (force || mobileHeaderStateRef.current !== nextState) {
+        mobileHeaderStateRef.current = nextState
+        setMobileHeaderState(nextState)
+        try {
+          window.history.replaceState(
+            {
+              ...window.history.state,
+              gameCityMobileHeaderState: nextState,
+            },
+            '',
+            window.location.href
+          )
+        } catch {
+          // Header motion should continue if history state is unavailable.
+        }
       }
-
-      // Threshold to avoid jitter on tiny scrolls
-      const threshold = 4
-      if (Math.abs(currentY - lastY) < threshold) return
-
-      // Hide on scroll down, show on scroll up
-      if (currentY > lastY) {
-        setIsHidden(true)
-      } else {
-        setIsHidden(false)
-      }
-
-      lastScrollYRef.current = currentY
     }
 
+    const initialState: MobileHeaderState =
+      isMobileHeaderAtTop(window.scrollY) && !isRestoring
+        ? 'top'
+        : restoredAwayFromTopState
+    commitHeaderState(initialState, true)
+
+    const finishRestoration = () => {
+      isRestoring = false
+      anchorScrollY = window.scrollY
+      commitHeaderState(
+        isMobileHeaderAtTop(window.scrollY)
+          ? 'top'
+          : restoredAwayFromTopState
+      )
+    }
+
+    const handleScroll = () => {
+      if (
+        isRestoring &&
+        restorationTarget !== null &&
+        Math.abs(window.scrollY - restorationTarget) <= 2
+      ) {
+        finishRestoration()
+        return
+      }
+      if (isRestoring) return
+
+      const next = nextMobileHeaderScrollState({
+        scrollY: window.scrollY,
+        anchorScrollY,
+        currentState: mobileHeaderStateRef.current,
+      })
+      anchorScrollY = next.anchorScrollY
+      commitHeaderState(next.state as MobileHeaderState)
+    }
+
+    const restorationTimeout = window.setTimeout(() => {
+      if (isRestoring) finishRestoration()
+    }, 1200)
     window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    return () => {
+      window.clearTimeout(restorationTimeout)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
+  useEffect(() => {
+    const mainRow = mainRowRef.current
+    if (!mainRow) return
+    const updateHeight = () => {
+      const nextHeight = mainRow.getBoundingClientRect().height
+      if (nextHeight > 0) setMobileMainHeight(nextHeight)
+    }
+    updateHeight()
+    if (typeof ResizeObserver === 'undefined') return
+    const observer = new ResizeObserver(updateHeight)
+    observer.observe(mainRow)
+    return () => observer.disconnect()
   }, [])
 
   const handleSearch = (e: React.FormEvent) => {
@@ -152,10 +241,10 @@ const Navbar = () => {
     }
   }
 
-  const renderSuggestions = () => {
+  const renderSuggestions = (id: string) => {
     if (!searchOpen || !searchQuery.trim()) return null
     return (
-      <div className="absolute left-0 right-0 top-full mt-2 overflow-hidden rounded-lg border border-gray-700 bg-[#171725] shadow-2xl z-[60]" role="listbox">
+      <div id={id} className="absolute left-0 right-0 top-full mt-2 overflow-hidden rounded-lg border border-gray-700 bg-[#171725] shadow-2xl z-[60]" role="listbox">
         {suggestionsLoading ? (
           <div className="px-4 py-5 text-center text-sm text-gray-400">Searching...</div>
         ) : suggestions.length === 0 ? (
@@ -196,11 +285,25 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`bg-[#0f0f19]/95 backdrop-blur-md border-b border-gray-800 shadow-lg fixed top-0 left-0 right-0 z-50 transition-transform duration-300 ${
-        isHidden ? '-translate-y-full' : 'translate-y-0'
+      data-mobile-header-state={mobileHeaderState}
+      className={`bg-[#0f0f19]/95 backdrop-blur-md border-b border-gray-800 shadow-lg fixed top-[env(safe-area-inset-top)] md:top-0 left-0 right-0 z-50 transition-transform duration-200 ease-out motion-reduce:transition-none md:translate-y-0 ${
+        mobileHeaderState === 'top'
+          ? 'translate-y-0'
+          : mobileHeaderState === 'compact'
+            ? '-translate-y-[var(--mobile-main-height)]'
+            : '-translate-y-[calc(100%+1px)]'
       }`}
+      style={
+        {
+          '--mobile-main-height': `${mobileMainHeight}px`,
+        } as React.CSSProperties
+      }
     >
-      <div className="container mx-auto px-3 sm:px-4">
+      <div
+        ref={mainRowRef}
+        data-mobile-header-row="main"
+        className="container mx-auto px-3 sm:px-4"
+      >
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
           <Link
@@ -235,7 +338,7 @@ const Navbar = () => {
                 />
               </div>
             </form>
-            {renderSuggestions()}
+            {renderSuggestions('navbar-search-suggestions')}
           </div>
 
           {/* Desktop Menu */}
@@ -372,19 +475,6 @@ const Navbar = () => {
 
           {/* Mobile Actions */}
           <div className="md:hidden flex items-center space-x-2">
-            {/* Mobile Search Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              aria-label="Open search"
-              className="text-gray-300 hover:text-white p-2"
-              onClick={() => {
-                setIsMobileMenuOpen(true)
-              }}
-            >
-              <Search className="h-5 w-5" />
-            </Button>
-
             {/* Cart Button */}
             <Link
               to="/cart"
@@ -422,37 +512,12 @@ const Navbar = () => {
                 </SheetHeader>
 
                 <div className="py-6 space-y-6">
-                  {/* Mobile Search */}
-                  <div data-navbar-search className="relative">
-                  <form onSubmit={handleSearch} className="space-y-2">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                      <Input
-                        type="text"
-                        placeholder="Search for games..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        onFocus={() => searchQuery.trim().length >= 2 && setSearchOpen(true)}
-                        onKeyDown={handleSearchKeyDown}
-                        role="combobox"
-                        aria-expanded={searchOpen}
-                        aria-controls="mobile-search-suggestions"
-                        className="w-full pl-10 bg-gray-900 border-gray-700"
-                      />
-                    </div>
-                  </form>
-                  {renderSuggestions()}
-                  </div>
-
                   {/* Mobile Navigation */}
                   <div className="space-y-2">
-                    <Link
-                      to="/category/all"
-                      className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      Categories
-                    </Link>
+                    <MobileMenuCategories
+                      isOpen={isMobileMenuOpen}
+                      onNavigate={() => setIsMobileMenuOpen(false)}
+                    />
                     <Link
                       to="/favorites"
                       className="block px-3 py-2 text-gray-300 hover:text-yellow-400 transition-colors"
@@ -533,6 +598,41 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+
+      {/* Persistent Mobile Search Row */}
+      <div
+        data-mobile-header-row="search"
+        data-navbar-search
+        className="relative border-t border-gray-800/80 px-3 py-2 md:hidden"
+      >
+        <form onSubmit={handleSearch} role="search" aria-label="Search products">
+          <div className="relative">
+            <Search
+              className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
+              aria-hidden="true"
+            />
+            <Input
+              type="search"
+              inputMode="search"
+              enterKeyHint="search"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              onFocus={() =>
+                searchQuery.trim().length >= 2 && setSearchOpen(true)
+              }
+              onKeyDown={handleSearchKeyDown}
+              role="combobox"
+              aria-label="Search products"
+              aria-expanded={searchOpen}
+              aria-controls="mobile-search-suggestions"
+              className="h-10 w-full rounded-lg border-gray-700 bg-gray-900 pl-10 pr-3 text-white placeholder:text-gray-400 focus:border-yellow-500 focus:ring-yellow-500"
+            />
+          </div>
+        </form>
+        {renderSuggestions('mobile-search-suggestions')}
+      </div>
+      <div id="mobile-catalog-nav-slot" className="md:hidden" />
     </nav>
   )
 }

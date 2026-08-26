@@ -124,7 +124,8 @@ const FeaturedProducts = () => {
           {products.slice(0, 4).map((product) => (
             <Card
               key={product.id}
-              className="bg-gray-800 border-gray-700 h-full flex flex-col group-hover:border-yellow-500/50 transition-colors cursor-pointer min-h-[350px] sm:min-h-[400px]"
+              data-featured-product-card
+              className="bg-gray-800 border-gray-700 h-full flex flex-col group-hover:border-yellow-500/50 transition-colors cursor-pointer min-h-0 md:min-h-[400px]"
               onClick={() =>
                 navigate(
                   generateProductUrl({
@@ -181,7 +182,7 @@ const FeaturedProducts = () => {
                   )}
                 </div>
 
-                <div className="space-y-2 flex flex-col flex-grow">
+                <div className="space-y-1 md:space-y-2 flex flex-col flex-grow">
                   <h3 className="font-semibold text-sm line-clamp-2 text-white group-hover:text-yellow-400 transition-colors">
                     {product.name}
                   </h3>
@@ -192,9 +193,12 @@ const FeaturedProducts = () => {
                     </p>
                   )}
 
-                  <div className="flex-grow" />
+                  <div
+                    data-featured-product-spacer
+                    className="hidden md:block md:flex-grow"
+                  />
 
-                  <div className="flex items-center mb-2">
+                  <div className="flex items-center mb-0.5 md:mb-2">
                     {product.rating > 0 ? (
                       <>
                         {renderStars(product.rating)}
@@ -232,7 +236,7 @@ const FeaturedProducts = () => {
                     )}
                   </div>
 
-                  <div className="flex gap-1.5 pt-2">
+                  <div className="flex gap-1.5 pt-1 md:pt-2">
                     <Button
                       onClick={(e) => handleAddToCart(e, product)}
                       disabled={product.count_in_stock === 0}
@@ -244,8 +248,9 @@ const FeaturedProducts = () => {
                         : 'Add to Cart'}
                     </Button>
                     <Button
+                      data-featured-product-view
                       variant="outline"
-                      className="border-gray-600 text-muted-foreground hover:text-white text-xs py-1.5 px-2 h-8 sm:h-9"
+                      className="hidden border-gray-600 text-muted-foreground hover:text-white text-xs py-1.5 px-2 h-8 sm:h-9 md:inline-flex"
                       size="sm"
                       onClick={(e) => {
                         e.stopPropagation()

@@ -15,8 +15,10 @@ const Layout = ({ children }: LayoutProps) => {
     if ('scrollRestoration' in window.history) {
       try {
         // Prevent browser restoring scroll on SPA navigations
-        ;(window.history as any).scrollRestoration = 'manual'
-      } catch {}
+        window.history.scrollRestoration = 'manual'
+      } catch {
+        // Older embedded browsers may expose history as read-only.
+      }
     }
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior })
   }, [location.pathname, location.search, location.hash])
@@ -24,7 +26,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 pt-16">
+      <main className="flex-1 pt-28 md:pt-16">
         {children}
       </main>
       <Footer />

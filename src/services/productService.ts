@@ -81,6 +81,14 @@ export type CategoryProductsResponse = {
   hasMore: boolean
 }
 
+export type CategoryCountFilters = {
+  filterBy: string
+  conditionFilter: string
+  priceRange: [number | null, number | null]
+  priceFilterActive: boolean
+  selectedBrands: string[]
+}
+
 export const CATEGORY_PAGE_SIZE = 12
 
 export const fetchProductsByCategory = async (
@@ -92,6 +100,31 @@ export const fetchProductsByCategory = async (
     `/products/category/${encodeURIComponent(category)}?page=${pageNumber}&limit=${limit}`
   )
   return data
+}
+
+export const fetchCategoryProductCount = async (
+  category: string,
+  filters: CategoryCountFilters,
+  signal?: AbortSignal
+) => {
+  const params = new URLSearchParams()
+  if (filters.filterBy !== 'all') params.set('filterBy', filters.filterBy)
+  if (filters.conditionFilter !== 'all') {
+    params.set('condition', filters.conditionFilter)
+  }
+  filters.selectedBrands.forEach((brand) => params.append('brands', brand))
+  if (filters.priceFilterActive && filters.priceRange[0] !== null) {
+    params.set('minPrice', String(filters.priceRange[0]))
+  }
+  if (filters.priceFilterActive && filters.priceRange[1] !== null) {
+    params.set('maxPrice', String(filters.priceRange[1]))
+  }
+
+  const { data } = await api.get<{ total: number }>(
+    `/products/category/${encodeURIComponent(category)}/count?${params.toString()}`,
+    { signal }
+  )
+  return data.total
 }
 
 // Mock data for local development
@@ -214,6 +247,34 @@ export const useCategoryProducts = (
     queryFn: () => fetchProductsByCategory(category, pageNumber, limit),
     staleTime: 5 * 60 * 1000,
     placeholderData: keepPreviousData,
+  })
+}
+
+export const useCategoryProductCount = (
+  category: string,
+  filters: CategoryCountFilters,
+  enabled = true
+) => {
+  const selectedBrands = [...filters.selectedBrands].sort()
+  return useQuery({
+    queryKey: [
+      'category-product-count',
+      category,
+      filters.filterBy,
+      filters.conditionFilter,
+      filters.priceFilterActive,
+      filters.priceRange[0],
+      filters.priceRange[1],
+      selectedBrands,
+    ],
+    queryFn: ({ signal }) =>
+      fetchCategoryProductCount(
+        category,
+        { ...filters, selectedBrands },
+        signal
+      ),
+    enabled,
+    staleTime: 5 * 60 * 1000,
   })
 }
 
