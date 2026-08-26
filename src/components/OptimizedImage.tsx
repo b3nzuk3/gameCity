@@ -5,6 +5,9 @@ interface OptimizedImageProps {
   src: string
   alt: string
   className?: string
+  imageClassName?: string
+  placeholderClassName?: string
+  errorClassName?: string
   width?: number
   height?: number
   priority?: boolean
@@ -20,6 +23,9 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
   alt,
   className,
+  imageClassName,
+  placeholderClassName,
+  errorClassName,
   width,
   height,
   priority = false,
@@ -91,6 +97,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
         <div
           className={cn(
             'absolute inset-0 bg-gray-200 animate-pulse',
+            placeholderClassName,
             placeholder === 'blur' && blurDataURL && 'blur-sm'
           )}
           style={{
@@ -103,7 +110,12 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
 
       {/* Error State */}
       {isError && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
+        <div
+          className={cn(
+            'absolute inset-0 flex items-center justify-center bg-gray-100',
+            errorClassName
+          )}
+        >
           <div className="text-center text-gray-500">
             <svg
               className="w-8 h-8 mx-auto mb-2"
@@ -136,6 +148,7 @@ const OptimizedImage: React.FC<OptimizedImageProps> = ({
           onError={handleError}
           className={cn(
             'w-full h-full object-cover transition-opacity duration-300',
+            imageClassName,
             isLoaded ? 'opacity-100' : 'opacity-0'
           )}
         />

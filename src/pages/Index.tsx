@@ -7,7 +7,6 @@ import SEO from '@/components/SEO'
 import OptimizedImage from '@/components/OptimizedImage'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Shield, Truck, Sparkles, Zap } from 'lucide-react'
-import { Separator } from '@/components/ui/separator'
 import GoogleReviews from '@/components/GoogleReviews'
 
 const Index = () => {
@@ -93,108 +92,153 @@ const Index = () => {
       {/* Hero Section */}
       <Hero />
 
-      {/* Features Section */}
-      <section className="py-8 md:py-16 px-4 md:px-6 bg-gray-900">
-        <div className="container mx-auto">
-          <div className="text-center mb-6 md:mb-12">
-            <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-white">
-              Why Choose Gamecity?
-            </h2>
-            <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">
-              We're committed to delivering the best gaming experience with
-              premium components and exceptional service.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="p-3 md:p-6 rounded-xl glass-card bg-gray-800/30 flex flex-col items-center text-center"
-              >
-                <div className="mb-2 md:mb-4 p-2 md:p-3 rounded-full bg-yellow-500/20">
-                  {feature.icon}
+      <div data-home-sections className="flex flex-col">
+        {/* Features Section */}
+        <section
+          data-home-features-section
+          className="hidden md:order-1 md:block md:py-16 md:px-6 bg-gray-900"
+        >
+          <div className="container mx-auto">
+            <div className="text-center mb-6 md:mb-12">
+              <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-white">
+                Why Choose Gamecity?
+              </h2>
+              <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">
+                We're committed to delivering the best gaming experience with
+                premium components and exceptional service.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
+              {features.map((feature, index) => (
+                <div
+                  key={index}
+                  className="p-3 md:p-6 rounded-xl glass-card bg-gray-800/30 flex flex-col items-center text-center"
+                >
+                  <div className="mb-2 md:mb-4 p-2 md:p-3 rounded-full bg-yellow-500/20">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-sm md:text-xl font-semibold mb-1 md:mb-2 text-white">
+                    {feature.title}
+                  </h3>
+                  <p className="text-muted-foreground text-xs md:text-sm">
+                    {feature.description}
+                  </p>
                 </div>
-                <h3 className="text-sm md:text-xl font-semibold mb-1 md:mb-2 text-white">
-                  {feature.title}
-                </h3>
-                <p className="text-muted-foreground text-xs md:text-sm">
-                  {feature.description}
-                </p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+        </section>
+
+        {/* Featured Products Section */}
+        <div
+          data-home-featured-section
+          className="order-1 md:order-2"
+        >
+          <FeaturedProducts />
         </div>
-      </section>
 
-      {/* Featured Products Section */}
-      <FeaturedProducts />
+        {/* Google Reviews Section */}
+        <div data-home-reviews-section className="order-3 md:order-3">
+          <GoogleReviews />
+        </div>
 
-      {/* Google Reviews Section */}
-      <GoogleReviews />
-
-      {/* Categories Section */}
-      <section className="py-8 md:py-20 px-2 md:px-6 bg-gray-900">
-        <div className="container mx-auto">
+        {/* Categories Section */}
+        <section
+          id="shop-by-category"
+          className="order-2 py-8 md:order-4 md:py-20 px-2 md:px-6 bg-gray-900"
+        >
+          <div
+            data-home-category-container
+            className="container mx-auto px-0 md:px-8"
+          >
           <div className="flex flex-col items-center mb-6 md:mb-12">
-            <span className="px-2 py-0.5 md:px-3 md:py-1 text-xs font-medium text-yellow-400 bg-yellow-500/20 rounded-full mb-2 md:mb-3">
+            <span
+              data-home-category-badge
+              className="hidden md:inline-flex md:px-3 md:py-1 text-xs font-medium text-yellow-400 bg-yellow-500/20 rounded-full md:mb-3"
+            >
               Browse Categories
             </span>
             <h2 className="text-2xl md:text-4xl font-bold text-center mb-2 md:mb-4">
               Shop By Category
             </h2>
-            <p className="text-muted-foreground text-center text-sm md:text-base max-w-2xl">
+            <p
+              data-home-category-description
+              className="hidden text-muted-foreground text-center text-sm md:block md:text-base max-w-2xl"
+            >
               Find the perfect components for your setup by category. Whether
               you're building a new PC or upgrading your current one.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-8">
+          <div
+            data-home-category-grid
+            className="grid grid-cols-2 gap-x-3 gap-y-5 md:grid-cols-3 md:gap-8"
+          >
             {categories.map((category, index) => (
               <div
                 key={index}
-                className="group relative overflow-hidden rounded-lg md:rounded-xl shadow-lg hover-scale"
+                data-home-category-card
+                className="group relative min-w-0 md:overflow-hidden md:rounded-xl md:shadow-lg md:hover-scale"
               >
-                {/* Dark overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/60 to-transparent z-10"></div>
+                <Link
+                  data-mobile-category-link
+                  to={category.path}
+                  aria-label={`Shop ${category.title}`}
+                  className="absolute inset-0 z-30 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FDB813] focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 md:hidden"
+                />
 
-                {/* Background image */}
-                <div className="h-40 md:h-80 overflow-hidden">
+                {/* Dark overlay */}
+                <div className="absolute inset-0 z-10 hidden bg-gradient-to-t from-gray-900/90 via-gray-900/60 to-transparent md:block"></div>
+
+                {/* Category image */}
+                <div className="aspect-square overflow-hidden rounded-md bg-[#1b1b27] md:h-80 md:aspect-auto md:rounded-none md:bg-transparent">
                   <OptimizedImage
                     src={category.image}
                     alt={`${
                       category.title
                     } - Gaming ${category.title.toLowerCase()} in Nairobi Kenya`}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    width={400}
-                    height={320}
-                    quality={75}
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="h-full w-full bg-[#1b1b27] md:bg-gray-100"
+                    imageClassName="!object-contain p-2 transition-transform duration-500 group-hover:scale-[1.03] md:!object-cover md:p-0 md:duration-700 md:group-hover:scale-110"
+                    placeholderClassName="bg-[#1b1b27] md:bg-gray-200"
+                    errorClassName="bg-[#1b1b27] md:bg-gray-100"
+                    sizes="(max-width: 767px) 50vw, (max-width: 1200px) 50vw, 33vw"
                     priority={index < 3} // Prioritize first 3 images
                   />
                 </div>
 
-                {/* Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-2 md:p-6 z-20">
-                  <h3 className="text-xs md:text-xl font-bold mb-0.5 md:mb-2">{category.title}</h3>
-                  <p className="text-muted-foreground text-[10px] md:text-sm mb-1 md:mb-4 line-clamp-2">
+                <h3
+                  data-mobile-category-title
+                  className="mt-2 text-sm font-semibold leading-tight text-white md:hidden"
+                >
+                  {category.title}
+                </h3>
+
+                {/* Desktop content */}
+                <div
+                  data-desktop-category-content
+                  className="absolute bottom-0 left-0 right-0 z-20 hidden p-6 md:block"
+                >
+                  <h3 className="mb-2 text-xl font-bold">{category.title}</h3>
+                  <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
                     {category.description}
                   </p>
                   <Link to={category.path}>
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-yellow-400 border-yellow-700 hover:bg-yellow-900/30 h-6 md:h-9 text-xs md:text-sm px-2 md:px-3"
+                      className="h-9 border-yellow-700 px-3 text-sm text-yellow-400 hover:bg-yellow-900/30"
                     >
                       View {category.title}
-                      <ArrowRight size={12} className="ml-1 md:ml-2 md:w-4 md:h-4" />
+                      <ArrowRight size={16} className="ml-2" />
                     </Button>
                   </Link>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </div>
 
       {/* Background Elements */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">

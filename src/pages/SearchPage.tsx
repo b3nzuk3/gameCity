@@ -70,13 +70,13 @@ const SearchPage = () => {
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8 mt-16">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">
+        <div className="mb-6 flex flex-col gap-4 md:mb-8 md:flex-row md:items-center md:justify-between">
+          <h1 className="min-w-0 break-words text-2xl font-bold md:text-3xl">
             {searchTerm ? `Search Results for "${searchTerm}"` : 'Search'}
           </h1>
-          <div className="flex items-center gap-4">
+          <div className="flex w-full items-center gap-4 md:w-auto">
             <Select onValueChange={setSortBy} defaultValue="name">
-              <SelectTrigger className="w-[180px] bg-gray-800 border-gray-700">
+              <SelectTrigger className="w-full bg-gray-800 border-gray-700 md:w-[180px]">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent className="bg-gray-800 border-gray-700">
@@ -89,15 +89,15 @@ const SearchPage = () => {
         </div>
 
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6">
             {[...Array(8)].map((_, i) => (
-              <ProductSkeleton key={i} />
+              <ProductSkeleton key={i} variant="listing" />
             ))}
           </div>
         ) : sortedProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6">
             {sortedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} variant="listing" />
             ))}
           </div>
         ) : (

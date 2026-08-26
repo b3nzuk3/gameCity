@@ -35,12 +35,6 @@ const Hero = () => {
       ></div>
 
       <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
-        <div className="inline-block mb-6 px-3 py-1 rounded-full bg-yellow-500/20 backdrop-blur-sm border border-yellow-500/30">
-          <span className="text-xs font-medium text-yellow-400">
-            ✨ Welcome to Gamecity
-          </span>
-        </div>
-
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
           Build Your Ultimate
           <span className="block text-yellow-400"> Dream Machine</span>
