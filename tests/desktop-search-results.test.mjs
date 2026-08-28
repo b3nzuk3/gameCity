@@ -86,3 +86,9 @@ test('desktop price filter follows condition and uses the themed range control',
   assert.match(categoryPage, /availablePriceRange={availablePriceRange}/)
   assert.match(searchPage, /availablePriceRange={availablePriceRange}/)
 })
+
+test('desktop filter sidebar uses natural page height without internal scrolling', () => {
+  assert.doesNotMatch(sidebar, /max-h-\[calc\(100vh/)
+  assert.doesNotMatch(sidebar, /overflow-y-auto/)
+  assert.doesNotMatch(sidebar, /sticky top-24/)
+})

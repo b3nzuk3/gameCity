@@ -162,7 +162,7 @@ const ProductFilterSidebar = ({
       aria-label="Product filters"
       className="hidden w-[280px] shrink-0 lg:block"
     >
-      <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto rounded-lg border border-gray-800 bg-[#171723] p-4">
+      <div className="rounded-lg border border-gray-800 bg-[#171723] p-4">
         <div className="flex items-center justify-between border-b border-gray-800 pb-3">
           <h2 className="font-semibold text-white">Filters</h2>
           <Button
