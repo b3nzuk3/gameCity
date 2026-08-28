@@ -5,7 +5,6 @@ import { useQueryClient } from '@tanstack/react-query'
 import Layout from '@/components/Layout'
 import SEO from '@/components/SEO'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import {
   Select,
   SelectContent,
@@ -15,8 +14,9 @@ import {
 } from '@/components/ui/select'
 import { type Product } from '@/services/backendService'
 import { Package, Filter } from 'lucide-react'
-import { Input } from '@/components/ui/input'
 import ProductCard from '@/components/ProductCard'
+import DesktopProductGrid from '@/components/DesktopProductGrid'
+import ProductFilterSidebar from '@/components/ProductFilterSidebar'
 import MobileCatalogControls, {
   type MobileCatalogFilterValues,
 } from '@/components/MobileCatalogControls'
@@ -38,6 +38,11 @@ import {
   snapshotKey,
 } from '@/lib/infiniteCatalog'
 import { PRODUCT_CATEGORIES as CATEGORIES } from '@/lib/productCategories'
+import {
+  buildAvailableSpecificationFilters,
+  matchesSpecificationFilters,
+  type ActiveSpecificationFilters,
+} from '@/lib/productSpecificationFilters'
 
 // Add this mapping from slug to display name
 const CATEGORY_SLUG_TO_NAME: Record<string, string> = {
@@ -129,7 +134,7 @@ const CategoryPage = () => {
   const [searchParams] = useSearchParams()
   const currentPage = Math.max(1, Number(routePage || searchParams.get('page') || 1))
   const categoryParam = category === 'all' ? 'all' : category || 'all'
-  const isMobile = useIsMobile()
+  const isMobile = useIsMobile(1024)
   const queryClient = useQueryClient()
   const categoryQuery = useCategoryProducts(categoryParam, currentPage, CATEGORY_PAGE_SIZE)
   const products = useMemo(
@@ -151,8 +156,9 @@ const CategoryPage = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>(
     DEFAULT_FILTERS.selectedBrands
   )
+  const [selectedSpecificationFilters, setSelectedSpecificationFilters] =
+    useState<ActiveSpecificationFilters>({})
   const [filterPreferencesHydrated, setFilterPreferencesHydrated] = useState(false)
-  const [showFilters, setShowFilters] = useState(false)
   const [mobileCatalogNavTarget, setMobileCatalogNavTarget] =
     useState<HTMLElement | null>(null)
 
@@ -219,6 +225,14 @@ const CategoryPage = () => {
     const brands = allLoadedProducts.map((product) => product.brand).filter(Boolean)
     return Array.from(new Set(brands))
   }, [allLoadedProducts])
+  const brandCounts = useMemo(
+    () => allLoadedProducts.reduce<Record<string, number>>((counts, product) => {
+      const brand = product.brand
+      if (brand?.trim()) counts[brand] = (counts[brand] || 0) + 1
+      return counts
+    }, {}),
+    [allLoadedProducts]
+  )
   const availablePriceRange = useMemo<[number, number]>(() => {
     const prices = allLoadedProducts
       .map((product) => product.price)
@@ -282,9 +296,18 @@ const CategoryPage = () => {
     setSelectedBrands([])
   }, [])
 
+  const clearDesktopFilters = useCallback(() => {
+    clearMobileFilters()
+    setSelectedSpecificationFilters({})
+  }, [clearMobileFilters])
+
   useEffect(() => {
     setMobileCatalogNavTarget(document.getElementById('mobile-catalog-nav-slot'))
   }, [])
+
+  useEffect(() => {
+    setSelectedSpecificationFilters({})
+  }, [categoryParam])
 
   useEffect(() => {
     if (categoryQuery.error) console.error('CategoryPage: Error fetching products:', categoryQuery.error)
@@ -405,6 +428,18 @@ const CategoryPage = () => {
   const filteredProducts = useMemo(
     () => displayBatches.flatMap((batch) => batch.products),
     [displayBatches]
+  )
+
+  const availableSpecificationFilters = useMemo(
+    () => buildAvailableSpecificationFilters(filteredProducts),
+    [filteredProducts]
+  )
+
+  const desktopFilteredProducts = useMemo(
+    () => filteredProducts.filter((product) =>
+      matchesSpecificationFilters(product, selectedSpecificationFilters)
+    ),
+    [filteredProducts, selectedSpecificationFilters]
   )
 
   const productLinks = useMemo(() => {
@@ -735,7 +770,7 @@ const CategoryPage = () => {
           />,
           mobileCatalogNavTarget
         )}
-      <div className="container mx-auto px-4 pb-8 pt-16 md:py-8 md:mt-16">
+      <div className="mx-auto w-full px-4 pb-8 pt-16 lg:px-[clamp(0.75rem,1.25vw,1.5rem)] lg:py-6">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">
@@ -758,10 +793,10 @@ const CategoryPage = () => {
           </p>
         </div>
 
-        {/* Category Navigation */}
+        {/* Desktop category navigation */}
         <div
           data-desktop-category-navigation
-          className="mb-8 hidden overflow-x-auto md:block"
+          className="mb-6 hidden overflow-x-auto lg:block"
         >
           <div className="flex space-x-2 pb-2">
             {CATEGORIES.map((cat) => (
@@ -780,200 +815,124 @@ const CategoryPage = () => {
           </div>
         </div>
 
-        {/* Filter Toggle Button for Mobile */}
-        <div
-          data-tablet-filter-toggle
-          className="mb-4 hidden md:flex lg:hidden"
-        >
-          <Button
-            variant="outline"
-            className="w-full border-gray-700 text-muted-foreground hover:text-foreground flex items-center justify-center gap-2"
-            onClick={() => setShowFilters((prev) => !prev)}
-            aria-expanded={showFilters}
-            aria-controls="filters-section"
-          >
-            <Filter size={18} />
-            {showFilters ? 'Hide Filters' : 'Show Filters'}
-          </Button>
-        </div>
-
-        {/* Filters and Sorting */}
-        <div
-          id="filters-section"
-          data-desktop-filters
-          className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8 ${
-            showFilters ? '' : 'hidden'
-          } lg:grid`}
-        >
-          {/* Stock Filter */}
-          <Select value={filterBy} onValueChange={setFilterBy}>
-            <SelectTrigger className="w-full bg-gray-900 border-gray-700">
-              <SelectValue placeholder="Filter by stock..." />
-            </SelectTrigger>
-            <SelectContent className="bg-gray-900 border-gray-700">
-              <SelectItem value="all">All Products</SelectItem>
-              <SelectItem value="in-stock">In Stock</SelectItem>
-              <SelectItem value="low-stock">Low Stock</SelectItem>
-              <SelectItem value="out-of-stock">Out of Stock</SelectItem>
-            </SelectContent>
-          </Select>
-
-          {/* Condition Filter */}
-          <Select value={conditionFilter} onValueChange={setConditionFilter}>
-            <SelectTrigger className="w-full bg-gray-900 border-gray-700">
-              <SelectValue placeholder="Filter by condition..." />
-            </SelectTrigger>
-            <SelectContent className="bg-gray-900 border-gray-700">
-              <SelectItem value="all">All Conditions</SelectItem>
-              <SelectItem value="New">New</SelectItem>
-              <SelectItem value="Pre-Owned">Pre-Owned</SelectItem>
-            </SelectContent>
-          </Select>
-
-          {/* Sort Options */}
-          <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-full bg-gray-900 border-gray-700">
-              <SelectValue placeholder="Sort by..." />
-            </SelectTrigger>
-            <SelectContent className="bg-gray-900 border-gray-700">
-              <SelectItem value="name">Name (A-Z)</SelectItem>
-              <SelectItem value="price-low">Price (Low to High)</SelectItem>
-              <SelectItem value="price-high">Price (High to Low)</SelectItem>
-              <SelectItem value="rating">Rating (High to Low)</SelectItem>
-            </SelectContent>
-          </Select>
-
-          {/* Brand Filter */}
-          <Select
-            value={selectedBrands.join(',')}
-            onValueChange={(value) =>
-              setSelectedBrands(value === 'all' ? [] : value.split(','))
-            }
-          >
-            <SelectTrigger className="w-full bg-gray-900 border-gray-700">
-              <SelectValue placeholder="Filter by brand..." />
-            </SelectTrigger>
-            <SelectContent className="bg-gray-900 border-gray-700">
-              <SelectItem value="all">All Brands</SelectItem>
-              {availableBrands.map((brand) => (
-                <SelectItem key={brand} value={brand}>
-                  {brand}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {/* Price Range Filter */}
-          <div className="flex items-center space-x-2">
-            <Input
-              type="number"
-              placeholder="Min"
-              value={priceRange[0] ?? ''}
-              onChange={(e) => {
-                setPriceFilterActive(true)
-                setPriceRange([
-                  e.target.value ? Number(e.target.value) : null,
-                  priceRange[1],
-                ])
-              }}
-              className="w-24 bg-gray-900 border-gray-700"
-            />
-            <span>-</span>
-            <Input
-              type="number"
-              placeholder="Max"
-              value={priceRange[1] ?? ''}
-              onChange={(e) => {
-                setPriceFilterActive(true)
-                setPriceRange([
-                  priceRange[0],
-                  e.target.value ? Number(e.target.value) : null,
-                ])
-              }}
-              className="w-24 bg-gray-900 border-gray-700"
-            />
-          </div>
-        </div>
-
-        {/* Products Grid */}
-        {loading || (isMobile && isLoadingMore && mobileBatches.length === 0) ? (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6">
-            {[...Array(8)].map((_, index) => (
-              <ProductSkeleton key={index} variant="listing" />
-            ))}
-          </div>
-        ) : filteredProducts.length > 0 ? (
-          <div
-            ref={productGridRef}
-            onClickCapture={(event) => {
-              if ((event.target as HTMLElement).closest('a[href*="/product/"]')) {
-                persistSnapshot()
-              }
+        <div className="hidden items-start gap-5 lg:mx-[clamp(1.25rem,1.9vw,2.25rem)] lg:flex">
+          <ProductFilterSidebar
+            filterBy={filterBy}
+            conditionFilter={conditionFilter}
+            selectedBrands={selectedBrands}
+            availableBrands={availableBrands}
+            brandCounts={brandCounts}
+            availablePriceRange={availablePriceRange}
+            availableSpecificationFilters={availableSpecificationFilters}
+            selectedSpecificationFilters={selectedSpecificationFilters}
+            priceRange={priceRange}
+            onFilterByChange={setFilterBy}
+            onConditionChange={setConditionFilter}
+            onBrandsChange={setSelectedBrands}
+            onSpecificationFiltersChange={setSelectedSpecificationFilters}
+            onPriceRangeChange={(range) => {
+              setPriceRange(range)
+              setPriceFilterActive(range[0] !== null || range[1] !== null)
             }}
-            className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-6"
-          >
-            {displayBatches.map((batch) => (
-              <section key={batch.page} className="contents" aria-label={`Page ${batch.page}`}>
-                <div
-                  data-catalog-page={batch.page}
-                  className="col-span-full h-px"
-                  aria-hidden="true"
-                />
-                {batch.products.map((product) => (
-                  <div key={product.id} className="relative">
-                    {(product.count_in_stock ?? product.countInStock ?? 0) <= 5 &&
-                      (product.count_in_stock ?? product.countInStock ?? 0) > 0 && (
-                        <Badge
-                          variant="destructive"
-                          className="absolute top-2 right-2 z-10 hidden text-xs md:inline-flex"
-                        >
-                          Low Stock
-                        </Badge>
-                      )}
-                    {(product.count_in_stock ?? product.countInStock ?? 0) === 0 && (
-                      <Badge
-                        variant="secondary"
-                        className="absolute top-2 right-2 z-10 hidden text-xs bg-gray-600 md:inline-flex"
-                      >
-                        Out of Stock
-                      </Badge>
-                    )}
-                    <ProductCard
-                      variant="listing"
-                      product={{ ...product, href: productLinks.get(product.id) }}
-                    />
-                  </div>
-                ))}
-              </section>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <Package size={48} className="mx-auto mb-4 text-muted-foreground" />
-            <h2 className="text-xl font-medium mb-2">No products found</h2>
-            <p className="text-muted-foreground mb-6">
-              Try adjusting your filters or search criteria
-            </p>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSortBy('name')
-                setFilterBy('all')
-                setConditionFilter('all')
-                setSelectedBrands([])
-                setPriceRange([null, null])
-                setPriceFilterActive(false)
-              }}
-              className="border-gray-700 text-muted-foreground hover:text-foreground"
-            >
-              <Filter size={16} className="mr-2" />
-              Reset Filters
-            </Button>
-          </div>
-        )}
+            onClear={clearDesktopFilters}
+          />
 
-        {isMobile && mobileBatches.length > 0 && (
-          <div className="md:hidden mt-6 text-center" aria-live="polite">
+          <main className="min-w-0 flex-1">
+            <div className="mb-4 flex items-center justify-between rounded-lg border border-gray-800 bg-[#171723] px-4 py-3">
+              <p className="text-sm text-gray-400">
+                Showing {desktopFilteredProducts.length} of {totalProducts} products
+              </p>
+              <div className="flex items-center gap-3">
+                <label htmlFor="desktop-catalog-sort" className="text-sm text-gray-400">Sort by</label>
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger id="desktop-catalog-sort" className="h-9 w-[190px] border-gray-700 bg-gray-900">
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent className="border-gray-700 bg-gray-900">
+                    <SelectItem value="name">Name (A-Z)</SelectItem>
+                    <SelectItem value="price-low">Price (Low to High)</SelectItem>
+                    <SelectItem value="price-high">Price (High to Low)</SelectItem>
+                    <SelectItem value="rating">Rating (High to Low)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {loading ? (
+              <div className="grid grid-cols-3 gap-2 xl:grid-cols-5">
+                {[...Array(10)].map((_, index) => <ProductSkeleton key={index} />)}
+              </div>
+            ) : desktopFilteredProducts.length > 0 ? (
+              <DesktopProductGrid
+                products={desktopFilteredProducts.map((product) => ({
+                  ...product,
+                  href: productLinks.get(product.id),
+                }))}
+              />
+            ) : (
+              <div className="py-12 text-center">
+                <Package size={48} className="mx-auto mb-4 text-muted-foreground" />
+                <h2 className="mb-2 text-xl font-medium">No products found</h2>
+                <p className="mb-6 text-muted-foreground">Try adjusting your filters.</p>
+                <Button variant="outline" onClick={clearDesktopFilters}>
+                  <Filter size={16} className="mr-2" /> Reset Filters
+                </Button>
+              </div>
+            )}
+
+            {!loading && desktopFilteredProducts.length > 0 && totalPages > 1 && (
+              <div className="mt-8 flex items-center justify-between border-t border-gray-700 pt-6">
+                <div className="text-sm text-muted-foreground">
+                  Showing {(currentPage - 1) * productsPerPage + 1} to{' '}
+                  {Math.min(currentPage * productsPerPage, totalProducts)} of {totalProducts} products
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Link to={pageHref(Math.max(1, currentPage - 1))} aria-disabled={currentPage <= 1} tabIndex={currentPage <= 1 ? -1 : 0} className="inline-flex h-9 items-center justify-center rounded-md border border-gray-700 px-3 text-sm text-muted-foreground hover:text-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50">Previous</Link>
+                  <span className="px-2 text-sm text-muted-foreground">Page {currentPage} of {totalPages}</span>
+                  <Link to={pageHref(currentPage + 1)} aria-disabled={currentPage >= totalPages} tabIndex={currentPage >= totalPages ? -1 : 0} className="inline-flex h-9 items-center justify-center rounded-md border border-gray-700 px-3 text-sm text-muted-foreground hover:text-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50">Next</Link>
+                </div>
+              </div>
+            )}
+          </main>
+        </div>
+
+        <div className="lg:hidden">
+          {loading || (isMobile && isLoadingMore && mobileBatches.length === 0) ? (
+            <div className="grid grid-cols-1 gap-2">
+              {[...Array(8)].map((_, index) => <ProductSkeleton key={index} variant="listing" />)}
+            </div>
+          ) : filteredProducts.length > 0 ? (
+            <div
+              ref={productGridRef}
+              onClickCapture={(event) => {
+                if ((event.target as HTMLElement).closest('a[href*="/product/"]')) persistSnapshot()
+              }}
+              className="grid grid-cols-1 gap-2"
+            >
+              {displayBatches.map((batch) => (
+                <section key={batch.page} className="contents" aria-label={`Page ${batch.page}`}>
+                  <div data-catalog-page={batch.page} className="col-span-full h-px" aria-hidden="true" />
+                  {batch.products.map((product) => (
+                    <div key={product.id} className="relative">
+                      <ProductCard variant="listing" product={{ ...product, href: productLinks.get(product.id) }} />
+                    </div>
+                  ))}
+                </section>
+              ))}
+            </div>
+          ) : (
+            <div className="py-12 text-center">
+              <Package size={48} className="mx-auto mb-4 text-muted-foreground" />
+              <h2 className="mb-2 text-xl font-medium">No products found</h2>
+              <p className="mb-6 text-muted-foreground">Try adjusting your filters or search criteria</p>
+              <Button variant="outline" onClick={clearMobileFilters} className="border-gray-700 text-muted-foreground hover:text-foreground">
+                <Filter size={16} className="mr-2" /> Reset Filters
+              </Button>
+            </div>
+          )}
+
+          {isMobile && mobileBatches.length > 0 && (
+          <div className="mt-6 text-center" aria-live="polite">
             {isLoadingMore && (
               <div
                 className="grid grid-cols-1 gap-2"
@@ -1003,39 +962,8 @@ const CategoryPage = () => {
               </p>
             )}
           </div>
-        )}
-
-        {/* Pagination Controls */}
-        {!loading && filteredProducts.length > 0 && totalPages > 1 && (
-          <div className="hidden md:flex items-center justify-between mt-8 pt-6 border-t border-gray-700">
-            <div className="text-sm text-muted-foreground">
-              Showing {(currentPage - 1) * productsPerPage + 1} to{' '}
-              {Math.min(currentPage * productsPerPage, totalProducts)} of{' '}
-              {totalProducts} products
-            </div>
-            <div className="flex items-center space-x-2">
-              <Link
-                to={pageHref(Math.max(1, currentPage - 1))}
-                aria-disabled={currentPage <= 1}
-                tabIndex={currentPage <= 1 ? -1 : 0}
-                className="inline-flex h-9 items-center justify-center rounded-md border border-gray-700 px-3 text-sm text-muted-foreground hover:text-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50"
-              >
-                Previous
-              </Link>
-              <span className="text-sm text-muted-foreground px-2">
-                Page {currentPage} of {totalPages}
-              </span>
-              <Link
-                to={pageHref(currentPage + 1)}
-                aria-disabled={currentPage >= totalPages}
-                tabIndex={currentPage >= totalPages ? -1 : 0}
-                className="inline-flex h-9 items-center justify-center rounded-md border border-gray-700 px-3 text-sm text-muted-foreground hover:text-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50"
-              >
-                Next
-              </Link>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </Layout>
   )

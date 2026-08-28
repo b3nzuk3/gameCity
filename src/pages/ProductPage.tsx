@@ -190,7 +190,7 @@ const ProductPage = () => {
           },
         ]}
       />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 lg:py-6">
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           <div className="space-y-4">
             <div className="w-full overflow-hidden">

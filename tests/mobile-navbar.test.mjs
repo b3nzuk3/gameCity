@@ -64,7 +64,7 @@ test('mobile header has distinct main and persistent search rows', () => {
   assert.match(navbar, /aria-label="Search products"/)
   assert.match(navbar, /-translate-y-\[var\(--mobile-main-height\)\]/)
   assert.match(navbar, /-translate-y-\[calc\(100%\+1px\)\]/)
-  assert.match(navbar, /md:translate-y-0/)
+  assert.match(navbar, /lg:translate-y-0/)
   assert.match(navbar, /gameCityCatalogSnapshotKey/)
   assert.match(navbar, /gameCityMobileHeaderState/)
   assert.match(categoryPage, /gameCityCatalogScrollY: window\.scrollY/)
@@ -72,7 +72,7 @@ test('mobile header has distinct main and persistent search rows', () => {
 
 test('mobile transition is reduced-motion safe and layout reserves both rows', () => {
   assert.match(navbar, /motion-reduce:transition-none/)
-  assert.match(layout, /pt-28 md:pt-16/)
+  assert.match(layout, /pt-28 lg:pt-16/)
 })
 
 test('desktop search remains present and mobile no longer uses a search launcher', () => {

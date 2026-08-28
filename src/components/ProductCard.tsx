@@ -84,7 +84,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
         className={cn(
           'bg-[#232334] border-gray-700 overflow-hidden hover:border-yellow-500/50 transition-all duration-200 group cursor-pointer hover:shadow-lg hover:shadow-yellow-500/10 active:scale-[0.98] h-full',
           isListing
-            ? 'grid min-h-[178px] grid-cols-[minmax(112px,38%)_minmax(0,1fr)] md:flex md:min-h-[400px] md:flex-col'
+            ? 'grid min-h-[178px] grid-cols-[minmax(112px,38%)_minmax(0,1fr)] lg:flex lg:min-h-[400px] lg:flex-col'
             : 'flex min-h-[350px] flex-col sm:min-h-[400px]'
         )}
       >
@@ -93,7 +93,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
           className={cn(
             'relative overflow-hidden',
             isListing
-              ? 'min-h-[178px] bg-[#1b1b27] md:min-h-0 md:aspect-square md:bg-white'
+              ? 'min-h-[178px] bg-[#1b1b27] lg:min-h-0 lg:aspect-square lg:bg-white'
               : 'aspect-square bg-white'
           )}
         >
@@ -104,16 +104,16 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
             } in Nairobi Kenya`}
             className={cn(
               'w-full h-full transition-transform duration-300 group-hover:scale-105',
-              isListing && 'bg-[#1b1b27] md:bg-gray-100'
+              isListing && 'bg-[#1b1b27] lg:bg-gray-100'
             )}
             imageClassName={cn(
-              isListing ? 'object-contain p-1.5 md:object-cover md:p-0' : 'object-cover'
+              isListing ? 'object-contain p-1.5 lg:object-cover lg:p-0' : 'object-cover'
             )}
             placeholderClassName={cn(
-              isListing && 'bg-[#1b1b27] md:bg-gray-200'
+              isListing && 'bg-[#1b1b27] lg:bg-gray-200'
             )}
             errorClassName={cn(
-              isListing && 'bg-[#1b1b27] md:bg-gray-100'
+              isListing && 'bg-[#1b1b27] lg:bg-gray-100'
             )}
             sizes={
               isListing
@@ -137,7 +137,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
           )}
 
           {/* Stock Badge */}
-          <div className={cn('absolute top-2 right-2 z-10', isListing && 'hidden md:block')}>
+          <div className={cn('absolute top-2 right-2 z-10', isListing && 'hidden lg:block')}>
             <div
               className={`px-2 py-1 rounded-full text-xs font-semibold shadow-lg ${
                 stockCount > 0
@@ -155,7 +155,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
             size="icon"
             className={cn(
               'absolute bottom-2 right-2 bg-black/50 hover:bg-black/70 text-white transition-all duration-200',
-              isListing ? 'h-10 w-10 md:h-8 md:w-8' : 'h-8 w-8',
+              isListing ? 'h-10 w-10 lg:h-8 lg:w-8' : 'h-8 w-8',
               isProductFavorite ? 'text-red-400' : 'hover:text-red-400'
             )}
             onClick={handleToggleFavorite}
@@ -176,14 +176,14 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
           <CardContent
             className={cn(
               'flex min-h-0 flex-grow flex-col',
-              isListing ? 'p-2.5 pb-1 md:p-4' : 'p-2 sm:p-4'
+              isListing ? 'p-2.5 pb-1 lg:p-4' : 'p-2 sm:p-4'
             )}
           >
           {/* Product Title - Allow wrapping for long names */}
           <h3
             className={cn(
               'font-semibold text-white leading-tight break-words hyphens-auto line-clamp-3',
-              isListing ? 'mb-1.5 text-sm md:mb-2 md:text-base' : 'mb-2 text-sm sm:text-base'
+              isListing ? 'mb-1.5 text-sm lg:mb-2 lg:text-base' : 'mb-2 text-sm sm:text-base'
             )}
           >
             {product.name}
@@ -191,13 +191,13 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
 
           {/* Category */}
           {product.category && (
-            <div className={cn('text-xs text-[#b8b8c8] capitalize', isListing ? 'mb-1 md:mb-2' : 'mb-2')}>
+            <div className={cn('text-xs text-[#b8b8c8] capitalize', isListing ? 'mb-1 lg:mb-2' : 'mb-2')}>
               {product.category}
             </div>
           )}
 
           {/* Rating - Compact */}
-          <div className={cn('flex items-center', isListing ? 'mb-1 md:mb-2' : 'mb-2')}>
+          <div className={cn('flex items-center', isListing ? 'mb-1 lg:mb-2' : 'mb-2')}>
             {product.rating > 0 ? (
               <>
                 <div className="flex items-center">
@@ -222,7 +222,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
           </div>
 
           {/* Price - Prominent */}
-          <div className={cn(isListing ? 'mb-1 md:mb-2' : 'mb-2')}>
+          <div className={cn(isListing ? 'mb-1 lg:mb-2' : 'mb-2')}>
             {isOfferActive(product.offer) ? (
               <div className="flex flex-col">
                 <span className="text-xs line-through text-[#b8b8c8]">
@@ -231,7 +231,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
                 <span
                   className={cn(
                     'font-bold text-[#FDB813] tabular-nums leading-tight',
-                    isListing ? 'text-base md:text-xl' : 'text-lg sm:text-xl'
+                    isListing ? 'text-base lg:text-xl' : 'text-lg sm:text-xl'
                   )}
                 >
                   {formatKESPrice(getOfferPrice(product.price, product.offer))}
@@ -242,7 +242,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
               <span
                 className={cn(
                   'font-bold text-[#FDB813] tabular-nums leading-tight',
-                  isListing ? 'text-base md:text-xl' : 'text-lg sm:text-xl'
+                  isListing ? 'text-base lg:text-xl' : 'text-lg sm:text-xl'
                 )}
               >
                 {formatKESPrice(product.price)}
@@ -254,7 +254,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
           {isListing && (
             <div
               className={cn(
-                'mb-1 text-xs font-medium md:hidden',
+                'mb-1 text-xs font-medium lg:hidden',
                 stockCount > 0 ? 'text-green-400' : 'text-red-400'
               )}
             >
@@ -271,7 +271,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
             className={cn(
               'mt-auto pt-0',
               isListing
-                ? 'p-2.5 pt-0 md:p-3 md:pt-0'
+                ? 'p-2.5 pt-0 lg:p-3 lg:pt-0'
                 : 'p-2 pt-0 sm:p-3 sm:pt-0'
             )}
           >
@@ -281,7 +281,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
               size="sm"
               className={cn(
                 'min-w-0 flex-1 border-gray-600 px-2 py-1.5 text-xs text-white hover:bg-gray-700 hover:text-white',
-                isListing ? 'hidden md:inline-flex md:h-9' : 'h-8 sm:h-9'
+                isListing ? 'hidden lg:inline-flex lg:h-9' : 'h-8 sm:h-9'
               )}
               onClick={(e) => {
                 e.preventDefault()
@@ -299,7 +299,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
               size="sm"
               className={cn(
                 'min-w-0 flex-1 bg-gradient-to-r from-[#FDB813] to-[#ff9500] hover:from-[#ff9500] hover:to-[#FDB813] text-black font-semibold text-xs py-1.5 px-2 shadow-lg hover:shadow-xl transition-all duration-200 active:scale-95',
-                isListing ? 'h-10 md:h-9' : 'h-8 sm:h-9'
+                isListing ? 'h-10 lg:h-9' : 'h-8 sm:h-9'
               )}
               onClick={handleAddToCart}
               disabled={stockCount === 0}

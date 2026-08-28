@@ -15,22 +15,22 @@ test('listing cards use a compact mobile image-and-details layout', () => {
 })
 
 test('mobile listing cards hide View and use a charcoal image panel', () => {
-  assert.match(productCard, /hidden md:inline-flex/)
-  assert.match(productCard, /bg-\[#1b1b27\] md:bg-gray-100/)
+  assert.match(productCard, /hidden lg:inline-flex/)
+  assert.match(productCard, /bg-\[#1b1b27\] lg:bg-gray-100/)
   assert.doesNotMatch(productCard, /isListing \? '.*bg-white/)
 })
 
 test('category and search results opt into one-column mobile listing cards', () => {
-  assert.match(categoryPage, /grid-cols-1 md:grid-cols-3 lg:grid-cols-4/)
+  assert.match(categoryPage, /className="grid grid-cols-1 gap-2"/)
   assert.match(categoryPage, /variant="listing"/)
-  assert.match(searchPage, /grid-cols-1 md:grid-cols-3 lg:grid-cols-4/)
+  assert.match(searchPage, /className="grid grid-cols-1 gap-2 lg:hidden"/)
   assert.match(searchPage, /variant="listing"/)
 })
 
 test('listing skeletons reserve the same horizontal mobile geometry', () => {
   assert.match(skeleton, /variant\?: 'default' \| 'listing'/)
   assert.match(skeleton, /grid-cols-\[minmax\(112px,38%\)_minmax\(0,1fr\)\]/)
-  assert.match(skeleton, /bg-\[#1b1b27\] md:bg-muted/)
+  assert.match(skeleton, /bg-\[#1b1b27\] lg:bg-muted/)
   assert.match(categoryPage, /<ProductSkeleton[^>]*variant="listing"/s)
   assert.match(searchPage, /<ProductSkeleton[^>]*variant="listing"/s)
 })

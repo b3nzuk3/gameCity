@@ -286,7 +286,7 @@ const Navbar = () => {
   return (
     <nav
       data-mobile-header-state={mobileHeaderState}
-      className={`bg-[#0f0f19]/95 backdrop-blur-md border-b border-gray-800 shadow-lg fixed top-[env(safe-area-inset-top)] md:top-0 left-0 right-0 z-50 transition-transform duration-200 ease-out motion-reduce:transition-none md:translate-y-0 ${
+      className={`bg-[#0f0f19]/95 backdrop-blur-md border-b border-gray-800 shadow-lg fixed top-[env(safe-area-inset-top)] lg:top-0 left-0 right-0 z-50 transition-transform duration-200 ease-out motion-reduce:transition-none lg:translate-y-0 ${
         mobileHeaderState === 'top'
           ? 'translate-y-0'
           : mobileHeaderState === 'compact'
@@ -302,7 +302,7 @@ const Navbar = () => {
       <div
         ref={mainRowRef}
         data-mobile-header-row="main"
-        className="container mx-auto px-3 sm:px-4"
+        className="container mx-auto px-3 sm:px-4 lg:w-full lg:max-w-none lg:px-[clamp(0.75rem,1.25vw,1.5rem)]"
       >
         <div className="flex items-center justify-between h-14 sm:h-16">
           {/* Logo */}
@@ -320,7 +320,10 @@ const Navbar = () => {
           </Link>
 
           {/* Search Bar - Desktop */}
-          <div data-navbar-search className="hidden md:flex relative flex-1 max-w-lg mx-8">
+          <div
+            data-navbar-search
+            className="relative mx-[clamp(1rem,2vw,2.25rem)] hidden min-w-0 flex-1 lg:flex"
+          >
             <form onSubmit={handleSearch} className="w-full">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -342,12 +345,12 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden shrink-0 items-center gap-1 lg:flex xl:gap-2">
             {/* Navigation Links with Hover Dropdown */}
             <div className="relative group">
               <Link
                 to="/category/all"
-                className="text-gray-300 group-hover:text-yellow-400 transition-colors px-3 py-4 rounded-md text-sm font-medium flex items-center"
+                className="flex items-center rounded-md px-2 py-4 text-sm font-medium text-gray-300 transition-colors group-hover:text-yellow-400 xl:px-3"
               >
                 Categories
               </Link>
@@ -455,17 +458,17 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center gap-1">
                 <Link to="/signin">
                   <Button
                     variant="ghost"
-                    className="text-gray-300 hover:text-white"
+                    className="px-2 text-gray-300 hover:text-white xl:px-3"
                   >
                     Sign In
                   </Button>
                 </Link>
                 <Link to="/signup">
-                  <Button className="bg-yellow-500 hover:bg-yellow-400 text-black">
+                  <Button className="bg-yellow-500 px-3 text-black hover:bg-yellow-400 xl:px-4">
                     Sign Up
                   </Button>
                 </Link>
@@ -474,7 +477,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Actions */}
-          <div className="md:hidden flex items-center space-x-2">
+          <div className="lg:hidden flex items-center space-x-2">
             {/* Cart Button */}
             <Link
               to="/cart"
@@ -603,7 +606,7 @@ const Navbar = () => {
       <div
         data-mobile-header-row="search"
         data-navbar-search
-        className="relative border-t border-gray-800/80 px-3 py-2 md:hidden"
+        className="relative border-t border-gray-800/80 px-3 py-2 lg:hidden"
       >
         <form onSubmit={handleSearch} role="search" aria-label="Search products">
           <div className="relative">
@@ -632,7 +635,7 @@ const Navbar = () => {
         </form>
         {renderSuggestions('mobile-search-suggestions')}
       </div>
-      <div id="mobile-catalog-nav-slot" className="md:hidden" />
+      <div id="mobile-catalog-nav-slot" className="lg:hidden" />
     </nav>
   )
 }

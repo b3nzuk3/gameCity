@@ -82,14 +82,12 @@ test('synchronizes bounded price fields with a two-thumb range slider', () => {
   assert.match(categoryPage, /availablePriceRange={availablePriceRange}/)
 })
 
-test('keeps the former category and filter controls off phones but available above mobile', () => {
+test('switches cleanly from mobile controls to desktop controls at lg', () => {
   assert.match(
     categoryPage,
-    /data-desktop-category-navigation[\s\S]{0,160}className="[^"]*hidden[^"]*md:block/
+    /data-desktop-category-navigation[\s\S]{0,160}className="[^"]*hidden[^"]*lg:block/
   )
-  assert.match(
-    categoryPage,
-    /data-tablet-filter-toggle[\s\S]{0,160}className="[^"]*hidden[^"]*md:flex[^"]*lg:hidden/
-  )
-  assert.match(categoryPage, /data-desktop-filters/)
+  assert.match(categoryPage, /<ProductFilterSidebar/)
+  assert.match(categoryPage, /className="lg:hidden"/)
+  assert.doesNotMatch(categoryPage, /data-tablet-filter-toggle/)
 })
