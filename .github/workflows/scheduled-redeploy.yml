@@ -1,0 +1,20 @@
+name: Scheduled Vercel Redeploy
+
+on:
+  schedule:
+    # Every 6 hours
+    - cron: "0 */6 * * *"
+
+  # Allows us to trigger it manually from GitHub
+  workflow_dispatch:
+
+jobs:
+  redeploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger Vercel deployment
+        run: |
+          curl --fail --show-error \
+            -X POST \
+            "${{ secrets.VERCEL_DEPLOY_HOOK }}"
