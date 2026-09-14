@@ -65,7 +65,7 @@ const DesktopSearchResultItem = ({ product }: { product: Product }) => {
         )}
 
         {compactSpecifications.length > 0 && (
-          <p className="mt-2 line-clamp-1 text-sm text-gray-300">
+          <p className="mt-2 line-clamp-1 text-base leading-6 text-gray-300">
             {compactSpecifications.join(' • ')}
           </p>
         )}

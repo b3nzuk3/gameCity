@@ -324,7 +324,7 @@ const GoogleReviews = () => {
                         ))}
                       </div>
                       
-                      <p className="text-gray-300 text-sm leading-relaxed flex-grow">
+                      <p className="text-gray-300 text-base leading-relaxed flex-grow">
                         "{review.text}"
                       </p>
                     </div>

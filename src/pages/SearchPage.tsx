@@ -212,7 +212,7 @@ const SearchPage = () => {
                 onClear={clearDesktopFilters}
               />
               <main className="min-w-0 flex-1">
-                <p className="mb-3 text-sm text-gray-400">{desktopProducts.length} results</p>
+                <p className="mb-3 text-base leading-6 text-gray-400">{desktopProducts.length} results</p>
                 {desktopProducts.length > 0 ? (
                   <DesktopSearchResultList products={desktopProducts} />
                 ) : (
@@ -229,7 +229,7 @@ const SearchPage = () => {
           <div className="text-center py-16">
             <Package className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h2 className="text-xl font-semibold mb-2">No products found</h2>
-            <p className="text-muted-foreground">
+            <p className="text-base leading-6 text-muted-foreground">
               Your search for "{searchTerm}" did not match any products.
             </p>
           </div>

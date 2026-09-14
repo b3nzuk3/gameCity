@@ -263,7 +263,7 @@ const MobileCatalogControls = ({
             <SheetDescription>
               Refine and sort the products shown in this category.
             </SheetDescription>
-            <p className="pt-1 text-sm font-medium text-gray-200" aria-live="polite">
+            <p className="pt-1 text-base font-medium text-gray-200" aria-live="polite">
               {resultCountLoading
                 ? 'Updating product count...'
                 : resultCount === null
@@ -412,7 +412,7 @@ const MobileCatalogControls = ({
                   )}
                 </div>
               ) : (
-                <p className="text-sm text-gray-400">No brand options available.</p>
+                <p className="text-base text-gray-400">No brand options available.</p>
               )}
             </fieldset>
 

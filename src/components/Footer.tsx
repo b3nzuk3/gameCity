@@ -27,7 +27,7 @@ const Footer = () => {
             <Link to="/" className="text-lg md:text-2xl font-bold text-yellow-400">
               Gamecity Electronics
             </Link>
-            <p className="text-muted-foreground text-xs md:text-base leading-relaxed">
+            <p className="text-muted-foreground text-sm md:text-base leading-relaxed">
               Your premier destination for high-quality gaming components and
               accessories in Nairobi, Kenya.
             </p>
@@ -36,7 +36,7 @@ const Footer = () => {
                 href="https://www.google.com/maps/place/GAMECITY+ELECTRONICS/@-1.2835,36.8247986,17z/data=!4m6!3m5!1s0x182f11ff319a2a71:0x23dfb4aee72fab6f!8m2!3d-1.2834756!4d36.8245877!16s%2Fg%2F11rcy9p60j?entry=ttu&g_ep=EgoyMDI1MDYwNC4wIKXMDSoASAFQAw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center text-xs md:text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
+                className="flex items-center text-sm md:text-base text-muted-foreground hover:text-yellow-400 transition-colors"
               >
                 <MapPin
                   size={14}
@@ -46,7 +46,7 @@ const Footer = () => {
               </a>
               <a
                 href="tel:0712248706"
-                className="flex items-center text-xs md:text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
+                className="flex items-center text-sm md:text-base text-muted-foreground hover:text-yellow-400 transition-colors"
               >
                 <Phone size={14} className="text-yellow-500 mr-2 md:mr-3 md:w-[18px] md:h-[18px]" />
                 <span>+254 712 248 706</span>
@@ -55,14 +55,14 @@ const Footer = () => {
                 href="https://wa.me/254712248706"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center text-xs md:text-sm text-muted-foreground hover:text-[#25D366] transition-colors"
+                className="flex items-center text-sm md:text-base text-muted-foreground hover:text-[#25D366] transition-colors"
               >
                 <MessageCircle size={14} className="text-[#25D366] mr-2 md:mr-3 md:w-[18px] md:h-[18px]" />
                 <span>Chat on WhatsApp</span>
               </a>
               <a
                 href="mailto:gamecityelectronics@gmail.com"
-                className="flex items-center text-xs md:text-sm text-muted-foreground hover:text-yellow-400 transition-colors"
+                className="flex items-center text-sm md:text-base text-muted-foreground hover:text-yellow-400 transition-colors"
               >
                 <Mail size={14} className="text-yellow-500 mr-2 md:mr-3 md:w-[18px] md:h-[18px]" />
                 <span className="truncate">gamecityelectronics@gmail.com</span>
@@ -85,7 +85,7 @@ const Footer = () => {
           {/* Quick Links */}
           <div className="space-y-2 md:space-y-4">
             <h4 className="text-sm md:text-lg font-semibold text-white">Quick Links</h4>
-            <div className="space-y-1 md:space-y-2 text-xs md:text-base">
+            <div className="space-y-1 md:space-y-2 text-sm md:text-base">
               <Link
                 to="/search"
                 className="text-muted-foreground hover:text-yellow-400 transition-colors flex items-center"
@@ -118,7 +118,7 @@ const Footer = () => {
             <h4 className="text-sm md:text-lg font-semibold text-white">
               Customer Service
             </h4>
-            <div className="space-y-1 md:space-y-2 text-xs md:text-base">
+            <div className="space-y-1 md:space-y-2 text-sm md:text-base">
               <Link
                 to="/contact"
                 className="text-muted-foreground hover:text-yellow-400 transition-colors flex items-center"
@@ -190,14 +190,14 @@ const Footer = () => {
                 <Twitter className="w-4 h-4 md:w-5 md:h-5" />
               </a>
             </div>
-            <p className="text-xs md:text-sm text-muted-foreground hidden md:block">
+            <p className="text-sm md:text-base text-muted-foreground hidden md:block">
               Stay updated with our latest products and exclusive deals!
             </p>
           </div>
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-4 md:mt-16 py-3 md:py-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-xs md:text-sm text-muted-foreground">
+        <div className="mt-4 md:mt-16 py-3 md:py-6 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center text-sm md:text-base text-muted-foreground">
           <p>© {currentYear} Gamecity Electronics</p>
           <div className="flex space-x-4 md:space-x-6 mt-2 md:mt-0">
             <Link

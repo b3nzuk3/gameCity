@@ -19,7 +19,7 @@ export default function HomepageProductSection({ section }: { section: HomepageS
         <div className="max-w-2xl">
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-yellow-400">Curated for your setup</p>
           <h2 id={`homepage-section-${section.id}`} className="text-2xl font-bold tracking-tight text-white sm:text-3xl md:text-4xl">{section.title}</h2>
-          {section.subtitle && <p className="mt-3 text-sm leading-6 text-slate-400 sm:text-base">{section.subtitle}</p>}
+          {section.subtitle && <p className="mt-3 text-base leading-7 text-slate-400">{section.subtitle}</p>}
         </div>
         {section.viewAllHref && section.viewAllLabel && (section.viewAllHref.startsWith('/') ? <Link to={section.viewAllHref} className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-yellow-400 hover:text-yellow-300">{section.viewAllLabel}<ArrowUpRight className="h-4 w-4" /></Link> : <a href={section.viewAllHref} target="_blank" rel="noreferrer" className="inline-flex shrink-0 items-center gap-2 text-sm font-semibold text-yellow-400 hover:text-yellow-300">{section.viewAllLabel}<ArrowUpRight className="h-4 w-4" /></a>)}
       </div>

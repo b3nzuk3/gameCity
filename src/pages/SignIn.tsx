@@ -117,7 +117,7 @@ const SignIn = () => {
               </form>
 
               <div className="mt-6 text-center space-y-2">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-base text-muted-foreground">
                   Don't have an account?{' '}
                   <Link
                     to="/signup"
@@ -126,7 +126,7 @@ const SignIn = () => {
                     Sign up
                   </Link>
                 </p>
-                <p className="text-sm">
+                <p className="text-base">
                   <Link
                     to="/forgot-password"
                     className="text-yellow-400 hover:text-yellow-300 underline"

@@ -52,7 +52,7 @@ const ForgotPassword = () => {
                 </p>
               </CardHeader>
               <CardContent className="text-center">
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-base leading-6 text-muted-foreground mb-4">
                   Didn't receive the email? Check your spam folder or try again.
                 </p>
                 <div className="space-y-2">

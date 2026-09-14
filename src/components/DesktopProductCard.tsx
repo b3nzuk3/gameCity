@@ -69,7 +69,7 @@ const DesktopProductCard = ({ product }: DesktopProductCardProps) => {
             {product.name}
           </h3>
         </Link>
-        <p className="mt-2 truncate text-xs leading-4 capitalize text-gray-400">{product.brand || product.category}</p>
+        <p className="mt-2 truncate text-base leading-6 capitalize text-gray-400">{product.brand || product.category}</p>
         <div className="mt-3">
           {isOfferActive(product.offer) && (
             <div className="text-[11px] leading-4 text-gray-500 line-through">{formatKESPrice(product.price)}</div>
@@ -78,7 +78,7 @@ const DesktopProductCard = ({ product }: DesktopProductCardProps) => {
             {formatKESPrice(isOfferActive(product.offer) ? getOfferPrice(product.price, product.offer) : product.price)}
             <span className="ml-1 text-xs font-normal text-gray-400">ex VAT</span>
           </div>
-          <div className={`mt-2 text-xs font-medium leading-4 ${stockCount > 0 ? 'text-green-400' : 'text-red-400'}`}>
+          <div className={`mt-2 text-base font-medium leading-6 ${stockCount > 0 ? 'text-green-400' : 'text-red-400'}`}>
             {stockCount > 0 ? 'In stock' : 'Out of stock'}
           </div>
         </div>

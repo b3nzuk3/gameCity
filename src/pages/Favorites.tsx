@@ -84,12 +84,12 @@ const Favorites = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <h3 className="font-semibold text-sm line-clamp-2 text-white group-hover:text-yellow-400 transition-colors">
+                    <h3 className="font-semibold text-base line-clamp-2 text-white group-hover:text-yellow-400 transition-colors">
                       {product.name}
                     </h3>
 
                     {product.category && (
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-base leading-6 text-muted-foreground">
                         {product.category}
                       </p>
                     )}

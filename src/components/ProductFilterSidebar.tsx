@@ -288,7 +288,7 @@ const ProductFilterSidebar = ({
           />
         ) : (
           <FilterSection label="Brand">
-            <p className="px-2 text-xs text-gray-500">No brands available</p>
+            <p className="px-2 text-sm leading-5 text-gray-500">No brands available</p>
           </FilterSection>
         )}
 

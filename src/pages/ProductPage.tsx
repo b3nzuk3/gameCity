@@ -238,7 +238,7 @@ const ProductPage = () => {
 
           <div className="flex flex-col">
             <h1 className="text-3xl font-bold mb-2" dangerouslySetInnerHTML={{ __html: sanitizeHtml(product.name) }} />
-            <dl className="mb-4 grid grid-cols-1 gap-1 text-sm text-muted-foreground">
+            <dl className="mb-4 grid grid-cols-1 gap-1 text-base leading-6 text-muted-foreground">
               {product.brand && <div><dt className="inline font-medium">Brand: </dt><dd className="inline">{product.brand}</dd></div>}
               {product.category && <div><dt className="inline font-medium">Category: </dt><dd className="inline"><Link className="underline hover:text-yellow-400" to={`/category/${product.category.toLowerCase().replace(/\s+/g, '-')}`}>{product.category}</Link></dd></div>}
               {product.condition && <div><dt className="inline font-medium">Condition: </dt><dd className="inline">{product.condition}</dd></div>}
@@ -273,7 +273,7 @@ const ProductPage = () => {
               Object.keys(product.specifications).length > 0 && (
                 <div className="mb-8">
                   <h3 className="font-semibold text-lg mb-2">Specifications</h3>
-                  <table className="w-full text-sm mb-4" aria-label={`${product.name} specifications`}>
+                  <table className="w-full text-base leading-6 mb-4" aria-label={`${product.name} specifications`}>
                     <tbody>
                       {Object.entries(product.specifications).map(
                         ([key, value]) => (
@@ -298,7 +298,7 @@ const ProductPage = () => {
                   id="product-description-content"
                   data-product-description-content
                   className={cn(
-                    'prose prose-sm md:prose-base prose-invert max-w-none overflow-hidden whitespace-pre-line transition-[max-height] duration-200 ease-out motion-reduce:transition-none md:max-h-none md:overflow-visible',
+                    'text-base leading-7 md:text-lg md:leading-8 [&_p]:text-base [&_p]:leading-7 md:[&_p]:text-lg md:[&_p]:leading-8 max-w-none overflow-hidden whitespace-pre-line transition-[max-height] duration-200 ease-out motion-reduce:transition-none md:max-h-none md:overflow-visible',
                     isDescriptionExpanded
                       ? 'max-h-[var(--product-description-height)]'
                       : 'max-h-28'
@@ -335,7 +335,7 @@ const ProductPage = () => {
               </div>
             )}
 
-            <p className="text-sm text-muted-foreground mb-4 mt-4">
+            <p className="text-base leading-6 text-muted-foreground mb-4 mt-4">
               Availability:{' '}
               {product.countInStock > 0
                 ? `${product.countInStock} in stock`
@@ -344,7 +344,7 @@ const ProductPage = () => {
 
             <div className="mt-auto pt-4 space-y-4">
               <div className="flex items-center gap-4">
-                <p className="text-sm font-medium">Quantity:</p>
+                <p className="text-base font-medium">Quantity:</p>
                 <div className="flex items-center border border-gray-700 rounded-md">
                   <Button
                     variant="ghost"

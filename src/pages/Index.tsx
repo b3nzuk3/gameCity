@@ -111,7 +111,7 @@ const Index = () => {
             </h2>
             <p
               data-home-category-description
-              className="hidden text-muted-foreground text-center text-sm md:block md:text-base max-w-2xl"
+              className="hidden text-muted-foreground text-center text-base leading-7 md:block max-w-2xl"
             >
               Find the perfect components for your setup by category. Whether
               you're building a new PC or upgrading your current one.
@@ -167,7 +167,7 @@ const Index = () => {
                   className="absolute bottom-0 left-0 right-0 z-20 hidden p-6 md:block"
                 >
                   <h3 className="mb-2 text-xl font-bold">{category.title}</h3>
-                  <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
+                  <p className="mb-4 line-clamp-2 text-base leading-7 text-muted-foreground">
                     {category.description}
                   </p>
                   <Link to={category.path}>

@@ -69,7 +69,7 @@ const Cart = () => {
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium line-clamp-2">
+                        <p className="text-base font-medium leading-6 line-clamp-2">
                           {item.name.length > 40
                             ? `${item.name.substring(0, 40)}...`
                             : item.name}

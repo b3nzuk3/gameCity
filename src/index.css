@@ -62,6 +62,12 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Keep body copy comfortable to read unless a component intentionally opts
+     into a smaller utility size for metadata or controls. */
+  p {
+    @apply text-base leading-relaxed;
+  }
 }
 
 .story-link {

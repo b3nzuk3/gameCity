@@ -183,12 +183,12 @@ const SignUp = () => {
                       </button>
                     </div>
                     {passwordStrengthError && (
-                      <p className="text-red-400 text-sm mt-1">
+                      <p className="text-red-400 text-base leading-6 mt-1">
                         {passwordStrengthError}
                       </p>
                     )}
                     {!passwordStrengthError && formData.password && (
-                      <p className="text-green-400 text-sm mt-1">
+                      <p className="text-green-400 text-base leading-6 mt-1">
                         Password strength: Strong
                       </p>
                     )}
@@ -227,12 +227,12 @@ const SignUp = () => {
                       </button>
                     </div>
                     {passwordError && (
-                      <p className="text-red-400 text-sm mt-1">
+                      <p className="text-red-400 text-base leading-6 mt-1">
                         {passwordError}
                       </p>
                     )}
                     {formData.confirmPassword && passwordsMatch && !passwordError && (
-                      <p className="text-green-400 text-sm mt-1">
+                      <p className="text-green-400 text-base leading-6 mt-1">
                         Passwords match
                       </p>
                     )}
@@ -249,7 +249,7 @@ const SignUp = () => {
               )}
 
               <div className="mt-6 text-center">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-base leading-6 text-muted-foreground">
                   Already have an account?{' '}
                   <Link
                     to="/signin"

@@ -290,7 +290,7 @@ const BuildPC = () => {
 
     return (
       <div className="flex items-center justify-between pt-4 border-t border-gray-700 mt-4">
-        <p className="text-xs text-muted-foreground">
+        <p className="text-sm leading-5 text-muted-foreground">
           {state.total} item{state.total !== 1 ? 's' : ''}
           {state.search && ` matching "${state.search}"`}
         </p>
@@ -516,7 +516,7 @@ const BuildPC = () => {
                                 <CardContent>
                                   <div className="flex items-center justify-between">
                                     <div>
-                                      <p className="text-sm text-muted-foreground capitalize">
+                                      <p className="text-base leading-6 text-muted-foreground capitalize">
                                         {part.category}
                                       </p>
                                     </div>
@@ -575,15 +575,15 @@ const BuildPC = () => {
                       <div key={category.id}>
                         <div className="flex justify-between items-center py-2 border-b border-gray-700">
                           <div className="flex-1">
-                            <p className="text-sm text-muted-foreground">
+                            <p className="text-base leading-6 text-muted-foreground">
                               {category.name}
                             </p>
                             {selectedStorage.length === 0 ? (
-                              <p className="text-sm italic text-muted-foreground">
+                              <p className="text-base leading-6 italic text-muted-foreground">
                                 Not selected
                               </p>
                             ) : (
-                              <p className="text-xs text-yellow-400">
+                              <p className="text-sm leading-5 text-yellow-400">
                                 {selectedStorage.length}/{MAX_STORAGE} selected
                               </p>
                             )}
@@ -596,13 +596,13 @@ const BuildPC = () => {
                           >
                             <div className="flex-1">
                               <div className="flex items-center justify-between">
-                                <p className="text-sm">
+                                <p className="text-base leading-6">
                                   <span className="text-muted-foreground text-xs mr-1">
                                     #{idx + 1}
                                   </span>
                                   {drive.name}
                                 </p>
-                                <p className="text-sm text-yellow-400">
+                                <p className="text-base leading-6 text-yellow-400">
                                   {formatKESPrice(drive.price)}
                                 </p>
                               </div>
@@ -632,20 +632,20 @@ const BuildPC = () => {
                       className="flex justify-between items-center py-2 border-b border-gray-700 last:border-0"
                     >
                       <div className="flex-1">
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-base leading-6 text-muted-foreground">
                           {category.name}
                         </p>
                         {part ? (
                           <div>
                             <div className="flex items-center justify-between">
-                              <p className="text-sm">{part.name}</p>
-                              <p className="text-sm text-yellow-400">
+                              <p className="text-base leading-6">{part.name}</p>
+                              <p className="text-base leading-6 text-yellow-400">
                                 {formatKESPrice(part.price)}
                               </p>
                             </div>
                           </div>
                         ) : (
-                          <p className="text-sm italic text-muted-foreground">
+                          <p className="text-base leading-6 italic text-muted-foreground">
                             Not selected
                           </p>
                         )}

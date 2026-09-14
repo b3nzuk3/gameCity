@@ -231,7 +231,7 @@ const Profile = () => {
                 <CardContent className="space-y-4">
                   <div className="p-4 bg-gray-800 rounded-lg">
                     <h3 className="font-semibold mb-2">Password Reset</h3>
-                    <p className="text-sm text-muted-foreground mb-4">
+                    <p className="text-base leading-6 text-muted-foreground mb-4">
                       Reset your password by clicking the button below.
                       Instructions will be sent to your email address.
                     </p>

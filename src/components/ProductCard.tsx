@@ -183,7 +183,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
           <h3
             className={cn(
               'font-semibold text-white leading-tight break-words hyphens-auto line-clamp-3',
-              isListing ? 'mb-1.5 text-sm lg:mb-2 lg:text-base' : 'mb-2 text-sm sm:text-base'
+              isListing ? 'mb-1.5 text-[15px] lg:mb-2 lg:text-base' : 'mb-2 text-[15px] sm:text-base'
             )}
           >
             {product.name}
@@ -191,7 +191,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
 
           {/* Category */}
           {product.category && (
-            <div className={cn('text-xs text-[#b8b8c8] capitalize', isListing ? 'mb-1 lg:mb-2' : 'mb-2')}>
+            <div className={cn('text-base leading-6 text-[#b8b8c8] capitalize', isListing ? 'mb-1 lg:mb-2' : 'mb-2')}>
               {product.category}
             </div>
           )}
@@ -212,12 +212,12 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
                     />
                   ))}
                 </div>
-                <span className="text-xs text-[#b8b8c8] ml-1">
+                <span className="text-sm text-[#b8b8c8] ml-1">
                   ({product.numReviews || 0})
                 </span>
               </>
             ) : (
-              <div className="h-3 text-xs text-[#b8b8c8]">No reviews yet</div>
+              <div className="h-3 text-sm text-[#b8b8c8]">No reviews yet</div>
             )}
           </div>
 

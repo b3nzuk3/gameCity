@@ -786,7 +786,7 @@ const CategoryPage = () => {
                   : `${mobileResultCount} products found`
                 : `${totalProducts} products found`}
           </p>
-          <p className="mt-3 max-w-3xl text-sm text-muted-foreground">
+          <p className="mt-3 max-w-3xl text-base leading-7 text-muted-foreground">
             {category === 'all'
               ? 'Browse GameCity Electronics products for gaming, PC building, and creative work in Nairobi, Kenya.'
               : `Browse ${categoryName.toLowerCase()} from GameCity Electronics. Compare products, specifications, prices, and stock availability.`}
@@ -839,7 +839,7 @@ const CategoryPage = () => {
 
           <main className="min-w-0 flex-1">
             <div className="mb-4 flex items-center justify-between rounded-lg border border-gray-800 bg-[#171723] px-4 py-3">
-              <p className="text-sm text-gray-400">
+              <p className="text-base leading-6 text-gray-400">
                 Showing {desktopFilteredProducts.length} of {totalProducts} products
               </p>
               <div className="flex items-center gap-3">
@@ -945,7 +945,7 @@ const CategoryPage = () => {
             )}
             {loadMoreError && (
               <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">
+                <p className="text-base leading-6 text-muted-foreground">
                   We couldn’t load more products.
                 </p>
                 <Button variant="outline" onClick={() => void loadNextPage(true)}>
@@ -957,7 +957,7 @@ const CategoryPage = () => {
               <div ref={loadSentinelRef} className="h-1" aria-hidden="true" />
             )}
             {!isLoadingMore && !loadMoreError && !hasMoreMobile && (
-              <p className="text-sm text-muted-foreground py-2">
+              <p className="text-base leading-6 text-muted-foreground py-2">
                 You’ve reached the end of the products.
               </p>
             )}

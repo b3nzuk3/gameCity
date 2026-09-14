@@ -97,7 +97,7 @@ const MpesaPayment: React.FC<MpesaPaymentProps> = ({
           </Button>
         </div>
       </div>
-      <p className="text-xs text-muted-foreground">
+      <p className="text-sm leading-5 text-muted-foreground">
         For sandbox testing, use the phone number: 254708374149
       </p>
     </div>
