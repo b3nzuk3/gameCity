@@ -76,6 +76,51 @@
   @apply bg-opacity-20 backdrop-blur-lg bg-white/5 border border-white/10 shadow-lg;
 }
 
+/* Homepage merchandising carousel */
+.homepage-product-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  touch-action: pan-x;
+}
+
+.homepage-product-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.homepage-product-carousel-item {
+  flex: 0 0 min(82vw, 21rem);
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+@media (min-width: 640px) {
+  .homepage-product-carousel-item {
+    flex-basis: calc((100% - 1rem) / 2);
+  }
+}
+
+@media (min-width: 768px) {
+  .homepage-product-carousel-item {
+    flex-basis: calc((100% - 2rem) / 3);
+  }
+}
+
+@media (min-width: 1024px) {
+  .homepage-product-carousel-item {
+    flex-basis: calc((100% - 3rem) / 4);
+  }
+}
+
+@media (min-width: 1280px) {
+  .homepage-product-carousel-item {
+    flex-basis: calc((100% - 4rem) / 5);
+  }
+}
+
 .neo-button {
   @apply relative overflow-hidden transition-all duration-300 hover:shadow-[0_0_20px_rgba(255,178,44,0.3)] active:shadow-[0_0_10px_rgba(255,178,44,0.2)];
 }

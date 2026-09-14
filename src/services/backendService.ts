@@ -49,6 +49,48 @@ export type UploadsResponse = {
   }>
 }
 
+export type HomepageHero = {
+  eyebrow: string
+  title: string
+  highlightText: string
+  description: string
+  primaryCtaLabel: string
+  primaryCtaHref: string
+  secondaryCtaLabel: string
+  secondaryCtaHref: string
+  imageUrl: string
+  imageAlt: string
+  enabled: boolean
+}
+
+export type HomepageSectionProduct = {
+  productId: string
+  sortOrder: number
+  product: Product | null
+  missing: boolean
+}
+
+export type HomepageSectionLayout = 'grid' | 'carousel'
+
+export type HomepageSection = {
+  id: string
+  title: string
+  subtitle: string
+  type: 'MANUAL_PRODUCTS'
+  enabled: boolean
+  sortOrder: number
+  layout: HomepageSectionLayout
+  viewAllLabel: string
+  viewAllHref: string
+  products: HomepageSectionProduct[]
+}
+
+export type HomepageResponse = {
+  configured: boolean
+  hero: HomepageHero | null
+  sections: HomepageSection[]
+}
+
 export type User = {
   id: string
   name: string
@@ -155,6 +197,10 @@ const backendService = {
     logout: () => {
       localStorage.removeItem('gamecity_token')
     },
+  },
+  homepage: {
+    get: (): Promise<HomepageResponse> =>
+      handleRequest<HomepageResponse>('GET', '/public/homepage'),
   },
   products: {
     getAll: (

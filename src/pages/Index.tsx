@@ -1,38 +1,24 @@
 import React from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router-dom'
 import Layout from '@/components/Layout'
 import Hero from '@/components/Hero'
 import FeaturedProducts from '@/components/FeaturedProducts'
+import HomepageSections from '@/components/HomepageSections'
 import SEO from '@/components/SEO'
 import OptimizedImage from '@/components/OptimizedImage'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Shield, Truck, Sparkles, Zap } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import GoogleReviews from '@/components/GoogleReviews'
+import backendService from '@/services/backendService'
 
 const Index = () => {
-  // Features section data
-  const features = [
-    {
-      title: 'Premium Quality',
-      description: 'Hand-picked components from trusted brands',
-      icon: <Shield className="h-10 w-10 text-yellow-500" />,
-    },
-    {
-      title: 'Fast Shipping',
-      description: 'Free delivery on orders over KES 50,000',
-      icon: <Truck className="h-10 w-10 text-yellow-500" />,
-    },
-    {
-      title: 'Expert Support',
-      description: '24/7 technical assistance and guidance',
-      icon: <Sparkles className="h-10 w-10 text-yellow-500" />,
-    },
-    {
-      title: 'Performance',
-      description: 'Optimized builds for maximum performance',
-      icon: <Zap className="h-10 w-10 text-yellow-500" />,
-    },
-  ]
+  const homepage = useQuery({
+    queryKey: ['homepage', 'public'],
+    queryFn: () => backendService.homepage.get(),
+    staleTime: 60_000,
+  })
+
 
   // Categories section
   const categories = [
@@ -81,6 +67,8 @@ const Index = () => {
     },
   ]
 
+  const hasConfiguredSections = Boolean(homepage.data?.configured && homepage.data.sections.length > 0)
+
   return (
     <Layout>
       <SEO
@@ -90,52 +78,12 @@ const Index = () => {
         url="/"
       />
       {/* Hero Section */}
-      <Hero />
+      <Hero config={homepage.data?.hero} />
 
       <div data-home-sections className="flex flex-col">
-        {/* Features Section */}
-        <section
-          data-home-features-section
-          className="hidden md:order-1 md:block md:py-16 md:px-6 bg-gray-900"
-        >
-          <div className="container mx-auto">
-            <div className="text-center mb-6 md:mb-12">
-              <h2 className="text-2xl md:text-4xl font-bold mb-2 md:mb-4 text-white">
-                Why Choose Gamecity?
-              </h2>
-              <p className="text-muted-foreground text-sm md:text-base max-w-2xl mx-auto">
-                We're committed to delivering the best gaming experience with
-                premium components and exceptional service.
-              </p>
-            </div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-8">
-              {features.map((feature, index) => (
-                <div
-                  key={index}
-                  className="p-3 md:p-6 rounded-xl glass-card bg-gray-800/30 flex flex-col items-center text-center"
-                >
-                  <div className="mb-2 md:mb-4 p-2 md:p-3 rounded-full bg-yellow-500/20">
-                    {feature.icon}
-                  </div>
-                  <h3 className="text-sm md:text-xl font-semibold mb-1 md:mb-2 text-white">
-                    {feature.title}
-                  </h3>
-                  <p className="text-muted-foreground text-xs md:text-sm">
-                    {feature.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
-        {/* Featured Products Section */}
-        <div
-          data-home-featured-section
-          className="order-1 md:order-2"
-        >
-          <FeaturedProducts />
-        </div>
+        {/* Database-backed merchandising takes precedence once at least one section exists. */}
+        {hasConfiguredSections ? <HomepageSections sections={homepage.data?.sections ?? []} /> : <div data-home-featured-section className="order-1 md:order-2"><FeaturedProducts /></div>}
 
         {/* Google Reviews Section */}
         <div data-home-reviews-section className="order-3 md:order-3">

@@ -8,13 +8,10 @@ const featuredProducts = readFileSync(
   'utf8'
 )
 
-test('mobile hides Why Choose GameCity while desktop keeps it first', () => {
+test('homepage does not render the removed Why Choose GameCity section', () => {
   assert.match(home, /data-home-sections[^>]*className="[^"]*flex flex-col/)
-  assert.match(
-    home,
-    /data-home-features-section[^>]*className="[^"]*hidden[^\"]*md:order-1[^\"]*md:block/
-  )
-  assert.match(home, />\s*Why Choose Gamecity\?\s*</)
+  assert.doesNotMatch(home, /data-home-features-section/)
+  assert.doesNotMatch(home, />\s*Why Choose Gamecity\?\s*</)
 })
 
 test('mobile orders featured products directly before shop by category', () => {
