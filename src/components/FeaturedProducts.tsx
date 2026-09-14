@@ -49,7 +49,7 @@ const FeaturedProducts = () => {
   if (loading) {
     return (
       <section className="py-16 bg-gray-900/50">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto lg:max-w-[1600px] px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Featured Products
           </h2>
@@ -71,7 +71,7 @@ const FeaturedProducts = () => {
   if (products.length === 0) {
     return (
       <section className="py-16 bg-gray-900/50">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto lg:max-w-[1600px] px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
             Featured Products
           </h2>
@@ -115,7 +115,7 @@ const FeaturedProducts = () => {
 
   return (
     <section className="py-16 bg-gray-900/50">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto lg:max-w-[1600px] px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">
           Featured Products
         </h2>

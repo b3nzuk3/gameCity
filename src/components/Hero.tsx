@@ -42,7 +42,7 @@ export default function Hero({ config }: { config?: HomepageHero | null }) {
   const hero = config || DEFAULT_HERO
 
   return <section className="relative overflow-hidden border-b border-slate-800 bg-[#09090f]">
-    <div className="mx-auto grid min-h-0 max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16 lg:px-8 lg:py-20 xl:py-24">
+    <div className="mx-auto grid min-h-0 max-w-7xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:max-w-[1600px] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16 lg:px-8 lg:py-20 xl:py-24">
       <div className="relative z-10 max-w-2xl">
         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.22em] text-yellow-400 sm:mb-6">{hero.eyebrow}</p>
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.04] tracking-tight text-white">{renderTitle(hero.title, hero.highlightText)}</h1>

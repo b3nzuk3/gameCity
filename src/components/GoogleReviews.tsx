@@ -175,7 +175,7 @@ const GoogleReviews = () => {
       {/* Background glow effects matching index */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-3xl h-64 bg-yellow-500/5 rounded-full filter blur-[100px] -z-10 pointer-events-none"></div>
 
-      <div className="container mx-auto">
+      <div className="container mx-auto lg:max-w-[1600px]">
         <div className="flex flex-col items-center mb-8 md:mb-14">
           <div className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 text-xs md:text-sm font-medium text-white bg-gray-800/80 border border-gray-700/50 rounded-full mb-4 shadow-lg backdrop-blur-md">
             <GoogleIcon />

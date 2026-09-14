@@ -97,7 +97,7 @@ const Index = () => {
         >
           <div
             data-home-category-container
-            className="container mx-auto px-0 md:px-8"
+            className="container mx-auto lg:max-w-[1600px] px-0 md:px-8"
           >
           <div className="flex flex-col items-center mb-6 md:mb-12">
             <span

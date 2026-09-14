@@ -14,7 +14,7 @@ export default function HomepageProductSection({ section }: { section: HomepageS
   const layout = section.layout === 'carousel' ? 'carousel' : 'grid'
 
   return <section className="border-b border-slate-800/80 bg-[#0d0d16] py-14 sm:py-16 md:py-20" aria-labelledby={`homepage-section-${section.id}`}>
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="container mx-auto lg:max-w-[1600px] px-4 sm:px-6 lg:px-8">
       <div className="mb-8 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
         <div className="max-w-2xl">
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-yellow-400">Curated for your setup</p>
