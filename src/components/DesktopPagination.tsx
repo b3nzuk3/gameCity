@@ -30,7 +30,7 @@ const DesktopPagination = ({
   return (
     <nav
       aria-label="Product pagination"
-      className={cn('flex items-center justify-end gap-1', className)}
+      className={cn('flex items-center justify-center gap-1', className)}
     >
       {page > 1 ? (
         <Link

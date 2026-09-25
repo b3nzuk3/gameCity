@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
+import AnnouncementBar from './AnnouncementBar'
 import Navbar from './Navbar'
 import Footer from './Footer'
 
@@ -9,6 +10,16 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const location = useLocation()
+  const [isAtTop, setIsAtTop] = useState(() =>
+    typeof window === 'undefined' ? true : window.scrollY <= 0
+  )
+
+  useEffect(() => {
+    const updateScrollPosition = () => setIsAtTop(window.scrollY <= 0)
+    updateScrollPosition()
+    window.addEventListener('scroll', updateScrollPosition, { passive: true })
+    return () => window.removeEventListener('scroll', updateScrollPosition)
+  }, [])
 
   useEffect(() => {
     // Scroll to top on route change
@@ -25,8 +36,13 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 pt-28 lg:pt-16">
+      <AnnouncementBar isVisible={isAtTop} />
+      <Navbar announcementVisible={isAtTop} />
+      <main
+        className={`flex-1 ${
+          isAtTop ? 'pt-[9.5rem] lg:pt-[6.5rem]' : 'pt-28 lg:pt-16'
+        }`}
+      >
         {children}
       </main>
       <Footer />

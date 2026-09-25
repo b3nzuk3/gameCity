@@ -973,7 +973,7 @@ const CategoryPage = () => {
             )}
 
             {!loading && totalPages > 1 && (
-              <div className="mt-8 flex items-center justify-between border-t border-gray-700 pt-6">
+              <div className="mt-8 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center border-t border-gray-700 pt-6">
                 <div className="text-sm text-muted-foreground">
                   Showing {(currentPage - 1) * productsPerPage + 1} to{' '}
                   {Math.min(currentPage * productsPerPage, totalProducts)} of {totalProducts} products
@@ -982,7 +982,9 @@ const CategoryPage = () => {
                   currentPage={currentPage}
                   totalPages={totalPages}
                   hrefForPage={pageHref}
+                  className="justify-self-center"
                 />
+                <span aria-hidden="true" />
               </div>
             )}
           </main>
