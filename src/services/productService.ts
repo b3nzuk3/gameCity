@@ -9,6 +9,10 @@ import {
 import axios from 'axios'
 import backendService from './backendService'
 import type { Product as BackendProduct } from './backendService'
+import {
+  DESKTOP_PRODUCT_PAGE_SIZE,
+  MOBILE_CATEGORY_PAGE_SIZE,
+} from '@/config/catalog'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
@@ -89,7 +93,8 @@ export type CategoryCountFilters = {
   selectedBrands: string[]
 }
 
-export const CATEGORY_PAGE_SIZE = 12
+export const CATEGORY_PAGE_SIZE = DESKTOP_PRODUCT_PAGE_SIZE
+export { MOBILE_CATEGORY_PAGE_SIZE }
 
 export const fetchProductsByCategory = async (
   category: string,
@@ -240,13 +245,16 @@ export const useProducts = (
 export const useCategoryProducts = (
   category: string,
   pageNumber = 1,
-  limit = CATEGORY_PAGE_SIZE
+  limit = CATEGORY_PAGE_SIZE,
+  enabled = true
 ) => {
   return useQuery({
     queryKey: ['category-products', category, pageNumber, limit],
     queryFn: () => fetchProductsByCategory(category, pageNumber, limit),
     staleTime: 5 * 60 * 1000,
-    placeholderData: keepPreviousData,
+    enabled,
+    placeholderData: (previousData, previousQuery) =>
+      previousQuery?.queryKey[3] === limit ? previousData : undefined,
   })
 }
 

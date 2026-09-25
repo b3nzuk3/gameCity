@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useSearchParams } from 'react-router-dom'
 import Layout from '@/components/Layout'
 import {
   Select,
@@ -13,6 +13,8 @@ import { Package } from 'lucide-react'
 import ProductCard from '@/components/ProductCard'
 import { ProductSkeleton } from '@/components/ui/product-skeleton'
 import DesktopSearchResultList from '@/components/DesktopSearchResultList'
+import DesktopPagination from '@/components/DesktopPagination'
+import { buildPaginationHref } from '@/lib/catalogPagination'
 import ProductFilterSidebar from '@/components/ProductFilterSidebar'
 import {
   buildAvailableSpecificationFilters,
@@ -20,16 +22,21 @@ import {
   type ActiveSpecificationFilters,
 } from '@/lib/productSpecificationFilters'
 import { findProductCategoryId, PRODUCT_CATEGORIES } from '@/lib/productCategories'
-
-const useQuery = () => {
-  return new URLSearchParams(useLocation().search)
-}
+import {
+  DESKTOP_PRODUCT_PAGE_SIZE,
+  MOBILE_SEARCH_PAGE_SIZE,
+} from '@/config/catalog'
 
 const SearchPage = () => {
-  const query = useQuery()
-  const searchTerm = query.get('q') || ''
+  const [searchParams] = useSearchParams()
+  const location = useLocation()
+  const searchTerm = searchParams.get('q') || ''
+  const currentPage = Math.max(1, Number(searchParams.get('page') || 1))
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [totalProducts, setTotalProducts] = useState(0)
+  const [totalPages, setTotalPages] = useState(1)
+  const [isMobile, setIsMobile] = useState<boolean | null>(null)
   const [sortBy, setSortBy] = useState('name')
   const [filterBy, setFilterBy] = useState('all')
   const [conditionFilter, setConditionFilter] = useState('all')
@@ -40,29 +47,67 @@ const SearchPage = () => {
   const [priceRange, setPriceRange] = useState<[number | null, number | null]>([null, null])
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 1023px)')
+    const updateMode = () => setIsMobile(mediaQuery.matches)
+    updateMode()
+    mediaQuery.addEventListener('change', updateMode)
+    return () => mediaQuery.removeEventListener('change', updateMode)
+  }, [])
+
+  useEffect(() => {
+    if (isMobile === null) return
+    let active = true
+
     const fetchProducts = async () => {
       if (!searchTerm) {
         setProducts([])
+        setTotalProducts(0)
+        setTotalPages(1)
         setLoading(false)
         return
       }
       try {
         setLoading(true)
-        const data = await backendService.products.getAll(1, searchTerm)
+        const pageSize = isMobile
+          ? MOBILE_SEARCH_PAGE_SIZE
+          : DESKTOP_PRODUCT_PAGE_SIZE
+        const data = await backendService.products.getAll(
+          currentPage,
+          searchTerm,
+          pageSize
+        )
+        if (!active) return
         setProducts(data.products)
+        setTotalProducts(data.total ?? data.products.length)
+        setTotalPages(Math.max(1, Number(data.pages) || 1))
       } catch (error) {
+        if (!active) return
         console.error(
           `SearchPage: Error fetching products for "${searchTerm}":`,
           error
         )
         setProducts([])
+        setTotalProducts(0)
+        setTotalPages(1)
       } finally {
-        setLoading(false)
+        if (active) setLoading(false)
       }
     }
 
-    fetchProducts()
-  }, [searchTerm])
+    void fetchProducts()
+    return () => {
+      // Prevent a slower response for an old search/page from replacing current results.
+      active = false
+    }
+  }, [currentPage, isMobile, searchTerm])
+
+  const pageHref = (page: number) => {
+    const currentUrl = typeof window === 'undefined' ? location : window.location
+    return buildPaginationHref(currentUrl.pathname, currentUrl.search, page, {
+      queryKey: 'page',
+      hash: currentUrl.hash,
+    })
+  }
 
   const sortedProducts = React.useMemo(() => {
     const sorted = [...products]
@@ -212,7 +257,9 @@ const SearchPage = () => {
                 onClear={clearDesktopFilters}
               />
               <main className="min-w-0 flex-1">
-                <p className="mb-3 text-base leading-6 text-gray-400">{desktopProducts.length} results</p>
+                <p className="mb-3 text-base leading-6 text-gray-400">
+                  Showing {desktopProducts.length} of {totalProducts} results
+                </p>
                 {desktopProducts.length > 0 ? (
                   <DesktopSearchResultList products={desktopProducts} />
                 ) : (
@@ -221,6 +268,14 @@ const SearchPage = () => {
                     <h2 className="mb-2 text-xl font-semibold">No products match these filters</h2>
                     <button type="button" onClick={clearDesktopFilters} className="text-sm font-medium text-yellow-400">Clear filters</button>
                   </div>
+                )}
+                {!loading && totalPages > 1 && (
+                  <DesktopPagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    hrefForPage={pageHref}
+                    className="mt-6"
+                  />
                 )}
               </main>
             </div>

@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react-swc'
 import { vitePrerenderPlugin } from 'vite-prerender-plugin'
 import path from 'path'
 import { readFileSync } from 'node:fs'
+import { DESKTOP_PRODUCT_PAGE_SIZE } from './src/config/catalog'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -121,7 +122,7 @@ function readCategoryRoutes(): string[] {
       if (category) counts.set(category, (counts.get(category) || 0) + 1)
     }
     return [...counts.entries()].flatMap(([category, total]) => {
-      const pages = Math.max(1, Math.ceil(total / 12))
+      const pages = Math.max(1, Math.ceil(total / DESKTOP_PRODUCT_PAGE_SIZE))
       return Array.from({ length: pages }, (_, index) =>
         `/category/${category}/page/${index + 1}`
       )

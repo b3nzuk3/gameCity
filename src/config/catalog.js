@@ -1,0 +1,3 @@
+export const DESKTOP_PRODUCT_PAGE_SIZE = 25
+export const MOBILE_CATEGORY_PAGE_SIZE = 12
+export const MOBILE_SEARCH_PAGE_SIZE = 50

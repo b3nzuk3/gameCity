@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import Layout from '@/components/Layout'
 import SEO from '@/components/SEO'
@@ -17,18 +17,22 @@ import { Package, Filter } from 'lucide-react'
 import ProductCard from '@/components/ProductCard'
 import DesktopProductGrid from '@/components/DesktopProductGrid'
 import ProductFilterSidebar from '@/components/ProductFilterSidebar'
+import DesktopPagination from '@/components/DesktopPagination'
+import { buildPaginationHref } from '@/lib/catalogPagination'
 import MobileCatalogControls, {
   type MobileCatalogFilterValues,
 } from '@/components/MobileCatalogControls'
 import { ProductSkeleton } from '@/components/ui/product-skeleton'
 import {
-  CATEGORY_PAGE_SIZE,
   fetchProductsByCategory,
   useCategoryProducts,
   useCategoryProductCount,
 } from '@/services/productService'
+import {
+  DESKTOP_PRODUCT_PAGE_SIZE,
+  MOBILE_CATEGORY_PAGE_SIZE,
+} from '@/config/catalog'
 import { generateProductUrl } from '@/lib/slugUtils'
-import { useIsMobile } from '@/hooks/use-mobile'
 import {
   catalogPagePath,
   createCatalogSnapshot,
@@ -132,16 +136,33 @@ const readFilterPreferences = (category: string): FilterPreferences => {
 const CategoryPage = () => {
   const { category, page: routePage } = useParams<{ category: string; page?: string }>()
   const [searchParams] = useSearchParams()
+  const location = useLocation()
   const currentPage = Math.max(1, Number(routePage || searchParams.get('page') || 1))
   const categoryParam = category === 'all' ? 'all' : category || 'all'
-  const isMobile = useIsMobile(1024)
+  const [isMobile, setIsMobile] = useState<boolean | null>(null)
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 1023px)')
+    const updateMode = () => setIsMobile(mediaQuery.matches)
+    updateMode()
+    mediaQuery.addEventListener('change', updateMode)
+    return () => mediaQuery.removeEventListener('change', updateMode)
+  }, [])
+
   const queryClient = useQueryClient()
-  const categoryQuery = useCategoryProducts(categoryParam, currentPage, CATEGORY_PAGE_SIZE)
+  const categoryPageSize = isMobile === true
+    ? MOBILE_CATEGORY_PAGE_SIZE
+    : DESKTOP_PRODUCT_PAGE_SIZE
+  const categoryQuery = useCategoryProducts(
+    categoryParam,
+    currentPage,
+    categoryPageSize,
+    isMobile !== null
+  )
   const products = useMemo(
     () => categoryQuery.data?.products || [],
     [categoryQuery.data?.products]
   )
-  const loading = categoryQuery.isLoading
+  const loading = categoryQuery.isLoading || (isMobile === null && !categoryQuery.data)
   const [sortBy, setSortBy] = useState(DEFAULT_FILTERS.sortBy)
   const [filterBy, setFilterBy] = useState(DEFAULT_FILTERS.filterBy)
   const [conditionFilter, setConditionFilter] = useState<string>(
@@ -178,8 +199,16 @@ const CategoryPage = () => {
   // Pagination state
   const totalPages = categoryQuery.data?.pages || 1
   const totalProducts = categoryQuery.data?.total || 0
-  const productsPerPage = CATEGORY_PAGE_SIZE
-  const pageHref = (page: number) => catalogPagePath(categoryParam, page)
+  const productsPerPage = DESKTOP_PRODUCT_PAGE_SIZE
+  const pageHref = (page: number) => {
+    const currentUrl = typeof window === 'undefined' ? location : window.location
+    return buildPaginationHref(
+      catalogPagePath(categoryParam, page),
+      currentUrl.search,
+      page,
+      { hash: currentUrl.hash }
+    )
+  }
 
   const filterStateKey = useMemo(
     () =>
@@ -478,9 +507,9 @@ const CategoryPage = () => {
   const fetchMobilePage = useCallback(
     (page: number) =>
       queryClient.fetchQuery({
-        queryKey: ['category-products', categoryParam, page, CATEGORY_PAGE_SIZE],
+        queryKey: ['category-products', categoryParam, page, MOBILE_CATEGORY_PAGE_SIZE],
         queryFn: () =>
-          fetchProductsByCategory(categoryParam, page, CATEGORY_PAGE_SIZE),
+          fetchProductsByCategory(categoryParam, page, MOBILE_CATEGORY_PAGE_SIZE),
         staleTime: 5 * 60 * 1000,
       }),
     [categoryParam, queryClient]
@@ -880,17 +909,17 @@ const CategoryPage = () => {
               </div>
             )}
 
-            {!loading && desktopFilteredProducts.length > 0 && totalPages > 1 && (
+            {!loading && totalPages > 1 && (
               <div className="mt-8 flex items-center justify-between border-t border-gray-700 pt-6">
                 <div className="text-sm text-muted-foreground">
                   Showing {(currentPage - 1) * productsPerPage + 1} to{' '}
                   {Math.min(currentPage * productsPerPage, totalProducts)} of {totalProducts} products
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Link to={pageHref(Math.max(1, currentPage - 1))} aria-disabled={currentPage <= 1} tabIndex={currentPage <= 1 ? -1 : 0} className="inline-flex h-9 items-center justify-center rounded-md border border-gray-700 px-3 text-sm text-muted-foreground hover:text-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50">Previous</Link>
-                  <span className="px-2 text-sm text-muted-foreground">Page {currentPage} of {totalPages}</span>
-                  <Link to={pageHref(currentPage + 1)} aria-disabled={currentPage >= totalPages} tabIndex={currentPage >= totalPages ? -1 : 0} className="inline-flex h-9 items-center justify-center rounded-md border border-gray-700 px-3 text-sm text-muted-foreground hover:text-foreground aria-disabled:pointer-events-none aria-disabled:opacity-50">Next</Link>
-                </div>
+                <DesktopPagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  hrefForPage={pageHref}
+                />
               </div>
             )}
           </main>

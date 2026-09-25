@@ -58,7 +58,7 @@ test('desktop catalog content uses Amazon-like listing proportions without chang
   assert.match(desktopCard, /line-clamp-2 min-h-\[2\.8rem\] text-\[15px\]/)
   assert.match(desktopCard, /text-lg font-bold leading-6 text-\[#FDB813\]/)
   assert.match(desktopCard, /ml-1 text-xs font-normal text-gray-400/)
-  assert.match(desktopCard, /mt-auto pt-4/)
+  assert.match(desktopCard, /mt-auto flex gap-1\.5 pt-4/)
   assert.match(desktopCard, />ex VAT</)
 })
 

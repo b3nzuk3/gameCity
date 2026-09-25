@@ -7,8 +7,9 @@ import type { HelmetServerState } from 'react-helmet-async'
 import { AppContent } from './App'
 import { createAppQueryClient } from './queryClient'
 import {
-  CATEGORY_PAGE_SIZE,
-} from '@/services/productService'
+  DESKTOP_PRODUCT_PAGE_SIZE,
+  MOBILE_CATEGORY_PAGE_SIZE,
+} from '@/config/catalog'
 
 type CatalogEntry = {
   id: string
@@ -50,18 +51,19 @@ export async function prerender(data: { url: string }) {
     const category = decodeURIComponent(categoryMatch[1])
     const page = Math.max(1, Number(categoryMatch[2] || categoryMatch[3] || 1))
     const allProducts = categoryProducts(category)
-    const start = (page - 1) * CATEGORY_PAGE_SIZE
-    const products = {
-      products: allProducts.slice(start, start + CATEGORY_PAGE_SIZE),
-      page,
-      pages: Math.max(1, Math.ceil(allProducts.length / CATEGORY_PAGE_SIZE)),
-      total: allProducts.length,
-      hasMore: start + CATEGORY_PAGE_SIZE < allProducts.length,
+    for (const pageSize of [DESKTOP_PRODUCT_PAGE_SIZE, MOBILE_CATEGORY_PAGE_SIZE]) {
+      const start = (page - 1) * pageSize
+      queryClient.setQueryData(
+        ['category-products', category, page, pageSize],
+        {
+          products: allProducts.slice(start, start + pageSize),
+          page,
+          pages: Math.max(1, Math.ceil(allProducts.length / pageSize)),
+          total: allProducts.length,
+          hasMore: start + pageSize < allProducts.length,
+        }
+      )
     }
-    queryClient.setQueryData(
-      ['category-products', category, page, CATEGORY_PAGE_SIZE],
-      products
-    )
   }
 
   const html = renderToString(
@@ -114,7 +116,7 @@ function readCategoryRoutes(): string[] {
     if (category) counts.set(category, (counts.get(category) || 0) + 1)
   }
   return [...counts.entries()].flatMap(([category, total]) => {
-    const pages = Math.max(1, Math.ceil(total / CATEGORY_PAGE_SIZE))
+    const pages = Math.max(1, Math.ceil(total / DESKTOP_PRODUCT_PAGE_SIZE))
     return [
       `/category/${category}`,
       ...Array.from({ length: pages }, (_, index) =>

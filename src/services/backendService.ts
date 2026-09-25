@@ -205,20 +205,26 @@ const backendService = {
   products: {
     getAll: (
       pageNumber: number = 1,
-      search?: string
+      search?: string,
+      limit: number = 50
     ): Promise<{
       products: Product[]
       page: number
       pages: number
-      count: number
+      count?: number
+      total: number
+      hasMore: boolean
     }> =>
       handleRequest<{
         products: Product[]
         page: number
         pages: number
-        count: number
+        count?: number
+        total: number
+        hasMore: boolean
       }>('GET', `/products?${new URLSearchParams({
         page: String(pageNumber),
+        limit: String(limit),
         ...(search?.trim() ? { search: search.trim() } : {}),
       }).toString()}`),
     getAllByCategory: (

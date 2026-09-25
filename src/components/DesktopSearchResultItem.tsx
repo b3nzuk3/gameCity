@@ -9,6 +9,7 @@ import { generateProductUrl } from '@/lib/slugUtils'
 import { getOfferPrice, isOfferActive } from '@/lib/utils'
 import type { Product } from '@/services/backendService'
 import { getProductImageUrl } from '@/utils/imageUtils'
+import WhatsAppProductButton from '@/components/WhatsAppProductButton'
 
 const DesktopSearchResultItem = ({ product }: { product: Product }) => {
   const { addToCart } = useCart()
@@ -83,15 +84,22 @@ const DesktopSearchResultItem = ({ product }: { product: Product }) => {
           <span className={`mt-3 text-sm font-medium ${stockCount > 0 ? 'text-green-400' : 'text-red-400'}`}>
             {stockCount > 0 ? 'In stock' : 'Out of stock'}
           </span>
-          <Button
-            type="button"
-            disabled={stockCount === 0 || !hasPrice}
-            onClick={() => addToCart(product, 1)}
-            className="mt-4 w-full bg-[#FDB813] text-black hover:bg-[#ff9500]"
-          >
-            <ShoppingCart className="mr-2 h-4 w-4" />
-            {stockCount > 0 && hasPrice ? 'Add to cart' : 'Out of stock'}
-          </Button>
+          <div className="mt-4 flex w-full gap-1.5">
+            <Button
+              type="button"
+              disabled={stockCount === 0 || !hasPrice}
+              onClick={() => addToCart(product, 1)}
+              className="min-w-0 flex-1 bg-[#FDB813] text-black hover:bg-[#ff9500]"
+            >
+              <ShoppingCart className="mr-2 h-4 w-4" />
+              {stockCount > 0 && hasPrice ? 'Add to cart' : 'Out of stock'}
+            </Button>
+            <WhatsAppProductButton
+              productName={product.name}
+              productPath={href}
+              className="h-10 w-10"
+            />
+          </div>
         </div>
       </div>
     </article>

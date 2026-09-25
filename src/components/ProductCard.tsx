@@ -11,6 +11,7 @@ import { generateProductUrl } from '@/lib/slugUtils'
 import OptimizedImage from './OptimizedImage'
 import { getProductImageUrl } from '@/utils/imageUtils'
 import { cn } from '@/lib/utils'
+import WhatsAppProductButton from '@/components/WhatsAppProductButton'
 
 interface ProductProps {
   variant?: 'default' | 'listing'
@@ -50,6 +51,11 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
   const isListing = variant === 'listing'
   const stockCount =
     product.countInStock ?? product.count_in_stock ?? product.stock ?? 0
+  const href = product.href || generateProductUrl({
+    _id: product.id.toString(),
+    name: product.name,
+    category: product.category,
+  })
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -71,11 +77,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
 
   return (
     <Link
-      to={product.href || generateProductUrl({
-        _id: product.id.toString(),
-        name: product.name,
-        category: product.category,
-      })}
+      to={href}
       tabIndex={0}
       className="block focus:outline-none focus:ring-2 focus:ring-yellow-500 rounded-lg"
       style={{ textDecoration: 'none', color: 'inherit' }}
@@ -98,7 +100,7 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
           )}
         >
           <OptimizedImage
-            src={getProductImageUrl(product, "thumbnail")}
+            src={getProductImageUrl({ ...product, id: String(product.id) }, 'thumbnail')}
             alt={`${product.name} - Gaming ${
               product.category || 'electronics'
             } in Nairobi Kenya`}
@@ -307,6 +309,15 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
               <ShoppingCart size={12} className="mr-1" />
               {stockCount === 0 ? 'Out' : 'Add'}
             </Button>
+            <WhatsAppProductButton
+              productName={product.name}
+              productPath={href}
+              className={cn(
+                isListing
+                  ? 'h-10 w-10 lg:h-9 lg:w-9'
+                  : 'h-8 w-8 sm:h-9 sm:w-9'
+              )}
+            />
             </div>
           </CardFooter>
         </div>

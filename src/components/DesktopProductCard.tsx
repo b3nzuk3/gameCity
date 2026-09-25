@@ -9,6 +9,7 @@ import { generateProductUrl } from '@/lib/slugUtils'
 import { getDiscountPercent, getOfferPrice, isOfferActive } from '@/lib/utils'
 import type { Product } from '@/services/backendService'
 import { getProductImageUrl } from '@/utils/imageUtils'
+import WhatsAppProductButton from '@/components/WhatsAppProductButton'
 
 type DesktopProductCardProps = {
   product: Product & { href?: string }
@@ -82,17 +83,22 @@ const DesktopProductCard = ({ product }: DesktopProductCardProps) => {
             {stockCount > 0 ? 'In stock' : 'Out of stock'}
           </div>
         </div>
-        <div className="mt-auto pt-4">
+        <div className="mt-auto flex gap-1.5 pt-4">
           <Button
             type="button"
             size="sm"
             disabled={stockCount === 0}
             onClick={() => addToCart(product, 1)}
-            className="h-8 w-full bg-[#FDB813] px-2 text-xs font-semibold text-black hover:bg-[#ff9500]"
+            className="h-8 min-w-0 flex-1 bg-[#FDB813] px-2 text-xs font-semibold text-black hover:bg-[#ff9500]"
           >
             <ShoppingCart className="mr-1.5 h-3.5 w-3.5" />
             {stockCount > 0 ? 'Add to cart' : 'Out of stock'}
           </Button>
+          <WhatsAppProductButton
+            productName={product.name}
+            productPath={href}
+            className="h-8 w-8"
+          />
         </div>
       </div>
     </article>
