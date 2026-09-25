@@ -40,6 +40,17 @@ export type Product = {
   }
 }
 
+export type ProductQueryFilters = {
+  sort?: 'name' | 'price' | '-price' | '-rating'
+  filterBy?: 'in-stock' | 'low-stock' | 'out-of-stock'
+  condition?: 'New' | 'Pre-Owned'
+  brands?: string[]
+  categories?: string[]
+  minPrice?: number
+  maxPrice?: number
+  specifications?: Record<string, string[]>
+}
+
 export type UploadsResponse = {
   urls: string[]
   variants?: Array<{
@@ -206,7 +217,8 @@ const backendService = {
     getAll: (
       pageNumber: number = 1,
       search?: string,
-      limit: number = 50
+      limit: number = 50,
+      filters?: ProductQueryFilters
     ): Promise<{
       products: Product[]
       page: number
@@ -214,19 +226,34 @@ const backendService = {
       count?: number
       total: number
       hasMore: boolean
-    }> =>
-      handleRequest<{
+    }> => {
+      const params = new URLSearchParams({
+        page: String(pageNumber),
+        limit: String(limit),
+      })
+      if (search?.trim()) params.set('search', search.trim())
+      if (filters?.sort) params.set('sort', filters.sort)
+      if (filters?.filterBy) params.set('filterBy', filters.filterBy)
+      if (filters?.condition) params.set('condition', filters.condition)
+      filters?.brands?.filter(Boolean).forEach((brand) => params.append('brands', brand))
+      filters?.categories?.filter(Boolean).forEach((category) => params.append('categories', category))
+      if (filters?.minPrice !== undefined) params.set('minPrice', String(filters.minPrice))
+      if (filters?.maxPrice !== undefined) params.set('maxPrice', String(filters.maxPrice))
+      Object.entries(filters?.specifications || {}).forEach(([specificationId, values]) => {
+        values.filter(Boolean).forEach((value) => {
+          params.append(`spec.${specificationId}`, value)
+        })
+      })
+
+      return handleRequest<{
         products: Product[]
         page: number
         pages: number
         count?: number
         total: number
         hasMore: boolean
-      }>('GET', `/products?${new URLSearchParams({
-        page: String(pageNumber),
-        limit: String(limit),
-        ...(search?.trim() ? { search: search.trim() } : {}),
-      }).toString()}`),
+      }>('GET', `/products?${params.toString()}`)
+    },
     getAllByCategory: (
       category: string,
       page: number = 1,

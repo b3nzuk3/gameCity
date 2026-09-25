@@ -85,6 +85,12 @@ test('every category pagination page matches its catalog slice', () => {
   }
 
   for (const [category, entries] of categoryEntries) {
+    // The desktop API sorts before paginating; prerendered page boundaries
+    // must follow the same global name + ID ordering.
+    const sortedEntries = [...entries].sort((a, b) =>
+      a.name < b.name ? -1 : a.name > b.name ? 1 :
+      a.id > b.id ? -1 : a.id < b.id ? 1 : 0
+    )
     const pages = Math.max(1, Math.ceil(entries.length / DESKTOP_PRODUCT_PAGE_SIZE))
     const seen = new Set()
     for (let page = 1; page <= pages; page += 1) {
@@ -93,7 +99,7 @@ test('every category pagination page matches its catalog slice', () => {
         [...html.matchAll(/href="([^\"]*\/product\/[^\"]+)"/g)]
           .map((match) => new URL(match[1], 'https://www.gamecityelectronics.co.ke').pathname)
       )
-      const expected = new Set(entries
+      const expected = new Set(sortedEntries
         .slice(
           (page - 1) * DESKTOP_PRODUCT_PAGE_SIZE,
           page * DESKTOP_PRODUCT_PAGE_SIZE

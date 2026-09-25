@@ -85,6 +85,16 @@ export type CategoryProductsResponse = {
   hasMore: boolean
 }
 
+export type CategoryDesktopOptions = {
+  sort?: 'name' | '-price' | 'price' | '-rating'
+  filterBy?: 'in-stock' | 'low-stock' | 'out-of-stock'
+  condition?: 'New' | 'Pre-Owned'
+  brands?: string[]
+  minPrice?: number | null
+  maxPrice?: number | null
+  specifications?: Record<string, string[]>
+}
+
 export type CategoryCountFilters = {
   filterBy: string
   conditionFilter: string
@@ -99,10 +109,41 @@ export { MOBILE_CATEGORY_PAGE_SIZE }
 export const fetchProductsByCategory = async (
   category: string,
   pageNumber = 1,
-  limit = CATEGORY_PAGE_SIZE
+  limit = CATEGORY_PAGE_SIZE,
+  desktopOptions?: CategoryDesktopOptions
 ) => {
+  if (!desktopOptions) {
+    const { data } = await api.get<CategoryProductsResponse>(
+      `/products/category/${encodeURIComponent(category)}?page=${pageNumber}&limit=${limit}`
+    )
+    return data
+  }
+
+  const params = new URLSearchParams({
+    page: String(pageNumber),
+    limit: String(limit),
+  })
+  params.set('sort', desktopOptions.sort || 'name')
+  if (desktopOptions.filterBy) params.set('filterBy', desktopOptions.filterBy)
+  if (desktopOptions.condition) params.set('condition', desktopOptions.condition)
+  const sortedBrands = [...(desktopOptions.brands || [])].sort()
+  sortedBrands.forEach((brand) => {
+    params.append('brands', brand)
+  })
+  if (desktopOptions.minPrice !== null && desktopOptions.minPrice !== undefined) {
+    params.set('minPrice', String(desktopOptions.minPrice))
+  }
+  if (desktopOptions.maxPrice !== null && desktopOptions.maxPrice !== undefined) {
+    params.set('maxPrice', String(desktopOptions.maxPrice))
+  }
+  Object.entries(desktopOptions.specifications || {})
+    .sort(([left], [right]) => left.localeCompare(right))
+    .forEach(([id, values]) => {
+      const sortedValues = [...values].sort()
+      sortedValues.forEach((value) => params.append(`spec.${id}`, value))
+    })
   const { data } = await api.get<CategoryProductsResponse>(
-    `/products/category/${encodeURIComponent(category)}?page=${pageNumber}&limit=${limit}`
+    `/products/category/${encodeURIComponent(category)}?${params.toString()}`
   )
   return data
 }
@@ -246,15 +287,41 @@ export const useCategoryProducts = (
   category: string,
   pageNumber = 1,
   limit = CATEGORY_PAGE_SIZE,
-  enabled = true
+  enabled = true,
+  desktopOptions?: CategoryDesktopOptions
 ) => {
+  const sortedBrands = desktopOptions?.brands ? [...desktopOptions.brands].sort() : undefined
+  const sortedSpecifications = desktopOptions?.specifications
+    ? Object.fromEntries(
+        Object.entries(desktopOptions.specifications)
+          .sort(([left], [right]) => left.localeCompare(right))
+          .map(([id, values]) => [id, [...values].sort()])
+      )
+    : undefined
+  const queryKey = desktopOptions
+    ? [
+        'category-products',
+        category,
+        pageNumber,
+        limit,
+        desktopOptions.sort || 'name',
+        desktopOptions.filterBy || null,
+        desktopOptions.condition || null,
+        sortedBrands || [],
+        desktopOptions.minPrice ?? null,
+        desktopOptions.maxPrice ?? null,
+        sortedSpecifications || {},
+      ]
+    : ['category-products', category, pageNumber, limit]
   return useQuery({
-    queryKey: ['category-products', category, pageNumber, limit],
-    queryFn: () => fetchProductsByCategory(category, pageNumber, limit),
+    queryKey,
+    queryFn: () => fetchProductsByCategory(category, pageNumber, limit, desktopOptions),
     staleTime: 5 * 60 * 1000,
     enabled,
-    placeholderData: (previousData, previousQuery) =>
-      previousQuery?.queryKey[3] === limit ? previousData : undefined,
+    placeholderData: desktopOptions
+      ? undefined
+      : (previousData, previousQuery) =>
+          previousQuery?.queryKey[3] === limit ? previousData : undefined,
   })
 }
 

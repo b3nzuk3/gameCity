@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { Link, useLocation, useParams, useSearchParams } from 'react-router-dom'
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useQueryClient } from '@tanstack/react-query'
 import Layout from '@/components/Layout'
 import SEO from '@/components/SEO'
@@ -25,6 +25,7 @@ import MobileCatalogControls, {
 import { ProductSkeleton } from '@/components/ui/product-skeleton'
 import {
   fetchProductsByCategory,
+  type CategoryDesktopOptions,
   useCategoryProducts,
   useCategoryProductCount,
 } from '@/services/productService'
@@ -44,56 +45,9 @@ import {
 import { PRODUCT_CATEGORIES as CATEGORIES } from '@/lib/productCategories'
 import {
   buildAvailableSpecificationFilters,
-  matchesSpecificationFilters,
   type ActiveSpecificationFilters,
+  type AvailableSpecificationFilter,
 } from '@/lib/productSpecificationFilters'
-
-// Add this mapping from slug to display name
-const CATEGORY_SLUG_TO_NAME: Record<string, string> = {
-  monitors: 'Monitors',
-  'graphics-cards': 'Graphics Cards',
-  memory: 'Memory',
-  processors: 'Processors',
-  storage: 'Storage',
-  motherboards: 'Motherboards',
-  cases: 'Cases',
-  'power-supply': 'Power Supply',
-  'pre-built': 'PRE-BUILT',
-  'cpu-cooling': 'CPU Cooling',
-  oem: 'OEM',
-  accessories: 'Accessories',
-  laptops: 'Laptops',
-  all: 'All Products',
-}
-
-// Helper function to normalize category names
-const normalizeCategory = (category: string): string => {
-  if (!category) return ''
-  // Map URL slugs and common variants to canonical names
-  const categoryMappings: { [key: string]: string } = {
-    monitors: 'monitors',
-    'graphics-cards': 'graphics cards',
-    'graphics card': 'graphics cards',
-    'graphics cards': 'graphics cards',
-    graphics: 'graphics cards',
-    memory: 'memory',
-    processors: 'processors',
-    storage: 'storage',
-    motherboards: 'motherboards',
-    cases: 'cases',
-    'power-supply': 'power supply',
-    'power supply': 'power supply',
-    'pre-built': 'pre-built',
-    'pre-built-pcs': 'pre-built',
-    'pre built': 'pre-built',
-    'pre built pcs': 'pre-built',
-    accessories: 'accessories',
-    laptops: 'laptops',
-  }
-  // Lowercase, trim, and map
-  const key = category.toLowerCase().trim()
-  return categoryMappings[key] || key
-}
 
 type ProductBatch = { page: number; products: Product[] }
 
@@ -106,6 +60,10 @@ type FilterPreferences = {
   selectedBrands: string[]
 }
 
+type DesktopFilterState = FilterPreferences & {
+  selectedSpecificationFilters: ActiveSpecificationFilters
+}
+
 const DEFAULT_FILTERS: FilterPreferences = {
   sortBy: 'name',
   filterBy: 'all',
@@ -113,6 +71,53 @@ const DEFAULT_FILTERS: FilterPreferences = {
   priceRange: [null, null],
   priceFilterActive: false,
   selectedBrands: [],
+}
+
+const DESKTOP_QUERY_TO_SORT: Record<string, string> = {
+  name: 'name',
+  price: 'price',
+  '-price': '-price',
+  '-rating': '-rating',
+  'price-low': 'price',
+  'price-high': '-price',
+  rating: '-rating',
+}
+
+const parseNumberParam = (value: string | null) => {
+  if (value === null || value.trim() === '') return null
+  const parsed = Number(value)
+  return Number.isFinite(parsed) && parsed >= 0 ? parsed : null
+}
+
+const parseDesktopCategoryFilters = (
+  searchParams: URLSearchParams
+): DesktopFilterState => {
+  const sortBy = DESKTOP_QUERY_TO_SORT[searchParams.get('sort') || 'name'] || 'name'
+  const filterByValue = searchParams.get('filterBy') || ''
+  const conditionValue = searchParams.get('condition') || ''
+  const filterBy = ['in-stock', 'low-stock', 'out-of-stock'].includes(filterByValue)
+    ? filterByValue
+    : 'all'
+  const conditionFilter = ['New', 'Pre-Owned'].includes(conditionValue)
+    ? conditionValue
+    : 'all'
+  const minPrice = parseNumberParam(searchParams.get('minPrice'))
+  const maxPrice = parseNumberParam(searchParams.get('maxPrice'))
+  const specifications: ActiveSpecificationFilters = {}
+  for (const [key, value] of searchParams.entries()) {
+    if (!key.startsWith('spec.') || key.length <= 5 || !value) continue
+    const id = key.slice(5)
+    specifications[id] = [...(specifications[id] || []), value]
+  }
+  return {
+    sortBy,
+    filterBy,
+    conditionFilter,
+    priceRange: [minPrice, maxPrice],
+    priceFilterActive: minPrice !== null || maxPrice !== null,
+    selectedBrands: Array.from(new Set(searchParams.getAll('brands').filter(Boolean))),
+    selectedSpecificationFilters: specifications,
+  }
 }
 
 const filterPreferencesKey = (category: string) =>
@@ -137,8 +142,25 @@ const CategoryPage = () => {
   const { category, page: routePage } = useParams<{ category: string; page?: string }>()
   const [searchParams] = useSearchParams()
   const location = useLocation()
+  const navigate = useNavigate()
   const currentPage = Math.max(1, Number(routePage || searchParams.get('page') || 1))
   const categoryParam = category === 'all' ? 'all' : category || 'all'
+  const desktopFilters = useMemo(
+    () => parseDesktopCategoryFilters(searchParams),
+    [searchParams]
+  )
+  const desktopQueryOptions = useMemo<CategoryDesktopOptions>(
+    () => ({
+      sort: (desktopFilters.sortBy || 'name') as CategoryDesktopOptions['sort'],
+      filterBy: desktopFilters.filterBy === 'all' ? undefined : desktopFilters.filterBy as CategoryDesktopOptions['filterBy'],
+      condition: desktopFilters.conditionFilter === 'all' ? undefined : desktopFilters.conditionFilter as CategoryDesktopOptions['condition'],
+      brands: desktopFilters.selectedBrands,
+      minPrice: desktopFilters.priceFilterActive ? desktopFilters.priceRange[0] : null,
+      maxPrice: desktopFilters.priceFilterActive ? desktopFilters.priceRange[1] : null,
+      specifications: desktopFilters.selectedSpecificationFilters,
+    }),
+    [desktopFilters]
+  )
   const [isMobile, setIsMobile] = useState<boolean | null>(null)
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 1023px)')
@@ -156,7 +178,8 @@ const CategoryPage = () => {
     categoryParam,
     currentPage,
     categoryPageSize,
-    isMobile !== null
+    isMobile !== null,
+    isMobile === true ? undefined : desktopQueryOptions
   )
   const products = useMemo(
     () => categoryQuery.data?.products || [],
@@ -177,8 +200,6 @@ const CategoryPage = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>(
     DEFAULT_FILTERS.selectedBrands
   )
-  const [selectedSpecificationFilters, setSelectedSpecificationFilters] =
-    useState<ActiveSpecificationFilters>({})
   const [filterPreferencesHydrated, setFilterPreferencesHydrated] = useState(false)
   const [mobileCatalogNavTarget, setMobileCatalogNavTarget] =
     useState<HTMLElement | null>(null)
@@ -252,8 +273,9 @@ const CategoryPage = () => {
   // Get unique brands from products
   const availableBrands = useMemo(() => {
     const brands = allLoadedProducts.map((product) => product.brand).filter(Boolean)
-    return Array.from(new Set(brands))
-  }, [allLoadedProducts])
+    const selected = isMobile === true ? selectedBrands : desktopFilters.selectedBrands
+    return Array.from(new Set([...brands, ...selected])).sort()
+  }, [allLoadedProducts, desktopFilters.selectedBrands, isMobile, selectedBrands])
   const brandCounts = useMemo(
     () => allLoadedProducts.reduce<Record<string, number>>((counts, product) => {
       const brand = product.brand
@@ -325,18 +347,65 @@ const CategoryPage = () => {
     setSelectedBrands([])
   }, [])
 
+  const updateDesktopUrl = useCallback(
+    (changes: Partial<DesktopFilterState>) => {
+      const nextState: DesktopFilterState = {
+        ...desktopFilters,
+        ...changes,
+        priceRange: changes.priceRange
+          ? [...changes.priceRange] as [number | null, number | null]
+          : desktopFilters.priceRange,
+        selectedBrands: changes.selectedBrands
+          ? [...changes.selectedBrands]
+          : desktopFilters.selectedBrands,
+        selectedSpecificationFilters: changes.selectedSpecificationFilters
+          ? { ...changes.selectedSpecificationFilters }
+          : desktopFilters.selectedSpecificationFilters,
+      }
+      const params = new URLSearchParams(location.search)
+      params.delete('page')
+      params.delete('sort')
+      if (nextState.sortBy !== DEFAULT_FILTERS.sortBy) {
+        params.set('sort', nextState.sortBy || 'name')
+      }
+      params.delete('filterBy')
+      if (nextState.filterBy !== DEFAULT_FILTERS.filterBy) params.set('filterBy', nextState.filterBy)
+      params.delete('condition')
+      if (nextState.conditionFilter !== DEFAULT_FILTERS.conditionFilter) {
+        params.set('condition', nextState.conditionFilter)
+      }
+      params.delete('brands')
+      nextState.selectedBrands.forEach((brand) => params.append('brands', brand))
+      params.delete('minPrice')
+      params.delete('maxPrice')
+      if (nextState.priceFilterActive) {
+        if (nextState.priceRange[0] !== null) params.set('minPrice', String(nextState.priceRange[0]))
+        if (nextState.priceRange[1] !== null) params.set('maxPrice', String(nextState.priceRange[1]))
+      }
+      for (const key of [...params.keys()]) {
+        if (key.startsWith('spec.')) params.delete(key)
+      }
+      Object.entries(nextState.selectedSpecificationFilters).forEach(([id, values]) => {
+        values.forEach((value) => params.append(`spec.${id}`, value))
+      })
+      const query = params.toString()
+      navigate(
+        `${catalogPagePath(categoryParam, 1)}${query ? `?${query}` : ''}${location.hash}`
+      )
+    },
+    [categoryParam, desktopFilters, location.hash, location.search, navigate]
+  )
+
   const clearDesktopFilters = useCallback(() => {
-    clearMobileFilters()
-    setSelectedSpecificationFilters({})
-  }, [clearMobileFilters])
+    updateDesktopUrl({
+      ...DEFAULT_FILTERS,
+      selectedSpecificationFilters: {},
+    })
+  }, [updateDesktopUrl])
 
   useEffect(() => {
     setMobileCatalogNavTarget(document.getElementById('mobile-catalog-nav-slot'))
   }, [])
-
-  useEffect(() => {
-    setSelectedSpecificationFilters({})
-  }, [categoryParam])
 
   useEffect(() => {
     if (categoryQuery.error) console.error('CategoryPage: Error fetching products:', categoryQuery.error)
@@ -368,22 +437,12 @@ const CategoryPage = () => {
     setFilterPreferencesHydrated(true)
   }, [categoryParam])
 
-  // Derive synchronously so prerendered HTML contains the product cards on the
-  // first render. Effects do not run during server-side rendering.
+  // Desktop responses are already filtered, sorted, and paginated by the API.
+  // Mobile deliberately keeps its local session-filtering behavior.
   const filterProducts = useCallback((batchProducts: Product[]) => {
+    if (isMobile !== true) return batchProducts
     let filtered = [...batchProducts]
 
-    // 1. Category filter (always apply first)
-    const selectedCategory = CATEGORY_SLUG_TO_NAME[category ?? 'all']
-    if (category && category !== 'all') {
-      filtered = filtered.filter(
-        (product) =>
-          normalizeCategory(product.category || '') ===
-          normalizeCategory(selectedCategory)
-      )
-    }
-
-    // 2. Stock filters
     if (filterBy === 'in-stock') {
       filtered = filtered.filter(
         (product) => (product.countInStock ?? product.count_in_stock ?? 0) > 0
@@ -399,17 +458,12 @@ const CategoryPage = () => {
       )
     }
 
-    // 3. Condition filter
     if (conditionFilter !== 'all') {
       filtered = filtered.filter((product) => product.condition === conditionFilter)
     }
-
-    // 4. Brand filter
     if (selectedBrands.length > 0) {
       filtered = filtered.filter((product) => selectedBrands.includes(product.brand || ''))
     }
-
-    // 5. Price range filter only if active
     if (priceFilterActive && (priceRange[0] !== null || priceRange[1] !== null)) {
       filtered = filtered.filter(
         (product) =>
@@ -418,7 +472,6 @@ const CategoryPage = () => {
       )
     }
 
-    // 6. Sorting
     switch (sortBy) {
       case 'name':
         filtered.sort((a, b) => a.name.localeCompare(b.name))
@@ -433,17 +486,8 @@ const CategoryPage = () => {
         filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0))
         break
     }
-
     return filtered
-  }, [
-    sortBy,
-    filterBy,
-    conditionFilter,
-    selectedBrands,
-    priceRange,
-    priceFilterActive,
-    category,
-  ])
+  }, [conditionFilter, filterBy, isMobile, priceFilterActive, priceRange, selectedBrands, sortBy])
 
   const displayBatches = useMemo(
     () =>
@@ -459,17 +503,32 @@ const CategoryPage = () => {
     [displayBatches]
   )
 
-  const availableSpecificationFilters = useMemo(
-    () => buildAvailableSpecificationFilters(filteredProducts),
-    [filteredProducts]
-  )
+  const availableSpecificationFilters = useMemo<AvailableSpecificationFilter[]>(() => {
+    const filters = buildAvailableSpecificationFilters(filteredProducts)
+    const filtersById = new Map(filters.map((filter) => [filter.id, filter]))
+    Object.entries(desktopFilters.selectedSpecificationFilters).forEach(([id, values]) => {
+      if (values.length === 0) return
+      const existing = filtersById.get(id)
+      if (existing) {
+        const optionValues = new Set(existing.options.map((option) => option.value.toLowerCase()))
+        values.forEach((value) => {
+          if (!optionValues.has(value.toLowerCase())) {
+            existing.options.push({ value, label: value, count: 0 })
+          }
+        })
+      } else {
+        filtersById.set(id, {
+          id,
+          label: id,
+          options: values.map((value) => ({ value, label: value, count: 0 })),
+        })
+      }
+    })
+    return Array.from(filtersById.values())
+  }, [desktopFilters.selectedSpecificationFilters, filteredProducts])
 
-  const desktopFilteredProducts = useMemo(
-    () => filteredProducts.filter((product) =>
-      matchesSpecificationFilters(product, selectedSpecificationFilters)
-    ),
-    [filteredProducts, selectedSpecificationFilters]
-  )
+  const desktopFilteredProducts = filteredProducts
+
 
   const productLinks = useMemo(() => {
     const nameCounts = new Map<string, number>()
@@ -717,7 +776,7 @@ const CategoryPage = () => {
     )
     observer.observe(loadSentinelRef.current)
     return () => observer.disconnect()
-  }, [isMobile, loadMoreError, loadNextPage, mobileBatches])
+  }, [isMobile, isLoadingMore, loadMoreError, loadNextPage, mobileBatches])
 
   useEffect(() => {
     if (!isMobile || !productGridRef.current) return
@@ -846,23 +905,27 @@ const CategoryPage = () => {
 
         <div className="hidden items-start gap-5 lg:mx-[clamp(1.25rem,1.9vw,2.25rem)] lg:flex">
           <ProductFilterSidebar
-            filterBy={filterBy}
-            conditionFilter={conditionFilter}
-            selectedBrands={selectedBrands}
+            filterBy={desktopFilters.filterBy}
+            conditionFilter={desktopFilters.conditionFilter}
+            selectedBrands={desktopFilters.selectedBrands}
             availableBrands={availableBrands}
             brandCounts={brandCounts}
             availablePriceRange={availablePriceRange}
             availableSpecificationFilters={availableSpecificationFilters}
-            selectedSpecificationFilters={selectedSpecificationFilters}
-            priceRange={priceRange}
-            onFilterByChange={setFilterBy}
-            onConditionChange={setConditionFilter}
-            onBrandsChange={setSelectedBrands}
-            onSpecificationFiltersChange={setSelectedSpecificationFilters}
-            onPriceRangeChange={(range) => {
-              setPriceRange(range)
-              setPriceFilterActive(range[0] !== null || range[1] !== null)
-            }}
+            selectedSpecificationFilters={desktopFilters.selectedSpecificationFilters}
+            priceRange={desktopFilters.priceRange}
+            onFilterByChange={(value) => updateDesktopUrl({ filterBy: value })}
+            onConditionChange={(value) => updateDesktopUrl({ conditionFilter: value })}
+            onBrandsChange={(brands) => updateDesktopUrl({ selectedBrands: brands })}
+            onSpecificationFiltersChange={(filters) =>
+              updateDesktopUrl({ selectedSpecificationFilters: filters })
+            }
+            onPriceRangeChange={(range) =>
+              updateDesktopUrl({
+                priceRange: range,
+                priceFilterActive: range[0] !== null || range[1] !== null,
+              })
+            }
             onClear={clearDesktopFilters}
           />
 
@@ -873,15 +936,15 @@ const CategoryPage = () => {
               </p>
               <div className="flex items-center gap-3">
                 <label htmlFor="desktop-catalog-sort" className="text-sm text-gray-400">Sort by</label>
-                <Select value={sortBy} onValueChange={setSortBy}>
+                <Select value={desktopFilters.sortBy} onValueChange={(value) => updateDesktopUrl({ sortBy: value })}>
                   <SelectTrigger id="desktop-catalog-sort" className="h-9 w-[190px] border-gray-700 bg-gray-900">
                     <SelectValue placeholder="Sort by" />
                   </SelectTrigger>
                   <SelectContent className="border-gray-700 bg-gray-900">
                     <SelectItem value="name">Name (A-Z)</SelectItem>
-                    <SelectItem value="price-low">Price (Low to High)</SelectItem>
-                    <SelectItem value="price-high">Price (High to Low)</SelectItem>
-                    <SelectItem value="rating">Rating (High to Low)</SelectItem>
+                    <SelectItem value="price">Price (Low to High)</SelectItem>
+                    <SelectItem value="-price">Price (High to Low)</SelectItem>
+                    <SelectItem value="-rating">Rating (High to Low)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -51,16 +51,31 @@ export async function prerender(data: { url: string }) {
     const category = decodeURIComponent(categoryMatch[1])
     const page = Math.max(1, Number(categoryMatch[2] || categoryMatch[3] || 1))
     const allProducts = categoryProducts(category)
+    // The desktop API orders the complete result set before applying the
+    // page window. Match its default name/_id sort for crawlable static pages;
+    // keep mobile's existing 12-item chronological batches unchanged.
+    const desktopProducts = [...allProducts].sort((a, b) => {
+      const nameA = String(a.name || '')
+      const nameB = String(b.name || '')
+      if (nameA !== nameB) return nameA < nameB ? -1 : 1
+      const idA = String(a._id || a.id || '')
+      const idB = String(b._id || b.id || '')
+      return idA > idB ? -1 : idA < idB ? 1 : 0
+    })
     for (const pageSize of [DESKTOP_PRODUCT_PAGE_SIZE, MOBILE_CATEGORY_PAGE_SIZE]) {
+      const pageProducts = pageSize === DESKTOP_PRODUCT_PAGE_SIZE ? desktopProducts : allProducts
       const start = (page - 1) * pageSize
+      const queryKey = pageSize === DESKTOP_PRODUCT_PAGE_SIZE
+        ? ['category-products', category, page, pageSize, 'name', null, null, [], null, null, {}]
+        : ['category-products', category, page, pageSize]
       queryClient.setQueryData(
-        ['category-products', category, page, pageSize],
+        queryKey,
         {
-          products: allProducts.slice(start, start + pageSize),
+          products: pageProducts.slice(start, start + pageSize),
           page,
-          pages: Math.max(1, Math.ceil(allProducts.length / pageSize)),
-          total: allProducts.length,
-          hasMore: start + pageSize < allProducts.length,
+          pages: Math.max(1, Math.ceil(pageProducts.length / pageSize)),
+          total: pageProducts.length,
+          hasMore: start + pageSize < pageProducts.length,
         }
       )
     }
