@@ -247,24 +247,6 @@ const FeaturedProducts = () => {
                         ? 'Out of Stock'
                         : 'Add to Cart'}
                     </Button>
-                    <Button
-                      data-featured-product-view
-                      variant="outline"
-                      className="hidden border-gray-600 text-muted-foreground hover:text-white text-xs py-1.5 px-2 h-8 sm:h-9 md:inline-flex"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        navigate(
-                          generateProductUrl({
-                            _id: product.id.toString(),
-                            name: product.name,
-                            category: product.category,
-                          })
-                        )
-                      }}
-                    >
-                      View
-                    </Button>
                   </div>
                 </div>
               </CardContent>

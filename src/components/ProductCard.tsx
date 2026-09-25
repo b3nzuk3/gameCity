@@ -15,6 +15,7 @@ import WhatsAppProductButton from '@/components/WhatsAppProductButton'
 
 interface ProductProps {
   variant?: 'default' | 'listing'
+  hideViewButton?: boolean
   product: {
     id: string | number
     name: string
@@ -45,7 +46,7 @@ interface ProductProps {
   }
 }
 
-const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
+const ProductCard = ({ product, variant = 'default', hideViewButton = false }: ProductProps) => {
   const { addToCart } = useCart()
   const { addToFavorites, removeFromFavorites, isFavorite } = useFavorites()
   const isListing = variant === 'listing'
@@ -278,25 +279,27 @@ const ProductCard = ({ product, variant = 'default' }: ProductProps) => {
             )}
           >
             <div className="flex gap-1.5 w-full">
-            <Button
-              variant="outline"
-              size="sm"
-              className={cn(
-                'min-w-0 flex-1 border-gray-600 px-2 py-1.5 text-xs text-white hover:bg-gray-700 hover:text-white',
-                isListing ? 'hidden lg:inline-flex lg:h-9' : 'h-8 sm:h-9'
-              )}
-              onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                window.location.href = generateProductUrl({
-                  _id: product.id.toString(),
-                  name: product.name,
-                  category: product.category,
-                })
-              }}
-            >
-              View
-            </Button>
+            {!hideViewButton && (
+              <Button
+                variant="outline"
+                size="sm"
+                className={cn(
+                  'min-w-0 flex-1 border-gray-600 px-2 py-1.5 text-xs text-white hover:bg-gray-700 hover:text-white',
+                  isListing ? 'hidden lg:inline-flex lg:h-9' : 'h-8 sm:h-9'
+                )}
+                onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()
+                  window.location.href = generateProductUrl({
+                    _id: product.id.toString(),
+                    name: product.name,
+                    category: product.category,
+                  })
+                }}
+              >
+                View
+              </Button>
+            )}
             <Button
               size="sm"
               className={cn(

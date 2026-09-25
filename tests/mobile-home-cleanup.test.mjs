@@ -40,10 +40,9 @@ test('featured product cards stay fully clickable and become compact on mobile',
   )
 })
 
-test('featured card View action is hidden only on mobile', () => {
-  assert.match(
-    featuredProducts,
-    /data-featured-product-view[\s\S]{0,160}className="[^"]*hidden[^\"]*md:inline-flex/
-  )
-  assert.match(featuredProducts, />\s*View\s*</)
+test('fallback homepage product cards omit View on every screen while retaining Add to Cart and card navigation', () => {
+  assert.doesNotMatch(featuredProducts, /data-featured-product-view|>\s*View\s*</)
+  assert.match(featuredProducts, /onClick=\{\(e\) => handleAddToCart\(e, product\)\}/)
+  assert.match(featuredProducts, /data-featured-product-card[\s\S]{0,500}onClick=/)
+  assert.match(featuredProducts, /View All Products/)
 })

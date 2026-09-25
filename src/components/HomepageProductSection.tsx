@@ -30,7 +30,7 @@ export default function HomepageProductSection({ section }: { section: HomepageS
         aria-label={layout === 'carousel' ? `${section.title} products` : undefined}
         tabIndex={layout === 'carousel' ? 0 : undefined}
       >
-        {products.map((product) => layout === 'carousel' ? <div className="homepage-product-carousel-item" key={product.id}><ProductCard product={product} /></div> : <ProductCard key={product.id} product={product} />)}
+        {products.map((product) => layout === 'carousel' ? <div className="homepage-product-carousel-item" key={product.id}><ProductCard product={product} hideViewButton /></div> : <ProductCard key={product.id} product={product} hideViewButton />)}
       </div>
     </div>
   </section>
