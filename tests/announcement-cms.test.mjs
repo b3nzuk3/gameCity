@@ -34,3 +34,10 @@ test('announcement bar renders CMS copy, safe links, and no tab stop while hidde
   assert.match(announcementBar, /tabIndex=\{isVisible \? 0 : -1\}/)
   assert.match(announcementBar, /if \(!config\.enabled\) return null/)
 })
+
+test('compact announcement bar leaves vertical room for glyph descenders', () => {
+  assert.match(announcementBar, /flex h-8 items-center/)
+  assert.match(announcementBar, /truncate leading-5/)
+  assert.doesNotMatch(announcementBar, /leading-none/)
+  assert.match(layout, /pt-\[9rem\] lg:pt-\[6rem\]/)
+})

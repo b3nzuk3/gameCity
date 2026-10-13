@@ -52,7 +52,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Navbar announcementVisible={announcementVisible} />
       <main
         className={`flex-1 ${
-          announcementVisible ? 'pt-[9.5rem] lg:pt-[6.5rem]' : 'pt-28 lg:pt-16'
+          announcementVisible ? 'pt-[9rem] lg:pt-[6rem]' : 'pt-28 lg:pt-16'
         }`}
       >
         {children}

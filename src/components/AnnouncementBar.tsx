@@ -71,11 +71,11 @@ const AnnouncementBar = ({ config, isVisible }: AnnouncementBarProps) => {
     <aside
       aria-label="Store announcement"
       aria-hidden={!isVisible}
-      className={`fixed inset-x-0 top-0 z-50 flex h-10 items-center justify-center border-b border-yellow-300/40 bg-[#FDB813] px-3 text-center text-xs font-semibold text-black shadow-sm sm:text-sm ${
+      className={`fixed inset-x-0 top-0 z-50 flex h-8 items-center justify-center border-b border-yellow-300/40 bg-[#FDB813] px-3 text-center text-xs font-semibold text-black shadow-sm sm:text-sm ${
         isVisible ? 'translate-y-0' : '-translate-y-full'
       }`}
     >
-      <p className="flex min-w-0 items-center justify-center gap-2 truncate leading-none">
+      <p className="flex min-w-0 items-center justify-center gap-2 truncate leading-5">
         <span className="truncate sm:hidden">{mobileText}</span>
         <span className="hidden truncate sm:inline">{config.text}</span>
         {cta}

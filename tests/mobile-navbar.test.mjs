@@ -73,9 +73,9 @@ test('mobile header has distinct main and persistent search rows', () => {
 
 test('mobile transition is reduced-motion safe and layout reserves both rows', () => {
   assert.match(navbar, /motion-reduce:transition-none/)
-  assert.match(layout, /announcementVisible \? 'pt-\[9\.5rem\] lg:pt-\[6\.5rem\]' : 'pt-28 lg:pt-16'/)
+  assert.match(layout, /announcementVisible \? 'pt-\[9rem\] lg:pt-\[6rem\]' : 'pt-28 lg:pt-16'/)
   assert.match(layout, /AnnouncementBar/)
-  assert.match(navbar, /top-\[calc\(env\(safe-area-inset-top\)\+2\.5rem\)\] lg:top-10/)
+  assert.match(navbar, /top-\[calc\(env\(safe-area-inset-top\)\+2rem\)\] lg:top-8/)
   assert.match(navbar, /top-\[env\(safe-area-inset-top\)\] lg:top-0/)
 })
 

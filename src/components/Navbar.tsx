@@ -292,7 +292,7 @@ const Navbar = ({ announcementVisible = true }: NavbarProps) => {
       data-mobile-header-state={mobileHeaderState}
       className={`bg-[#0f0f19]/95 backdrop-blur-md border-b border-gray-800 shadow-lg fixed ${
         announcementVisible
-          ? 'top-[calc(env(safe-area-inset-top)+2.5rem)] lg:top-10'
+          ? 'top-[calc(env(safe-area-inset-top)+2rem)] lg:top-8'
           : 'top-[env(safe-area-inset-top)] lg:top-0'
       } left-0 right-0 z-50 transition-transform duration-200 ease-out motion-reduce:transition-none lg:translate-y-0 ${
         mobileHeaderState === 'top'

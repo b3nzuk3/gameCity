@@ -14,7 +14,7 @@ The response includes a non-null `announcement` object:
 ```
 
 `enabled` controls whether the bar is rendered and whether the header/main layout
-reserves its height. When enabled, the bar keeps the existing top-only behavior: it
+reserves its height. The bar is 32px tall with a 20px text line height to avoid clipping glyph descenders; navbar offsets and main padding use the same 32px allowance. When enabled, the bar keeps the existing top-only behavior: it
 is visible at scroll position zero and slides away after scrolling. The mobile copy
 uses `mobileText`; an empty mobile value falls back to `text`.
 
