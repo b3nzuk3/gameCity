@@ -73,7 +73,7 @@ test('mobile header has distinct main and persistent search rows', () => {
 
 test('mobile transition is reduced-motion safe and layout reserves both rows', () => {
   assert.match(navbar, /motion-reduce:transition-none/)
-  assert.match(layout, /isAtTop \? 'pt-\[9\.5rem\] lg:pt-\[6\.5rem\]' : 'pt-28 lg:pt-16'/)
+  assert.match(layout, /announcementVisible \? 'pt-\[9\.5rem\] lg:pt-\[6\.5rem\]' : 'pt-28 lg:pt-16'/)
   assert.match(layout, /AnnouncementBar/)
   assert.match(navbar, /top-\[calc\(env\(safe-area-inset-top\)\+2\.5rem\)\] lg:top-10/)
   assert.match(navbar, /top-\[env\(safe-area-inset-top\)\] lg:top-0/)
@@ -84,6 +84,8 @@ test('announcement bar is visible only at the top of the page', () => {
   assert.match(layout, /addEventListener\('scroll', updateScrollPosition/)
   assert.match(announcementBar, /isVisible \? 'translate-y-0' : '-translate-y-full'/)
   assert.match(announcementBar, /aria-hidden={!isVisible}/)
+  assert.match(layout, /announcement\.enabled && isAtTop/)
+  assert.match(layout, /<AnnouncementBar config=\{announcement\}/)
 })
 
 test('desktop search remains present and mobile no longer uses a search launcher', () => {

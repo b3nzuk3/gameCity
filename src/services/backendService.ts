@@ -74,6 +74,49 @@ export type HomepageHero = {
   enabled: boolean
 }
 
+export type HomepageAnnouncement = {
+  enabled: boolean
+  text: string
+  mobileText: string
+  linkLabel: string
+  linkHref: string
+}
+
+export const DEFAULT_HOMEPAGE_ANNOUNCEMENT: HomepageAnnouncement = {
+  enabled: true,
+  text: 'Gaming PCs, components & accessories • Delivery across Kenya',
+  mobileText: 'Delivery across Kenya',
+  linkLabel: 'Shop now',
+  linkHref: '/category/all',
+}
+
+export function normalizeHomepageAnnouncement(
+  announcement?: Partial<HomepageAnnouncement> | null
+): HomepageAnnouncement {
+  return {
+    enabled:
+      typeof announcement?.enabled === 'boolean'
+        ? announcement.enabled
+        : DEFAULT_HOMEPAGE_ANNOUNCEMENT.enabled,
+    text:
+      typeof announcement?.text === 'string' && announcement.text.trim()
+        ? announcement.text
+        : DEFAULT_HOMEPAGE_ANNOUNCEMENT.text,
+    mobileText:
+      typeof announcement?.mobileText === 'string'
+        ? announcement.mobileText
+        : DEFAULT_HOMEPAGE_ANNOUNCEMENT.mobileText,
+    linkLabel:
+      typeof announcement?.linkLabel === 'string'
+        ? announcement.linkLabel
+        : DEFAULT_HOMEPAGE_ANNOUNCEMENT.linkLabel,
+    linkHref:
+      typeof announcement?.linkHref === 'string'
+        ? announcement.linkHref
+        : DEFAULT_HOMEPAGE_ANNOUNCEMENT.linkHref,
+  }
+}
+
 export type HomepageSectionProduct = {
   productId: string
   sortOrder: number
@@ -100,6 +143,7 @@ export type HomepageResponse = {
   configured: boolean
   hero: HomepageHero | null
   sections: HomepageSection[]
+  announcement: HomepageAnnouncement
 }
 
 export type User = {

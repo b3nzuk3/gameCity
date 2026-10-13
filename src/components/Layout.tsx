@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { useLocation } from 'react-router-dom'
 import AnnouncementBar from './AnnouncementBar'
 import Navbar from './Navbar'
 import Footer from './Footer'
+import backendService, {
+  normalizeHomepageAnnouncement,
+} from '@/services/backendService'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -13,6 +17,14 @@ const Layout = ({ children }: LayoutProps) => {
   const [isAtTop, setIsAtTop] = useState(() =>
     typeof window === 'undefined' ? true : window.scrollY <= 0
   )
+  const homepage = useQuery({
+    queryKey: ['homepage', 'public'],
+    queryFn: () => backendService.homepage.get(),
+    staleTime: 60_000,
+  })
+
+  const announcement = normalizeHomepageAnnouncement(homepage.data?.announcement)
+  const announcementVisible = announcement.enabled && isAtTop
 
   useEffect(() => {
     const updateScrollPosition = () => setIsAtTop(window.scrollY <= 0)
@@ -36,11 +48,11 @@ const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <AnnouncementBar isVisible={isAtTop} />
-      <Navbar announcementVisible={isAtTop} />
+      <AnnouncementBar config={announcement} isVisible={announcementVisible} />
+      <Navbar announcementVisible={announcementVisible} />
       <main
         className={`flex-1 ${
-          isAtTop ? 'pt-[9.5rem] lg:pt-[6.5rem]' : 'pt-28 lg:pt-16'
+          announcementVisible ? 'pt-[9.5rem] lg:pt-[6.5rem]' : 'pt-28 lg:pt-16'
         }`}
       >
         {children}
