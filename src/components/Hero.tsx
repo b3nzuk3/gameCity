@@ -33,7 +33,7 @@ function renderTitle(title: string, highlightText: string) {
   const highlight = highlightText.trim()
   if (!highlight) return title
   const start = title.toLowerCase().lastIndexOf(highlight.toLowerCase())
-  if (start < 0) return title
+  if (start < 0) return <>{title}{' '}<span className="block text-yellow-400">{highlight}</span></>
   return <>{title.slice(0, start)}<span className="block text-yellow-400">{title.slice(start, start + highlight.length)}</span>{title.slice(start + highlight.length)}</>
 }
 
